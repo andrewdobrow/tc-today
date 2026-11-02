@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-02T11:57:29Z",
+  "generated_at": "2026-11-02T13:59:20Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 1,
+    "placements_after": 1,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,25 +49,34 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 184,
+    "candidates_processed": 189,
     "routes": {
-      "generate_new": 51,
-      "skip": 132,
+      "generate_new": 36,
+      "skip": 152,
       "update_existing": 1
     },
     "eligibility": {
-      "listing": 3,
-      "low_value": 134,
+      "listing": 4,
+      "low_value": 138,
       "publishable": 47
     },
     "source_classes": {
-      "aggregator": 137,
+      "aggregator": 142,
       "local_news": 33,
       "regional_news": 11,
       "unknown": 3
     },
-    "rejected_count": 3,
+    "rejected_count": 4,
     "rejected_examples": [
+      {
+        "headline": "Trump’s Latest Housing Move Promises Major Relief, but Which Buyers Will Actually Save Thousands? - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNZnVHU3lqWWY0aVNhLUNfbjN2TW5DZFp6NVRGMWtMSURJYmFKMWtzbDBEMURMckZ5LUVnWW1BMndyU2gyOThBUUdMRzFWYld6OUE0ZEMydVhXckk4ejB0QWZsRFotczdUWTNYMFFVUEpIbTN3U1pvbzhMd0sxdDNZek54U2VlQUxKNHZwRVVTYUpUVHFYOHc?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "11845 SW Lyra Dr, Port Saint Lucie, FL 34987 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQTlhOSTI2M3JhWHBpSTRzY3BVU2w0S3kzSjJnQng2T3Jud0RxdFVFZ29PT0pmQkQwbUJBX1pwX1RJZzF1SkRRZ294dmwtMnZrZ082bzRaSmVEeEFZSjZoWVBwcXVtSjB1QlY4M3lmbFljblotZkc2aC1BekxGRXVnMUJpbGtHZkZvYzR0b19vRzJqSlpManNv?oc=5",
@@ -99,39 +108,80 @@
   },
   "relationships": {
     "counts": {
-      "follow_up": 1,
-      "new_story": 38,
-      "same_event": 145
+      "new_story": 32,
+      "same_event": 157
     },
     "examples": [
       {
-        "story_id": "story_024833",
-        "title": "Florida county hopes plan will prevent I-95 corridor mess | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-c7b3d2d0bc",
+        "story_id": "story_024873",
+        "title": "How officials are preparing for Election Day disruptions — including from Trump",
+        "event_key": "unknown-event-e7ebd4f35a",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_024874",
+        "title": "Florida News That Impacts You – November 2nd, 2026 - 1290 WJNO",
+        "event_key": "unknown-event-5230520b01",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_024833",
+        "title": "Florida county hopes plan will prevent I-95 corridor mess | Opinion - Treasure Coast News",
+        "event_key": "unknown-event-c7b3d2d0bc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_024834",
         "title": "Florida restaurant claims to be the best new sports bar in town - Treasure Coast News",
         "event_key": "unknown-event-ec594cfb1f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_024835",
         "title": "Kamloops News - Castanet Kamloops",
         "event_key": "unknown-event-d043f5f1e9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024875",
+        "title": "Dallas-area high school football storylines for Week 11: Martin pursues undefeated season - Yahoo Sports",
+        "event_key": "unknown-event-7ff7250cba",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -144,6 +194,20 @@
         "story_id": "story_024836",
         "title": "Hundreds displaced, portion of Military Trail closed indefinitely after deadly Palm Beach County Learjet crash",
         "event_key": "traffic-crash-19b5bdea57-19b5bdea57",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024876",
+        "title": "Okeechobee County schools closed Monday amid widespread flooding - WPEC",
+        "event_key": "unknown-event-6e101d2d92",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -158,10 +222,11 @@
         "event_key": "unknown-event-f08b61dad6",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -185,10 +250,11 @@
         "event_key": "traffic-crash-71fa300cba-71fa300cba",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/greenacres/palm-beach-county-high-school-announces-monday-closure-in-wake-of-learjet-crash",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -207,15 +273,44 @@
         ]
       },
       {
-        "story_id": "story_024832",
+        "story_id": "story_024676",
+        "title": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - cw34.com",
+        "event_key": "traffic-crash-port-st-lucie-9a73c781d8",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024784",
+        "title": "Flash Flood Advisory issued for northeastern Palm Beach County - WPEC",
+        "event_key": "unknown-event-d04bb8dea0",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024872",
         "title": "9 dead after jet crashes near Greenacres; shelters open for hundreds displaced",
         "event_key": "traffic-crash-11d215b632-11d215b632",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/greenacres/fiery-incident-reported-near-military-trail-and-10th-avenue",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -245,18 +340,6 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024837",
-        "title": "Boca Raton breaks ground on $2M railroad crossing project - WPEC",
-        "event_key": "unknown-event-13679eee0b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -291,76 +374,6 @@
         "story_id": "story_024676",
         "title": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
         "event_key": "traffic-crash-port-st-lucie-63581d29e7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024704",
-        "title": "Somerset College Prep's Dylan Beck finishes third at state bowling finals - Treasure Coast News",
-        "event_key": "unknown-event-07052c083a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_013476",
-        "title": "Florida interstate crash in Martin County leaves multiple people dead - Yahoo",
-        "event_key": "traffic-crash-b1b1d064fe-b1b1d064fe",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024706",
-        "title": "Trump administration promises US farmers $15 billion in weeks before the midterms",
-        "event_key": "unknown-event-16fb72571d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_022602",
-        "title": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry - WFLX",
-        "event_key": "unknown-event-bba53d7ee0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024652",
-        "title": "October 2026 in photos: MARTY bus, Reaves execution, king tides and more - Treasure Coast News",
-        "event_key": "unknown-event-06332ccb25",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -374,9 +387,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_024833",
-        "title": "Florida county hopes plan will prevent I-95 corridor mess | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-c7b3d2d0bc",
+        "story_id": "story_024873",
+        "title": "How officials are preparing for Election Day disruptions — including from Trump",
+        "event_key": "unknown-event-e7ebd4f35a",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -384,25 +397,70 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_024874",
+        "title": "Florida News That Impacts You – November 2nd, 2026 - 1290 WJNO",
+        "event_key": "unknown-event-5230520b01",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_024833",
+        "title": "Florida county hopes plan will prevent I-95 corridor mess | Opinion - Treasure Coast News",
+        "event_key": "unknown-event-c7b3d2d0bc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_024834",
         "title": "Florida restaurant claims to be the best new sports bar in town - Treasure Coast News",
         "event_key": "unknown-event-ec594cfb1f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_024835",
         "title": "Kamloops News - Castanet Kamloops",
         "event_key": "unknown-event-d043f5f1e9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024875",
+        "title": "Dallas-area high school football storylines for Week 11: Martin pursues undefeated season - Yahoo Sports",
+        "event_key": "unknown-event-7ff7250cba",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -416,6 +474,21 @@
         "story_id": "story_024836",
         "title": "Hundreds displaced, portion of Military Trail closed indefinitely after deadly Palm Beach County Learjet crash",
         "event_key": "traffic-crash-19b5bdea57-19b5bdea57",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024876",
+        "title": "Okeechobee County schools closed Monday amid widespread flooding - WPEC",
+        "event_key": "unknown-event-6e101d2d92",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -432,10 +505,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -461,10 +535,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/greenacres/palm-beach-county-high-school-announces-monday-closure-in-wake-of-learjet-crash",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -484,16 +559,47 @@
         ]
       },
       {
-        "story_id": "story_024832",
+        "story_id": "story_024676",
+        "title": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - cw34.com",
+        "event_key": "traffic-crash-port-st-lucie-9a73c781d8",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024784",
+        "title": "Flash Flood Advisory issued for northeastern Palm Beach County - WPEC",
+        "event_key": "unknown-event-d04bb8dea0",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_024872",
         "title": "9 dead after jet crashes near Greenacres; shelters open for hundreds displaced",
         "event_key": "traffic-crash-11d215b632-11d215b632",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/greenacres/fiery-incident-reported-near-military-trail-and-10th-avenue",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -525,19 +631,6 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024837",
-        "title": "Boca Raton breaks ground on $2M railroad crossing project - WPEC",
-        "event_key": "unknown-event-13679eee0b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -574,81 +667,6 @@
         "story_id": "story_024676",
         "title": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
         "event_key": "traffic-crash-port-st-lucie-63581d29e7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024704",
-        "title": "Somerset College Prep's Dylan Beck finishes third at state bowling finals - Treasure Coast News",
-        "event_key": "unknown-event-07052c083a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_013476",
-        "title": "Florida interstate crash in Martin County leaves multiple people dead - Yahoo",
-        "event_key": "traffic-crash-b1b1d064fe-b1b1d064fe",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024706",
-        "title": "Trump administration promises US farmers $15 billion in weeks before the midterms",
-        "event_key": "unknown-event-16fb72571d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_022602",
-        "title": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry - WFLX",
-        "event_key": "unknown-event-bba53d7ee0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_024652",
-        "title": "October 2026 in photos: MARTY bus, Reaves execution, king tides and more - Treasure Coast News",
-        "event_key": "unknown-event-06332ccb25",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -665,73 +683,22 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
-    "high_confidence_candidate_count": 1,
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "follow_up": 1
-    },
-    "milestones": {
-      "death": 1
-    },
-    "reason_codes": {
-      "agency_match": 1,
-      "enforced_follow_up": 1,
-      "entity_match": 1,
-      "event_type_match": 1,
-      "fact_continuity": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "structured_incident_continuity": 1,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
-        "event_key": "traffic-crash-port-st-lucie-fbe6d73d18",
-        "current_story_id": "story_024676",
-        "current_relationship": "follow_up",
-        "candidate_story_id": "story_024676",
-        "candidate_confidence": 0.934,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up",
-          "location_match",
-          "agency_match",
-          "event_type_match",
-          "entity_match",
-          "title_continuity",
-          "fact_continuity",
-          "structured_incident_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Distinctive facts overlap: 1.00",
-          "Identity anchor qualified: True",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: death",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.93",
-          "Threshold: 0.68"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 18,
     "retrospective_high_confidence_candidate_count": 7,
     "retrospective_activation_eligible_candidate_count": 5,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 368,
-      "timeline_entries_examined": 1207,
-      "transitions_examined": 794,
+      "stories_with_timelines": 370,
+      "timeline_entries_examined": 1212,
+      "transitions_examined": 797,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 18,
       "high_confidence_candidate_count": 7,
@@ -745,7 +712,7 @@
       },
       "same_source_evolution_examples": [
         {
-          "story_id": "story_024828",
+          "story_id": "story_024868",
           "story_title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
           "milestones": [
             "closure"
@@ -766,7 +733,7 @@
           "prior_article": {
             "article_id": "rss-11fab8f50538e4d50943",
             "event_key": "traffic-crash-768ef5b1f5-768ef5b1f5",
-            "published_at": "2026-11-02T11:42:40.914448+00:00",
+            "published_at": "2026-11-02T13:42:41.870399+00:00",
             "title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -774,14 +741,14 @@
           "newer_article": {
             "article_id": "rss-1b8d5ef3cc24d5b5be9c",
             "event_key": "fire-708e56f0ff-708e56f0ff",
-            "published_at": "2026-11-02T11:42:40.914448+00:00",
+            "published_at": "2026-11-02T13:42:41.870399+00:00",
             "title": "Truck fire shuts down Florida's Turnpike South in St. Lucie County",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
           }
         },
         {
-          "story_id": "story_024828",
+          "story_id": "story_024868",
           "story_title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
           "milestones": [
             "resolution"
@@ -803,7 +770,7 @@
           "prior_article": {
             "article_id": "rss-1b8d5ef3cc24d5b5be9c",
             "event_key": "fire-708e56f0ff-708e56f0ff",
-            "published_at": "2026-11-02T11:42:40.914448+00:00",
+            "published_at": "2026-11-02T13:42:41.870399+00:00",
             "title": "Truck fire shuts down Florida's Turnpike South in St. Lucie County",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -811,7 +778,7 @@
           "newer_article": {
             "article_id": "rss-ecd622dee9e155599790",
             "event_key": "traffic-crash-8a02cb01a2-8a02cb01a2",
-            "published_at": "2026-11-02T11:42:40.914448+00:00",
+            "published_at": "2026-11-02T13:42:41.870399+00:00",
             "title": "All lanes reopen on Florida's Turnpike after truck fire, crash in St. Lucie County",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -2611,35 +2578,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 666,
-      "treasure_coast_local": 431,
+      "florida": 676,
+      "treasure_coast_local": 433,
       "treasure_coast_region": 150,
-      "unknown": 1232
+      "unknown": 1248
     },
-    "average_score": 57.99
+    "average_score": 57.91
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 666,
-      "treasure_coast_local": 431,
+      "florida": 676,
+      "treasure_coast_local": 433,
       "treasure_coast_region": 150,
-      "unknown": 1232
+      "unknown": 1248
     },
     "average_priority": 3.05
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1462,
+      "active": 1491,
       "developing": 82,
-      "ongoing": 935
+      "ongoing": 934
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2439,
-    "active_stories_after": 2439,
+    "active_stories_before": 2475,
+    "active_stories_after": 2475,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2668,23 +2635,23 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-02T11:41:22Z",
-    "quarantined_story_records_retained": 4785,
-    "active_story_count": 2479
+    "generated_at": "2026-11-02T13:41:38Z",
+    "quarantined_story_records_retained": 4788,
+    "active_story_count": 2507
   },
   "stories": {
-    "total": 2479,
+    "total": 2507,
     "importance_levels": {
       "breaking": 5,
-      "high": 51,
-      "normal": 344,
-      "low": 2079,
+      "high": 53,
+      "normal": 347,
+      "low": 2102,
       "archived": 0
     },
-    "average_importance": 7.53,
+    "average_importance": 7.55,
     "top": [
       {
-        "story_id": "story_024830",
+        "story_id": "story_024870",
         "title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says - WPTV",
         "score": 75,
         "editorial_priority": 85,
@@ -2738,7 +2705,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-02T11:42:40.914448+00:00",
+          "last_updated": "2026-11-02T13:42:41.870399+00:00",
           "hours_since_update": 0.01,
           "event_count": 6,
           "timeline_entries": 6
@@ -2757,7 +2724,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.05
+          "age_hours": 2.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2795,13 +2762,13 @@
         },
         "event_count": 8,
         "timeline_entries": 6,
-        "relationship_decisions": 1,
+        "relationship_decisions": 0,
         "canonical_source_candidates": 6,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 2.06,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -2819,7 +2786,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 39.03
+          "age_hours": 41.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2869,7 +2836,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-31T20:42:28.931873+00:00",
-          "hours_since_update": 39.03,
+          "hours_since_update": 41.03,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2887,7 +2854,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 81.38
+          "age_hours": 83.38
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2953,7 +2920,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-30T02:20:20.620764+00:00",
-          "hours_since_update": 81.38,
+          "hours_since_update": 83.38,
           "event_count": 68,
           "timeline_entries": 53
         }
@@ -2971,7 +2938,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 121.07
+          "age_hours": 123.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3027,7 +2994,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-28T10:42:38.998617+00:00",
-          "hours_since_update": 121.07,
+          "hours_since_update": 123.07,
           "event_count": 9,
           "timeline_entries": 9
         }
@@ -3045,7 +3012,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 14.05
+          "age_hours": 16.08
         },
         "level": "high",
         "importance_reasons": [
@@ -3086,7 +3053,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-01T21:42:33.213938+00:00",
-          "hours_since_update": 14.05,
+          "hours_since_update": 16.08,
           "event_count": 29,
           "timeline_entries": 29
         }
@@ -3104,7 +3071,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 163.95
+          "age_hours": 165.95
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3153,13 +3120,13 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-26T15:45:46.965295+00:00",
-          "hours_since_update": 163.95,
+          "hours_since_update": 165.95,
           "event_count": 13,
           "timeline_entries": 13
         }
       },
       {
-        "story_id": "story_024829",
+        "story_id": "story_024869",
         "title": "Vero Beach man killed in crash involving semi-trailer in Indian River County - Vero News",
         "score": 65,
         "editorial_priority": 64,
@@ -3171,7 +3138,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.0
+          "age_hours": 0.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3208,8 +3175,8 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 0.0,
+          "last_updated": "2026-11-02T13:42:41.870399+00:00",
+          "hours_since_update": 0.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3227,7 +3194,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 160.96
+          "age_hours": 162.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3271,7 +3238,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-26T18:45:37.276499+00:00",
-          "hours_since_update": 160.96,
+          "hours_since_update": 162.96,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3289,7 +3256,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 204.94
+          "age_hours": 206.94
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3344,65 +3311,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-24T22:46:38.426958+00:00",
-          "hours_since_update": 204.94,
+          "hours_since_update": 206.94,
           "event_count": 2,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_022163",
-        "title": "Sheriff identifies man killed in deputy-involved shooting at Boca Raton plaza - cw34.com",
-        "score": 65,
-        "editorial_priority": 54,
-        "editorial_score": 54,
-        "score_breakdown": {
-          "score": 54,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 71.01
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Jensen Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 71.01,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -3418,7 +3329,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 113.7
+          "age_hours": 115.7
         },
         "level": "high",
         "importance_reasons": [
@@ -3464,7 +3375,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-28T18:00:54.226569+00:00",
-          "hours_since_update": 113.7,
+          "hours_since_update": 115.7,
           "event_count": 8,
           "timeline_entries": 8
         }
@@ -3482,7 +3393,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 158.96
+          "age_hours": 160.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3520,7 +3431,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-26T20:44:50.447132+00:00",
-          "hours_since_update": 158.96,
+          "hours_since_update": 160.96,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3538,7 +3449,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 90.51
+          "age_hours": 92.51
         },
         "level": "high",
         "importance_reasons": [
@@ -3577,7 +3488,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-29T17:12:41.184446+00:00",
-          "hours_since_update": 90.51,
+          "hours_since_update": 92.51,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3595,7 +3506,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 328.95
+          "age_hours": 330.95
         },
         "level": "high",
         "importance_reasons": [
@@ -3636,7 +3547,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-19T18:45:36.350614+00:00",
-          "hours_since_update": 328.95,
+          "hours_since_update": 330.95,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3654,7 +3565,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 175.55
+          "age_hours": 177.56
         },
         "level": "high",
         "importance_reasons": [
@@ -3697,9 +3608,65 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T04:09:45.816789+00:00",
-          "hours_since_update": 175.55,
+          "hours_since_update": 177.56,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_022163",
+        "title": "Sheriff identifies man killed in deputy-involved shooting at Boca Raton plaza - cw34.com",
+        "score": 65,
+        "editorial_priority": 45,
+        "editorial_score": 45,
+        "score_breakdown": {
+          "score": 45,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 73.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Jensen Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
+          "last_updated": "2026-10-30T12:42:19.702247+00:00",
+          "hours_since_update": 73.01,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -3715,7 +3682,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 158.96
+          "age_hours": 160.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3749,7 +3716,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-26T20:44:50.447132+00:00",
-          "hours_since_update": 158.96,
+          "hours_since_update": 160.96,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3767,7 +3734,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 158.97
+          "age_hours": 160.97
         },
         "level": "high",
         "importance_reasons": [
@@ -3801,7 +3768,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-26T20:44:50.447132+00:00",
-          "hours_since_update": 158.97,
+          "hours_since_update": 160.97,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3819,7 +3786,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 240.98
+          "age_hours": 242.98
         },
         "level": "high",
         "importance_reasons": [
@@ -3857,7 +3824,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-23T10:44:25.402106+00:00",
-          "hours_since_update": 240.98,
+          "hours_since_update": 242.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3875,7 +3842,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 235.95
+          "age_hours": 237.95
         },
         "level": "high",
         "importance_reasons": [
@@ -3913,7 +3880,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-23T15:45:30.009156+00:00",
-          "hours_since_update": 235.95,
+          "hours_since_update": 237.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3923,7 +3890,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-02T11:47:28Z",
+    "generated_at": "2026-11-02T13:47:50Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3938,35 +3905,34 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 1,
-        "no_publishable_sources": 2
+        "category_eligibility_archive_recovery": 5,
+        "no_publishable_sources": 4
       },
       "failures": {
-        "no_category_eligible_sources": 6
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 17.048,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 0,
+      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested_count": 9,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 1,
-      "published_story_duplicate_suppression_count": 26,
-      "story_aware_update_context_count": 3,
-      "material_update_promotion_evaluation_count": 10,
+      "published_story_duplicate_suppression_count": 25,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 11,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 9,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 8,
+      "material_update_promotion_model_call_count": 3
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 6,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3990,6 +3956,16 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
+            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes?teaserSource=trending",
+            "editorial_story_id": "story_024676",
+            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
+            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
             "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
             "editorial_story_id": "story_024676",
@@ -4002,16 +3978,6 @@
             "category_key": "local_gov",
             "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry - WFLX",
             "source_url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOWm9Kd0o2anl6WjVpRWtoMFNqZHZEY096TDRJeUxsNWY5bGItSHBqNmdlTzBQcjRZbDE5Ym1QcVNkZVF4c0Riam9VdF8xaDhxeGh4Q1hNa1cyLVJ0dXltMDA5M1Z3cEJoYW5FYzZOSnhXcDh2eTNiNUFDQVdmbEp0UGxYWUJTSU50TVNKa0V4WjdCNHdCeXd6OEU4cmxNSWZHMDVMTXU0WXR4bXoxVDd4eDhPRWR3WEx4eFZHZ3FrUXJUUWxjdHZ6YlNGWWtiektsX1hfbllR0gHqAUFVX3lxTE9meDBLTnV3QThBZ3oyRHE3eWxIdFFNQUFJU051OUdkcG1nU1p3THFLaXlCWVhuaDJWWHh1MDRwSi1iaWIwbXJ5U3p1S2l3R3drWU5wZWhkWWtreHJmcUxCLUUxb3BQcGdJa2pzMmVqdGJNMXB4YUY5SFlaYkdFUUZjWmtJZ2U0dEFocHdfRXZJYVJDZjFNazVOaU9ZTGhTb3BIQzRXelFHNmt6aFVMcEtEZUNaLTlQaTRnVHNyNXVzZDFkQlNNb1NFaWNNaU1TRWdrTGtDaHBod1lFcVJ6Zm45eTdpdTgtOGxuQQ",
-            "editorial_story_id": "story_022602",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
             "editorial_story_id": "story_022602",
             "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
             "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
@@ -4043,9 +4009,40 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes?teaserSource=trending",
+            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
+            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Late Saturday crash around 11:05 p.m. on northbound I-95 in Martin County",
+              "2017 Toyota Camry struck the rear of a parked 2012 Kenworth tractor-trailer's 53-foot trailer",
+              "Camry spun across all three northbound lanes and stopped on the left shoulder",
+              "Three passengers killed: a 34-year-old man, a 5-year-old boy and a woman",
+              "31-year-old Port St. Lucie woman driving the Camry sustained non-incapacitating injuries",
+              "11-year-old girl sustained incapacitating injuries and was flown by LifeStar"
+            ],
+            "novel_facts": [
+              "Incoming explicitly states that the 60-year-old Miami tractor-trailer driver was uninjured"
+            ],
+            "reason": "The vehicles, crash sequence, time, location and casualty details establish the same incident. The incoming repeats the canonical's substantive reporting; the truck driver's uninjured status is a minor detail, not a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
@@ -4078,38 +4075,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.89,
-            "shared_anchors": [
-              "Florida's November 2026 vote on Amendment 3",
-              "Proposed homestead exemption increases to $150,000 in 2027 and $250,000 in 2028",
-              "Exemption applies to non-school property taxes",
-              "Amendment requires 60% voter approval",
-              "Potential loss of local-government revenue"
-            ],
-            "novel_facts": [
-              "Adds ballot background on Amendment 1's budget stabilization fund proposal",
-              "Adds ballot background on Amendment 2's agricultural tangible personal property tax exemption",
-              "Lists county early-voting deadlines and Election Day polling hours"
-            ],
-            "reason": "The incoming ballot preview revisits the same pending Amendment 3 vote with identical exemption amounts, implementation years and approval threshold. Its additional amendment summaries and voting logistics are background and service information, not a new consequential development or independently newsworthy follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
@@ -4139,15 +4104,15 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 27.457
+        "new_publication_stale_rejected_count": 1,
+        "elapsed_seconds": 38.738
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4168,18 +4133,8 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-            "editorial_story_id": "story_024676",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "crime",
             "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
@@ -4202,16 +4157,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
-            "editorial_story_id": "story_024580",
-            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - WPEC",
             "source_url": "https://cbs12.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
             "editorial_story_id": "story_024580",
@@ -4219,30 +4164,25 @@
             "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
+            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
+            "editorial_story_id": "story_024580",
+            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
+            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "crime",
             "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
@@ -4308,33 +4248,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
-            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 1.0,
-            "shared_anchors": [
-              "Guyrson Maddy, 37, arrested on domestic battery and held for Broward County probation violations in four felony cases",
-              "Reported assault at the Best Western in the 7900 block of South U.S. Highway 1 around 11:20 p.m. Friday",
-              "Dark-colored 2025 Tesla Model Y located at a home on Palm Breezes Drive",
-              "Maddy found in a bathroom with assistance from Deputy Mendoza and K-9 Oso and arrested without incident"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article repeats the same incident, arrest, charges, warrant history and investigative details already in the canonical. It adds no material development or independently newsworthy follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - WPEC",
             "source_url": "https://cbs12.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
             "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
@@ -4347,17 +4260,32 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
+            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
+            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
+            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 25.579
+        "elapsed_seconds": 27.25
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4378,7 +4306,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4428,16 +4356,6 @@
             "canonical_slug": "2026-10-29-suspect-in-custody-after-roommate-dispute-ends-in-stabbing-on-se-indian-street",
             "canonical_headline": "Suspect charged with attempted murder after SE Indian Street roommate attack",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Florida man receives life sentence for using AI to create child pornography of neighborhood children",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/florida-man-receives-life-sentence-for-using-ai-to-create-child-pornography-of-neighborhood-children",
-            "editorial_story_id": "story_024266",
-            "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
-            "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4539,25 +4457,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Florida man receives life sentence for using AI to create child pornography of neighborhood children",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/florida-man-receives-life-sentence-for-using-ai-to-create-child-pornography-of-neighborhood-children",
-            "canonical_slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
-            "canonical_headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 6,
-        "elapsed_seconds": 23.295
+        "elapsed_seconds": 29.512
       },
       {
         "category_key": "sports",
@@ -4594,8 +4497,8 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 15,
-        "elapsed_seconds": 15.477
+        "new_publication_stale_rejected_count": 14,
+        "elapsed_seconds": 19.435
       },
       {
         "category_key": "things_to_do",
@@ -4694,14 +4597,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 25.578
+        "elapsed_seconds": 31.733
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
         "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 23,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4722,82 +4625,31 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
-        "published_story_duplicate_suppressions": [
-          {
-            "category_key": "florida",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-            "editorial_story_id": "story_022602",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          }
-        ],
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "florida",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.89,
-            "shared_anchors": [
-              "Florida's November 2026 vote on Amendment 3",
-              "Proposed homestead exemption increases to $150,000 in 2027 and $250,000 in 2028",
-              "Exemption applies to non-school property taxes",
-              "Amendment requires 60% voter approval",
-              "Potential loss of local-government revenue"
-            ],
-            "novel_facts": [
-              "Adds ballot background on Amendment 1's budget stabilization fund proposal",
-              "Adds ballot background on Amendment 2's agricultural tangible personal property tax exemption",
-              "Lists county early-voting deadlines and Election Day polling hours"
-            ],
-            "reason": "The incoming ballot preview revisits the same pending Amendment 3 vote with identical exemption amounts, implementation years and approval threshold. Its additional amendment summaries and voting logistics are background and service information, not a new consequential development or independently newsworthy follow-up.",
-            "validation_errors": []
-          }
-        ],
+        "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.359
+        "elapsed_seconds": 24.955
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 17.048,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 17.048,
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4808,11 +4660,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
+            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
+            "editorial_story_id": "story_023996",
+            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
+            "editorial_story_id": "story_024676",
+            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
+            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
@@ -4824,37 +4696,77 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
-            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_024676",
-              "source:https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_024676,source:https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
+            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
+            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.94,
+            "shared_anchors": [
+              "Indian River County early voting ends Saturday before the Tuesday, Nov. 3 General Election.",
+              "Both describe the same regional early-voting period on the Treasure Coast.",
+              "Both instruct Election Day voters to use their assigned precinct and explain the 7 p.m. vote-by-mail receipt deadline."
+            ],
+            "novel_facts": [
+              "The incoming article confirms that the scheduled Saturday early-voting period has ended.",
+              "It reports nearly 56,000 early votes in St. Lucie County, around 29,000 each in Martin and Indian River counties, and more than 3,700 in Okeechobee County.",
+              "Martin County officials report that more than 40% of registered voters voted early or by mail.",
+              "Palm Beach County continued early voting Sunday at 28 sites."
+            ],
+            "reason": "Both articles cover the same election's regional early-voting deadline. The incoming report adds routine turnout figures, scheduled closure confirmation and voting reminders, but no changed voting rules, election outcome, disruption or distinct accountability development warranting an update or separate URL.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
+            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
+            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 1.0,
+            "shared_anchors": [
+              "Identical WPBF source URL",
+              "Late Saturday crash around 11:05 p.m. on northbound I-95 in northern Martin County",
+              "Toyota Camry struck a tractor-trailer parked on the right shoulder and spun across three lanes",
+              "Three Camry passengers killed: a 34-year-old man, a 5-year-old boy and a woman",
+              "31-year-old female Camry driver and 11-year-old girl injured; 60-year-old Miami truck driver uninjured",
+              "Northbound traffic diverted at Martin Highway"
+            ],
+            "novel_facts": [
+              "Incoming specifies mile marker 112",
+              "Incoming names St. Mary’s Medical Center as the Camry driver's destination",
+              "Incoming reports northbound lanes reopened after 5 a.m."
+            ],
+            "reason": "The identical source URL and matching crash circumstances establish the same incident. The canonical already includes the three deaths, victims' ages, injuries and collision sequence. The added mile marker, hospital destination and reopening time are routine details, not material developments or an independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "martin",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
@@ -4872,27 +4784,23 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County early voting ends; Election Day voters must use assigned precincts",
-        "generated_card_count": 0,
-        "elapsed_seconds": 56.693
+        "elapsed_seconds": 44.453
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "category_eligibility_archive_recovery",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 1,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed St. Lucie County category eligibility contract",
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4901,39 +4809,29 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
+            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
             "editorial_story_id": "story_024676",
             "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
             "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Broward fugitive apprehended after reported domestic disturbance at Port St. Lucie hotel - WPBF",
-            "source_url": "https://www.wpbf.com/article/broward-fugitive-domestic-incident-port-st-lucie/74303310",
+            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
             "editorial_story_id": "story_024580",
             "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
             "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
-            "editorial_story_id": "story_024580",
-            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-            "basis": "same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4977,31 +4875,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
-            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_024676",
-              "source:https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_024676,source:https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
           {
             "source_headline": "'A smile that lights up the room': Loved ones remember St. Lucie County firefighter - WPEC",
             "source_url": "https://cbs12.com/news/local/a-smile-that-lights-up-the-room-loved-ones-remember-st-lucie-county-firefighter-austin-hodge-brother-jarius-hodge-brother-firefighters-died-",
@@ -5028,63 +4903,50 @@
         ],
         "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
+            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
+            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
             "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
             "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Broward fugitive apprehended after reported domestic disturbance at Port St. Lucie hotel - WPBF",
-            "source_url": "https://www.wpbf.com/article/broward-fugitive-domestic-incident-port-st-lucie/74303310",
-            "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-            "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-            "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.99,
+            "confidence": 1.0,
             "shared_anchors": [
-              "Guyrson Maddy, 37, arrested by the St. Lucie County Sheriff's Office on a domestic battery charge with Broward County probation-violation holds",
-              "Reported assault at the Best Western in the 7900 block of South U.S. Highway 1 around 11:20 p.m. Friday",
-              "Witness reported a man assaulting a woman and pushing her into a vehicle before leaving",
-              "Dark-colored 2025 Tesla Model Y located at a home on Palm Breezes Drive",
-              "Woman directed deputies to a bathroom where Maddy was found and arrested without incident with K-9 assistance"
+              "Identical WPBF source URL",
+              "Late Saturday crash around 11:05 p.m. on northbound I-95 in northern Martin County",
+              "Toyota Camry struck a tractor-trailer parked on the right shoulder and spun across three lanes",
+              "Three Camry passengers killed: a 34-year-old man, a 5-year-old boy and a woman",
+              "31-year-old female Camry driver and 11-year-old girl injured; 60-year-old Miami truck driver uninjured",
+              "Northbound traffic diverted at Martin Highway"
             ],
             "novel_facts": [
-              "Incoming lists additional underlying offenses associated with the Broward probation holds",
-              "Incoming reports that Maddy's Palm Beach County probation began in 2023 and ended the preceding Sunday"
+              "Incoming specifies mile marker 112",
+              "Incoming names St. Mary’s Medical Center as the Camry driver's destination",
+              "Incoming reports northbound lanes reopened after 5 a.m."
             ],
-            "reason": "The named suspect, precise hotel location and time, distinctive vehicle, and bathroom apprehension establish the same incident. The arrest and domestic battery charge are already reported in the canonical. Additional probation-history details are background, not a material development or independently newsworthy follow-up.",
+            "reason": "The identical source URL and matching crash circumstances establish the same incident. The canonical already includes the three deaths, victims' ages, injuries and collision sequence. The added mile marker, hospital destination and reopening time are routine details, not material developments or an independently newsworthy follow-up.",
             "validation_errors": []
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-            "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
+            "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - WPEC",
+            "source_url": "https://cbs12.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county",
             "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
             "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
             "canonical_is_custom": false,
-            "identity_basis": "same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5182,14 +5044,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 28.0
+        "elapsed_seconds": 24.115
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5210,17 +5072,60 @@
         "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
+            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
+            "editorial_story_id": "story_023996",
+            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
+            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
+            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.94,
+            "shared_anchors": [
+              "Indian River County early voting ends Saturday before the Tuesday, Nov. 3 General Election.",
+              "Both describe the same regional early-voting period on the Treasure Coast.",
+              "Both instruct Election Day voters to use their assigned precinct and explain the 7 p.m. vote-by-mail receipt deadline."
+            ],
+            "novel_facts": [
+              "The incoming article confirms that the scheduled Saturday early-voting period has ended.",
+              "It reports nearly 56,000 early votes in St. Lucie County, around 29,000 each in Martin and Indian River counties, and more than 3,700 in Okeechobee County.",
+              "Martin County officials report that more than 40% of registered voters voted early or by mail.",
+              "Palm Beach County continued early voting Sunday at 28 sites."
+            ],
+            "reason": "Both articles cover the same election's regional early-voting deadline. The incoming report adds routine turnout figures, scheduled closure confirmation and voting reminders, but no changed voting rules, election outcome, disruption or distinct accountability development warranting an update or separate URL.",
+            "validation_errors": []
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.546
+        "elapsed_seconds": 24.1
       }
     ]
   }
