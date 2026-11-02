@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-02T16:45:31Z",
+  "generated_at": "2026-11-02T19:49:23Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,42 +15,62 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "no_publishable_sources": 4
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 1,
+      "no_publishable_sources": 2
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "invalid_json": 1,
+      "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 0,
-    "model_elapsed_seconds": 0.0,
-    "archive_recovery_requested_count": 9,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 69.279,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 1,
-    "published_story_duplicate_suppression_count": 21,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 11,
+    "category_eligibility_rejection_count": 8,
+    "published_story_duplicate_suppression_count": 16,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 8,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 10,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 8,
+    "material_update_promotion_model_call_count": 0
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "publishable_source_count": 13,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.922,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.717,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        }
+      ],
+      "model_elapsed_seconds": 9.639,
+      "failure_code": "invalid_json",
+      "failure_summary": "Assignment editor returned no valid hero source",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -59,10 +79,67 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 4,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Aerial video shows significant flooding in St. Lucie West; police urge drivers to avoid area",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/aerial-video-shows-significant-flooding-in-st-lucie-west-police-urge-drivers-to-avoid-area"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie County schools announce early dismissal, cancel aftercare - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-excuse-absences-as-heavy-rain-brings-flooding-st-lucie-county-st-lucie-public-schools-school-early-pickup-early-student-pickup-school-dismissal-school-absences-excused-absences-oak-hammock-k-8-school-oak-hammock-school"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Heavy rain floods Port St. Lucie, Okeechobee roads amid Treasure Coast flood watch - WPEC",
+          "source_url": "https://cbs12.com/news/local/heavy-rain-floods-port-st-lucie-okeechobee-county-roads-indian-river-county-emergency-services-department-intersection-closed-weather-impact-street-closures-florida-news"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie Public Schools allows early pickups Monday amid flooding concerns",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-allows-early-pickups-monday-amid-flooding-concerns"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -71,16 +148,6 @@
           "editorial_story_id": "story_024676",
           "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
           "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -106,41 +173,35 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Port St. Lucie woman, 66, arrested on animal cruelty counts after 124 cats found in home - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-woman-66-arrested-on-29-animal-cruelty-counts-in-cat-hoarding-case-florida-news-florida-crime-local-news-local-crime-cat-hoarding-port-st-lucie",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.324
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 56.514
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 5,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 8,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 10.647,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 10.647,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -149,10 +210,25 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie Public Schools allows early pickups Monday amid flooding concerns",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-allows-early-pickups-monday-amid-flooding-concerns"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -166,18 +242,8 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-          "editorial_story_id": "story_022602",
-          "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-          "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-          "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
+          "source_headline": "Broward fugitive apprehended after reported domestic disturbance at Port St. Lucie hotel - WPBF",
+          "source_url": "https://www.wpbf.com/article/broward-fugitive-domestic-incident-port-st-lucie/74303310",
           "editorial_story_id": "story_024580",
           "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
           "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
@@ -187,9 +253,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -209,44 +275,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-          "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-          "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-          "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.89,
-          "shared_anchors": [
-            "Florida's November 2026 vote on Amendment 3",
-            "Proposed homestead exemption increases to $150,000 in 2027 and $250,000 in 2028",
-            "Exemption applies to non-school property taxes",
-            "Amendment requires 60% voter approval",
-            "Potential loss of local-government revenue"
-          ],
-          "novel_facts": [
-            "Adds ballot background on Amendment 1's budget stabilization fund proposal",
-            "Adds ballot background on Amendment 2's agricultural tangible personal property tax exemption",
-            "Lists county early-voting deadlines and Election Day polling hours"
-          ],
-          "reason": "The incoming ballot preview revisits the same pending Amendment 3 vote with identical exemption amounts, implementation years and approval threshold. Its additional amendment summaries and voting logistics are background and service information, not a new consequential development or independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-          "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
+          "source_headline": "Broward fugitive apprehended after reported domestic disturbance at Port St. Lucie hotel - WPBF",
+          "source_url": "https://www.wpbf.com/article/broward-fugitive-domestic-incident-port-st-lucie/74303310",
           "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
           "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
@@ -255,20 +289,28 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
+          "confidence": 0.99,
           "shared_anchors": [
-            "Guyrson Maddy, 37, arrested on domestic battery and held for Broward County probation violations in four felony cases",
+            "Guyrson Maddy, 37, arrested on a domestic battery charge with outstanding Broward County probation-violation warrants",
             "Reported assault at the Best Western in the 7900 block of South U.S. Highway 1 around 11:20 p.m. Friday",
-            "Dark-colored 2025 Tesla Model Y located at a home on Palm Breezes Drive",
-            "Maddy found in a bathroom with assistance from Deputy Mendoza and K-9 Oso and arrested without incident"
+            "Witness reported a man assaulting a woman and pushing her into a vehicle before leaving",
+            "Dark-colored 2025 Tesla Model Y located at a residence on Palm Breezes Drive",
+            "Woman directed deputies to a bathroom where Maddy was found and arrested without incident"
           ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same incident, arrest, charges, warrant history and investigative details already in the canonical. It adds no material development or independently newsworthy follow-up.",
+          "novel_facts": [
+            "Incoming article lists additional underlying offenses associated with the Broward County probation holds",
+            "Incoming article says Maddy's Palm Beach County probation began in 2023 and ended the preceding Sunday"
+          ],
+          "reason": "The named suspect, hotel address, incident time, distinctive vehicle and bathroom apprehension establish the same arrest. The additional probation history and offense details are background, not a new charge, ruling or other material development. Preserve the existing canonical.",
           "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.238
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Police urge drivers to avoid flooded St. Lucie West as vehicles become stranded",
+      "generated_card_count": 0,
+      "elapsed_seconds": 38.653
     },
     {
       "category_key": "business",
@@ -276,7 +318,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 19,
-      "publishable_source_count": 6,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -293,9 +335,46 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:port st lucie"
+          ],
+          "headline": "Aerial video shows significant flooding in St. Lucie West; police urge drivers to avoid area",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/aerial-video-shows-significant-flooding-in-st-lucie-west-police-urge-drivers-to-avoid-area"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:school district"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county"
+          ],
+          "headline": "St. Lucie Public Schools allows early pickups Monday amid flooding concerns",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-allows-early-pickups-monday-amid-flooding-concerns"
+        }
+      ],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
@@ -449,8 +528,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 5,
-      "elapsed_seconds": 18.869
+      "new_publication_stale_rejected_count": 1,
+      "elapsed_seconds": 29.775
     },
     {
       "category_key": "sports",
@@ -487,15 +566,15 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 10,
-      "elapsed_seconds": 14.199
+      "new_publication_stale_rejected_count": 14,
+      "elapsed_seconds": 17.966
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 16,
+      "fresh_candidate_count": 19,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -546,32 +625,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Treasure Coast families invited to watch and try dog sports at kennel club's Pirate Cluster",
-          "source_url": "https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-10-09-treasure-coast-kennel-club-brings-four-days-of-dog-sports-to-fort-pierce-fairgro",
-          "canonical_headline": "Treasure Coast Kennel Club brings four days of dog sports to Fort Pierce fairgrounds",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_023929",
-            "source:https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_023929,source:https://www.wptv.com/shining-a-light/treasure-coast-families-invited-to-watch-and-try-dog-sports-at-kennel-clubs-pirate-cluster",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -611,23 +666,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.602
+      "elapsed_seconds": 31.139
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 0,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -636,7 +691,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -649,13 +704,13 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.952
+      "elapsed_seconds": 31.148
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "no_publishable_sources",
-      "fetched_candidate_count": 28,
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 24,
       "publishable_source_count": 0,
       "selected_source_count": 0,
@@ -677,18 +732,8 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County woman honored after using CPR to save 3-year-old girl from swimming pool - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-woman-honored-after-using-cpr-to-save-3-year-old-girl-from-swimming-pool",
-          "editorial_story_id": "story_022183",
-          "canonical_slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
-          "canonical_headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
@@ -722,39 +767,11 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County woman honored after using CPR to save 3-year-old girl from swimming pool - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-woman-honored-after-using-cpr-to-save-3-year-old-girl-from-swimming-pool",
-          "canonical_slug": "2026-10-19-martin-county-fire-rescue-honors-woman-who-saved-drowning-3-year-old-with-cpr",
-          "canonical_headline": "Martin County Fire Rescue Honors Woman Who Saved Drowning 3-Year-Old With CPR",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Madison Isler, 20, rescued 3-year-old Luna from her apartment complex swimming pool on Aug. 23.",
-            "Isler performed CPR with assistance from a pediatric intensive care unit nurse.",
-            "Martin County Fire Rescue presented Isler with its inaugural Heroic Heart Award.",
-            "Luna and Isler reunited at fire rescue headquarters with Luna's mother, Christine Hernandez.",
-            "Both articles use the same WPTV source URL and substantially identical reporting and quotations."
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same rescue and award ceremony already covered by the canonical. Its later publication date and minor wording changes introduce no new development; preserve the existing page without rewriting it.",
-          "validation_errors": []
-        },
         {
           "category_key": "martin",
           "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
@@ -836,21 +853,36 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 27.964
+      "elapsed_seconds": 37.327
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "no_publishable_sources",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 26.888,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 22.105,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 48.993,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -861,10 +893,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -874,26 +906,6 @@
           "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
           "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-          "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-          "editorial_story_id": "story_024676",
-          "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-          "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-          "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
-          "editorial_story_id": "story_024580",
-          "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-          "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -918,9 +930,9 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge honored with procession - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-firefighter-austin-hodge-procession/74250417",
-          "editorial_story_id": "story_023522",
+          "source_headline": "'Have no word': St. Lucie County mourns firefighter-paramedic Austin Hodge after on-duty death - WPBF",
+          "source_url": "https://www.wpbf.com/article/austin-hodge-st-lucie-county-mourns-firefighter-paramedic-on-duty-death/74252967",
+          "editorial_story_id": "story_023150",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "basis": "durable_custom_incident_identity:near-term-custom-subject|2026-10-24|firefight-paramedic-austin-hodge",
@@ -953,9 +965,9 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -989,48 +1001,6 @@
             "Incoming reports northbound lanes reopened after 5 a.m."
           ],
           "reason": "The identical source URL and matching crash circumstances establish the same incident. The canonical already includes the three deaths, victims' ages, injuries and collision sequence. The added mile marker, hospital destination and reopening time are routine details, not material developments or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-          "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-          "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-          "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Deputies locate wanted Broward County man after Fort Pierce hotel disturbance - cw34.com",
-          "source_url": "https://cw34.com/news/local/deputies-locate-wanted-broward-county-man-after-fort-pierce-hotel-disturbance-st-lucie-county-fort-pierce-fort-pierce-hotel-best-western-us-highway-1-south-us-highway-1-st-lucie-county-sheriffs-office-slcso-guyrson-maddy-broward-county?teaserSource=trending",
-          "canonical_slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-          "canonical_headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Guyrson Maddy, 37, arrested on domestic battery and held for Broward County probation violations in four felony cases",
-            "Reported assault at the Best Western in the 7900 block of South U.S. Highway 1 around 11:20 p.m. Friday",
-            "Dark-colored 2025 Tesla Model Y located at a home on Palm Breezes Drive",
-            "Maddy found in a bathroom with assistance from Deputy Mendoza and K-9 Oso and arrested without incident"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same incident, arrest, charges, warrant history and investigative details already in the canonical. It adds no material development or independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -1078,8 +1048,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County firefighter paramedic Austin Hodge honored with procession - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-firefighter-austin-hodge-procession/74250417",
+          "source_headline": "'Have no word': St. Lucie County mourns firefighter-paramedic Austin Hodge after on-duty death - WPBF",
+          "source_url": "https://www.wpbf.com/article/austin-hodge-st-lucie-county-mourns-firefighter-paramedic-on-duty-death/74252967",
           "canonical_slug": "2026-10-24-st-lucie-county-firefighter-paramedic-austin-hodge-dies-in-line-of-duty",
           "canonical_headline": "St. Lucie County Firefighter-Paramedic Austin Hodge Dies in Line of Duty",
           "canonical_is_custom": true,
@@ -1092,23 +1062,27 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
+          "confidence": 0.99,
           "shared_anchors": [
-            "Deceased St. Lucie County Fire District firefighter-paramedic Austin Hodge",
-            "Memorial arrangements involving Stone Brothers Funeral Home",
-            "Fire district tributes and community support for Hodge's family"
+            "St. Lucie County Fire District firefighter-paramedic Austin Hodge",
+            "Hodge's on-duty death on Saturday, Oct. 24",
+            "More than nine years of service with the district"
           ],
           "novel_facts": [
-            "An escort to Stone Brothers Funeral Home is planned around 2 p.m.",
-            "The procession route includes S. 35th Street, Virginia Avenue, S. 13th Street, Delaware Avenue and S. 7th Street.",
-            "Fire apparatus will line the route, and community members may pay respects safely along it."
+            "Firefighters escorted Hodge's body from the medical examiner's office to a Fort Pierce funeral home Monday.",
+            "Hodge was found unresponsive in his firehouse bunk during shift change and died at the hospital despite lifesaving efforts.",
+            "Friends and former colleagues shared personal memories and discussed the family's earlier loss of his brother, Jarius."
           ],
-          "reason": "The incoming article concerns the same death and memorial arrangements already covered by the canonical. It adds routine procession logistics, not a material development concerning the death or an independently newsworthy public-interest follow-up.",
+          "reason": "Both articles cover Austin Hodge's same on-duty death. The incoming report adds a procession, circumstances of discovery, and memorial reactions, but no official cause, investigative finding, or other material development. Its statement that funeral arrangements remain unannounced is superseded by the canonical's announced arrangements.",
           "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 18.385
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie flooding strands vehicles as police urge residents to avoid travel",
+      "generated_card_count": 1,
+      "elapsed_seconds": 77.271
     },
     {
       "category_key": "indian_river",
@@ -1146,7 +1120,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.716
+      "elapsed_seconds": 22.212
     }
   ]
 }

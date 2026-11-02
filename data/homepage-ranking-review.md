@@ -4,14 +4,15 @@
 
 ## Hero
 
-- Current: **Three killed, including 5-year-old boy, in I-95 crash in Martin County**
-- Recommended: **Three killed, including 5-year-old boy, in I-95 crash in Martin County**
+- Current: **Early school pickups allowed amid Port St. Lucie flooding; Oak Hammock excluded**
+- Recommended: **Early school pickups allowed amid Port St. Lucie flooding; Oak Hammock excluded**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
+| 1 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 43 | importance 0; freshness 54.8; urgency 2/10; validated material update |
 
 ## Recommended moves
 
