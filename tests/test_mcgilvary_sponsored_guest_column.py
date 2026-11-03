@@ -4,6 +4,7 @@ Image binaries are supplied separately; this regression guards the editorial
 payload, image filenames, captions, page metadata and author credit.
 """
 from __future__ import annotations
+from html import unescape
 import importlib
 import json
 import os
@@ -105,7 +106,7 @@ def test_sponsored_guest_page_displays_authorship_seo_links_and_photo_box():
     )
     assert "<h1 class=\"article-headline\">" + HEADLINE + "</h1>" in page
     assert item["subhead"] in page
-    assert BYLINE in page
+    assert BYLINE in unescape(page)
     assert '"name": "Mike McGilvary"' in page
     assert 'content="Mike McGilvary"' in page
     assert 'class="article-contributor-card"' in page
@@ -131,7 +132,7 @@ def test_old_sponsored_article_without_guest_fields_keeps_existing_byline_and_se
     )
     example.update(is_custom=True, authoritative_custom=True, first_published="Sun, 04 Oct 2026 09:00:00 -0400")
     html = g.render_article_page(example, "Business & Development", "business", "2026-10-04", example["slug"])
-    assert "Sponsored by Packard Roofing" in html
+    assert 'Sponsored by <a href="https://www.packardroofing.com/"' in html
     assert "article-contributor-card" in html  # class definition is harmless
     assert '<aside class="article-contributor-card"' not in html
     assert "<title>Three generations later" in html
