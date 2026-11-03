@@ -20142,11 +20142,19 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         bio_html = _mark_sponsor_domain_links(make_paragraphs(_guest_bio, preserve_all=True))
         headshot_html = ""
         if _guest_headshot_url.startswith(("https://", "http://")):
+            _headshot_caption = str(hero.get("author_headshot_caption") or "").strip()
+            _headshot_credit = str(hero.get("image_credit") or "").strip()
+            _headshot_notes = "<span>" + html_lib.escape(_headshot_caption) + "</span>" if _headshot_caption else ""
+            if _headshot_credit:
+                _headshot_notes += "<small>Photo: " + html_lib.escape(_headshot_credit) + "</small>"
             headshot_html = (
+                '<figure class="article-contributor-portrait">'
                 f'<img class="article-contributor-headshot" '
                 f'src="{html_lib.escape(_guest_headshot_url, quote=True)}" '
                 f'alt="{html_lib.escape(str(hero.get("author_headshot_alt") or _guest_author), quote=True)}" '
                 'loading="lazy">'
+                + (f'<figcaption>{_headshot_notes}</figcaption>' if _headshot_notes else "")
+                + '</figure>'
             )
         _guest_author_box_html = (
             '<aside class="article-contributor-card" aria-label="About the author">'
@@ -20356,7 +20364,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-guest-deck {{ max-width: 900px; font-size: 19px; line-height: 1.5; color: var(--text-secondary); margin: -15px 0 16px; }}
     .article-guest-author-byline {{ max-width: 940px; color: var(--text); font-size: 13px; font-weight: 600; line-height: 1.7; margin: 0 0 30px; }}
     .article-contributor-card {{ display: flex; align-items: flex-start; gap: 20px; padding: 22px; margin: 35px 0 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }}
+    .article-contributor-portrait {{ margin: 0; width: 120px; flex: none; }}
     .article-contributor-headshot {{ width: 110px; height: 110px; border-radius: 10px; object-fit: cover; flex: none; }}
+    .article-contributor-portrait figcaption {{ display: grid; gap: 4px; padding-top: 6px; color: var(--text-muted); font-size: 10px; line-height: 1.35; }}
+    .article-contributor-portrait figcaption small {{ font-size: 10px; }}
     .article-contributor-details {{ min-width: 0; }}
     .article-contributor-details h2 {{ font-family: "Fraunces", serif; font-size: 23px; margin: 0 0 10px; }}
     .article-contributor-details p {{ font-size: 14px; line-height: 1.65; color: var(--text-secondary); margin: 0; }}
@@ -22617,7 +22628,7 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
             "custom_publication_key", "custom_series_key", "custom_edition_key",
             "sponsored", "sponsor_name", "sponsor_url", "carousel_images",
             "subhead", "byline", "author_name", "author_bio",
-            "author_headshot_url", "author_headshot_alt",
+            "author_headshot_url", "author_headshot_alt", "author_headshot_caption",
             "seo_title", "meta_description", "focus_keywords",
         ):
             value = canonical.get(key)
@@ -28050,7 +28061,7 @@ def _refresh_current_manual_custom_metadata(existing, hero, headline):
     existing["carousel_images"] = copy.deepcopy(hero.get("carousel_images") or [])
     for field in (
         "subhead", "byline", "author_name", "author_bio",
-        "author_headshot_url", "author_headshot_alt",
+        "author_headshot_url", "author_headshot_alt", "author_headshot_caption",
         "seo_title", "meta_description", "focus_keywords",
     ):
         existing[field] = copy.deepcopy(hero.get(field) or "")
@@ -38457,7 +38468,7 @@ def write_archives(all_categories, top_cat):
                     field: copy.deepcopy(hero.get(field) or "")
                     for field in (
                         "subhead", "byline", "author_name", "author_bio",
-                        "author_headshot_url", "author_headshot_alt",
+                        "author_headshot_url", "author_headshot_alt", "author_headshot_caption",
                         "seo_title", "meta_description", "focus_keywords",
                     )
                 } if hero.get("is_custom") else {}),
