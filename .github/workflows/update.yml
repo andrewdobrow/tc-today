@@ -511,6 +511,9 @@ jobs:
             python scripts/prepare_membership_paywall.py
           fi
 
+      - name: Sync editor-selected author photos on published custom articles
+        run: python scripts/sync_custom_author_photos.py
+
       - name: Validate final SEO and audience contracts
         run: |
           # Events can cross their exact 30-day expiry cutoff after the earlier
