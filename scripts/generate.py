@@ -22616,6 +22616,9 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
             "custom_body_hash", "custom_headline_key", "custom_id",
             "custom_publication_key", "custom_series_key", "custom_edition_key",
             "sponsored", "sponsor_name", "sponsor_url", "carousel_images",
+            "subhead", "byline", "author_name", "author_bio",
+            "author_headshot_url", "author_headshot_alt",
+            "seo_title", "meta_description", "focus_keywords",
         ):
             value = canonical.get(key)
             if value not in (None, ""):
