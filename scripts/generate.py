@@ -16872,6 +16872,107 @@ def reconcile_homepage_hero_headline_permalink(top_cat, output_root):
     return {"action": "corrected", "previous_slug": actual_slug, "canonical_slug": new_slug}
 
 
+
+def enforce_final_homepage_hero_feed_parity(top_cat, output_root):
+    """Verify final homepage selection against the exact native-feed archive gate.
+
+    A live card can retain an eligible-looking timestamp even when the canonical
+    publication row is subsequently marked ranking_eligible=False. The prior
+    freshness and headline/permalink checks did not detect this, so the native
+    Top News writer aborted a completed newsroom run *after* article generation.
+
+    Keep the strict native-feed gate. If the selected hero is ineligible, recover
+    a different, verified canonical publication from the established full-archive
+    recovery selector. Never mark a quarantined or retired row eligible, fabricate
+    a permalink, or silently swap only the native hero.
+    """
+    from tct_engine.top_news_app_feed import (
+        _postpublication_checker,
+        build_top_news_app_feed,
+    )
+
+    root = Path(output_root)
+    archive = load_archive(root / "archive.json")
+    checker = _postpublication_checker(root, _archive_entry_publishable)
+
+    def _verify(hero):
+        hero = hero if isinstance(hero, dict) else {}
+        slug = _normalize_existing_article_slug(
+            hero.get("_archived_slug") or hero.get("canonical_slug")
+            or hero.get("slug") or _article_slug_from_permalink(hero.get("link", ""))
+        )
+        try:
+            # Exactly the canonical, ranking-eligible, publishable archive set
+            # that write_top_news_app_feed will apply inside render_index().
+            build_top_news_app_feed(
+                hero_slug=slug,
+                top_story_slugs=[],
+                homepage_other_slugs=[],
+                archive=archive,
+                is_publishable=checker,
+            )
+        except (ValueError, IndexError) as exc:
+            return False, str(exc)
+        rows = [
+            row for row in archive
+            if isinstance(row, dict)
+            and _normalize_existing_article_slug(row.get("slug")) == slug
+        ]
+        if len(rows) != 1 or not _archive_entry_live_identity_safe(rows[0]):
+            return False, "no unique safe canonical archive owner"
+        if not _published_article_path(slug, root / "articles"):
+            return False, "canonical article file missing or redirected"
+        if _homepage_hero_headline_key(hero.get("headline")) != _homepage_hero_headline_key(rows[0].get("headline")):
+            return False, "homepage headline does not match canonical article"
+        age = _canonical_hero_freshness_assessment(rows[0]).get("age_hours")
+        if age is None or age >= CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS:
+            return False, "canonical article is too old for homepage hero"
+        return True, ""
+
+    current = (top_cat or {}).get("hero") or {}
+    verified, reason = _verify(current)
+    if verified:
+        return top_cat
+
+    recovered, recovery_report = _recent_canonical_archive_homepage_hero(
+        archive, root, max_age_hours=CANONICAL_HERO_FALLBACK_MAX_AGE_HOURS,
+    )
+    if recovered:
+        replacement_ok, replacement_reason = _verify(recovered.get("hero"))
+        if replacement_ok:
+            global FRONT_PAGE_HERO_AUDIT
+            FRONT_PAGE_HERO_AUDIT = {
+                "version": "1.11.3.6",
+                "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "selection_reason": "recovered_after_final_feed_parity_rejection",
+                "rejected_hero": {
+                    "headline": str(current.get("headline") or "")[:130],
+                    "slug": current.get("_archived_slug") or current.get("canonical_slug") or "",
+                    "reason": reason[:300],
+                },
+                "selected": {
+                    "headline": recovered["hero"].get("headline", ""),
+                    "category_key": recovered.get("category_key", ""),
+                    "slug": recovered["hero"].get("_archived_slug", ""),
+                    "archive_only": True,
+                },
+                "full_archive_candidate_pool": recovery_report,
+            }
+            print(
+                "  Homepage hero/feed parity repaired: "
+                f"{reason[:140]}; recovered {recovered['hero'].get('_archived_slug', '')}"
+            )
+            return recovered
+        reason += f"; alternate rejected: {replacement_reason}"
+
+    raise RuntimeError(
+        "Final homepage hero/feed parity FAILED: no eligible canonical "
+        f"publication could replace {str(current.get('headline') or '')[:100]!r}: "
+        f"{reason[:350]}; verified recovery candidates="
+        f"{recovery_report.get('eligible', 0)}"
+    )
+
+
 def validate_rendered_homepage_hero_headline_permalink(index_html, output_root):
     """Fail closed if late final-projection rewriting reintroduces a wrong hero URL."""
     html = str(index_html or "")
@@ -43666,6 +43767,11 @@ def main():
     _hero_headline_permalink_reconciliation = reconcile_homepage_hero_headline_permalink(
         top_cat, OUTPUT_DIR
     )
+    # Last gate: the homepage hero must be the very same ranking-eligible,
+    # canonical publication the native Top News feed is allowed to mirror.
+    # Late archive rebinding can invalidate a previously fresh live selection.
+    top_cat = enforce_final_homepage_hero_feed_parity(top_cat, OUTPUT_DIR)
+    _write_front_page_hero_audit(OUTPUT_DIR)
     index_html = render_index(all_categories, top_cat)
     index_html, _final_surface_projection_repair = repair_final_canonical_surface_projection(
         index_html, OUTPUT_DIR
