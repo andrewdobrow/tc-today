@@ -514,6 +514,9 @@ jobs:
       - name: Sync editor-selected author photos on published custom articles
         run: python scripts/sync_custom_author_photos.py
 
+      - name: Keep sponsored articles out of the general homepage hero
+        run: python scripts/enforce_editorial_main_hero.py
+
       - name: Validate final SEO and audience contracts
         run: |
           # Events can cross their exact 30-day expiry cutoff after the earlier
