@@ -4,22 +4,20 @@
 
 ## Hero
 
-- Current: **Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service**
-- Recommended: **Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service**
+- Current: **St. Lucie County's Legacy High polling site stays open via alternate route**
+- Recommended: **St. Lucie County's Legacy High polling site stays open via alternate route**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Martin County district schools closed Tuesday, after-school activities canceled | Voluntary Rockridge evacuation ordered; St. Lucie County schools to close | 68 | importance 0; freshness 84.97; urgency 10/10; validated material update |
-| 2 | Voluntary Rockridge evacuation ordered; St. Lucie County schools to close | Martin County district schools closed Tuesday, after-school activities canceled | 66 | importance 0; freshness 99.88; urgency 10/10 |
-| 3 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 37 | importance 0; freshness 28.22; urgency 2/10; validated material update |
+| 1 | Martin County district schools closed Tuesday, after-school activities canceled | Martin County district schools closed Tuesday, after-school activities canceled | 46 | importance 0; freshness 90.95; urgency 2/10 |
+| 2 | Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival | — |  |  |
 
 ## Recommended moves
 
-- **Voluntary Rockridge evacuation ordered; St. Lucie County schools to close**: 2 → 1 — importance 0; freshness 84.97; urgency 10/10; validated material update
-- **Martin County district schools closed Tuesday, after-school activities canceled**: 1 → 2 — importance 0; freshness 99.88; urgency 10/10
+No top-deck moves recommended.
 
 ## Guardrails
 
