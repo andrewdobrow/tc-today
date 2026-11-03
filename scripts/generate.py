@@ -20024,9 +20024,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     _guest_author_name = str(hero.get("guest_author_name") or "").strip() if _guest_byline else ""
     _seo_title = str(hero.get("seo_title") or "").strip() if _is_sponsored else ""
     _seo_description = str(hero.get("seo_description") or "").strip() if _is_sponsored else ""
-    description = html_lib.escape(
-        _seo_description or (hero.get("teaser") or hero.get("body", "")[:155]),
-        quote=True,
+    description = (
+        html_lib.escape(_seo_description, quote=True)
+        if _seo_description else (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     )
     _sponsor_name = str(hero.get("sponsor_name") or "").strip()
     _sponsor_url = str(hero.get("sponsor_url") or "").strip()
