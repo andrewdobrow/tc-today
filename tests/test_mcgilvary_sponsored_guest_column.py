@@ -35,12 +35,26 @@ GALLERY = [
 HEADSHOT = "mike-mcgilvary-headshot-florida-certified-roofing-contractor-ccc1331721.jpg"
 
 
+FIXTURE = ROOT / "tests/fixtures/mcgilvary_sponsored_guest_column_2026_11_03.json"
+CUSTOM_ID = "mike-mcgilvary-florida-roof-age-law-sponsored-2026-11-03"
+
+
 def _article():
+    """Retain historical sponsor regressions after the live custom queue rotates."""
+    item = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    assert item["custom_id"] == CUSTOM_ID
+    return item
+
+
+def test_active_queue_matches_sponsor_fixture_when_queued():
+    """Enforce this release's exact copy, without blocking the next custom story."""
     queue = json.loads((ROOT / "custom_articles.json").read_text(encoding="utf-8"))
-    matches = [row for row in queue if row.get("custom_id") == "mike-mcgilvary-florida-roof-age-law-sponsored-2026-11-03"]
-    assert len(matches) == 1
-    assert len(queue) == 1, "only the newly requested custom article belongs in the queue"
-    return matches[0]
+    assert isinstance(queue, list)
+    assert len(queue) <= 1, "the rotating queue must contain at most one custom release"
+    matches = [row for row in queue if row.get("custom_id") == CUSTOM_ID]
+    if matches:
+        assert len(matches) == 1
+        assert matches[0] == _article()
 
 
 def _generator():
