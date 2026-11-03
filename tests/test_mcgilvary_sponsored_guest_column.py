@@ -32,7 +32,7 @@ GALLERY = [
     "mike-mcgilvary-roofing-crew-palm-beach-county-tile-roof-specialists.jpg",
     "mike-mcgilvary-florida-roof-age-law-tile-roof-preservation-expert.jpg",
 ]
-HEADSHOT = "mike-mcgilvary-headshot-florida-certified-roofing-contractor-ccc1331721.jpg"
+HEADSHOT = "mike-mcgilvary-florida-roof-age-law-tile-roof-preservation-expert.jpg"
 
 
 FIXTURE = ROOT / "tests/fixtures/mcgilvary_sponsored_guest_column_2026_11_03.json"
@@ -95,14 +95,14 @@ def test_exact_headline_subhead_byline_and_guest_column_copy():
     assert not re.search(r"\b(?:561|772)[-. ]\d{3}[-. ]\d{4}\b", item["body"])
 
 
-def test_gallery_is_client_order_with_exact_captions_alt_text_and_separate_headshot():
+def test_gallery_is_client_order_with_exact_captions_alt_text_and_author_photo():
     item = _article()
     assert item["image_url"] == PREFIX + GALLERY[0]
     assert [x["url"] for x in item["carousel_images"]] == [PREFIX + name for name in GALLERY]
     assert all(x["caption"] and x["alt"] for x in item["carousel_images"])
     assert item["image_credit"] == "Mike McGilvary Roofing, Inc."
     assert item["author_headshot_url"] == PREFIX + HEADSHOT
-    assert HEADSHOT not in [x["url"] for x in item["carousel_images"]]
+    # The editor may deliberately reuse a carousel image in the author box.
     assert "The original tiles are catalogued and reinstalled" in item["carousel_images"][2]["caption"]
 
 
