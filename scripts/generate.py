@@ -5886,7 +5886,7 @@ def _archive_article_metrics(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="article-contributor-card"[^>]*>.*?</aside>\s*)?(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
@@ -5918,7 +5918,7 @@ def _archive_article_body(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="article-contributor-card"[^>]*>.*?</aside>\s*)?(?:<p class="article-sponsored-partnership"[^>]*>.*?</p>\s*)?(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
