@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-03T00:01:48Z",
+  "generated_at": "2026-11-03T03:03:15Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,26 +49,35 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 173,
+    "candidates_processed": 161,
     "routes": {
-      "generate_new": 48,
-      "skip": 125
+      "generate_new": 43,
+      "skip": 118
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 136,
-      "publishable": 36
+      "listing": 2,
+      "low_value": 126,
+      "publishable": 33
     },
     "source_classes": {
-      "aggregator": 137,
-      "local_news": 28,
+      "aggregator": 128,
+      "local_news": 25,
       "regional_news": 8
     },
-    "rejected_count": 1,
+    "rejected_count": 2,
     "rejected_examples": [
       {
         "headline": "Miami Cash4Keys Execs Accused of Stealing Vulnerable Senior’s Home in Brazen Scheme - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPSEdPdC1mLUtZcjJINWwyeEhTRlJkeExOdTFGMFJ6UTBXdFFReGlYT1RNY1NQbXFuLUw0M3dhQmNtNFNhVExpajdsUlI0ZWY0TWRMUWxLNmVEa1lxTW5nTTRldEdzLWpkUzVuM0xsMzYxWXVodXh6eTRSX2hOQWo0WjdrOXZSSFV5Z0E?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
+        "headline": "3554 Ocean Dr Apt 204S, Vero Beach, FL 32963 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOMk5fUzVJS1B0MDEwMHU4cHdWQnFsQ0dCZGRnQV9Hb3dKT3ZBcFU0X3g3LTBHUVNlQm1FTVB5bnJyQThPYWtfdXlZZzd6cURiRlBXYjZnYXNuV08xUGZYMlpnVTY2TVMzU3N0dDg0dXVJTXZkcl9pYWdFbUJ3U2pmclk4YW5DQWZ5Y1AyY0t2dkxtNW5aY3hXaGV4MA?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -79,14 +88,14 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 36,
-      "same_event": 137
+      "new_story": 30,
+      "same_event": 131
     },
     "examples": [
       {
-        "story_id": "story_025063",
-        "title": "Florida counties declare states of emergency; shelters open in IRC - Bradenton Herald",
-        "event_key": "unknown-event-d8ff28115f",
+        "story_id": "story_025102",
+        "title": "Flash flooding impacts 25 polling places in 7 counties in Florida - WPLG Local 10",
+        "event_key": "unknown-event-e49f0d5f38",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -96,40 +105,40 @@
         ]
       },
       {
-        "story_id": "story_025063",
-        "title": "Florida counties declare states of emergency; shelters open in IRC - Treasure Coast News",
-        "event_key": "unknown-event-ab01468be6",
+        "story_id": "story_025103",
+        "title": "Gov. DeSantis declares state of emergency for 7 Florida counties, including Treasure Coast, for flooding",
+        "event_key": "unknown-event-a3f91d8797",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025104",
+        "title": "NHC raises development odds for western Atlantic disturbance - WPEC",
+        "event_key": "unknown-event-991bd91e8b",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025066",
+        "title": "Gov. declares state of emergency amid flooding; Indian River schools to close - Vero News",
+        "event_key": "unknown-event-14c92ed2f4",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMipwFBVV95cUxOOU5IMFdGTTdiNlJxVm5aaVBHZjZSLXVPcHhrM1JBOFN3TnhsTTJ4WTIxWUs3T0ZWTm1tb0s4SVljbWM4cll1RmxxcVV4STJld2Z0UGFwTi1kaUpyek5hODVWMWdrY0xFWVdCVF9MY3JfSHdFM05SejA0TzVUYlFyTlgxWnItX25rT0xSUW5LRHpMcUZCQmw0WEliQ2pUSVh1aXc4TU02Yw",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025064",
-        "title": "Flooding impacts several Palm Beach Gardens neighborhoods",
-        "event_key": "fire-dab9cb60dd-dab9cb60dd",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_025065",
-        "title": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements",
-        "event_key": "unknown-event-b35b08eadc",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -138,23 +147,12 @@
         "event_key": "unknown-event-d3117d180a",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMi_wFBVV95cUxOdG8tU1dENWh5ZzVCZ3VlSHFOWG9lakVKRHdheE4tS0E1NFJkcVNVY2U5eWFOdVJsdEV4Zmd3RmJkampTWnNkbmlZSkZDclRIZjhxYUVQSzY1eFpMT19OQWJhOEpUbHFiQk1nazI2Zk9WbHNrT0pEemZxZG0zTEg2M2w4U1Bfa0I5emMtY3NqQmhrMlFZOEluVVBnYXdDNUtwYWppdklKSlh6Q0F1aDBHRk1Wd0N4TWJDT1oydGlqM0JnR0JpM2FnV1U5bWZCSmVKcnZKOXBQTkRkTkk0X3l1LW5nVHJfZVIzdjBrOFJzckoxQkdiWFZXNGRiTHAxRDQ",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025066",
-        "title": "County declares local state of emergency amid flooding; schools to close - Vero News",
-        "event_key": "unknown-event-0850dc5fb0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -172,9 +170,9 @@
         ]
       },
       {
-        "story_id": "story_025067",
-        "title": "DeSantis Declares State of Emergency for Brevard, 6 Counties - The Space Coast Rocket",
-        "event_key": "unknown-event-d460f89228",
+        "story_id": "story_025105",
+        "title": "Flooding and severe weather prompt school closures and activity cancellations for Tuesday - WPEC",
+        "event_key": "unknown-event-d021134df1",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -184,9 +182,152 @@
         ]
       },
       {
+        "story_id": "story_025106",
+        "title": "Martin County and Okeechobee County schools closed Tuesday due to flooding",
+        "event_key": "unknown-event-098c2bb4ba",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025107",
+        "title": "Flooding prompts St. Lucie County closures, could affect Election Day voting - WPEC",
+        "event_key": "traffic-crash-port-st-lucie-343033a59a",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025106",
+        "title": "Martin County and Okeechobee County schools closed Tuesday due to flooding - WFLX",
+        "event_key": "unknown-event-7b47fc1665",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025108",
+        "title": "Up to 600 residents displaced by deadly Learjet crash face uncertain timeline for returning home",
+        "event_key": "traffic-crash-a1d1f3bb97-a1d1f3bb97",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025109",
+        "title": "Homestead man killed in deadly head-on Belle Glade crash - WPEC",
+        "event_key": "named-person-death:belle-glade",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_025063",
+        "title": "Florida counties declare states of emergency; shelters open in IRC - Treasure Coast News",
+        "event_key": "unknown-event-ab01468be6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025064",
+        "title": "Flooding impacts several Palm Beach Gardens neighborhoods",
+        "event_key": "fire-dab9cb60dd-dab9cb60dd",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025065",
+        "title": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements",
+        "event_key": "unknown-event-b35b08eadc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025110",
+        "title": "Flash flood warning issued for Palm Beach County until 7:30 p.m. Monday - WPEC",
+        "event_key": "unknown-event-5d38e4acdd",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025067",
+        "title": "DeSantis Declares State of Emergency for Brevard, 6 Counties - The Space Coast Rocket",
+        "event_key": "unknown-event-d460f89228",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_025068",
         "title": "Okeechobee County sees 1-in-200-year rainfall event, leaving neighborhoods underwater",
         "event_key": "fire-9819f02681-9819f02681",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025111",
+        "title": "Driver arrested after deputies seize cocaine, cash and paraphernalia, HCSO says - WPEC",
+        "event_key": "unknown-event-7edd3cd9c8",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -199,141 +340,6 @@
         "story_id": "story_025026",
         "title": "Indian River, St. Lucie counties declare local states of emergency amid widespread flooding",
         "event_key": "unknown-event-4d8faf84b3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025027",
-        "title": "Trump touts Reflecting Pool repairs during midterm closing arguments",
-        "event_key": "unknown-event-cf34ea92c1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025028",
-        "title": "Florida is getting pounded with relentless record rain; more to come - Yahoo",
-        "event_key": "unknown-event-35910b8f53",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025029",
-        "title": "Five up for judicial retention votes in state’s Fourth District - The Florida Trib",
-        "event_key": "unknown-event-7896eb9ec8",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025032",
-        "title": "Flooding forces polling location changes in Palm Beach, Indian River counties ahead of Election Day - WFLX",
-        "event_key": "unknown-event-ef0e8b2cc7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025031",
-        "title": "Two former IRC deputies face felony charges in Flock misuse investigation - cw34.com",
-        "event_key": "unknown-event-40c91b897c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025069",
-        "title": "Heavy rain triggers widespread flooding across St. Lucie, Okeechobee counties - WPEC",
-        "event_key": "unknown-event-7b8d93de83",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_025032",
-        "title": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
-        "event_key": "unknown-event-5b16cd0eb1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
-        "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025033",
-        "title": "Heavy rains, torrential downpours soak Central Florida - Orlando Sentinel",
-        "event_key": "unknown-event-c27c24982a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025034",
-        "title": "Jean Daniel Madden, Jr - warwickonline.com",
-        "event_key": "unknown-event-e26449611e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025035",
-        "title": "High School Football: St. Helena falls to Stuart Hall, 55-20, as rally fizzles - The Napa Valley Register",
-        "event_key": "unknown-event-d75139b2f8",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -347,9 +353,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_025063",
-        "title": "Florida counties declare states of emergency; shelters open in IRC - Bradenton Herald",
-        "event_key": "unknown-event-d8ff28115f",
+        "story_id": "story_025102",
+        "title": "Flash flooding impacts 25 polling places in 7 counties in Florida - WPLG Local 10",
+        "event_key": "unknown-event-e49f0d5f38",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -360,43 +366,43 @@
         ]
       },
       {
-        "story_id": "story_025063",
-        "title": "Florida counties declare states of emergency; shelters open in IRC - Treasure Coast News",
-        "event_key": "unknown-event-ab01468be6",
+        "story_id": "story_025103",
+        "title": "Gov. DeSantis declares state of emergency for 7 Florida counties, including Treasure Coast, for flooding",
+        "event_key": "unknown-event-a3f91d8797",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025104",
+        "title": "NHC raises development odds for western Atlantic disturbance - WPEC",
+        "event_key": "unknown-event-991bd91e8b",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025066",
+        "title": "Gov. declares state of emergency amid flooding; Indian River schools to close - Vero News",
+        "event_key": "unknown-event-14c92ed2f4",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMipwFBVV95cUxOOU5IMFdGTTdiNlJxVm5aaVBHZjZSLXVPcHhrM1JBOFN3TnhsTTJ4WTIxWUs3T0ZWTm1tb0s4SVljbWM4cll1RmxxcVV4STJld2Z0UGFwTi1kaUpyek5hODVWMWdrY0xFWVdCVF9MY3JfSHdFM05SejA0TzVUYlFyTlgxWnItX25rT0xSUW5LRHpMcUZCQmw0WEliQ2pUSVh1aXc4TU02Yw",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025064",
-        "title": "Flooding impacts several Palm Beach Gardens neighborhoods",
-        "event_key": "fire-dab9cb60dd-dab9cb60dd",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_025065",
-        "title": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements",
-        "event_key": "unknown-event-b35b08eadc",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -406,24 +412,12 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMi_wFBVV95cUxOdG8tU1dENWh5ZzVCZ3VlSHFOWG9lakVKRHdheE4tS0E1NFJkcVNVY2U5eWFOdVJsdEV4Zmd3RmJkampTWnNkbmlZSkZDclRIZjhxYUVQSzY1eFpMT19OQWJhOEpUbHFiQk1nazI2Zk9WbHNrT0pEemZxZG0zTEg2M2w4U1Bfa0I5emMtY3NqQmhrMlFZOEluVVBnYXdDNUtwYWppdklKSlh6Q0F1aDBHRk1Wd0N4TWJDT1oydGlqM0JnR0JpM2FnV1U5bWZCSmVKcnZKOXBQTkRkTkk0X3l1LW5nVHJfZVIzdjBrOFJzckoxQkdiWFZXNGRiTHAxRDQ",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025066",
-        "title": "County declares local state of emergency amid flooding; schools to close - Vero News",
-        "event_key": "unknown-event-0850dc5fb0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -442,9 +436,9 @@
         ]
       },
       {
-        "story_id": "story_025067",
-        "title": "DeSantis Declares State of Emergency for Brevard, 6 Counties - The Space Coast Rocket",
-        "event_key": "unknown-event-d460f89228",
+        "story_id": "story_025105",
+        "title": "Flooding and severe weather prompt school closures and activity cancellations for Tuesday - WPEC",
+        "event_key": "unknown-event-d021134df1",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -455,9 +449,163 @@
         ]
       },
       {
+        "story_id": "story_025106",
+        "title": "Martin County and Okeechobee County schools closed Tuesday due to flooding",
+        "event_key": "unknown-event-098c2bb4ba",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025107",
+        "title": "Flooding prompts St. Lucie County closures, could affect Election Day voting - WPEC",
+        "event_key": "traffic-crash-port-st-lucie-343033a59a",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025106",
+        "title": "Martin County and Okeechobee County schools closed Tuesday due to flooding - WFLX",
+        "event_key": "unknown-event-7b47fc1665",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025108",
+        "title": "Up to 600 residents displaced by deadly Learjet crash face uncertain timeline for returning home",
+        "event_key": "traffic-crash-a1d1f3bb97-a1d1f3bb97",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025109",
+        "title": "Homestead man killed in deadly head-on Belle Glade crash - WPEC",
+        "event_key": "named-person-death:belle-glade",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_025063",
+        "title": "Florida counties declare states of emergency; shelters open in IRC - Treasure Coast News",
+        "event_key": "unknown-event-ab01468be6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025064",
+        "title": "Flooding impacts several Palm Beach Gardens neighborhoods",
+        "event_key": "fire-dab9cb60dd-dab9cb60dd",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025065",
+        "title": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements",
+        "event_key": "unknown-event-b35b08eadc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025110",
+        "title": "Flash flood warning issued for Palm Beach County until 7:30 p.m. Monday - WPEC",
+        "event_key": "unknown-event-5d38e4acdd",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_025067",
+        "title": "DeSantis Declares State of Emergency for Brevard, 6 Counties - The Space Coast Rocket",
+        "event_key": "unknown-event-d460f89228",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_025068",
         "title": "Okeechobee County sees 1-in-200-year rainfall event, leaving neighborhoods underwater",
         "event_key": "fire-9819f02681-9819f02681",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_025111",
+        "title": "Driver arrested after deputies seize cocaine, cash and paraphernalia, HCSO says - WPEC",
+        "event_key": "unknown-event-7edd3cd9c8",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -471,151 +619,6 @@
         "story_id": "story_025026",
         "title": "Indian River, St. Lucie counties declare local states of emergency amid widespread flooding",
         "event_key": "unknown-event-4d8faf84b3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025027",
-        "title": "Trump touts Reflecting Pool repairs during midterm closing arguments",
-        "event_key": "unknown-event-cf34ea92c1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025028",
-        "title": "Florida is getting pounded with relentless record rain; more to come - Yahoo",
-        "event_key": "unknown-event-35910b8f53",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025029",
-        "title": "Five up for judicial retention votes in state’s Fourth District - The Florida Trib",
-        "event_key": "unknown-event-7896eb9ec8",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025032",
-        "title": "Flooding forces polling location changes in Palm Beach, Indian River counties ahead of Election Day - WFLX",
-        "event_key": "unknown-event-ef0e8b2cc7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025031",
-        "title": "Two former IRC deputies face felony charges in Flock misuse investigation - cw34.com",
-        "event_key": "unknown-event-40c91b897c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025069",
-        "title": "Heavy rain triggers widespread flooding across St. Lucie, Okeechobee counties - WPEC",
-        "event_key": "unknown-event-7b8d93de83",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_025032",
-        "title": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
-        "event_key": "unknown-event-5b16cd0eb1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
-        "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025033",
-        "title": "Heavy rains, torrential downpours soak Central Florida - Orlando Sentinel",
-        "event_key": "unknown-event-c27c24982a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025034",
-        "title": "Jean Daniel Madden, Jr - warwickonline.com",
-        "event_key": "unknown-event-e26449611e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_025035",
-        "title": "High School Football: St. Helena falls to Stuart Hall, 55-20, as rally fizzles - The Napa Valley Register",
-        "event_key": "unknown-event-d75139b2f8",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -645,9 +648,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 370,
-      "timeline_entries_examined": 1164,
-      "transitions_examined": 755,
+      "stories_with_timelines": 376,
+      "timeline_entries_examined": 1179,
+      "transitions_examined": 764,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 19,
       "high_confidence_candidate_count": 7,
@@ -661,7 +664,7 @@
       },
       "same_source_evolution_examples": [
         {
-          "story_id": "story_025058",
+          "story_id": "story_025098",
           "story_title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
           "milestones": [
             "closure"
@@ -682,7 +685,7 @@
           "prior_article": {
             "article_id": "rss-11fab8f50538e4d50943",
             "event_key": "traffic-crash-768ef5b1f5-768ef5b1f5",
-            "published_at": "2026-11-02T23:42:41.909527+00:00",
+            "published_at": "2026-11-03T02:42:37.758925+00:00",
             "title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -690,7 +693,7 @@
           "newer_article": {
             "article_id": "rss-1b8d5ef3cc24d5b5be9c",
             "event_key": "fire-708e56f0ff-708e56f0ff",
-            "published_at": "2026-11-02T23:42:41.909527+00:00",
+            "published_at": "2026-11-03T02:42:37.758925+00:00",
             "title": "Truck fire shuts down Florida's Turnpike South in St. Lucie County",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -1190,7 +1193,7 @@
           ]
         },
         {
-          "story_id": "story_025058",
+          "story_id": "story_025098",
           "story_title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1201,7 +1204,7 @@
               "prior_article": {
                 "article_id": "rss-d25f2906d3e41a386f00",
                 "event_key": "traffic-crash-port-st-lucie-a2dfb7e4bc",
-                "published_at": "2026-11-02T23:42:41.909527+00:00",
+                "published_at": "2026-11-03T02:42:37.758925+00:00",
                 "title": "Heavy rain floods Port St. Lucie, Okeechobee roads amid Treasure Coast flood watch - WPEC",
                 "source": "https://cbs12.com/news/local/heavy-rain-floods-port-st-lucie-okeechobee-county-roads-indian-river-county-emergency-services-department-intersection-closed-weather-impact-street-closures-florida-news",
                 "url": "https://cbs12.com/news/local/heavy-rain-floods-port-st-lucie-okeechobee-county-roads-indian-river-county-emergency-services-department-intersection-closed-weather-impact-street-closures-florida-news"
@@ -1209,7 +1212,7 @@
               "newer_article": {
                 "article_id": "rss-ecd622dee9e155599790",
                 "event_key": "traffic-crash-8a02cb01a2-8a02cb01a2",
-                "published_at": "2026-11-02T23:42:41.909527+00:00",
+                "published_at": "2026-11-03T02:42:37.758925+00:00",
                 "title": "All lanes reopen on Florida's Turnpike after truck fire, crash in St. Lucie County",
                 "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
                 "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
@@ -2520,7 +2523,7 @@
           ]
         },
         {
-          "story_id": "story_025058",
+          "story_id": "story_025098",
           "story_title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
           "milestones": [
             "resolution"
@@ -2560,7 +2563,7 @@
           "prior_article": {
             "article_id": "rss-d25f2906d3e41a386f00",
             "event_key": "traffic-crash-port-st-lucie-a2dfb7e4bc",
-            "published_at": "2026-11-02T23:42:41.909527+00:00",
+            "published_at": "2026-11-03T02:42:37.758925+00:00",
             "title": "Heavy rain floods Port St. Lucie, Okeechobee roads amid Treasure Coast flood watch - WPEC",
             "source": "https://cbs12.com/news/local/heavy-rain-floods-port-st-lucie-okeechobee-county-roads-indian-river-county-emergency-services-department-intersection-closed-weather-impact-street-closures-florida-news",
             "url": "https://cbs12.com/news/local/heavy-rain-floods-port-st-lucie-okeechobee-county-roads-indian-river-county-emergency-services-department-intersection-closed-weather-impact-street-closures-florida-news"
@@ -2568,14 +2571,14 @@
           "newer_article": {
             "article_id": "rss-ecd622dee9e155599790",
             "event_key": "traffic-crash-8a02cb01a2-8a02cb01a2",
-            "published_at": "2026-11-02T23:42:41.909527+00:00",
+            "published_at": "2026-11-03T02:42:37.758925+00:00",
             "title": "All lanes reopen on Florida's Turnpike after truck fire, crash in St. Lucie County",
             "source": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county",
             "url": "https://www.wptv.com/traffic/traffic-news/truck-fire-shuts-down-floridas-turnpike-south-in-st-lucie-county"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_025058",
+            "Story: story_025098",
             "Novel milestones: resolution",
             "Identity anchor qualified: False",
             "Identity anchor codes: event_family_match, identity_anchor_missing",
@@ -2597,35 +2600,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 693,
-      "treasure_coast_local": 435,
-      "treasure_coast_region": 154,
+      "florida": 696,
+      "treasure_coast_local": 437,
+      "treasure_coast_region": 156,
       "unknown": 1274
     },
-    "average_score": 57.81
+    "average_score": 57.88
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 693,
-      "treasure_coast_local": 435,
-      "treasure_coast_region": 154,
+      "florida": 696,
+      "treasure_coast_local": 437,
+      "treasure_coast_region": 156,
       "unknown": 1274
     },
-    "average_priority": 3.1
+    "average_priority": 3.09
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1594,
-      "developing": 91,
-      "ongoing": 871
+      "active": 1601,
+      "developing": 95,
+      "ongoing": 867
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2517,
-    "active_stories_after": 2517,
+    "active_stories_before": 2532,
+    "active_stories_after": 2532,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2650,27 +2653,27 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 53,
+    "incident_anchor_to_story_count": 52,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-02T23:41:42Z",
-    "quarantined_story_records_retained": 4801,
-    "active_story_count": 2556
+    "generated_at": "2026-11-03T02:41:37Z",
+    "quarantined_story_records_retained": 4804,
+    "active_story_count": 2563
   },
   "stories": {
-    "total": 2556,
+    "total": 2563,
     "importance_levels": {
       "breaking": 5,
-      "high": 59,
-      "normal": 359,
-      "low": 2133,
+      "high": 57,
+      "normal": 361,
+      "low": 2140,
       "archived": 0
     },
-    "average_importance": 7.71,
+    "average_importance": 7.68,
     "top": [
       {
-        "story_id": "story_025060",
+        "story_id": "story_025100",
         "title": "Semi-truck turns into path of SUV, killing Vero Beach driver, FHP says - WPTV",
         "score": 75,
         "editorial_priority": 85,
@@ -2724,7 +2727,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-02T23:42:41.909527+00:00",
+          "last_updated": "2026-11-03T02:42:37.758925+00:00",
           "hours_since_update": 0.01,
           "event_count": 6,
           "timeline_entries": 6
@@ -2743,7 +2746,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.01
+          "age_hours": 54.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2793,7 +2796,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-10-31T20:42:28.931873+00:00",
-          "hours_since_update": 51.01,
+          "hours_since_update": 54.01,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2811,7 +2814,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 12.08
+          "age_hours": 15.09
         },
         "level": "high",
         "importance_reasons": [
@@ -2855,7 +2858,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 12.08,
+          "hours_since_update": 15.09,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -2873,7 +2876,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 133.01
+          "age_hours": 136.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2929,13 +2932,13 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-28T10:42:38.998617+00:00",
-          "hours_since_update": 133.01,
+          "hours_since_update": 136.01,
           "event_count": 9,
           "timeline_entries": 9
         }
       },
       {
-        "story_id": "story_025059",
+        "story_id": "story_025099",
         "title": "Vero Beach man killed in crash involving semi-trailer in Indian River County - Vero News",
         "score": 65,
         "editorial_priority": 64,
@@ -2984,7 +2987,7 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-11-02T23:42:41.909527+00:00",
+          "last_updated": "2026-11-03T02:42:37.758925+00:00",
           "hours_since_update": 0.01,
           "event_count": 1,
           "timeline_entries": 1
@@ -3003,7 +3006,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 26.01
+          "age_hours": 29.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3044,7 +3047,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-01T21:42:33.213938+00:00",
-          "hours_since_update": 26.01,
+          "hours_since_update": 29.01,
           "event_count": 29,
           "timeline_entries": 29
         }
@@ -3062,7 +3065,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 216.94
+          "age_hours": 219.94
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3117,7 +3120,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-24T22:46:38.426958+00:00",
-          "hours_since_update": 216.94,
+          "hours_since_update": 219.94,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3135,7 +3138,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 175.95
+          "age_hours": 178.95
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3184,7 +3187,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T15:45:46.965295+00:00",
-          "hours_since_update": 175.95,
+          "hours_since_update": 178.95,
           "event_count": 13,
           "timeline_entries": 13
         }
@@ -3202,7 +3205,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 295.85
+          "age_hours": 298.85
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3254,7 +3257,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-21T15:51:47.326757+00:00",
-          "hours_since_update": 295.85,
+          "hours_since_update": 298.85,
           "event_count": 7,
           "timeline_entries": 5
         }
@@ -3272,7 +3275,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 125.7
+          "age_hours": 128.7
         },
         "level": "high",
         "importance_reasons": [
@@ -3318,7 +3321,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-28T18:00:54.226569+00:00",
-          "hours_since_update": 125.7,
+          "hours_since_update": 128.7,
           "event_count": 8,
           "timeline_entries": 8
         }
@@ -3336,7 +3339,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 102.51
+          "age_hours": 105.51
         },
         "level": "high",
         "importance_reasons": [
@@ -3375,7 +3378,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-10-29T17:12:41.184446+00:00",
-          "hours_since_update": 102.51,
+          "hours_since_update": 105.51,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3393,7 +3396,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 172.96
+          "age_hours": 175.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3437,7 +3440,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T18:45:37.276499+00:00",
-          "hours_since_update": 172.96,
+          "hours_since_update": 175.96,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3455,7 +3458,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 187.55
+          "age_hours": 190.55
         },
         "level": "high",
         "importance_reasons": [
@@ -3498,7 +3501,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T04:09:45.816789+00:00",
-          "hours_since_update": 187.55,
+          "hours_since_update": 190.55,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3516,7 +3519,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 83.01
+          "age_hours": 86.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3554,59 +3557,66 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 83.01,
+          "hours_since_update": 86.01,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_025008",
-        "title": "Florida inundated with rain, Indian River under flash flood warning - Treasure Coast News",
-        "score": 45,
-        "editorial_priority": 42,
-        "editorial_score": 42,
+        "story_id": "story_025106",
+        "title": "Martin County and Okeechobee County schools closed Tuesday due to flooding",
+        "score": 40,
+        "editorial_priority": 45,
+        "editorial_score": 45,
         "score_breakdown": {
-          "score": 42,
-          "importance": 45,
-          "proximity_multiplier": 0.95,
+          "score": 45,
+          "importance": 40,
+          "proximity_multiplier": 1.0,
           "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 4.08
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.01
         },
         "level": "normal",
         "importance_reasons": [
           {
-            "code": "weather_emergency",
-            "label": "Weather emergency",
-            "points": 35
+            "code": "school_closure",
+            "label": "School closure",
+            "points": 20
           },
           {
             "code": "follow_up",
             "label": "Story has follow-up coverage",
             "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
           }
         ],
         "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
           "places": []
         },
         "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
         },
         "event_count": 2,
         "timeline_entries": 2,
-        "relationship_decisions": 0,
+        "relationship_decisions": 1,
         "canonical_source_candidates": 2,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-02T19:42:41.490045+00:00",
-          "hours_since_update": 4.08,
+          "last_updated": "2026-11-03T02:42:37.758925+00:00",
+          "hours_since_update": 0.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3624,7 +3634,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 252.98
+          "age_hours": 255.98
         },
         "level": "high",
         "importance_reasons": [
@@ -3662,7 +3672,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-23T10:44:25.402106+00:00",
-          "hours_since_update": 252.98,
+          "hours_since_update": 255.98,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3680,7 +3690,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 247.95
+          "age_hours": 250.95
         },
         "level": "high",
         "importance_reasons": [
@@ -3718,7 +3728,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-23T15:45:30.009156+00:00",
-          "hours_since_update": 247.95,
+          "hours_since_update": 250.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3736,7 +3746,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 170.96
+          "age_hours": 173.96
         },
         "level": "high",
         "importance_reasons": [
@@ -3774,13 +3784,65 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-26T20:44:50.447132+00:00",
-          "hours_since_update": 170.96,
+          "hours_since_update": 173.96,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_025058",
+        "story_id": "story_025008",
+        "title": "Florida inundated with rain, Indian River under flash flood warning - Treasure Coast News",
+        "score": 45,
+        "editorial_priority": 40,
+        "editorial_score": 40,
+        "score_breakdown": {
+          "score": 40,
+          "importance": 45,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 7.09
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "weather_emergency",
+            "label": "Weather emergency",
+            "points": 35
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-02T19:42:41.490045+00:00",
+          "hours_since_update": 7.09,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_025098",
         "title": "Florida's Turnpike South blocked in St. Lucie County after truck fire, separate crash",
         "score": 35,
         "editorial_priority": 40,
@@ -3823,77 +3885,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 8,
-        "timeline_entries": 7,
+        "event_count": 7,
+        "timeline_entries": 6,
         "relationship_decisions": 1,
-        "canonical_source_candidates": 7,
+        "canonical_source_candidates": 6,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-02T23:42:41.909527+00:00",
+          "last_updated": "2026-11-03T02:42:37.758925+00:00",
           "hours_since_update": 0.01,
-          "event_count": 8,
-          "timeline_entries": 7
-        }
-      },
-      {
-        "story_id": "story_025021",
-        "title": "Vehicle fire closes all southbound lanes on Florida’s Turnpike in St. Lucie County - WPEC",
-        "score": 35,
-        "editorial_priority": 39,
-        "editorial_score": 39,
-        "score_breakdown": {
-          "score": 39,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 2.01
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Stuart",
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 11,
-        "timeline_entries": 9,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 9,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-02T21:42:19.450441+00:00",
-          "hours_since_update": 2.01,
-          "event_count": 11,
-          "timeline_entries": 9
+          "event_count": 7,
+          "timeline_entries": 6
         }
       }
     ]
@@ -3901,7 +3903,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-02T23:49:45Z",
+    "generated_at": "2026-11-03T02:50:21Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3918,48 +3920,58 @@
       "statuses": {
         "category_eligibility_archive_recovery": 2,
         "generated_live": 4,
-        "no_publishable_sources": 3
+        "generation_failed_archive_recovery": 1,
+        "no_publishable_sources": 2
       },
       "failures": {
+        "missing_or_null_hero": 1,
         "no_category_eligible_sources": 2
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 107.965,
+      "model_attempt_count": 6,
+      "model_elapsed_seconds": 173.063,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 2,
-      "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 9,
-      "story_aware_update_context_count": 5,
-      "material_update_promotion_evaluation_count": 4,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 1,
+      "category_eligibility_rejection_count": 11,
+      "published_story_duplicate_suppression_count": 3,
+      "story_aware_update_context_count": 3,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generated_live",
-        "fetched_candidate_count": 26,
+        "status": "generation_failed_archive_recovery",
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 9,
-        "selected_source_count": 1,
+        "publishable_source_count": 10,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.598,
-            "result": "success"
+            "elapsed_seconds": 25.853,
+            "result": "missing_or_null_hero",
+            "error_summary": "Model response did not contain a usable hero after normalization"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 26.479,
+            "result": "missing_or_null_hero",
+            "error_summary": "Model response did not contain a usable hero after normalization"
           }
         ],
-        "model_elapsed_seconds": 15.598,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 52.332,
+        "failure_code": "missing_or_null_hero",
+        "failure_summary": "Model response did not contain a usable hero after normalization",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3968,9 +3980,37 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Martin County and Okeechobee County schools closed Tuesday due to flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Martin County and Okeechobee County schools closed Tuesday due to flooding - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/03/martin-county-okeechobee-county-schools-closed-tuesday-due-flooding/"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3986,85 +4026,23 @@
             "local_nexus_signals": [],
             "headline": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/heavy-rain-floods-port-st-lucie-roads-strands-drivers-residents-calling-for-drainage-improvements"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Indian River, St. Lucie counties declare local states of emergency amid widespread flooding",
-            "source_url": "https://www.wptv.com/weather/weather-news/indian-river-st-lucie-counties-declare-local-states-of-emergency-amid-widespread-flooding"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Aerial video shows significant flooding in St. Lucie West; police urge drivers to avoid area",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/aerial-video-shows-significant-flooding-in-st-lucie-west-police-urge-drivers-to-avoid-area"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
             "source_headline": "St. Lucie County schools announce early dismissal, cancel aftercare - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-excuse-absences-as-heavy-rain-brings-flooding-st-lucie-county-st-lucie-public-schools-school-early-pickup-early-student-pickup-school-dismissal-school-absences-excused-absences-oak-hammock-k-8-school-oak-hammock-school",
-            "editorial_story_id": "story_025020",
+            "editorial_story_id": "story_025058",
             "canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
             "canonical_headline": "Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service",
             "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-            "editorial_story_id": "story_024676",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
-            "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_025032",
-              "source:https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_025032,source:https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -4084,29 +4062,12 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
-            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/i-95-crash-in-martin-county-leaves-multiple-people-dead-closes-northbound-lanes",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Flooding moves polling sites in St. Lucie and Indian River counties for Nov. 3 election",
-        "generated_card_count": 0,
-        "elapsed_seconds": 53.964
+        "elapsed_seconds": 93.63
       },
       {
         "category_key": "crime",
@@ -4114,8 +4075,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 6,
-        "selected_source_count": 2,
+        "publishable_source_count": 9,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4123,11 +4084,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 29.247,
+            "elapsed_seconds": 50.314,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 29.247,
+        "model_elapsed_seconds": 50.314,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4138,7 +4099,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -4152,7 +4113,7 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
+            "headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties",
             "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day"
           }
         ],
@@ -4161,11 +4122,11 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
+            "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties",
             "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
+            "canonical_headline": "Flooding moves polling sites in St. Lucie and Indian River counties for Nov. 3 election",
             "basis": "exact_source_url",
             "identity_keys": [
               "story:story_025032",
@@ -4192,17 +4153,17 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Indian River and St. Lucie counties declare flooding emergencies; shelters set to open",
-        "generated_card_count": 1,
-        "elapsed_seconds": 62.745
+        "live_hero_headline": "DeSantis declares flooding emergency for all three Treasure Coast counties",
+        "generated_card_count": 2,
+        "elapsed_seconds": 78.064
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 14,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 15,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4219,9 +4180,47 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 7,
+        "category_eligibility_rejection_count": 6,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "election_political_process:supervisor of elections"
+            ],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:port st lucie"
+            ],
+            "headline": "Gov. DeSantis declares state of emergency for 7 Florida counties, including Treasure Coast, for flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/gov-desantis-declares-state-of-emergency-for-7-florida-counties-including-treasure-coast-for-flooding"
+          },
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "schools_education:school district"
+            ],
+            "local_nexus_signals": [
+              "source_locality:treasure coast",
+              "source_locality:martin county"
+            ],
+            "headline": "Martin County and Okeechobee County schools closed Tuesday due to flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4236,6 +4235,7 @@
               "source_locality:treasure coast",
               "source_locality:st lucie county",
               "source_locality:indian river county",
+              "source_locality:port st lucie",
               "source_locality:vero beach",
               "source_locality:sebastian"
             ],
@@ -4255,14 +4255,14 @@
               "election_political_process:election day"
             ],
             "local_nexus_signals": [
+              "source_locality:martin county",
               "source_locality:st lucie county",
               "source_locality:indian river county",
+              "source_locality:stuart",
               "source_locality:port st lucie",
-              "source_locality:fort pierce",
-              "source_locality:vero beach",
-              "source_locality:sebastian"
+              "source_locality:fort pierce"
             ],
-            "headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
+            "headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties",
             "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day"
           },
           {
@@ -4302,37 +4302,16 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-allows-early-pickups-monday-amid-flooding-concerns"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
-        "published_story_duplicate_suppressions": [
-          {
-            "category_key": "business",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-            "editorial_story_id": "story_022602",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Beachgoers in Martin County urged to stay out of water after high levels of fecal bacteria found: Officials",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/health-officials-urge-martin-county-beachgoers-to-stay-out-of-the-water-after-high-levels-of-fecal-bacteria-found",
-            "editorial_story_id": "story_024507",
-            "canonical_slug": "2026-10-30-fecal-bacteria-prompt-water-contact-advisory-at-10-martin-county-locations",
-            "canonical_headline": "Fecal bacteria prompt water contact advisory at 10 Martin County locations",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          }
-        ],
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
+            "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties",
             "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
             "publisher": "www.wptv.com",
             "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
+            "canonical_headline": "Flooding moves polling sites in St. Lucie and Indian River counties for Nov. 3 election",
             "basis": "exact_source_url",
             "identity_keys": [
               "story:story_025032",
@@ -4351,61 +4330,13 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "business",
-            "source_headline": "Florida voters weigh 3 amendments impacting homestead taxes, budget stabilization, agricultural industry",
-            "source_url": "https://www.wptv.com/news/political/elections-local/florida-voters-weigh-three-amendments-tuesday-impacting-homestead-taxes-budget-stabilization-and-the-agricultural-industry",
-            "canonical_slug": "2026-10-21-florida-senate-president-albritton-now-opposes-amendment-3",
-            "canonical_headline": "Florida Senate President Albritton Now Opposes Amendment 3",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.89,
-            "shared_anchors": [
-              "Florida's November 2026 vote on Amendment 3",
-              "Proposed homestead exemption increases to $150,000 in 2027 and $250,000 in 2028",
-              "Exemption applies to non-school property taxes",
-              "Amendment requires 60% voter approval",
-              "Potential loss of local-government revenue"
-            ],
-            "novel_facts": [
-              "Adds ballot background on Amendment 1's budget stabilization fund proposal",
-              "Adds ballot background on Amendment 2's agricultural tangible personal property tax exemption",
-              "Lists county early-voting deadlines and Election Day polling hours"
-            ],
-            "reason": "The incoming ballot preview revisits the same pending Amendment 3 vote with identical exemption amounts, implementation years and approval threshold. Its additional amendment summaries and voting logistics are background and service information, not a new consequential development or independently newsworthy follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Beachgoers in Martin County urged to stay out of water after high levels of fecal bacteria found: Officials",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/health-officials-urge-martin-county-beachgoers-to-stay-out-of-the-water-after-high-levels-of-fecal-bacteria-found",
-            "canonical_slug": "2026-10-30-fecal-bacteria-prompt-water-contact-advisory-at-10-martin-county-locations",
-            "canonical_headline": "Fecal bacteria prompt water contact advisory at 10 Martin County locations",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          }
-        ],
+        "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 30.579
+        "elapsed_seconds": 28.024
       },
       {
         "category_key": "sports",
@@ -4442,15 +4373,15 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 16,
-        "elapsed_seconds": 16.505
+        "new_publication_stale_rejected_count": 9,
+        "elapsed_seconds": 21.878
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4542,7 +4473,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 28.057
+        "elapsed_seconds": 26.981
       },
       {
         "category_key": "florida",
@@ -4580,21 +4511,28 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.785
+        "elapsed_seconds": 26.348
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "no_publishable_sources",
-        "fetched_candidate_count": 27,
+        "status": "generated_live",
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 12.792,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 12.792,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4605,31 +4543,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
-            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
-            "editorial_story_id": "story_023996",
-            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
-            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
-            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-            "editorial_story_id": "story_024676",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "martin",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
@@ -4643,75 +4561,11 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Early voting ends Saturday on the Treasure Coast, Okeechobee County - WPBF",
-            "source_url": "https://www.wpbf.com/article/early-voting-ends-treasure-coast-okeechobee-county/74303889",
-            "canonical_slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
-            "canonical_headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.94,
-            "shared_anchors": [
-              "Indian River County early voting ends Saturday before the Tuesday, Nov. 3 General Election.",
-              "Both describe the same regional early-voting period on the Treasure Coast.",
-              "Both instruct Election Day voters to use their assigned precinct and explain the 7 p.m. vote-by-mail receipt deadline."
-            ],
-            "novel_facts": [
-              "The incoming article confirms that the scheduled Saturday early-voting period has ended.",
-              "It reports nearly 56,000 early votes in St. Lucie County, around 29,000 each in Martin and Indian River counties, and more than 3,700 in Okeechobee County.",
-              "Martin County officials report that more than 40% of registered voters voted early or by mail.",
-              "Palm Beach County continued early voting Sunday at 28 sites."
-            ],
-            "reason": "Both articles cover the same election's regional early-voting deadline. The incoming report adds routine turnout figures, scheduled closure confirmation and voting reminders, but no changed voting rules, election outcome, disruption or distinct accountability development warranting an update or separate URL.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Three dead in crash on Interstate 95 in Martin County - WPBF",
-            "source_url": "https://www.wpbf.com/article/multiple-fatality-crash-closes-i-95-martin-county/74304252",
-            "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
-            "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 1.0,
-            "shared_anchors": [
-              "Identical WPBF source URL",
-              "Late Saturday crash around 11:05 p.m. on northbound I-95 in northern Martin County",
-              "Toyota Camry struck a tractor-trailer parked on the right shoulder and spun across three lanes",
-              "Three Camry passengers killed: a 34-year-old man, a 5-year-old boy and a woman",
-              "31-year-old female Camry driver and 11-year-old girl injured; 60-year-old Miami truck driver uninjured",
-              "Northbound traffic diverted at Martin Highway"
-            ],
-            "novel_facts": [
-              "Incoming specifies mile marker 112",
-              "Incoming names St. Mary’s Medical Center as the Camry driver's destination",
-              "Incoming reports northbound lanes reopened after 5 a.m."
-            ],
-            "reason": "The identical source URL and matching crash circumstances establish the same incident. The canonical already includes the three deaths, victims' ages, injuries and collision sequence. The added mile marker, hospital destination and reopening time are routine details, not material developments or an independently newsworthy follow-up.",
-            "validation_errors": []
-          },
           {
             "category_key": "martin",
             "source_headline": "Multiple-fatality crash involving tractor-trailer closes I-95 northbound in Martin County - WPEC",
@@ -4729,14 +4583,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 26.573
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Martin County district schools to close Tuesday as flooding makes travel unsafe",
+        "generated_card_count": 0,
+        "elapsed_seconds": 35.291
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 27,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 26,
         "publishable_source_count": 9,
         "selected_source_count": 9,
         "cache_hit": false,
@@ -4746,54 +4604,111 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 37.912,
+            "elapsed_seconds": 36.032,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 37.912,
+        "model_elapsed_seconds": 36.032,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
+        "article_framing_rejection_count": 1,
+        "article_framing_rejections": [
           {
             "surface": "card",
             "required": true,
             "passed": false,
-            "story_form": "update",
-            "lead_word_count": 56,
-            "baseline_anchor": "infrastructure_issue",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "flooding",
-              "lucie"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service",
-            "novelty_anchor": "disclosure",
-            "novelty_present": true,
-            "novelty_token_hits": [
-              "aftercare",
-              "cancel",
-              "dismissal",
-              "early",
-              "schools"
-            ],
-            "semantic_novel_fact_hits": [],
-            "semantic_novel_fact_token_count": 0,
+            "headline": "St. Lucie County health officials warn of floodwater risks to wells, wounds and septic systems",
             "missing": [
-              "original_event_context_missing"
+              "generated_copy_drifted_from_source_focus"
             ],
-            "source_title": "St. Lucie County schools announce early dismissal, cancel aftercare - WPEC",
-            "headline": "St. Lucie County schools to dismiss an hour early, cancel aftercare and activities"
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "St. Lucie County health officials warn of floodwater risks to wells, wounds and septic systems",
+              "lead": "The Florida Department of Health in St. Lucie County is warning residents about potentially unsafe private well water, wound exposure and septic system problems as heavy rainfall floods streets and neighborhoods. The county declared a local state of emergency Monday afternoon to expedite access to additional resources that may be needed.",
+              "lead_word_count": 51,
+              "headline_overlap_ratio": 0.417,
+              "new_context_token_count": 31,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "surname_first_reference": {
+                "required": false,
+                "passed": true,
+                "missing": [],
+                "candidates": []
+              },
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": true,
+              "headline": "St. Lucie County health officials warn of floodwater risks to wells, wounds and septic systems",
+              "lead": "The Florida Department of Health in St. Lucie County is warning residents about potentially unsafe private well water, wound exposure and septic system problems as heavy rainfall floods streets and neighborhoods. The county declared a local state of emergency Monday afternoon to expedite access to additional resources that may be needed.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "st_lucie_county"
+              ],
+              "lead_jurisdictions": [
+                "st_lucie_county"
+              ],
+              "missing_jurisdictions": [],
+              "headline_judge_claims": [],
+              "lead_judge_claims": [],
+              "missing_judge_claims": [],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": []
+            },
+            "source_focus": {
+              "required": true,
+              "passed": false,
+              "generated_headline": "St. Lucie County health officials warn of floodwater risks to wells, wounds and septic systems",
+              "generated_lead": "The Florida Department of Health in St. Lucie County is warning residents about potentially unsafe private well water, wound exposure and septic system problems as heavy rainfall floods streets and neighborhoods.",
+              "source_title": "Indian River, St. Lucie counties declare local states of emergency amid widespread flooding",
+              "source_lead": "Lucie counties declared local states of emergency Monday as heavy rainfall and flooding continued to inundate roads and neighborhoods across the Treasure Coast.In Indian River County, County Administrator John A. issued the emergency order in response to ongoing flooding, deteriorating weather conditions and continued rainfall. The county said numerous roads have become impassable, creating public safety concerns.",
+              "title_similarity": {
+                "score": 0.2724,
+                "overlap": 0.1667,
+                "jaccard": 0.0909,
+                "sorted_sequence": 0.4524,
+                "ordered_sequence": 0.3095,
+                "shared_token_count": 2.0
+              },
+              "lead_token_overlap": 0.208,
+              "missing": [
+                "generated_copy_drifted_from_source_focus"
+              ]
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "official_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            },
+            "temporal_integrity": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
           }
         ],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
         "category_eligibility_assessed_count": 9,
@@ -4834,18 +4749,18 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie County declares local emergency, partially activates EOC amid flooding",
+        "live_hero_headline": "Flooding shifts St. Lucie County polling sites; schools, offices and courts to close Tuesday",
         "generated_card_count": 1,
-        "elapsed_seconds": 69.652
+        "elapsed_seconds": 60.76
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generated_live",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 5,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 8,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4853,127 +4768,39 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.208,
+            "elapsed_seconds": 21.593,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 25.208,
+        "model_elapsed_seconds": 21.593,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card_after_enrichment",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 91,
-            "baseline_anchor": "",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "flooding",
-              "indian",
-              "precinct",
-              "river",
-              "voting"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
-            "novelty_anchor": "continuing_status",
-            "novelty_present": false,
-            "novelty_token_hits": [
-              "beach",
-              "counties",
-              "election",
-              "polling"
-            ],
-            "semantic_novel_fact_hits": [],
-            "semantic_novel_fact_token_count": 0,
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
-            "headline": "Flooding moves Indian River County Precinct 26 voting to ig Center in Vero Beach"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
-        "published_story_duplicate_suppressions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Flooding forces polling location changes in Palm Beach, Indian River counties ahead of Election Day - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
-            "editorial_story_id": "story_025032",
-            "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Flooding forces polling location changes in Palm Beach, St. Lucie, Indian River counties ahead of Election Day",
-            "source_url": "https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_025032",
-              "source:https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_025032,source:https://www.wptv.com/news/political/elections-local/flooding-forces-polling-location-changes-in-palm-beach-indian-river-counties-ahead-of-election-day",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Flooding forces polling location changes in Palm Beach, Indian River counties ahead of Election Day - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
-            "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-            "canonical_headline": "Flooding moves Indian River County Precinct 7 voting to Sebastian Elks Lodge",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          }
-        ],
+        "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Indian River County declares flooding emergency, announces two shelters",
+        "live_hero_headline": "Rockridge under voluntary evacuation over flooding, potential wastewater backups",
         "generated_card_count": 0,
-        "elapsed_seconds": 58.185
+        "elapsed_seconds": 48.828
       }
     ]
   }

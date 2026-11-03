@@ -4,16 +4,16 @@
 
 ## Hero
 
-- Current: **Flooding moves polling sites in St. Lucie and Indian River counties for Nov. 3 election**
-- Recommended: **Flooding moves polling sites in St. Lucie and Indian River counties for Nov. 3 election**
+- Current: **Voluntary Rockridge evacuation ordered; St. Lucie County schools to close**
+- Recommended: **Voluntary Rockridge evacuation ordered; St. Lucie County schools to close**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service | Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service | 66 | importance 0; freshness 96.45; urgency 8/10; validated material update |
-| 2 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 41 | importance 0; freshness 48.13; urgency 2/10; validated material update |
+| 1 | Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service | Flooding closes Port St. Lucie roads, suspends St. Lucie County's regular ART service | 52 | importance 0; freshness 91.41; urgency 2/10; validated material update |
+| 2 | Three killed, including 5-year-old boy, in I-95 crash in Martin County | Three killed, including 5-year-old boy, in I-95 crash in Martin County | 40 | importance 0; freshness 43.09; urgency 2/10; validated material update |
 
 ## Recommended moves
 
