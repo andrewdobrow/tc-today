@@ -20019,8 +20019,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         else ""
     )
 
-    description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     _is_sponsored = bool(hero.get("sponsored") or hero.get("is_sponsored"))
+    _guest_byline = str(hero.get("guest_byline") or "").strip() if _is_sponsored else ""
+    _guest_author_name = str(hero.get("guest_author_name") or "").strip() if _guest_byline else ""
+    _seo_title = str(hero.get("seo_title") or "").strip() if _is_sponsored else ""
+    _seo_description = str(hero.get("seo_description") or "").strip() if _is_sponsored else ""
+    description = html_lib.escape(
+        _seo_description or (hero.get("teaser") or hero.get("body", "")[:155]),
+        quote=True,
+    )
     _sponsor_name = str(hero.get("sponsor_name") or "").strip()
     _sponsor_url = str(hero.get("sponsor_url") or "").strip()
     # RSS, Open Graph, Twitter, and NewsArticle schema share one authoritative image
@@ -20032,16 +20039,19 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     structured_data = {
         "@context": "https://schema.org",
         "@type":    "Article" if _is_product_guide else "NewsArticle",
-        "headline": hero.get("headline", "")[:110],
-        "description": description,
+        "headline": hero.get("headline", "") if _guest_byline else hero.get("headline", "")[:110],
+        "description": html_lib.unescape(description),
         "image":    [image_url] if image_url else [],
         "datePublished": _pub_raw or pub_date,
         "dateModified":  _updated_raw or _pub_raw or pub_date,
-        "author":    {
+        "author":    ({
             "@type": "Person",
-            "name":  "Andrew Dobrow",
-            "url":   f"{SITE_URL}/author/andrew-dobrow.html",
-        },
+            "name": _guest_author_name or "Guest Contributor",
+        } if _guest_byline else {
+            "@type": "Person",
+            "name": "Andrew Dobrow",
+            "url": f"{SITE_URL}/author/andrew-dobrow.html",
+        }),
         "publisher": {
             "@type": "Organization",
             "name":  SITE_NAME,
@@ -20198,7 +20208,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             img_html = f'<figure class="article-hero-image"><img src="{html_lib.escape(str(_art_img), quote=True)}" alt="{html_lib.escape(str(hero.get("headline") or ""), quote=True)}" loading="eager">{credit}</figure>'
 
     head   = _page_head(
-        f"{hero['headline']} | Treasure Coast Today",
+        html_lib.escape(_seo_title, quote=True) if _seo_title else f"{hero['headline']} | Treasure Coast Today",
         description,
         f"/articles/{slug}.html",
         structured_data=structured_data,
@@ -20207,6 +20217,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             "published": _pub_raw or pub_date,
             "modified":  _pub_raw or pub_date,
             "section":   category_label,
+            "author": _guest_author_name or "Andrew Dobrow",
         },
     )
     header = _page_header(active=category_key)
@@ -20255,6 +20266,26 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 
     _urgency_text = f"{category_label} {hero.get('headline','')}".strip().lower()
     urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
+    _subhead = str(hero.get("subhead") or "").strip() if _is_sponsored else ""
+    _subhead_html = (
+        f'<p class="article-guest-subhead">{html_lib.escape(_subhead)}</p>'
+        if _subhead else ""
+    )
+    _headshot = hero.get("guest_author_headshot") if _is_sponsored else None
+    _guest_headshot_html = ""
+    if isinstance(_headshot, dict) and str(_headshot.get("url") or "").startswith(("https://", "http://")):
+        _photo = html_lib.escape(str(_headshot["url"]), quote=True)
+        _alt = html_lib.escape(str(_headshot.get("alt") or _guest_author_name or "Guest author"), quote=True)
+        _caption = html_lib.escape(str(_headshot.get("caption") or ""))
+        _photo_credit = html_lib.escape(str(hero.get("image_credit") or ""))
+        _guest_headshot_html = (
+            '<aside class="article-guest-author-photo" aria-label="Guest author photograph">'
+            f'<img src="{_photo}" alt="{_alt}" loading="lazy">'
+            '<div class="article-guest-author-photo-caption">'
+            + (f'<span>{_caption}</span>' if _caption else "")
+            + (f'<small>Photo: {_photo_credit}</small>' if _photo_credit else "")
+            + '</div></aside>'
+        )
     if _is_sponsored and _sponsor_name:
         _safe_sponsor_name = html_lib.escape(_sponsor_name)
         _safe_sponsor_url = html_lib.escape(_sponsor_url, quote=True)
@@ -20262,6 +20293,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             f'<span class="article-byline article-sponsored-byline">Sponsored by '
             f'<a href="{_safe_sponsor_url}" target="_blank" rel="sponsored nofollow noopener noreferrer external">{_safe_sponsor_name}</a></span>'
         )
+        if _guest_byline:
+            _article_byline_html += (
+                '<span class="article-byline article-guest-byline">'
+                f'{html_lib.escape(_guest_byline)}</span>'
+            )
         _sponsored_partnership_html = (
             '<p class="article-sponsored-partnership">This article was produced in partnership with '
             f'<a href="{_safe_sponsor_url}" target="_blank" rel="sponsored nofollow noopener noreferrer external">{_safe_sponsor_name}</a>.</p>'
@@ -20297,6 +20333,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-byline {{ font-size: 13px; color: var(--text-secondary); }}
     .article-byline a {{ color: var(--text); font-weight: 600; text-decoration: none; }}
     .article-byline a:hover {{ text-decoration: underline; }}
+    .article-guest-byline {{ flex-basis: 100%; color: var(--text); line-height: 1.5; }}
+    .article-guest-subhead {{ max-width: 870px; margin: -19px 0 29px; color: var(--text-secondary); font-size: clamp(16px, 2.2vw, 20px); line-height: 1.55; }}
+    .article-guest-author-photo {{ display: flex; align-items: center; gap: 16px; margin: 12px 0 26px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }}
+    .article-guest-author-photo img {{ width: 98px; height: 98px; flex: 0 0 98px; object-fit: cover; border-radius: 50%; }}
+    .article-guest-author-photo-caption {{ display: grid; gap: 5px; color: var(--text-secondary); font-size: 13px; line-height: 1.4; }}
+    .article-guest-author-photo-caption small {{ font-size: 11px; color: var(--text-muted); }}
     .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
     .article-published, .article-updated {{ font-size: 12px; color: var(--text-muted); }}
     .article-updated::before {{ content: "·"; margin: 0 7px 0 5px; }}
@@ -20404,10 +20446,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <span class="article-published">Published {_pub_display}</span>{_updated_html}
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
+      {_subhead_html}
       <div class="article-editorial-grid">
         <div class="article-main-column">
           {img_html}
           <div class="article-body">{body}</div>
+          {_guest_headshot_html}
           {_sponsored_partnership_html}
           {_newsletter_inline_embed("article")}
           {event_link_html}
@@ -22548,6 +22592,8 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
             "custom_body_hash", "custom_headline_key", "custom_id",
             "custom_publication_key", "custom_series_key", "custom_edition_key",
             "sponsored", "sponsor_name", "sponsor_url", "carousel_images",
+            "guest_byline", "guest_author_name", "guest_author_headshot",
+            "subhead", "seo_title", "seo_description", "focus_keywords",
         ):
             value = canonical.get(key)
             if value not in (None, ""):
@@ -25411,7 +25457,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
             f'  <meta property="og:type" content="article">\n'
             f'  <meta property="article:published_time" content="{_am.get("published","")}">\n'
             f'  <meta property="article:modified_time" content="{_am.get("modified","") or _am.get("published","")}">\n'
-            f'  <meta property="article:author" content="Andrew Dobrow">\n'
+            f'  <meta property="article:author" content="{html_lib.escape(str(_am.get("author") or "Andrew Dobrow"), quote=True)}">\n'
             f'  <meta property="article:section" content="{_am.get("section","")}">\n'
         )
     else:
@@ -27977,6 +28023,10 @@ def _refresh_current_manual_custom_metadata(existing, hero, headline):
     existing["sponsor_name"] = str(hero.get("sponsor_name") or "")
     existing["sponsor_url"] = str(hero.get("sponsor_url") or "")
     existing["carousel_images"] = copy.deepcopy(hero.get("carousel_images") or [])
+    for _field in ("guest_byline", "guest_author_name", "subhead", "seo_title", "seo_description"):
+        existing[_field] = str(hero.get(_field) or "")
+    existing["guest_author_headshot"] = copy.deepcopy(hero.get("guest_author_headshot") or {})
+    existing["focus_keywords"] = copy.deepcopy(hero.get("focus_keywords") or [])
     return True
 
 
