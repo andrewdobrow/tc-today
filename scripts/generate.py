@@ -19957,7 +19957,17 @@ def validate_custom_body_fidelity(hero, page_html):
         raise RuntimeError(
             f"Custom body fidelity FAILED for '{hero.get('headline','')[:60]}': article body missing"
         )
-    rendered_text = _html.unescape(re.sub(r"<[^>]+>", " ", match.group(1)))
+    body_markup = match.group(1)
+    # A sponsored guest author portrait is presentation media, not words from
+    # the approved copy. Ignore its caption when checking exact text fidelity.
+    if hero.get("author_headshot_url"):
+        body_markup = re.sub(
+            r'<figure\\b[^>]*class=["\\'][^"\\']*\\barticle-guest-author-photo\\b[^"\\']*["\\'][^>]*>.*?</figure>',
+            "",
+            body_markup,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+    rendered_text = _html.unescape(re.sub(r"<[^>]+>", " ", body_markup))
     source_tokens = _custom_body_tokens(hero.get("body", ""))
     rendered_tokens = _custom_body_tokens(rendered_text)
     if source_tokens != rendered_tokens:
