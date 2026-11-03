@@ -76,7 +76,7 @@ def test_exact_headline_subhead_byline_and_guest_column_copy():
     assert "When Roof Replacement Is the Right Answer" in item["body"]
     assert "A certification is not a warranty" in item["body"]
     assert "more than 100 five-year roof certifications" in item["body"]
-    assert "a ten-page photographic record" in item["body"]
+    assert "a [ten-page photographic record](https://treasurecoast.today/images/highland-beach-5-year-roof-certification-example-mike-mcgilvary-roofing.pdf)" in item["body"]
     assert "Learn more about the Florida roof age law at" in item["author_bio"]
     assert not re.search(r"\b(?:561|772)[-. ]\d{3}[-. ]\d{4}\b", item["body"])
 
@@ -112,6 +112,7 @@ def test_sponsored_guest_page_displays_authorship_seo_links_and_photo_box():
     assert 'class="article-contributor-card"' in page
     assert HEADSHOT in page
     assert page.count('data-carousel-slide=') == 6
+    assert 'href="https://treasurecoast.today/images/highland-beach-5-year-roof-certification-example-mike-mcgilvary-roofing.pdf"' in page
     assert 'data-carousel-counter>1 / 6</div>' in page
     assert page.count('Sponsored by <a href="https://mmroofrepair.com/"') == 1
     assert page.count("This article was produced in partnership with") == 1
