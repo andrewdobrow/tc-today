@@ -10,6 +10,11 @@ on:
         required: false
         default: false
         type: boolean
+      deploy_only:
+        description: "Deploy existing site without running news generation"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -24,6 +29,7 @@ concurrency:
 jobs:
   update:
     name: Update site — bounded runtime v1.9.6 (90-minute safety ceiling)
+    if: ${{ !inputs.deploy_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -586,6 +592,7 @@ jobs:
 
   deploy:
     needs: update
+    if: ${{ always() && (inputs.deploy_only || needs.update.result == 'success') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment:
