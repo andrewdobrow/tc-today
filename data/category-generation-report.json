@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-04T04:43:27Z",
+  "generated_at": "2026-11-04T11:48:24Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,50 +16,54 @@
     "category_count": 9,
     "statuses": {
       "cache_hit": 1,
-      "category_eligibility_archive_recovery": 4,
+      "category_eligibility_archive_recovery": 2,
+      "category_exception_archive_recovery": 1,
       "generated_live": 3,
+      "generation_failed_archive_recovery": 1,
       "no_publishable_sources": 1
     },
     "failures": {
-      "no_category_eligible_sources": 4
+      "article_framing_integrity": 1,
+      "invalid_json": 1,
+      "no_category_eligible_sources": 2
     },
-    "model_attempt_count": 3,
-    "model_elapsed_seconds": 67.631,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 140.124,
     "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 4,
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 5,
     "published_story_duplicate_suppression_count": 19,
-    "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 3,
-    "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 2,
+    "story_aware_update_context_count": 0,
+    "material_update_promotion_evaluation_count": 2,
+    "material_update_promotion_count": 1,
+    "material_update_promotion_cache_hit_count": 1,
     "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 28,
+      "status": "category_exception_archive_recovery",
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 19,
+      "publishable_source_count": 12,
       "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 36.237,
+          "elapsed_seconds": 23.299,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 36.237,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 23.299,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed after enrichment: surname_only_first_reference,headline_jurisdiction_missing_from_lead — Troy Ingersoll wins sixth term on St. Lucie County School Board, defeating Lisa Kessler",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -82,8 +86,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County reports 120 water rescues; schools closed Wednesday - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-reports-120-water-rescues-as-flooding-response-continues-schools-closed-shelters-open-historic-flooding-caution-floods-rain-downpour"
+          "headline": "Fort Pierce restaurant owner finds ways to get young kids to read more books",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-restaurant-owner-finds-ways-to-get-young-kids-to-read-more-books"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -96,71 +100,37 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin County and Okeechobee County schools to reopen Wednesday after closing on Tuesday due to flooding - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
+          "headline": "St. Lucie County reports 120 water rescues; schools closed Wednesday - cw34.com",
+          "source_url": "https://cw34.com/news/local/st-lucie-county-reports-120-water-rescues-as-flooding-response-continues-schools-closed-shelters-open-historic-flooding-caution-floods-rain-downpour"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
-          "source_url": "https://cbs12.com/news/election/six-st-lucie-county-polling-places-moved-because-of-flooding-on-election-day",
-          "editorial_story_id": "story_025340",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
-          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
-          "editorial_story_id": "story_025396",
-          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
-          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "source_headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board - WPEC",
+          "source_url": "https://cbs12.com/news/election/ingersoll-kessler-face-off-in-st-lucie-school-board-district-5-runoff",
+          "editorial_story_id": "story_025441",
+          "canonical_slug": "2026-11-03-troy-ingersoll-wins-sixth-term-on-st-lucie-county-school-board-defeating-lisa-ke",
+          "canonical_headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board, defeating Lisa Kessler",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Flooded roads complicate trip to Port St. Lucie polls; Legacy High School site is open - cw34.com",
-          "source_url": "https://cw34.com/news/local/legacy-high-school-voting-site-open-flooding-complicates-trip-port-st-lucie-polls-st-lucie-county-supervisor-of-elections-midway-road-glade-extension-elections-florida-news",
-          "editorial_story_id": "story_025340",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "editorial_story_id": "story_025444",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Martin County and Okeechobee County schools to reopen Wednesday after closing on Tuesday due to flooding - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
-          "canonical_headline": "Martin County district schools closed Tuesday, after-school activities canceled",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_025106",
-            "source:https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_025106,source:https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
@@ -174,29 +144,32 @@
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
-          "promoted": false,
+          "promoted": true,
           "cache_hit": false,
           "model_call": true,
-          "action": "preserve_existing_canonical",
+          "action": "update_existing_canonical",
           "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.87,
           "shared_anchors": [
-            "Flooding-related St. Lucie County polling-place relocations for the Nov. 3 election",
-            "Precincts 49, 51 and 71 relocated to Port St. Lucie Community Center, 2195 SE Airoso Blvd.",
-            "Precinct 12 relocated from Fort Pierce Masonic Lodge to Days Inn Midtown, 3224 S. US Highway 1",
-            "Precincts 83 and 92 listed at Tradition Town Hall, 10799 SW Civic Lane"
+            "The same Election Day flooding-related polling relocations in St. Lucie County",
+            "Precincts 49, 51 and 71 relocated to Port St. Lucie Community Center at 2195 SE Airoso Boulevard",
+            "Precinct 12 relocated from Fort Pierce Masonic Lodge to Days Inn Midtown at 3224 S. US Highway 1",
+            "Precinct 92 relocated from The Brennity at Tradition to Tradition Town Hall"
           ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same polling-relocation action and several exact precinct assignments. Although published later, it cites Monday's notice and gives conflicting assignments for precincts 67 and 86 without establishing a subsequent official change. Those discrepancies do not demonstrate a material new development; preserve the more comprehensive canonical rather than overwrite its updated directions.",
+          "novel_facts": [
+            "St. Lucie Public Schools will also be closed Wednesday; the candidate reports Tuesday closures only.",
+            "Superintendent Jon Prince says schools are expected to reopen Thursday if roads are clear."
+          ],
+          "reason": "The precise precincts, former polling sites and replacement addresses establish the same event. The additional Wednesday school closure is a material public-service update, but does not establish a distinct independently newsworthy follow-up. Update the existing page with that development. Do not replace its polling instructions with the incoming article's conflicting assignments for precincts 67, 86 and 83 without verification.",
           "validation_errors": []
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
-          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
-          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
-          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "source_headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board - WPEC",
+          "source_url": "https://cbs12.com/news/election/ingersoll-kessler-face-off-in-st-lucie-school-board-district-5-runoff",
+          "canonical_slug": "2026-11-03-troy-ingersoll-wins-sixth-term-on-st-lucie-county-school-board-defeating-lisa-ke",
+          "canonical_headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board, defeating Lisa Kessler",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -208,13 +181,13 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Flooded roads complicate trip to Port St. Lucie polls; Legacy High School site is open - cw34.com",
-          "source_url": "https://cw34.com/news/local/legacy-high-school-voting-site-open-flooding-complicates-trip-port-st-lucie-polls-st-lucie-county-supervisor-of-elections-midway-road-glade-extension-elections-florida-news",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -225,25 +198,38 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
-      "generated_card_count": 1,
-      "elapsed_seconds": 102.272
+      "elapsed_seconds": 85.542
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 14,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 15,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 25.712,
+          "result": "copydesk_integrity",
+          "error_type": "CopyDeskIntegrityError",
+          "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 24.419,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 50.131,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -252,7 +238,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -266,8 +252,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin county school potentional closure Wednesday amid flooding and severe weather - WPEC",
-          "source_url": "https://cbs12.com/news/crisis-in-the-classroom/martin-county-st-lucie-indian-river-school-protentional-closure-amid-flooding-and-severe-weather-heavy-rain-school-operations-wednesday-florida-news"
+          "headline": "Fort Pierce restaurant owner finds ways to get young kids to read more books",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-restaurant-owner-finds-ways-to-get-young-kids-to-read-more-books"
         }
       ],
       "published_story_duplicate_suppression_count": 1,
@@ -307,23 +293,44 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 35.329
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "St. Lucie County reports 120 flood rescues and water-related calls; schools closed Wednesday",
+      "generated_card_count": 0,
+      "elapsed_seconds": 70.517
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 14,
-      "selected_source_count": 0,
+      "publishable_source_count": 13,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 2.607,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 2.331,
+          "result": "invalid_json",
+          "error_type": "ValueError",
+          "error_summary": "Assignment editor returned no valid hero source"
+        }
+      ],
+      "model_elapsed_seconds": 4.939,
+      "failure_code": "invalid_json",
+      "failure_summary": "Assignment editor returned no valid hero source",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -332,8 +339,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -344,22 +351,48 @@
           "would_reject": true,
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [
-            "business_opening_closure_expansion:new location"
+            "development_project:developers"
           ],
           "competing_signals": [
-            "election_political_process:election day"
+            "election_political_process:supervisor of elections"
           ],
           "local_nexus_signals": [
-            "source_locality:st lucie county",
-            "source_locality:port st lucie",
-            "source_locality:fort pierce"
+            "source_locality:port st lucie"
           ],
-          "headline": "Port St. Lucie voters decide mayoral race as flooding forces polling place changes - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-voters-decide-mayoral-race-as-flooding-forces-polling-place-changesport-st-lucie-mayoral-runoff-port-st-lucie-election-results-shannon-martin-steven-giordano-port-st-lucie-mayor-race-port-st-lucie-election-day-port-st-lucie-trash"
+          "headline": "Steven Giordano unseats Shannon Martin in Port St. Lucie mayoral race - WPEC",
+          "source_url": "https://cbs12.com/news/local/steven-giordano-unseats-shannon-martin-in-port-st-lucie-mayoral-race-november-3-2026"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "sports:defeats"
+          ],
+          "local_nexus_signals": [
+            "source_locality:port st lucie"
+          ],
+          "headline": "Steven Giordano defeats incumbent Shannon Martin to win Port St. Lucie mayoral race",
+          "source_url": "https://www.wptv.com/news/political/elections-local/steven-giordano-defeats-incumbent-shannon-martin-to-win-port-st-lucie-mayoral-race"
         }
       ],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "editorial_story_id": "story_025444",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
@@ -372,22 +405,12 @@
         },
         {
           "category_key": "business",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "editorial_story_id": "story_025299",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County opens shelters for residents impacted by flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-opens-shelters-for-residents-impacted-by-flooding",
-          "editorial_story_id": "story_025262",
-          "canonical_slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "canonical_headline": "St. Lucie County opening temporary shelters Nov. 3 for flooded-out residents",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Port St. Lucie voters decide mayoral race as flooding forces polling place changes - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-voters-decide-mayoral-race-as-flooding-forces-polling-place-changesport-st-lucie-mayoral-runoff-port-st-lucie-election-results-shannon-martin-steven-giordano-port-st-lucie-mayor-race-port-st-lucie-election-day-port-st-lucie-trash",
+          "editorial_story_id": "story_025340",
+          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -398,6 +421,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
@@ -415,27 +453,12 @@
         },
         {
           "category_key": "business",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+          "source_headline": "Port St. Lucie voters decide mayoral race as flooding forces polling place changes - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-voters-decide-mayoral-race-as-flooding-forces-polling-place-changesport-st-lucie-mayoral-runoff-port-st-lucie-election-results-shannon-martin-steven-giordano-port-st-lucie-mayor-race-port-st-lucie-election-day-port-st-lucie-trash",
+          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County opens shelters for residents impacted by flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-opens-shelters-for-residents-impacted-by-flooding",
-          "canonical_slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "canonical_headline": "St. Lucie County opening temporary shelters Nov. 3 for flooded-out residents",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -445,14 +468,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 30.319
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 24.083
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -473,25 +498,52 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
+          "editorial_story_id": "story_025340",
+          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 19.585
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
+          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 13.657
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 3,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -565,14 +617,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.477
+      "elapsed_seconds": 13.323
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 2,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -582,11 +634,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.826,
+          "elapsed_seconds": 16.523,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.826,
+      "model_elapsed_seconds": 16.523,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -600,8 +652,18 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Incumbent James Uthmeier projected to win Attorney General race",
+          "source_url": "https://www.wptv.com/news/state/incumbent-james-uthmeier-projected-to-win-attorney-general-race",
+          "editorial_story_id": "story_025456",
+          "canonical_slug": "2026-11-03-james-uthmeier-projected-to-defeat-rodriguez-in-florida-attorney-general-race",
+          "canonical_headline": "James Uthmeier projected to defeat Rodriguez in Florida attorney general race",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
@@ -622,6 +684,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "florida",
+          "source_headline": "Incumbent James Uthmeier projected to win Attorney General race",
+          "source_url": "https://www.wptv.com/news/state/incumbent-james-uthmeier-projected-to-win-attorney-general-race",
+          "canonical_slug": "2026-11-03-james-uthmeier-projected-to-defeat-rodriguez-in-florida-attorney-general-race",
+          "canonical_headline": "James Uthmeier projected to defeat Rodriguez in Florida attorney general race",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
           "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
           "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
@@ -639,9 +716,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "James Uthmeier projected to defeat Rodriguez in Florida attorney general race",
+      "live_hero_headline": "Angie Nixon concedes Florida U.S. Senate special election to Ashley Moody",
       "generated_card_count": 0,
-      "elapsed_seconds": 42.355
+      "elapsed_seconds": 33.826
     },
     {
       "category_key": "martin",
@@ -731,16 +808,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.576
+      "elapsed_seconds": 15.697
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 5,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -748,34 +825,350 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.568,
+          "elapsed_seconds": 45.232,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.568,
+      "model_elapsed_seconds": 45.232,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 2,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 45,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [
+            "lucie"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "flooding"
+          ],
+          "semantic_novel_fact_hits": [
+            "closed",
+            "schools",
+            "wednesday"
+          ],
+          "semantic_novel_fact_token_count": 18,
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+          "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days"
+        },
+        {
+          "surface": "card_after_enrichment",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 45,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [
+            "lucie"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "flooding"
+          ],
+          "semantic_novel_fact_hits": [
+            "closed",
+            "schools",
+            "wednesday"
+          ],
+          "semantic_novel_fact_token_count": 18,
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+          "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days"
+        }
+      ],
+      "article_framing_rejection_count": 2,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": false,
+            "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday. County leaders warned that conditions could take up to seven days to return to normal as emergency crews continued their flood response.",
+            "lead_word_count": 45,
+            "headline_overlap_ratio": 0.917,
+            "new_context_token_count": 24,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "surname_first_reference": {
+              "required": true,
+              "passed": true,
+              "missing": [],
+              "candidates": [
+                {
+                  "full": "Election Day",
+                  "first": "Election",
+                  "last": "Day"
+                }
+              ]
+            },
+            "update_diagnostics": {
+              "required": true,
+              "passed": false,
+              "story_form": "update",
+              "lead_word_count": 45,
+              "baseline_anchor": "",
+              "baseline_present": false,
+              "baseline_anchor_present": true,
+              "baseline_details_present": false,
+              "baseline_context_hits": [
+                "lucie"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+              "novelty_anchor": "semantic_gate_novel_fact",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "flooding"
+              ],
+              "semantic_novel_fact_hits": [
+                "closed",
+                "schools",
+                "wednesday"
+              ],
+              "semantic_novel_fact_token_count": 18,
+              "missing": [
+                "original_event_details_missing"
+              ],
+              "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+              "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days"
+            },
+            "missing": [
+              "original_event_details_missing"
+            ]
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday. County leaders warned that conditions could take up to seven days to return to normal as emergency crews continued their flood response.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "lead_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "generated_lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday.",
+            "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+            "source_lead": "Lucie County election officials to move six precincts’ polling places on Election Day, including several in Port St. The Supervisor of Elections Office announced the changes in a notice posted Monday.",
+            "title_similarity": {
+              "score": 0.4601,
+              "overlap": 0.25,
+              "jaccard": 0.1429,
+              "sorted_sequence": 0.4967,
+              "ordered_sequence": 0.5229,
+              "shared_token_count": 3.0
+            },
+            "lead_token_overlap": 0.2,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "temporal_integrity": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card_after_enrichment",
+          "required": true,
+          "passed": false,
+          "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": false,
+            "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday. County leaders warned that conditions could take up to seven days to return to normal as emergency crews continued their flood response.",
+            "lead_word_count": 45,
+            "headline_overlap_ratio": 0.917,
+            "new_context_token_count": 24,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "surname_first_reference": {
+              "required": true,
+              "passed": true,
+              "missing": [],
+              "candidates": [
+                {
+                  "full": "Election Day",
+                  "first": "Election",
+                  "last": "Day"
+                }
+              ]
+            },
+            "update_diagnostics": {
+              "required": true,
+              "passed": false,
+              "story_form": "update",
+              "lead_word_count": 45,
+              "baseline_anchor": "",
+              "baseline_present": false,
+              "baseline_anchor_present": true,
+              "baseline_details_present": false,
+              "baseline_context_hits": [
+                "lucie"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+              "novelty_anchor": "semantic_gate_novel_fact",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "flooding"
+              ],
+              "semantic_novel_fact_hits": [
+                "closed",
+                "schools",
+                "wednesday"
+              ],
+              "semantic_novel_fact_token_count": 18,
+              "missing": [
+                "original_event_details_missing"
+              ],
+              "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+              "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days"
+            },
+            "missing": [
+              "original_event_details_missing"
+            ]
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday. County leaders warned that conditions could take up to seven days to return to normal as emergency crews continued their flood response.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "lead_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_judge_claims": [],
+            "lead_judge_claims": [],
+            "missing_judge_claims": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "St. Lucie County schools closed Wednesday as flood recovery could take seven days",
+            "generated_lead": "St. Lucie County schools are closed Wednesday after flooding disrupted road access and left students walking through standing water to get home Monday.",
+            "source_title": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
+            "source_lead": "Lucie County election officials to move six precincts’ polling places on Election Day, including several in Port St. The Supervisor of Elections Office announced the changes in a notice posted Monday.",
+            "title_similarity": {
+              "score": 0.4601,
+              "overlap": 0.25,
+              "jaccard": 0.1429,
+              "sorted_sequence": 0.4967,
+              "ordered_sequence": 0.5229,
+              "shared_token_count": 3.0
+            },
+            "lead_token_overlap": 0.2,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "official_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          },
+          "temporal_integrity": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
-          "source_url": "https://cbs12.com/news/election/six-st-lucie-county-polling-places-moved-because-of-flooding-on-election-day",
-          "editorial_story_id": "story_025340",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "editorial_story_id": "story_025444",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -790,31 +1183,21 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "editorial_story_id": "story_025299",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County opens shelters for residents impacted by flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-opens-shelters-for-residents-impacted-by-flooding",
-          "editorial_story_id": "story_025262",
-          "canonical_slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "canonical_headline": "St. Lucie County opening temporary shelters Nov. 3 for flooded-out residents",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Full Results: Mayor of Port St. Lucie - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
           "editorial_story_id": "story_025140",
           "canonical_slug": "2026-11-03-martin-county-election-results-live-coverage-of-florida-midterm-races",
           "canonical_headline": "Martin County election results: Live coverage of Florida midterm races",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/heavy-rain-floods-port-st-lucie-roads-strands-drivers-residents-calling-for-drainage-improvements",
+          "editorial_story_id": "story_025245",
+          "canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+          "canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -831,37 +1214,25 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Six St. Lucie County polling places moved because of flooding on Election Day - WPEC",
-          "source_url": "https://cbs12.com/news/election/six-st-lucie-county-polling-places-moved-because-of-flooding-on-election-day",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
+          "source_headline": "Meltzer wins open Port St. Lucie City Council District 1 seat, succeeding Morgan - WPEC",
+          "source_url": "https://cbs12.com/news/election/meltzer-jean-baptiste-compete-for-open-port-st-lucie-city-council-seat",
+          "canonical_slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
+          "canonical_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
-          "cache_hit": true,
+          "cache_hit": false,
           "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.97,
-          "shared_anchors": [
-            "Flooding-related St. Lucie County polling-place relocations for the Nov. 3 election",
-            "Precincts 49, 51 and 71 relocated to Port St. Lucie Community Center, 2195 SE Airoso Blvd.",
-            "Precinct 12 relocated from Fort Pierce Masonic Lodge to Days Inn Midtown, 3224 S. US Highway 1",
-            "Precincts 83 and 92 listed at Tradition Town Hall, 10799 SW Civic Lane"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same polling-relocation action and several exact precinct assignments. Although published later, it cites Monday's notice and gives conflicting assignments for precincts 67 and 86 without establishing a subsequent official change. Those discrepancies do not demonstrate a material new development; preserve the more comprehensive canonical rather than overwrite its updated directions.",
-          "validation_errors": []
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -880,40 +1251,25 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County opens shelters for residents impacted by flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-opens-shelters-for-residents-impacted-by-flooding",
-          "canonical_slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "canonical_headline": "St. Lucie County opening temporary shelters Nov. 3 for flooded-out residents",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Full Results: Mayor of Port St. Lucie - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
           "canonical_slug": "2026-11-03-martin-county-election-results-live-coverage-of-florida-midterm-races",
           "canonical_headline": "Martin County election results: Live coverage of Florida midterm races",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/heavy-rain-floods-port-st-lucie-roads-strands-drivers-residents-calling-for-drainage-improvements",
+          "canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+          "canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -942,17 +1298,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Flooding forces polling place moves in Fort Pierce and Port St. Lucie for Election Day",
-      "generated_card_count": 0,
-      "elapsed_seconds": 43.007
+      "live_hero_headline": "Steven Giordano unseats Shannon Martin as Port St. Lucie mayor by 2,601 votes",
+      "generated_card_count": 2,
+      "elapsed_seconds": 64.745
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "cache_hit",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 12,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 13,
       "selected_source_count": 1,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -969,7 +1325,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 13,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -1035,7 +1391,7 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Indian River County declares flooding emergency; Rockridge under voluntary evacuation",
-      "elapsed_seconds": 26.742
+      "elapsed_seconds": 16.783
     }
   ]
 }
