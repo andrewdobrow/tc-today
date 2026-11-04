@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-04T02:46:41Z",
+  "generated_at": "2026-11-04T04:43:27Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -24,35 +24,42 @@
       "no_category_eligible_sources": 4
     },
     "model_attempt_count": 3,
-    "model_elapsed_seconds": 53.56,
+    "model_elapsed_seconds": 67.631,
     "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 14,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 1,
+    "category_eligibility_rejection_count": 4,
+    "published_story_duplicate_suppression_count": 19,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 3,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 1,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_cache_hit_count": 2,
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 14,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 19,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 36.237,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 36.237,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -61,23 +68,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
-          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -103,11 +96,11 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Martin county school potentional closure Wednesday amid flooding and severe weather - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-st-lucie-indian-river-school-protentional-closure-amid-flooding-and-severe-weather-heavy-rain-school-operations-wednesday-florida-news"
+          "headline": "Martin County and Okeechobee County schools to reopen Wednesday after closing on Tuesday due to flooding - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -121,6 +114,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
+          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
+          "editorial_story_id": "story_025396",
+          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
+          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Flooded roads complicate trip to Port St. Lucie polls; Legacy High School site is open - cw34.com",
           "source_url": "https://cw34.com/news/local/legacy-high-school-voting-site-open-flooding-complicates-trip-port-st-lucie-polls-st-lucie-county-supervisor-of-elections-midway-road-glade-extension-elections-florida-news",
           "editorial_story_id": "story_025340",
@@ -130,12 +133,36 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County and Okeechobee County schools to reopen Wednesday after closing on Tuesday due to flooding - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
+          "canonical_headline": "Martin County district schools closed Tuesday, after-school activities canceled",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_025106",
+            "source:https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_025106,source:https://www.wptv.com/news/treasure-coast/region-okeechobee-county/okeechobee-county-schools-to-remain-closed-tuesday-due-to-flooding",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -145,6 +172,33 @@
           "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Flooding-related St. Lucie County polling-place relocations for the Nov. 3 election",
+            "Precincts 49, 51 and 71 relocated to Port St. Lucie Community Center, 2195 SE Airoso Blvd.",
+            "Precinct 12 relocated from Fort Pierce Masonic Lodge to Days Inn Midtown, 3224 S. US Highway 1",
+            "Precincts 83 and 92 listed at Tradition Town Hall, 10799 SW Civic Lane"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same polling-relocation action and several exact precinct assignments. Although published later, it cites Monday's notice and gives conflicting assignments for precincts 67 and 86 without establishing a subsequent official change. Those discrepancies do not demonstrate a material new development; preserve the more comprehensive canonical rather than overwrite its updated directions.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
+          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
+          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
+          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -169,7 +223,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 39.121
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
+      "generated_card_count": 1,
+      "elapsed_seconds": 102.272
     },
     {
       "category_key": "crime",
@@ -177,7 +235,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 12,
+      "publishable_source_count": 14,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -216,11 +274,11 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "editorial_story_id": "story_025299",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "editorial_story_id": "story_025391",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -234,10 +292,10 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
-          "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "canonical_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -249,15 +307,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.561
+      "elapsed_seconds": 35.329
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 13,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 14,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -274,28 +332,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:fort pierce",
-            "source_locality:vero beach",
-            "source_locality:sebastian"
-          ],
-          "headline": "Record-breaking rainfall in West Palm Beach: totals across the area",
-          "source_url": "https://www.wptv.com/weather/weather-news/record-breaking-rainfall-totals-across-the-area"
-        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -319,8 +358,18 @@
           "source_url": "https://cbs12.com/news/local/port-st-lucie-voters-decide-mayoral-race-as-flooding-forces-polling-place-changesport-st-lucie-mayoral-runoff-port-st-lucie-election-results-shannon-martin-steven-giordano-port-st-lucie-mayor-race-port-st-lucie-election-day-port-st-lucie-trash"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "editorial_story_id": "story_025391",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
@@ -351,6 +400,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "St. Lucie Public Schools to close Wednesday following historic flooding",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-close-wednesday-following-historic-flooding",
           "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
@@ -381,14 +445,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.92
+      "elapsed_seconds": 30.319
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -409,44 +473,17 @@
       "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "sports",
-          "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
-          "editorial_story_id": "story_025340",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "sports",
-          "source_headline": "Flooding forces polling location changes in Palm Beach, Martin, St. Lucie, Indian River counties - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxNUUtXUEQ0aGhyQS04YldVWlJVRnQ0aG5OcVNvZEt4U09WYXYzNW12OEd1YmZsbVotTTJCVEZYRWxBSnpVX1lIMW52ajJQNi1yUHFJWFU1bDZPcjl4TEp6Rl81bXZlX290SFc1eWlaVUlhLW9TRHhYem15VmhUZ0lEdVQxNmNvWnotVDE2YXM4REU4RzF1QkxLV0djb2xzMG9qYjRwRVlsZ2hDWDhDZTNYbkRyOVBHOVo3cnJheTJmWWwxR3hpQUF6ck44SXJiUlVYVnM5U1J0WDhIRjBrUC1ZcDdQekY",
-          "canonical_slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.23
+      "material_update_promotion_decisions": [],
+      "new_publication_stale_rejected_count": 1,
+      "elapsed_seconds": 19.585
     },
     {
       "category_key": "things_to_do",
@@ -528,14 +565,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.953
+      "elapsed_seconds": 21.477
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 2,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -545,11 +582,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.758,
+          "elapsed_seconds": 14.826,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 10.758,
+      "model_elapsed_seconds": 14.826,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -563,44 +600,64 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "editorial_story_id": "story_025391",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+      "live_hero_headline": "James Uthmeier projected to defeat Rodriguez in Florida attorney general race",
       "generated_card_count": 0,
-      "elapsed_seconds": 29.259
+      "elapsed_seconds": 42.355
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 4,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 3,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.995,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 19.995,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Martin County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -609,24 +666,72 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
+          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
+          "editorial_story_id": "story_025396",
+          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
+          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Road closures after loaded cement truck rolls into ditch in Martin County crash - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxPcGYwR1hmQ1JpeFE1UjFQcTk5OHRnN2lWWXdEUkNpSUNFWjZzbmpNMlFYeWk0Z2pCRGZnUUZTdGpqZUo4Uk11VjY1eXpjd2tTZHp2bV8tUnJzSXJqZDlNQ0ZaNE42ZTlFUzZCLVprZTA5Q1R5RVE1MWY3Z1pLS2pEdTRTR3NBSUh5bXYwNU5EeERndFJ5Tm5SUFJ2MGFDaUhVUW5YNFRuTTB2TUhYUW1rdW15R1Q5ekRhZUJsanh2RU1IOHJCODQydEZVRXlXSE14YW5HS0tTMUtyUHY1Qy1yREtnWklMdFgxQW5mMWtDRDd4dWdOQmlmNmFPWWw2V28xX2dycw",
+          "editorial_story_id": "story_025364",
+          "canonical_slug": "2026-11-03-cement-truck-rollover-causes-road-closures-on-84th-ave-in-martin-county",
+          "canonical_headline": "Cement truck rollover causes road closures on 84th Ave. in Martin County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Roberts beats White for Martin County School Board District 1 seat - WPEC",
+          "source_url": "https://cbs12.com/news/election/roberts-beats-white-for-martin-county-school-board-district-1-seat-florida-news-election-coverage",
+          "canonical_slug": "2026-11-03-roberts-wins-reelection-to-martin-county-school-board-district-1-with-6014",
+          "canonical_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Road closures after loaded cement truck rolls into ditch in Martin County crash - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxPcGYwR1hmQ1JpeFE1UjFQcTk5OHRnN2lWWXdEUkNpSUNFWjZzbmpNMlFYeWk0Z2pCRGZnUUZTdGpqZUo4Uk11VjY1eXpjd2tTZHp2bV8tUnJzSXJqZDlNQ0ZaNE42ZTlFUzZCLVprZTA5Q1R5RVE1MWY3Z1pLS2pEdTRTR3NBSUh5bXYwNU5EeERndFJ5Tm5SUFJ2MGFDaUhVUW5YNFRuTTB2TUhYUW1rdW15R1Q5ekRhZUJsanh2RU1IOHJCODQydEZVRXlXSE14YW5HS0tTMUtyUHY1Qy1yREtnWklMdFgxQW5mMWtDRDd4dWdOQmlmNmFPWWw2V28xX2dycw",
+          "canonical_slug": "2026-11-03-cement-truck-rollover-causes-road-closures-on-84th-ave-in-martin-county",
+          "canonical_headline": "Cement truck rollover causes road closures on 84th Ave. in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Roberts wins reelection to Martin County School Board District 1 with 60.14%",
-      "generated_card_count": 0,
-      "elapsed_seconds": 37.959
+      "elapsed_seconds": 23.576
     },
     {
       "category_key": "st_lucie",
@@ -634,8 +739,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
-      "selected_source_count": 4,
+      "publishable_source_count": 5,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -643,11 +748,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 22.807,
+          "elapsed_seconds": 16.568,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 22.807,
+      "model_elapsed_seconds": 16.568,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -658,7 +763,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 6,
@@ -715,20 +820,20 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/heavy-rain-floods-port-st-lucie-roads-strands-drivers-residents-calling-for-drainage-improvements",
+          "source_headline": "St. Lucie County schools announce early dismissal, cancel aftercare - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-excuse-absences-as-heavy-rain-brings-flooding-st-lucie-county-st-lucie-public-schools-school-early-pickup-early-student-pickup-school-dismissal-school-absences-excused-absences-oak-hammock-k-8-school-oak-hammock-school",
           "editorial_story_id": "story_025245",
           "canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
-          "canonical_headline": "Crews check Creekside homes as some Port St. Lucie roads remain impassable",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
+          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -739,12 +844,24 @@
           "canonical_headline": "St. Lucie County's Precinct 90 voters redirected from Legacy High to Tradition Town Hall",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Flooding-related St. Lucie County polling-place relocations for the Nov. 3 election",
+            "Precincts 49, 51 and 71 relocated to Port St. Lucie Community Center, 2195 SE Airoso Blvd.",
+            "Precinct 12 relocated from Fort Pierce Masonic Lodge to Days Inn Midtown, 3224 S. US Highway 1",
+            "Precincts 83 and 92 listed at Tradition Town Hall, 10799 SW Civic Lane"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same polling-relocation action and several exact precinct assignments. Although published later, it cites Monday's notice and gives conflicting assignments for precincts 67 and 86 without establishing a subsequent official change. Those discrepancies do not demonstrate a material new development; preserve the more comprehensive canonical rather than overwrite its updated directions.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -808,12 +925,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Heavy rain floods Port St. Lucie roads, strands drivers; residents call for drainage improvements - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/heavy-rain-floods-port-st-lucie-roads-strands-drivers-residents-calling-for-drainage-improvements",
+          "source_headline": "St. Lucie County schools announce early dismissal, cancel aftercare - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-excuse-absences-as-heavy-rain-brings-flooding-st-lucie-county-st-lucie-public-schools-school-early-pickup-early-student-pickup-school-dismissal-school-absences-excused-absences-oak-hammock-k-8-school-oak-hammock-school",
           "canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
-          "canonical_headline": "Crews check Creekside homes as some Port St. Lucie roads remain impassable",
+          "canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -825,16 +942,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County reports 120 rescues and water-related calls; schools closed Wednesday",
+      "live_hero_headline": "Flooding forces polling place moves in Fort Pierce and Port St. Lucie for Election Day",
       "generated_card_count": 0,
-      "elapsed_seconds": 41.66
+      "elapsed_seconds": 43.007
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "cache_hit",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 26,
+      "fresh_candidate_count": 25,
       "publishable_source_count": 12,
       "selected_source_count": 1,
       "cache_hit": true,
@@ -855,8 +972,18 @@
       "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "editorial_story_id": "story_025391",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Drainage systems overwhelmed as water covers roads, lawns and driveways in Vero Beach - WPEC",
@@ -877,6 +1004,21 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
+          "source_headline": "Republican Brian Mast wins reelection in Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/voters-guide/republican-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_slug": "2026-11-03-brian-mast-wins-reelection-in-floridas-21st-congressional-district",
+          "canonical_headline": "Brian Mast wins reelection in Florida's 21st Congressional District",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Drainage systems overwhelmed as water covers roads, lawns and driveways in Vero Beach - WPEC",
           "source_url": "https://cbs12.com/news/local/vero-beach-neighborhoods-flood-after-heavy-rain-nov-2-2026-florida-news-florida-flooding-rain",
           "canonical_slug": "2026-11-03-flooding-covers-vero-beach-neighborhood-roads-as-deputies-warn-drivers-to-stay-a",
@@ -893,7 +1035,7 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Indian River County declares flooding emergency; Rockridge under voluntary evacuation",
-      "elapsed_seconds": 18.467
+      "elapsed_seconds": 26.742
     }
   ]
 }
