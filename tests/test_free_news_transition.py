@@ -112,7 +112,12 @@ def test_homepage_support_card_no_longer_sells_subscriptions():
               'data-support-card="true"><div>Membership $1/month</div></a>')
     after = _rewrite_home_support(before)
     assert 'href="/donate.html"' in after
-    assert "Local news. Free for everyone." in after
+    assert "Your community. Your news. Your support." in after
+    assert "When roads flood, schools close" in after
+    assert "Support TCT Today" in after
+    assert "Give any amount. No subscription required." in after
+    assert "Read for free" not in after
+    assert "tct-membership-options" not in after
     assert "$1" not in after
 
 
@@ -391,3 +396,29 @@ def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp
     assert "voluntary reader contributions" in privacy
     terms = (tmp_path / "subscription-terms.html").read_text(encoding="utf-8")
     assert "Historical membership plans and pricing" in terms
+
+
+def test_homepage_current_donation_card_has_one_primary_action():
+    page = Path("index.html").read_text(encoding="utf-8")
+    import re
+    cards = re.findall(
+        r'<a\\b(?=[^>]*\\bdata-support-card="true")[^>]*>[\\s\\S]*?</a>',
+        page,
+    )
+    assert len(cards) == 1
+    card = cards[0]
+    assert 'href="/donate.html"' in card
+    assert "Support TCT Today" in card
+    assert "No subscription required." in card
+    assert "Read for free" not in card
+    assert "Stay informed" not in card
+    assert "tct-membership-options" not in card
+    assert "Try 1 Month" not in card
+    assert "Your community. Your news. Your support." in card
+
+
+def test_homepage_donation_styles_have_visible_single_cta():
+    css = Path("style.css").read_text(encoding="utf-8")
+    assert ".tct-donation-card .tct-membership-cta" in css
+    assert "background: #f26445" in css
+    assert ".tct-donation-card .tct-membership-assurance" in css
