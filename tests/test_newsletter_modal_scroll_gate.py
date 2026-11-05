@@ -82,5 +82,5 @@ def test_no_timer_or_exit_intent_can_bypass_the_gate():
 def test_asset_version_is_bumped_to_prevent_cached_immediate_modal():
     builder = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
     homepage = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.118"' in builder
-    assert '/main.js?v=1.13.9.118' in homepage
+    assert 'ASSET_VERSION = "1.13.9.119"' in builder
+    assert '/main.js?v=1.13.9.119' in homepage
