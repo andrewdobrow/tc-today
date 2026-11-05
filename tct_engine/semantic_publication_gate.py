@@ -752,11 +752,76 @@ def _clamp_confidence(value: object) -> float:
     return min(1.0, max(0.0, number))
 
 
+# Same storm is a shared cause, not an identity key. Distinct public impacts
+# must retain independent canonical articles even when a model reports high
+# same-event confidence. Only headline-level *primary* news subjects count:
+# mentioning several impacts as background in the body is not identity proof.
+_WEATHER_EVENT_TERMS = re.compile(
+    r"\b(?:flood(?:s|ed|ing|waters?)?|rain(?:fall|storm)?|storm|water(?:s)?\s+rises?|"
+    r"high\s+water|drainage|watershed)\b", re.I
+)
+_WEATHER_IMPACT_HEADLINES = {
+    "school_operations": re.compile(
+        r"\b(?:school(?:s|\s+district)?|class(?:es)?|campus(?:es)?)\b.{0,75}"
+        r"\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\b"
+        r"|\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\b"
+        r".{0,75}\b(?:school(?:s|\s+district)?|class(?:es)?|campus(?:es)?)\b", re.I
+    ),
+    "election_logistics": re.compile(
+        r"\b(?:polling\s+(?:place|site|location)|precinct|ballot|vot(?:e|ing)|"
+        r"election\s+day)\b", re.I
+    ),
+    "residential_inundation": re.compile(
+        r"\b(?:homes?|houses?|residences?|neighbou?rhoods?)\b.{0,95}"
+        r"\b(?:flood(?:s|ed|ing)?|water|pump|submerg(?:ed|ing)|underwater)\b"
+        r"|\b(?:water|flood(?:s|ed|ing)?|pump|submerg(?:ed|ing)|underwater)\b"
+        r".{0,95}\b(?:homes?|houses?|residences?|neighbou?rhoods?)\b", re.I
+    ),
+    "road_access": re.compile(
+        r"\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection|traffic)\b"
+        r".{0,80}\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\b"
+        r"|\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\b"
+        r".{0,80}\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection)\b", re.I
+    ),
+    "shelter_evacuations": re.compile(r"\b(?:shelters?|evacuat(?:e|ed|ion|ions)|displaced)\b", re.I),
+}
+
+
+def _weather_impact_families(headline: object) -> set[str]:
+    value = str(headline or "")
+    return {
+        family for family, pattern in _WEATHER_IMPACT_HEADLINES.items()
+        if pattern.search(value)
+    }
+
+
+def _is_cross_impact_weather_takeover(
+    incoming: Mapping[str, Any] | None,
+    candidate: Mapping[str, Any] | None,
+) -> bool:
+    """Block a weather-related update that changes the *reportable event*.
+
+    School closures/polling-place moves and homes filling with water may
+    share a storm and county, but are distinct events with distinct public
+    consequences. Low-similarity model approval cannot override this boundary.
+    """
+    if not incoming or not candidate:
+        return False
+    left = str(incoming.get("headline") or incoming.get("title") or "")
+    right = str(candidate.get("headline") or candidate.get("title") or "")
+    if not (_WEATHER_EVENT_TERMS.search(left) or _WEATHER_EVENT_TERMS.search(right)):
+        return False
+    left_impacts = _weather_impact_families(left)
+    right_impacts = _weather_impact_families(right)
+    return bool(left_impacts and right_impacts and left_impacts.isdisjoint(right_impacts))
+
+
 def validate_model_decision(
     raw_decision: Mapping[str, Any],
     candidates: Sequence[Mapping[str, Any]],
     *,
     min_confidence: float = DEFAULT_MIN_CONFIDENCE,
+    incoming: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     candidate_slugs = {
         str(row.get("slug") or (row.get("article") or {}).get("slug") or "").strip()
@@ -773,6 +838,22 @@ def validate_model_decision(
     shared_anchors = [str(v).strip() for v in (raw_decision.get("shared_anchors") or []) if str(v).strip()]
     novel_facts = [str(v).strip() for v in (raw_decision.get("novel_facts") or []) if str(v).strip()]
     consistency_repairs: list[str] = []
+
+    # An LLM's same-event confidence is not permission to collapse unrelated
+    # consequences of a common storm into the same canonical article.
+    if same_event and selected in candidate_slugs and incoming is not None:
+        selected_row = next(
+            (row for row in candidates if str(row.get("slug") or (row.get("article") or {}).get("slug") or "").strip() == selected),
+            None,
+        )
+        canonical = (selected_row.get("article") or selected_row) if selected_row else None
+        if _is_cross_impact_weather_takeover(incoming, canonical):
+            same_event = False
+            material_update = False
+            independent_followup = False
+            selected = ""
+            requested_action = ACTION_NEW
+            consistency_repairs.append("distinct_weather_impact_requires_independent_story")
 
     # The model sometimes reaches the correct structured identity/materiality
     # conclusion but truncates before the final recommended_action field (it is
@@ -865,7 +946,7 @@ def _prompt(
 
 Compare the fully written INCOMING article with the RECENT CANONICAL CANDIDATES. Decide whether the incoming article covers the exact same real-world incident, case, meeting, game, government action, business event, or continuing proceeding as one candidate.
 
-Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
+Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
 
 Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, witness color, cleanup detail, anniversary/color framing, or background explanation is NOT by itself a reason for a new URL.
 
@@ -958,7 +1039,7 @@ def adjudicate_candidates(
         raw_text = _response_text(response)
         parsed = _json_object(raw_text)
         validated = validate_model_decision(
-            parsed, candidates, min_confidence=min_confidence
+            parsed, candidates, min_confidence=min_confidence, incoming=incoming
         )
         validated["raw_model_decision"] = parsed
         return validated
@@ -1001,7 +1082,7 @@ def _resolution_prompt(
 
 The first pass returned HOLD. That HOLD is not evidence that the incoming story matches any candidate. Re-read the FULL incoming article and only the strongest bounded canonical shortlist below. Resolve the identity now whenever the facts support it.
 
-Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough.
+Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough. Shared weather or disaster circumstances are also insufficient: distinguish independent consequences such as school closures, election logistics, residential inundation, road closures, and shelter operations rather than merging them into one permalink.
 
 Decision rules:
 - If NO candidate is the same concrete real-world event, choose new_story. Do not hold merely because candidates are topically similar.
@@ -1095,7 +1176,7 @@ def adjudicate_resolution(
         raw_text = _response_text(response)
         parsed = _json_object(raw_text)
         validated = validate_model_decision(
-            parsed, candidates, min_confidence=min_confidence
+            parsed, candidates, min_confidence=min_confidence, incoming=incoming
         )
         validated["raw_model_decision"] = parsed
         validated["resolution_pass"] = True
