@@ -196,13 +196,13 @@ def _rewrite_home_support(text: str) -> str:
         r'<a\b(?=[^>]*\bdata-support-card="true")[^>]*>.*?</a>',
         re.I | re.S,
     )
-    replacement = f"""<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Donate to Treasure Coast Today">
+    replacement = """<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
         <div class="tct-membership-card-inner">
-          <span class="tct-membership-kicker">Reader-supported journalism</span>
-          <h2 class="tct-membership-headline">Local news. Free for everyone.</h2>
-          <p class="tct-membership-copy">No paywall. Independent reporting for Martin, St. Lucie and Indian River counties, supported by readers and advertisers.</p>
-          <span class="tct-membership-options" aria-hidden="true"><span>Read for free</span><span>Donate what you choose</span><span>Stay informed</span></span>
-          <span class="tct-membership-cta">{DONATE_HEART_SVG} Donate to support the newsroom <b>&rarr;</b></span>
+          <span class="tct-membership-kicker">LOCAL NEWS NEEDS LOCAL SUPPORT</span>
+          <h2 class="tct-membership-headline">Your community. Your news. Your support.</h2>
+          <p class="tct-membership-copy">When roads flood, schools close, or local decisions affect your neighborhood, staying informed matters. If Treasure Coast Today matters to you, help keep local news free for everyone.</p>
+          <span class="tct-membership-cta"><span class="tct-membership-cta-heart" aria-hidden="true">&#9829;</span> Support TCT Today <span class="tct-membership-cta-arrow" aria-hidden="true">&rarr;</span></span>
+          <span class="tct-membership-assurance">Give any amount. No subscription required.</span>
         </div>
       </a>"""
     return pattern.sub(replacement, text, count=1)
