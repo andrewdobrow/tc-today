@@ -31,5 +31,5 @@ def test_production_workflow_runs_registry_preflight_before_tests_and_generator(
     )
     preflight_at = workflow.index("Normalize persistent story registry")
     pytest_at = workflow.index("python -m pytest tests -v")
-    generate_at = workflow.index("python -u scripts/generate.py")
+    generate_at = workflow.index("python -u scripts/run_generator_fail_fast.py")
     assert preflight_at < pytest_at < generate_at

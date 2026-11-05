@@ -221,7 +221,9 @@ jobs:
           # actual provider response from this run for quota-failure detection.
           set -o pipefail
           touch "$RUNNER_TEMP/tct-generate-start.marker"
-          /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py 2>&1 | tee "$RUNNER_TEMP/tct-generate.log"
+          # Stream to Actions and retain the same log for the final diagnostic
+          # credit guard, but terminate immediately on confirmed exhausted credits.
+          /usr/bin/time -f "Generate elapsed: %E" python -u scripts/run_generator_fail_fast.py --log "$RUNNER_TEMP/tct-generate.log"
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

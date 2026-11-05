@@ -102,7 +102,7 @@ def test_missing_run_log_is_a_clear_failure(tmp_path):
 def test_production_guard_runs_before_commit_and_deploy():
     workflow = WORKFLOW.read_text(encoding="utf-8")
     assert "set -o pipefail" in workflow
-    assert 'tee "$RUNNER_TEMP/tct-generate.log"' in workflow
+    assert 'python -u scripts/run_generator_fail_fast.py --log "$RUNNER_TEMP/tct-generate.log"' in workflow
     assert 'tct-generate-start.marker' in workflow
     assert "python scripts/check_editorial_api_credits.py" in workflow
     assert workflow.index("- name: Generate news") < workflow.index(

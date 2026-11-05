@@ -261,7 +261,7 @@ def test_production_workflow_bounds_working_set_before_normalize_and_generation(
     normalize = workflow.index("repair_editorial_story_registry.py")
     compact_state = workflow.index("compact_editorial_working_set.py --phase state")
     pytest = workflow.index("python -m pytest tests -v")
-    generate = workflow.index("python -u scripts/generate.py")
+    generate = workflow.index("python -u scripts/run_generator_fail_fast.py")
     assert compact_registry < normalize < compact_state < pytest < generate
     assert 'TCT_STORY_HOT_DAYS: "14"' in workflow
 

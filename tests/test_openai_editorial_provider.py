@@ -155,7 +155,8 @@ def test_production_has_reversible_provider_flag_and_preserved_gates():
     assert "TCT_LLM_PROVIDER: ${{ vars.TCT_LLM_PROVIDER || 'anthropic' }}" in workflow
     assert "TCT_ENGINE_MODE:" in workflow
     assert "TCT_ENGINE_KILL_SWITCH:" in workflow
-    assert "scripts/generate.py" in workflow
+    assert "scripts/run_generator_fail_fast.py" in workflow
+    assert "scripts/generate.py" in Path("scripts/run_generator_fail_fast.py").read_text(encoding="utf-8")
     assert "git push" not in source[source.index("TCT_LLM_PROVIDER ="):source.index("# v1.13.6.5")]
 
 
