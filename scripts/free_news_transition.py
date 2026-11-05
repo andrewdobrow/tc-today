@@ -198,9 +198,10 @@ def _rewrite_home_support(text: str) -> str:
     )
     replacement = f"""<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
         <div class="tct-membership-card-inner">
-          <span class="tct-membership-kicker">LOCAL NEWS NEEDS LOCAL SUPPORT</span>
-          <h2 class="tct-membership-headline">Local news needs you.</h2>
-          <p class="tct-membership-copy">Flooded roads, school closures, decisions at City Hall—these stories affect your life. If TCT helps you stay informed, please help keep it free for everyone.</p>
+          <span class="tct-membership-kicker">A NOTE TO OUR READERS</span>
+          <h2 class="tct-membership-headline">Local news needs local support.</h2>
+          <p class="tct-membership-copy">From local government decisions and public safety updates to the events bringing our communities together, Treasure Coast Today helps you stay connected to the place you call home.</p>
+          <p class="tct-membership-copy tct-membership-copy--ask">Every story is free to read. If TCT is part of your day, your contribution helps keep it that way.</p>
           <span class="tct-membership-cta">{DONATE_HEART_SVG} Support TCT Today <span class="tct-membership-cta-arrow" aria-hidden="true">&rarr;</span></span>
           <span class="tct-membership-assurance">Give any amount. No subscription required.</span>
         </div>
