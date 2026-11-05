@@ -425,9 +425,35 @@ document.addEventListener("keydown", (event) => {
     document.body.appendChild(script);
   }
 
-  // Defer one task so a legacy embed already present in a cached page can be
-  // detected rather than initialized a second time.
-  window.setTimeout(loadSitewideKitModal, 0);
+  // Kit can display its own modal immediately after its embed is loaded.
+  // Do not inject the embed until the reader has traversed half of the page's
+  // actual scrollable distance. This replaces the previous load-time popup;
+  // no clock-based or exit-intent fallback may bypass the reader's progress.
+  const SCROLL_THRESHOLD = 0.5;
+  let modalActivated = false;
+
+  function maybeLoadSitewideKitModal() {
+    if (modalActivated) return;
+    const root = document.documentElement;
+    const pageHeight = Math.max(root.scrollHeight, document.body?.scrollHeight || 0);
+    const scrollableDistance = pageHeight - window.innerHeight;
+    // Short pages that cannot scroll do not get a surprise modal on arrival.
+    if (scrollableDistance <= 0) return;
+
+    const distanceRead = Math.max(window.scrollY || 0, root.scrollTop || 0);
+    if (distanceRead / scrollableDistance < SCROLL_THRESHOLD) return;
+
+    modalActivated = true;
+    window.removeEventListener("scroll", maybeLoadSitewideKitModal);
+    window.removeEventListener("resize", maybeLoadSitewideKitModal);
+    loadSitewideKitModal();
+  }
+
+  window.addEventListener("scroll", maybeLoadSitewideKitModal, { passive: true });
+  window.addEventListener("resize", maybeLoadSitewideKitModal, { passive: true });
+  // Handle readers arriving via a deep link or restored scroll position.
+  window.addEventListener("load", maybeLoadSitewideKitModal, { once: true });
+  maybeLoadSitewideKitModal();
 })();
 
 // -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
