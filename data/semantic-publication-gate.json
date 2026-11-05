@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-11-05T13:37:17.263242+00:00",
+  "generated_at": "2026-11-05T16:56:41.517018+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 44,
+    "evaluations": 39,
     "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
     "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 43,
+    "no_candidate_passes": 38,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 1,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 42,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -80,22 +80,22 @@
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 1,
-    "material_update_replays_suppressed": 3,
-    "pre_generation_materiality_evaluations": 2,
+    "material_update_replays_suppressed": 2,
+    "pre_generation_materiality_evaluations": 3,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 1,
-    "pre_generation_materiality_holds": 1,
+    "pre_generation_materiality_holds": 2,
     "pre_generation_materiality_model_calls": 2,
-    "pre_generation_materiality_cache_hits": 0,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_cache_hits": 1,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
@@ -103,6 +103,36 @@
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "martin",
+      "source_headline": "Fatal crash involving semi-truck in Martin County - WPBF",
+      "source_url": "https://www.wpbf.com/article/florida-indiantown-fatal-crash-semi-truck/74339896",
+      "canonical_slug": "2026-11-01-multiple-fatality-crash-closes-all-northbound-i-95-lanes-in-martin-county",
+      "canonical_headline": "Three killed, including 5-year-old boy, in I-95 crash in Martin County",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Both involve a fatal collision between a car or other vehicle and a tractor-trailer in Martin County.",
+        "Both report responses by Martin County Sheriff's deputies, Martin County Fire Rescue and Florida Highway Patrol."
+      ],
+      "novel_facts": [
+        "The incoming crash occurred on Warfield Boulevard just north of Fox Brown Road in Indiantown.",
+        "Warfield Boulevard is closed between Fox Brown Road and Martin Highway, with address access directed south from Martin Highway."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "st_lucie",
       "source_headline": "Port St. Lucie launches disaster relief program for flood-damaged homes - WPBF",
@@ -114,8 +144,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -149,11 +179,11 @@
       "semantic_action": "hold",
       "confidence": 0.98,
       "shared_anchors": [
-        "Flooding in St. Lucie County and Port St. Lucie in early November 2026"
+        "Both articles concern consequences of recent flooding in St. Lucie County, including Port St. Lucie."
       ],
       "novel_facts": [
-        "At least two dozen stranded vehicles were brought to the MidFlorida Event Center for owners to retrieve.",
-        "Vehicle owner Enrique Crespo was arranging another tow to take his flooded vehicle home.",
+        "At least two dozen stranded vehicles were towed to the MidFlorida Event Center for owners to retrieve, with more arriving throughout the day.",
+        "Vehicle owner Enrique Crespo said he needed another tow to take his car home.",
         "The Vitalia neighborhood in Tradition remained without power, leaving residents without air conditioning."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -228,106 +258,6 @@
       "incoming_headline": "Nixon concedes as Moody is projected to win Florida U.S. Senate special election",
       "incoming_source_url": "https://www.wptv.com/news/political/elections-local/floridas-u-s-senate-race-what-voters-need-to-know-before-election-day",
       "incoming_story_id": "story_023657",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Fort Pierce police seek missing endangered adult Joseph Lee Williams, 46",
-      "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-police-searching-missing-endangered-adult/74271166",
-      "incoming_story_id": "story_023813",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
-      "incoming_source_url": "https://cbs12.com/news/local/florida-port-st-lucie-man-charged-with-attempting-to-extort-florida-state-lawmaker-meg-weinberger-district-94-extortion-felony-threats-lawsuit-ethics-complaints-election-",
-      "incoming_story_id": "story_023984",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/mattamy-homes-donates-125-acres-in-martin-county-to-support-st-lucie-river-restoration",
-      "incoming_story_id": "story_024042",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Murray Middle School breaks ground on $33 million rebuild after tornado damage",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/murray-middle-school-breaks-ground-on-33-million-rebuild-after-hurricane-milton-damage",
-      "incoming_story_id": "story_023854",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Erosion hits Ocean Drive beachfront parking in Vero Beach as king tides persist",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-erosion-beach-flood-tide-rain/74277344",
-      "incoming_story_id": "story_024111",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1004,15 +934,35 @@
       }
     },
     {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
+      "incoming_source_url": "https://cw34.com/newsletter-daily/flooding-shuts-down-south-25th-street-near-two-st-lucie-county-schools-florida-news-local-news-florida-flooding",
+      "incoming_story_id": "story_025673",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
       "phase": "forward_publication",
-      "incoming_headline": "St. Lucie Public Schools remain closed Thursday amid flooded roads and bus stops",
+      "incoming_headline": "St. Lucie Public Schools remain closed Thursday because of flooded roads and bus stops",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-remain-closed-thursday-because-of-flooding",
       "incoming_story_id": "story_025596",
       "candidates": [
         {
           "slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
           "headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "retrieval_score": 0.7982,
+          "retrieval_score": 0.7979,
           "headline_similarity": 0.66,
           "similarity_basis": "source_headline",
           "shared_headline_tokens": [
@@ -1028,9 +978,9 @@
             "schools"
           ],
           "content_similarity": {
-            "score": 0.3556,
+            "score": 0.3539,
             "overlap": 0.4444,
-            "jaccard": 0.127,
+            "jaccard": 0.1212,
             "shared_token_count": 8,
             "shared_tokens": [
               "closed",
@@ -1065,205 +1015,16 @@
         "independently_newsworthy_followup": false,
         "confidence": 0.99,
         "shared_anchors": [
-          "St. Lucie Public Schools' continuing closure following the same week's severe flooding",
-          "Unsafe flooded roads preventing normal school operations",
-          "Thursday, Nov. 5, was the anticipated reopening date in the canonical article"
+          "St. Lucie Public Schools' continuing closure during the same week's flooding",
+          "The candidate anticipated reopening Thursday, Nov. 5; the incoming article directly revises that reopening plan",
+          "Flood-related travel hazards preventing safe school operations"
         ],
         "novel_facts": [
-          "The district extended its closure through Thursday, Nov. 5, because roads and bus stops remain flooded",
+          "The district announced Wednesday that schools will remain closed Thursday, Nov. 5",
           "Reopening is now expected Friday, Nov. 6, subject to conditions",
           "Essential employees must report under the district's Emergency Operations Plan"
         ],
-        "reason": "The incoming article updates the same district's ongoing flood-related school closure. Extending the closure and changing the expected reopening date materially affect families and employees, but do not introduce a distinct independently newsworthy follow-up requiring a new URL.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
-      "incoming_source_url": "https://cw34.com/newsletter-daily/flooding-shuts-down-south-25th-street-near-two-st-lucie-county-schools-florida-news-local-news-florida-flooding",
-      "incoming_story_id": "story_025673",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "gpt-6.1-sol",
-      "incoming_headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
-      "incoming_source_url": "https://cw34.com/newsletter-daily/flooding-shuts-down-south-25th-street-near-two-st-lucie-county-schools-florida-news-local-news-florida-flooding",
-      "incoming_story_id": "story_025673",
-      "candidates": [
-        {
-          "slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
-          "headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6172,
-          "retrieval_score": 0.5952,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "headline": "Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5804,
-          "retrieval_score": 0.5434,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5735,
-          "retrieval_score": 0.5395,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-troy-ingersoll-wins-sixth-term-on-st-lucie-county-school-board-defeating-lisa-ke",
-          "headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board, defeating Lisa Kessler",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5662,
-          "retrieval_score": 0.5322,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "headline": "St. Lucie County relocates flood shelters to help public schools reopen",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.54,
-          "retrieval_score": 0.503,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
-          "headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5255,
-          "retrieval_score": 0.4915,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5178,
-          "retrieval_score": 0.5078,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-11-04-family-questions-walking-safety-on-port-st-lucie-boulevard-after-teens-death",
-          "headline": "Family questions walking safety on Port St. Lucie Boulevard after teen's death",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4891,
-          "retrieval_score": 0.4521,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-04-david-jolly-wins-st-lucie-county-as-turnout-rises-despite-flooding",
-          "headline": "David Jolly wins St. Lucie County as turnout rises despite flooding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.485,
-          "retrieval_score": 0.448,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-10-26-buc-ees-gets-site-plan-approval-for-indrio-road-travel-center-in-st-lucie-county",
-          "headline": "Buc-ee's gets site plan approval for Indrio Road travel center in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4646,
-          "retrieval_score": 0.4546,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
-          "headline": "Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4524,
-          "retrieval_score": 0.4154,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-rick-meltzer-wins-open-port-st-lucie-city-council-district-1-seat",
-          "headline": "Rick Meltzer wins open Port St. Lucie City Council District 1 seat",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4415,
-          "retrieval_score": 0.4075,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": true,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [],
-        "novel_facts": [
-          "County officials announced Wednesday that flooding closed South 25th Street to through traffic between Cobra Pride Way at Fort Pierce Central High School and Bulldog Drive at Forest Grove Middle School.",
-          "Drivers must use alternate routes because flooding has made this specific road segment unsafe."
-        ],
-        "reason": "No candidate reports this specific South 25th Street closure. The candidates cover other flood consequences, including school closures, shelters, polling relocations and flooding on different roads. Shared flooding and incidental school-closure context do not make these the same event.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": true,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [],
-        "novel_facts": [
-          "County officials announced Wednesday that flooding closed South 25th Street to through traffic between Cobra Pride Way at Fort Pierce Central High School and Bulldog Drive at Forest Grove Middle School.",
-          "Drivers must use alternate routes because flooding has made this specific road segment unsafe."
-        ],
-        "reason": "No candidate reports this specific South 25th Street closure. The candidates cover other flood consequences, including school closures, shelters, polling relocations and flooding on different roads. Shared flooding and incidental school-closure context do not make these the same event.",
+        "reason": "This extends the same district's ongoing flood-related school closure and materially changes the previously announced reopening schedule. It belongs in the existing closure canonical, not a separate follow-up URL.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1279,7 +1040,7 @@
       "validation_errors": [
         "headline_missing_canonical_geography"
       ],
-      "word_count": 297,
+      "word_count": 271,
       "paragraph_count": 5,
       "baseline_lead_hits": [
         "flooding",
@@ -1288,12 +1049,11 @@
       ],
       "novelty_lead_hits": [
         "announced",
-        "change",
-        "could",
-        "depending",
+        "areas",
         "expected",
         "friday",
-        "plan",
+        "numerous",
+        "other",
         "stops"
       ],
       "reason": "composition_not_validated"
@@ -1302,36 +1062,11 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 11,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 2,
+    "already_consolidated": 0,
     "skipped": [
-      {
-        "source_story_id": "story_025711",
-        "target_story_id": "story_025106",
-        "target_slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
-        "incoming_headline": "Water rises in Jensen Beach homes on Hyline Drive as Martin County cannot pump it out",
-        "confidence": 0.88,
-        "shared_anchors": [
-          "Martin County flooding following heavy rain on Monday, Nov. 2, 2026",
-          "Jensen Beach explicitly identified as an affected community",
-          "Floodwaters affecting homes and preventing residents from safely remaining in them"
-        ],
-        "reason": "The incoming reports worsening residential impacts of the same dated Jensen Beach flooding already covered by the Martin County canonical. Continued indoor water rise and the county's inability to pump constitute a material operational update. Resident accounts and drainage explanations do not establish a distinct accountability or policy investigation warranting another URL.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "By Wednesday afternoon, water was still rising inside homes on Hyline Drive after rainfall had stopped.",
-          "Dozens of homes in the neighborhood were underwater.",
-          "Martin County said it could not pump out the neighborhood because the receiving watershed remained at capacity."
-        ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
-        ],
-        "resolved_source_story_id": "story_025711",
-        "resolved_target_story_id": "story_025106"
-      },
       {
         "source_story_id": "story_019789",
         "target_story_id": "story_020394",
@@ -1705,33 +1440,7 @@
         ]
       }
     ],
-    "rejected_directives": [
-      {
-        "source_story_id": "story_025711",
-        "target_story_id": "story_025106",
-        "target_slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
-        "incoming_headline": "Water rises in Jensen Beach homes on Hyline Drive as Martin County cannot pump it out",
-        "confidence": 0.88,
-        "shared_anchors": [
-          "Martin County flooding following heavy rain on Monday, Nov. 2, 2026",
-          "Jensen Beach explicitly identified as an affected community",
-          "Floodwaters affecting homes and preventing residents from safely remaining in them"
-        ],
-        "reason": "The incoming reports worsening residential impacts of the same dated Jensen Beach flooding already covered by the Martin County canonical. Continued indoor water rise and the county's inability to pump constitute a material operational update. Resident accounts and drainage explanations do not establish a distinct accountability or policy investigation warranting another URL.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "By Wednesday afternoon, water was still rising inside homes on Hyline Drive after rainfall had stopped.",
-          "Dozens of homes in the neighborhood were underwater.",
-          "Martin County said it could not pump out the neighborhood because the receiving watershed remained at capacity."
-        ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
-        ],
-        "resolved_source_story_id": "story_025711",
-        "resolved_target_story_id": "story_025106"
-      }
-    ],
+    "rejected_directives": [],
     "merges": []
   }
 }
