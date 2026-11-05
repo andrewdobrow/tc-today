@@ -757,33 +757,33 @@ def _clamp_confidence(value: object) -> float:
 # same-event confidence. Only headline-level *primary* news subjects count:
 # mentioning several impacts as background in the body is not identity proof.
 _WEATHER_EVENT_TERMS = re.compile(
-    r"\\b(?:flood(?:s|ed|ing|waters?)?|rain(?:fall|storm)?|storm|water(?:s)?\\s+rises?|"
-    r"high\\s+water|drainage|watershed)\\b", re.I
+    r"\b(?:flood(?:s|ed|ing|waters?)?|rain(?:fall|storm)?|storm|water(?:s)?\s+rises?|"
+    r"high\s+water|drainage|watershed)\b", re.I
 )
 _WEATHER_IMPACT_HEADLINES = {
     "school_operations": re.compile(
-        r"\\b(?:school(?:s|\\s+district)?|class(?:es)?|campus(?:es)?)\\b.{0,75}"
-        r"\\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\\b"
-        r"|\\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\\b"
-        r".{0,75}\\b(?:school(?:s|\\s+district)?|class(?:es)?|campus(?:es)?)\\b", re.I
+        r"\b(?:school(?:s|\s+district)?|class(?:es)?|campus(?:es)?)\b.{0,75}"
+        r"\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\b"
+        r"|\b(?:clos(?:e|ed|ures?|ing)|cancel(?:s|ed|led|lation)?|reopen(?:s|ed|ing)?)\b"
+        r".{0,75}\b(?:school(?:s|\s+district)?|class(?:es)?|campus(?:es)?)\b", re.I
     ),
     "election_logistics": re.compile(
-        r"\\b(?:polling\\s+(?:place|site|location)|precinct|ballot|vot(?:e|ing)|"
-        r"election\\s+day)\\b", re.I
+        r"\b(?:polling\s+(?:place|site|location)|precinct|ballot|vot(?:e|ing)|"
+        r"election\s+day)\b", re.I
     ),
     "residential_inundation": re.compile(
-        r"\\b(?:homes?|houses?|residences?|neighbou?rhoods?)\\b.{0,95}"
-        r"\\b(?:flood(?:s|ed|ing)?|water|pump|submerg(?:ed|ing)|underwater)\\b"
-        r"|\\b(?:water|flood(?:s|ed|ing)?|pump|submerg(?:ed|ing)|underwater)\\b"
-        r".{0,95}\\b(?:homes?|houses?|residences?|neighbou?rhoods?)\\b", re.I
+        r"\b(?:homes?|houses?|residences?|neighbou?rhoods?)\b.{0,95}"
+        r"\b(?:flood(?:s|ed|ing)?|water|pump|submerg(?:ed|ing)|underwater)\b"
+        r"|\b(?:water|flood(?:s|ed|ing)?|pump|submerg(?:ed|ing)|underwater)\b"
+        r".{0,95}\b(?:homes?|houses?|residences?|neighbou?rhoods?)\b", re.I
     ),
     "road_access": re.compile(
-        r"\\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection|traffic)\\b"
-        r".{0,80}\\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\\b"
-        r"|\\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\\b"
-        r".{0,80}\\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection)\\b", re.I
+        r"\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection|traffic)\b"
+        r".{0,80}\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\b"
+        r"|\b(?:flood(?:s|ed|ing)?|impassable|clos(?:ed|ures?)|reopen(?:ed|s)?)\b"
+        r".{0,80}\b(?:roads?|streets?|highways?|bridges?|lanes?|intersection)\b", re.I
     ),
-    "shelter_evacuations": re.compile(r"\\b(?:shelters?|evacuat(?:e|ed|ion|ions)|displaced)\\b", re.I),
+    "shelter_evacuations": re.compile(r"\b(?:shelters?|evacuat(?:e|ed|ion|ions)|displaced)\b", re.I),
 }
 
 
