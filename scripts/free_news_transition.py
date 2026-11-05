@@ -196,12 +196,12 @@ def _rewrite_home_support(text: str) -> str:
         r'<a\b(?=[^>]*\bdata-support-card="true")[^>]*>.*?</a>',
         re.I | re.S,
     )
-    replacement = """<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
+    replacement = f"""<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">LOCAL NEWS NEEDS LOCAL SUPPORT</span>
           <h2 class="tct-membership-headline">Local news needs you.</h2>
           <p class="tct-membership-copy">Flooded roads, school closures, decisions at City Hall—these stories affect your life. If TCT helps you stay informed, please help keep it free for everyone.</p>
-          <span class="tct-membership-cta"><span class="tct-membership-cta-heart" aria-hidden="true">&#9829;</span> Support TCT Today <span class="tct-membership-cta-arrow" aria-hidden="true">&rarr;</span></span>
+          <span class="tct-membership-cta">{DONATE_HEART_SVG} Support TCT Today <span class="tct-membership-cta-arrow" aria-hidden="true">&rarr;</span></span>
           <span class="tct-membership-assurance">Give any amount. No subscription required.</span>
         </div>
       </a>"""
