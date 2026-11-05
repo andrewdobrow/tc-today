@@ -6,6 +6,8 @@ with a separate Jensen Beach residential-flooding story. The model reported
 """
 from __future__ import annotations
 
+from tct_engine.semantic_material_update import validate_material_update
+
 from tct_engine.semantic_publication_gate import (
     ACTION_NEW,
     ACTION_UPDATE,
@@ -88,3 +90,26 @@ def test_different_incident_families_outside_storm_context_still_use_existing_po
 def test_candidate_validation_without_incoming_remains_backwards_compatible():
     outcome = validate_model_decision(_model_vote(), [CANDIDATE])
     assert outcome["action"] == ACTION_UPDATE
+
+
+def test_material_update_composition_rejects_school_permalink_overwrite():
+    # A composer that preserves a little school-closure context must still not
+    # be allowed to replace the canonical story with flooded-homes reporting.
+    payload = {
+        "headline": HOMES["headline"],
+        "teaser": "Flooded homes in Jensen Beach remain inundated after rainfall stopped, and county crews cannot pump out the neighborhood.",
+        "body": (
+            "Martin County schools closed and the precinct moved following flooding. "
+            "Now, floodwaters are still rising inside homes on Hyline Drive. "
+            + "Residents say county pumps cannot keep up with drainage. " * 20
+            + "\n\n"
+            + "The county reports the watershed remains at capacity. " * 25
+            + "\n\n"
+            + "Neighbors describe continued disruption and water damage. " * 20
+        ),
+    }
+    outcome = validate_material_update(
+        payload, canonical=SCHOOL, incoming=HOMES, decision=_model_vote(),
+    )
+    assert outcome["status"] == "invalid_composition"
+    assert "distinct_weather_impact_not_same_canonical_event" in outcome["validation_errors"]
