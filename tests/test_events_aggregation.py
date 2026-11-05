@@ -259,18 +259,22 @@ def test_existing_events_page_is_live_filterable_and_not_coming_soon():
 
 
 
-def test_events_page_subscription_banner_uses_selected_copy_and_subscribe_page_cta():
+def test_events_page_has_no_retired_subscription_conversion_banner():
     page = (ROOT / "events.html").read_text(encoding="utf-8")
-    assert 'data-events-subscribe-banner' in page
-    assert "Never miss what’s happening on the Treasure Coast." in page
-    assert "Unlock full access to local news starting at just $1." in page
-    assert "Try 1 Month for $1" in page
-    assert "Then $4.99/month" in page
-    assert 'href="/subscribe.html?next=%2Fevents.html"' in page
-    assert "tct_events_subscribe_banner_dismissed_v1" in page
-    assert "tct_member_entitled_hint" in page
-    assert "body.tct-member-entitled .events-subscribe-banner" in page
-    assert "MutationObserver" in page
+    for obsolete in (
+        "data-events-subscribe-banner",
+        "events-subscribe-banner",
+        "Never miss what’s happening on the Treasure Coast.",
+        "Unlock full access to local news starting at just $1.",
+        "Try 1 Month for $1",
+        "Then $4.99/month",
+        'href="/subscribe.html?next=%2Fevents.html"',
+        "tct_events_subscribe_banner_dismissed_v1",
+    ):
+        assert obsolete not in page
+    # The site's actual free-news conversion remains available in its header.
+    assert 'href="/donate.html"' in page
+
 
 
 def test_events_page_filters_are_compact_dropdowns_in_one_toolbar_row():
