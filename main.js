@@ -415,66 +415,21 @@ document.addEventListener("keydown", (event) => {
   });
 
   function loadSitewideKitModal() {
+    // Load Kit on page initialization and let Kit's own 50% scroll display
+    // rule decide when to open the popup. TCT must not add a second trigger.
     if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
-
-    // Kit's automatic timer/scroll trigger is separate from our 50% gate.
-    // Use Kit's documented link-click trigger instead: once the embed has
-    // initialized, open the *same* Kit modal immediately rather than waiting
-    // for Kit's second independent trigger (often noticed on scroll-back).
-    const trigger = document.createElement("a");
-    trigger.hidden = true;
-    trigger.href = `https://treasure-coast-today.kit.com/${config.uid}`;
-    trigger.setAttribute("data-formkit-toggle", config.uid);
-    trigger.setAttribute("aria-hidden", "true");
-    // If Kit fails to initialize, never navigate the reader away from TCT.
-    trigger.addEventListener("click", (event) => event.preventDefault());
-    document.body.appendChild(trigger);
 
     const script = document.createElement("script");
     script.async = true;
     script.dataset.uid = config.uid;
     script.dataset.tctNewsletterMode = config.mode;
     script.src = config.src;
-    script.addEventListener("load", () => {
-      // Defer until the embed's click handler is registered, without adding
-      // another time-based delay or requiring the reader to scroll again.
-      window.requestAnimationFrame(() => {
-        trigger.click();
-        trigger.remove();
-      });
-    }, { once: true });
-    script.addEventListener("error", () => trigger.remove(), { once: true });
     document.body.appendChild(script);
   }
 
-  // Readership gate: at 50%, load the Kit embed and activate its manual
-  // modal trigger on load. Neither the original immediate loader nor Kit's
-  // independent default timer decides when TCT requests the popup.
-  const SCROLL_THRESHOLD = 0.5;
-  let modalActivated = false;
-
-  function maybeLoadSitewideKitModal() {
-    if (modalActivated) return;
-    const root = document.documentElement;
-    const pageHeight = Math.max(root.scrollHeight, document.body?.scrollHeight || 0);
-    const scrollableDistance = pageHeight - window.innerHeight;
-    // Short pages that cannot scroll do not get a surprise modal on arrival.
-    if (scrollableDistance <= 0) return;
-
-    const distanceRead = Math.max(window.scrollY || 0, root.scrollTop || 0);
-    if (distanceRead / scrollableDistance < SCROLL_THRESHOLD) return;
-
-    modalActivated = true;
-    window.removeEventListener("scroll", maybeLoadSitewideKitModal);
-    window.removeEventListener("resize", maybeLoadSitewideKitModal);
-    loadSitewideKitModal();
-  }
-
-  window.addEventListener("scroll", maybeLoadSitewideKitModal, { passive: true });
-  window.addEventListener("resize", maybeLoadSitewideKitModal, { passive: true });
-  // Handle readers arriving via a deep link or restored scroll position.
-  window.addEventListener("load", maybeLoadSitewideKitModal, { once: true });
-  maybeLoadSitewideKitModal();
+  // Defer one task to allow cached/legacy embeds to be detected. This does
+  // not open the modal: Kit owns its timing, frequency, and suppression.
+  window.setTimeout(loadSitewideKitModal, 0);
 })();
 
 // -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
