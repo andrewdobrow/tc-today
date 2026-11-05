@@ -262,7 +262,7 @@ def test_donate_buttons_have_flat_monochrome_svg_before_label_and_not_newsletter
     home = _rewrite_home_support(
         '<a data-support-card="true" href="/subscribe.html">Old support tile</a>'
     )
-    assert DONATE_HEART_SVG + ' Donate to support the newsroom' in home
+    assert DONATE_HEART_SVG + ' Support TCT Today' in home
     generator = (root / "scripts/free_news_transition.py").read_text(encoding="utf-8")
     assert '{DONATE_HEART_SVG} Support TCT Today' in generator
 
