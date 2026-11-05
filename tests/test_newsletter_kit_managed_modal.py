@@ -53,3 +53,55 @@ def test_sitewide_script_cache_version_is_refreshed():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     assert 'ASSET_VERSION = "1.13.9.120"' in audience
     assert "/main.js?v=1.13.9.120" in home
+
+
+def test_initialization_inserts_only_the_official_kit_embed_once():
+    """Exercise the loader: no synthetic popup click and no scroll listener."""
+    import json
+    import shutil
+    import subprocess
+    import pytest
+
+    if not shutil.which("node"):
+        pytest.skip("Node.js is unavailable for JS behavioral test")
+    modal = _modal_script()
+    begin = modal.index("  function loadSitewideKitModal() {")
+    end = modal.index("\n})();", begin)
+    loader = modal[begin:end]
+    script = """
+const config = { uid: "be625cadfe", src: "https://treasure-coast-today.kit.com/be625cadfe/index.js", mode: "sitewide-modal" };
+let inserted = 0;
+let popupCommands = 0;
+let scheduled;
+const document = {
+  querySelector(sel) { return inserted ? {} : null; },
+  createElement(tag) {
+    if (tag !== "script") throw new Error("unexpected element: " + tag);
+    return { dataset: {}, setAttribute() { throw new Error("unexpected manual trigger"); } };
+  },
+  body: { appendChild(node) {
+    inserted++;
+    if (node.dataset.uid !== config.uid || node.src !== config.src) throw new Error("incorrect embed");
+  } }
+};
+const window = {
+  setTimeout(callback, delay) {
+    if (delay !== 0) throw new Error("unexpected timeout");
+    scheduled = callback;
+  },
+  addEventListener() { throw new Error("unexpected first-party scroll trigger"); }
+};
+""" + loader + """
+const before = inserted;
+scheduled();
+scheduled();
+console.log(JSON.stringify({before, inserted, popupCommands}));
+"""
+    result = subprocess.run(
+        ["node", "-e", script], cwd=ROOT, capture_output=True, text=True,
+        check=False
+    )
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout) == {
+        "before": 0, "inserted": 1, "popupCommands": 0
+    }
