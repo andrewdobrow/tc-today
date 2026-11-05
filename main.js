@@ -417,18 +417,39 @@ document.addEventListener("keydown", (event) => {
   function loadSitewideKitModal() {
     if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
 
+    // Kit's automatic timer/scroll trigger is separate from our 50% gate.
+    // Use Kit's documented link-click trigger instead: once the embed has
+    // initialized, open the *same* Kit modal immediately rather than waiting
+    // for Kit's second independent trigger (often noticed on scroll-back).
+    const trigger = document.createElement("a");
+    trigger.hidden = true;
+    trigger.href = `https://treasure-coast-today.kit.com/${config.uid}`;
+    trigger.setAttribute("data-formkit-toggle", config.uid);
+    trigger.setAttribute("aria-hidden", "true");
+    // If Kit fails to initialize, never navigate the reader away from TCT.
+    trigger.addEventListener("click", (event) => event.preventDefault());
+    document.body.appendChild(trigger);
+
     const script = document.createElement("script");
     script.async = true;
     script.dataset.uid = config.uid;
     script.dataset.tctNewsletterMode = config.mode;
     script.src = config.src;
+    script.addEventListener("load", () => {
+      // Defer until the embed's click handler is registered, without adding
+      // another time-based delay or requiring the reader to scroll again.
+      window.requestAnimationFrame(() => {
+        trigger.click();
+        trigger.remove();
+      });
+    }, { once: true });
+    script.addEventListener("error", () => trigger.remove(), { once: true });
     document.body.appendChild(script);
   }
 
-  // Kit can display its own modal immediately after its embed is loaded.
-  // Do not inject the embed until the reader has traversed half of the page's
-  // actual scrollable distance. This replaces the previous load-time popup;
-  // no clock-based or exit-intent fallback may bypass the reader's progress.
+  // Readership gate: at 50%, load the Kit embed and activate its manual
+  // modal trigger on load. Neither the original immediate loader nor Kit's
+  // independent default timer decides when TCT requests the popup.
   const SCROLL_THRESHOLD = 0.5;
   let modalActivated = false;
 
