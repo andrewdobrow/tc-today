@@ -1,7 +1,7 @@
 """Behavioral regression for sitewide newsletter modal's 50% scroll gate.
 
 Kit controls the modal once its embed is loaded. The first-party site must not
-load that embed before a user has traveled half the available scroll distance.
+load that embed or request its display before a user has traveled half the available scroll distance.
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ JS_FILE = ROOT / "main.js"
 
 def _gate_source() -> str:
     source = JS_FILE.read_text(encoding="utf-8")
-    beginning = source.index("  // Kit can display its own modal immediately")
+    beginning = source.index("  // Readership gate: at 50%, load the Kit embed")
     ending = source.index("\n})();", beginning)
     return source[beginning:ending]
 
@@ -84,3 +84,60 @@ def test_asset_version_is_bumped_to_prevent_cached_immediate_modal():
     homepage = (ROOT / "index.html").read_text(encoding="utf-8")
     assert 'ASSET_VERSION = "1.13.9.119"' in builder
     assert '/main.js?v=1.13.9.119' in homepage
+
+
+def test_kit_manual_trigger_activates_on_embed_load_without_a_second_timer():
+    """When 50% is reached, Kit's documented manual link opens on JS ready."""
+    if not shutil.which("node"):
+        pytest.skip("Node.js unavailable for JS behavioral regression")
+    source = JS_FILE.read_text(encoding="utf-8")
+    start = source.index("  function loadSitewideKitModal() {")
+    end = source.index("\n  // Readership gate: at 50%,", start)
+    loader = source[start:end]
+    js = """
+const config = { uid: "be625cadfe", mode: "sitewide-modal", src: "https://treasure-coast-today.kit.com/be625cadfe/index.js" };
+let opens = 0;
+let scriptLoads = 0;
+let trigger;
+let script;
+const document = {
+  querySelector: () => null,
+  createElement(tag) {
+    const el = {
+      tag, dataset: {}, hidden: false, listeners: {},
+      setAttribute(k, v) { this[k] = v; },
+      addEventListener(k, fn) { this.listeners[k] = fn; },
+      click() {
+        this.listeners.click?.({ preventDefault() {} });
+        if (this["data-formkit-toggle"] === config.uid) opens++;
+      },
+      remove() { this.removed = true; }
+    };
+    if (tag === "a") trigger = el;
+    if (tag === "script") script = el;
+    return el;
+  },
+  body: { appendChild() {} }
+};
+const window = { requestAnimationFrame(fn) { fn(); } };
+""" + loader + """
+loadSitewideKitModal();
+const before = opens;
+script.listeners.load();
+const after = opens;
+console.log(JSON.stringify([before, after, trigger.removed, script.dataset.uid]));
+"""
+    run = subprocess.run(["node", "-e", js], text=True, capture_output=True, check=False, cwd=ROOT)
+    assert run.returncode == 0, run.stderr
+    assert json.loads(run.stdout) == [0, 1, True, "be625cadfe"]
+
+
+def test_kit_trigger_uses_documented_manual_link_after_halfway():
+    source = JS_FILE.read_text(encoding="utf-8")
+    modal = source.split("// -- SITEWIDE KIT NEWSLETTER MODAL --", 1)[1].split("// -- FIRST-PARTY MOST READ", 1)[0]
+    assert 'trigger.setAttribute("data-formkit-toggle", config.uid)' in modal
+    assert 'script.addEventListener("load"' in modal
+    assert "trigger.click();" in modal
+    assert "window.requestAnimationFrame" in modal
+    assert 'const SCROLL_THRESHOLD = 0.5;' in modal
+    assert "window.setTimeout(loadSitewideKitModal, 0)" not in modal
