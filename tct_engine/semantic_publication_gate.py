@@ -946,7 +946,7 @@ def _prompt(
 
 Compare the fully written INCOMING article with the RECENT CANONICAL CANDIDATES. Decide whether the incoming article covers the exact same real-world incident, case, meeting, game, government action, business event, or continuing proceeding as one candidate.
 
-Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
+Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
 
 Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, witness color, cleanup detail, anniversary/color framing, or background explanation is NOT by itself a reason for a new URL.
 
@@ -1082,7 +1082,7 @@ def _resolution_prompt(
 
 The first pass returned HOLD. That HOLD is not evidence that the incoming story matches any candidate. Re-read the FULL incoming article and only the strongest bounded canonical shortlist below. Resolve the identity now whenever the facts support it.
 
-Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough.
+Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough. Shared weather or disaster circumstances are also insufficient: distinguish independent consequences such as school closures, election logistics, residential inundation, road closures, and shelter operations rather than merging them into one permalink.
 
 Decision rules:
 - If NO candidate is the same concrete real-world event, choose new_story. Do not hold merely because candidates are topically similar.
