@@ -17,6 +17,8 @@ import math
 import re
 from typing import Any, Mapping
 
+from .semantic_publication_gate import _is_cross_impact_weather_takeover
+
 SEMANTIC_MATERIAL_UPDATE_VERSION = "1.4"
 
 _STOP_WORDS = {
@@ -182,6 +184,11 @@ def validate_material_update(
     paragraphs = _paragraphs(body)
     lead = paragraphs[0] if paragraphs else ""
     errors: list[str] = []
+    # Composition is a second independent authority boundary: even if an
+    # earlier gate or cached decision allowed an overbroad merge, never write
+    # a school-closure/polling-place permalink as a residential flood report.
+    if _is_cross_impact_weather_takeover(incoming, canonical):
+        errors.append("distinct_weather_impact_not_same_canonical_event")
 
     words = re.findall(r"\b\w+\b", _plain(body))
     if not headline or len(headline.split()) < 5:
