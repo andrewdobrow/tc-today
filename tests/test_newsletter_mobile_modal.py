@@ -14,11 +14,11 @@ def test_kit_morning_brief_modal_runs_on_desktop_and_mobile():
     assert js.count('uid: "be625cadfe"') == 1
     assert 'mode: "sitewide-modal"' in js
     assert "loadSitewideKitModal" in js
-    assert "window.setTimeout(loadSitewideKitModal, 0)" not in js
-    assert "const SCROLL_THRESHOLD = 0.5;" in js
-    assert "window.addEventListener(\"scroll\", maybeLoadSitewideKitModal, { passive: true })" in js
-    assert "if (distanceRead / scrollableDistance < SCROLL_THRESHOLD) return;" in js
-    assert "loadSitewideKitModal();" in js
+    assert "window.setTimeout(loadSitewideKitModal, 0)" in js
+    assert "SCROLL_THRESHOLD" not in js
+    assert "maybeLoadSitewideKitModal" not in js
+    assert "data-formkit-toggle" not in js
+    assert "script.dataset.uid = config.uid" in js
     assert "RESPONSIVE ACQUISITION MODAL" not in js
     assert "showMobileSubscriptionModal" not in js
     assert "MOBILE_DELAY_MS" not in js

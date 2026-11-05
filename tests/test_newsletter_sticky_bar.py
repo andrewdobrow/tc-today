@@ -34,5 +34,5 @@ def test_sitewide_modal_loader_initializes_exactly_once():
     assert 'document.querySelector(`script[data-uid="${config.uid}"]`)' in js
     assert 'script.dataset.tctNewsletterMode = config.mode' in js
     assert 'document.body.appendChild(script)' in js
-    assert "window.setTimeout(loadSitewideKitModal, 0)" not in js
-    assert "const SCROLL_THRESHOLD = 0.5;" in js
+    assert "window.setTimeout(loadSitewideKitModal, 0)" in js
+    assert "SCROLL_THRESHOLD" not in js
