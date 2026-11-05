@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-11-05T16:56:41.517018+00:00",
+  "generated_at": "2026-11-05T20:07:33.972510+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,24 +62,24 @@
     }
   },
   "summary": {
-    "evaluations": 39,
-    "candidate_pairs": 1,
+    "evaluations": 40,
+    "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
-    "model_calls": 1,
+    "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 38,
+    "no_candidate_passes": 40,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 1,
-    "new_stories_allowed": 0,
+    "canonical_updates_selected": 0,
+    "new_stories_allowed": 2,
     "retroactive_rows_retained": 38,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
     "material_update_composer_calls": 1,
-    "material_updates_applied": 0,
+    "material_updates_applied": 1,
     "material_update_redirects": 0,
-    "material_update_holds": 1,
+    "material_update_holds": 0,
     "material_update_replays_suppressed": 2,
     "pre_generation_materiality_evaluations": 3,
     "pre_generation_materiality_promotions": 0,
@@ -87,17 +87,17 @@
     "pre_generation_materiality_holds": 2,
     "pre_generation_materiality_model_calls": 2,
     "pre_generation_materiality_cache_hits": 1,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
-    "terminal_permalink_updates_routed": 0,
+    "terminal_permalink_updates_routed": 1,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
     "late_published_skip_materiality_promotions": 0
@@ -121,8 +121,8 @@
       "semantic_action": "hold",
       "confidence": 0.99,
       "shared_anchors": [
-        "Both involve a fatal collision between a car or other vehicle and a tractor-trailer in Martin County.",
-        "Both report responses by Martin County Sheriff's deputies, Martin County Fire Rescue and Florida Highway Patrol."
+        "Both reports concern fatal collisions involving a passenger vehicle and a tractor-trailer in Martin County.",
+        "Both name Martin County Sheriff's deputies, Martin County Fire Rescue and Florida Highway Patrol as responding agencies."
       ],
       "novel_facts": [
         "The incoming crash occurred on Warfield Boulevard just north of Fox Brown Road in Indiantown.",
@@ -179,11 +179,11 @@
       "semantic_action": "hold",
       "confidence": 0.98,
       "shared_anchors": [
-        "Both articles concern consequences of recent flooding in St. Lucie County, including Port St. Lucie."
+        "Flooding in St. Lucie County and Port St. Lucie during the same period"
       ],
       "novel_facts": [
-        "At least two dozen stranded vehicles were towed to the MidFlorida Event Center for owners to retrieve, with more arriving throughout the day.",
-        "Vehicle owner Enrique Crespo said he needed another tow to take his car home.",
+        "At least two dozen stranded vehicles were taken to the MidFlorida Event Center for owners to retrieve.",
+        "Vehicle owner Enrique Crespo was arranging another tow to take his car home.",
         "The Vitalia neighborhood in Tradition remained without power, leaving residents without air conditioning."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -955,56 +955,376 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "St. Lucie Public Schools remain closed Thursday because of flooded roads and bus stops",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-to-remain-closed-thursday-because-of-flooding",
-      "incoming_story_id": "story_025596",
+      "incoming_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
+      "incoming_story_id": "story_025827",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "gpt-6.1-sol",
+      "incoming_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
+      "incoming_story_id": "story_025827",
+      "candidates": [
+        {
+          "slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
+          "headline": "St. Lucie County relocates flood shelters to help public schools reopen",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5664,
+          "retrieval_score": 0.5294,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-flooding-closes-south-25th-street-near-two-schools-in-st-lucie-county",
+          "headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5454,
+          "retrieval_score": 0.5054,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
+          "headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.543,
+          "retrieval_score": 0.521,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-23-bronx-man-extradited-to-st-lucie-county-in-check-fraud-case-after-border-arrest",
+          "headline": "Bronx Man Extradited to St. Lucie County in Check Fraud Case After Border Arrest",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5137,
+          "retrieval_score": 0.5127,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-11-04-david-jolly-wins-st-lucie-county-as-turnout-rises-despite-flooding",
+          "headline": "David Jolly wins St. Lucie County as turnout rises despite flooding",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4976,
+          "retrieval_score": 0.4606,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-st-lucie-nuclear-plant-marks-50-years-as-nrc-grants-20-year-license-extension",
+          "headline": "St. Lucie Nuclear Plant Marks 50 Years as NRC Grants 20-Year License Extension",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4892,
+          "retrieval_score": 0.4892,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+          "headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4875,
+          "retrieval_score": 0.4535,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-11-03-troy-ingersoll-wins-sixth-term-on-st-lucie-county-school-board-defeating-lisa-ke",
+          "headline": "Troy Ingersoll wins sixth term on St. Lucie County School Board, defeating Lisa Kessler",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4838,
+          "retrieval_score": 0.4498,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-11-04-family-questions-walking-safety-on-port-st-lucie-boulevard-after-teens-death",
+          "headline": "Family questions walking safety on Port St. Lucie Boulevard after teen's death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4696,
+          "retrieval_score": 0.4326,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-28-mattamy-homes-transferring-125-acres-in-martin-county-for-st-lucie-river-muck-st",
+          "headline": "Mattamy Homes transferring 125 acres in Martin County for St. Lucie River muck storage",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4571,
+          "retrieval_score": 0.4411,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4566,
+          "retrieval_score": 0.4436,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "headline": "Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4543,
+          "retrieval_score": 0.4173,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.98,
+        "shared_anchors": [
+          "St. Lucie County flooding in early November 2026",
+          "The broader flooding emergency article briefly mentions deputies checking Creekside homes Tuesday."
+        ],
+        "novel_facts": [
+          "About 75% of Creekside's approximately 150 homes have been evacuated, with a voluntary evacuation still in effect Thursday.",
+          "Creekside remains without electricity because submerged FPL equipment cannot yet be safely accessed.",
+          "Deputies are providing 24-hour neighborhood security and have a high-water vehicle available."
+        ],
+        "reason": "The incoming report covers Creekside's residential evacuation and power outage, a separate reportable consequence from shelter relocations, road closures, polling changes and school closures. A brief Creekside reference in the broader emergency article does not make that school-closure canonical the same event or justify repurposing its URL.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.98,
+        "shared_anchors": [
+          "St. Lucie County flooding in early November 2026",
+          "The broader flooding emergency article briefly mentions deputies checking Creekside homes Tuesday."
+        ],
+        "novel_facts": [
+          "About 75% of Creekside's approximately 150 homes have been evacuated, with a voluntary evacuation still in effect Thursday.",
+          "Creekside remains without electricity because submerged FPL equipment cannot yet be safely accessed.",
+          "Deputies are providing 24-hour neighborhood security and have a high-water vehicle available."
+        ],
+        "reason": "The incoming report covers Creekside's residential evacuation and power outage, a separate reportable consequence from shelter relocations, road closures, polling changes and school closures. A brief Creekside reference in the broader emergency article does not make that school-closure canonical the same event or justify repurposing its URL.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Indian River County public schools to remain closed Friday, plan Monday reopening",
+      "incoming_source_url": "https://cw34.com/news/local/st-lucie-county-schools-indian-river-county-schools-to-remain-closed-friday-flooding-delays-bus-stops-roads-athletics-sat-rescheduled-boys-and-girls-clubs-open-children",
+      "incoming_story_id": "story_025825",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.2",
+      "resolution_version": "1.0",
+      "model": "gpt-6.1-sol",
+      "incoming_headline": "Indian River County public schools to remain closed Friday, plan Monday reopening",
+      "incoming_source_url": "https://cw34.com/news/local/st-lucie-county-schools-indian-river-county-schools-to-remain-closed-friday-flooding-delays-bus-stops-roads-athletics-sat-rescheduled-boys-and-girls-clubs-open-children",
+      "incoming_story_id": "story_025825",
       "candidates": [
         {
           "slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
           "headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
-          "retrieval_score": 0.7979,
-          "headline_similarity": 0.66,
-          "similarity_basis": "source_headline",
-          "shared_headline_tokens": [
-            "flooding",
-            "lucie",
-            "public",
-            "schools",
-            "st"
-          ],
-          "shared_topic_tokens": [
-            "flooding",
-            "public",
-            "schools"
-          ],
-          "content_similarity": {
-            "score": 0.3539,
-            "overlap": 0.4444,
-            "jaccard": 0.1212,
-            "shared_token_count": 8,
-            "shared_tokens": [
-              "closed",
-              "conditions",
-              "district",
-              "flooding",
-              "public",
-              "remain",
-              "schools",
-              "severe"
-            ]
-          },
-          "strong_content_event_continuity": false,
-          "day_gap": 1,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.6705,
+          "retrieval_score": 0.6365,
           "reasons": [
-            "strong_fuzzy_headline",
-            "publication_gap_1_days"
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-flooding-closes-south-25th-street-near-two-schools-in-st-lucie-county",
+          "headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.648,
+          "retrieval_score": 0.608,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+          "headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5847,
+          "retrieval_score": 0.5627,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-prosecutors-drop-child-abuse-case-against-indian-river-county-bus-driver",
+          "headline": "Prosecutors Drop Child Abuse Case Against Indian River County Bus Driver",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5847,
+          "retrieval_score": 0.5847,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
+          "headline": "St. Lucie County relocates flood shelters to help public schools reopen",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5788,
+          "retrieval_score": 0.5418,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+          "headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5636,
+          "retrieval_score": 0.5296,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
+          "headline": "Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.558,
+          "retrieval_score": 0.521,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5397,
+          "retrieval_score": 0.5267,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
+          "headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5354,
+          "retrieval_score": 0.5134,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
+          "headline": "Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5254,
+          "retrieval_score": 0.4884,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-10-27-indian-river-county-sets-record-with-14083-turtle-nests-as-rough-surf-threatens",
+          "headline": "Indian River County sets record with 14,083 turtle nests as rough surf threatens eggs",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5073,
+          "retrieval_score": 0.4943,
+          "reasons": [
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-10-22-vero-beach-man-60-dies-in-crash-with-semi-at-66th-and-49th",
+          "headline": "FHP Report: Freightliner Turned Into SUV's Path in Fatal Indian River Crash",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5021,
+          "retrieval_score": 0.4981,
+          "reasons": [
+            "publication_gap_14_days"
           ]
         }
       ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Indian River County and St. Lucie public school districts' continuing closures during the same early-November flooding disruption",
+          "Flooded roads and unsafe school-bus transportation preventing students from returning to campuses",
+          "District reopening plans contingent on improving travel conditions"
+        ],
+        "novel_facts": [
+          "Both districts will remain closed Friday, Nov. 6, with reopening now planned for Monday, Nov. 9, instead of the previously anticipated Thursday return.",
+          "Indian River County cites unavailable bus drivers and major delays on County Roads 510 and 512; instructional staff may enter buildings Friday.",
+          "St. Lucie canceled athletics through Sunday and rescheduled the SAT planned for Saturday, Nov. 7.",
+          "St. Lucie Boys & Girls Clubs announced daytime access for children during the continued closures."
+        ],
+        "reason": "The incoming article advances the existing two-district school-closure proceeding with consequential new closure dates and revised reopening plans. These changes materially affect families but belong in the school-closure canonical, not a separate URL or the distinct road-closure, shelter or residential-flooding articles.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      },
+      "resolution_decision": {},
       "decision": {
         "status": "validated",
         "action": "update_existing_canonical",
@@ -1013,18 +1333,19 @@
         "same_real_world_event": true,
         "material_new_update": true,
         "independently_newsworthy_followup": false,
-        "confidence": 0.99,
+        "confidence": 0.98,
         "shared_anchors": [
-          "St. Lucie Public Schools' continuing closure during the same week's flooding",
-          "The candidate anticipated reopening Thursday, Nov. 5; the incoming article directly revises that reopening plan",
-          "Flood-related travel hazards preventing safe school operations"
+          "Indian River County and St. Lucie public school districts' continuing closures during the same early-November flooding disruption",
+          "Flooded roads and unsafe school-bus transportation preventing students from returning to campuses",
+          "District reopening plans contingent on improving travel conditions"
         ],
         "novel_facts": [
-          "The district announced Wednesday that schools will remain closed Thursday, Nov. 5",
-          "Reopening is now expected Friday, Nov. 6, subject to conditions",
-          "Essential employees must report under the district's Emergency Operations Plan"
+          "Both districts will remain closed Friday, Nov. 6, with reopening now planned for Monday, Nov. 9, instead of the previously anticipated Thursday return.",
+          "Indian River County cites unavailable bus drivers and major delays on County Roads 510 and 512; instructional staff may enter buildings Friday.",
+          "St. Lucie canceled athletics through Sunday and rescheduled the SAT planned for Saturday, Nov. 7.",
+          "St. Lucie Boys & Girls Clubs announced daytime access for children during the continued closures."
         ],
-        "reason": "This extends the same district's ongoing flood-related school closure and materially changes the previously announced reopening schedule. It belongs in the existing closure canonical, not a separate follow-up URL.",
+        "reason": "The incoming article advances the existing two-district school-closure proceeding with consequential new closure dates and revised reopening plans. These changes materially affect families but belong in the school-closure canonical, not a separate URL or the distinct road-closure, shelter or residential-flooding articles.",
         "validation_errors": [],
         "consistency_repairs": []
       }
@@ -1033,33 +1354,204 @@
   "archive_repairs": [],
   "material_update_compositions": [
     {
-      "phase": "forward_publication",
+      "phase": "terminal_permalink_authority",
       "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
       "incoming_slug": "",
-      "status": "invalid_composition",
-      "validation_errors": [
-        "headline_missing_canonical_geography"
-      ],
-      "word_count": 271,
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 293,
       "paragraph_count": 5,
       "baseline_lead_hits": [
+        "closures",
         "flooding",
+        "indian",
         "lucie",
+        "river",
+        "school",
         "wednesday"
       ],
       "novelty_lead_hits": [
-        "announced",
-        "areas",
+        "access",
+        "anticipated",
+        "campuses",
         "expected",
         "friday",
-        "numerous",
-        "other",
-        "stops"
+        "had",
+        "now",
+        "previously",
+        "return",
+        "transportation"
       ],
-      "reason": "composition_not_validated"
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 0.8,
+        "date_gap_days": 2,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+        "incoming_headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned",
+        "candidate_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
+        "prospective_lastmod": "2026-11-05",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 56,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "closures",
+          "flooding",
+          "indian",
+          "lucie",
+          "river",
+          "school",
+          "wednesday"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "closed",
+          "friday"
+        ],
+        "semantic_novel_fact_hits": [
+          "access",
+          "anticipated",
+          "both",
+          "districts",
+          "friday",
+          "monday",
+          "previously",
+          "return",
+          "thursday"
+        ],
+        "semantic_novel_fact_token_count": 35,
+        "missing": [],
+        "source_title": "St. Lucie, Indian River County schools to remain closed Friday - cw34.com",
+        "headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned"
+      },
+      "headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned"
     }
   ],
-  "material_updates": [],
+  "material_updates": [
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
+      "source_story_id": "story_025825",
+      "target_story_id": "story_025299",
+      "source_headline": "St. Lucie, Indian River County schools to remain closed Friday - cw34.com",
+      "updated_headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Indian River County and St. Lucie public school districts' continuing closures during the same early-November flooding disruption",
+        "Flooded roads and unsafe school-bus transportation preventing students from returning to campuses",
+        "District reopening plans contingent on improving travel conditions"
+      ],
+      "novel_facts": [
+        "Both districts will remain closed Friday, Nov. 6, with reopening now planned for Monday, Nov. 9, instead of the previously anticipated Thursday return.",
+        "Indian River County cites unavailable bus drivers and major delays on County Roads 510 and 512; instructional staff may enter buildings Friday.",
+        "St. Lucie canceled athletics through Sunday and rescheduled the SAT planned for Saturday, Nov. 7.",
+        "St. Lucie Boys & Girls Clubs announced daytime access for children during the continued closures."
+      ],
+      "updated_at": "2026-11-05T20:03:35Z",
+      "composition": {
+        "phase": "terminal_permalink_authority",
+        "canonical_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 293,
+        "paragraph_count": 5,
+        "baseline_lead_hits": [
+          "closures",
+          "flooding",
+          "indian",
+          "lucie",
+          "river",
+          "school",
+          "wednesday"
+        ],
+        "novelty_lead_hits": [
+          "access",
+          "anticipated",
+          "campuses",
+          "expected",
+          "friday",
+          "had",
+          "now",
+          "previously",
+          "return",
+          "transportation"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 0.8,
+          "date_gap_days": 2,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+          "incoming_headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned",
+          "candidate_slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
+          "prospective_lastmod": "2026-11-05",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 56,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "closures",
+            "flooding",
+            "indian",
+            "lucie",
+            "river",
+            "school",
+            "wednesday"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Indian River County joins St. Lucie in Wednesday school closures after flooding",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "closed",
+            "friday"
+          ],
+          "semantic_novel_fact_hits": [
+            "access",
+            "anticipated",
+            "both",
+            "districts",
+            "friday",
+            "monday",
+            "previously",
+            "return",
+            "thursday"
+          ],
+          "semantic_novel_fact_token_count": 35,
+          "missing": [],
+          "source_title": "St. Lucie, Indian River County schools to remain closed Friday - cw34.com",
+          "headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned"
+        },
+        "headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned"
+      }
+    }
+  ],
   "registry_consolidation": {
     "status": "no_changes",
     "directives_considered": 8,
