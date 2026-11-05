@@ -112,8 +112,8 @@ def test_homepage_support_card_no_longer_sells_subscriptions():
               'data-support-card="true"><div>Membership $1/month</div></a>')
     after = _rewrite_home_support(before)
     assert 'href="/donate.html"' in after
-    assert "Your community. Your news. Your support." in after
-    assert "When roads flood, schools close" in after
+    assert "Local news needs you." in after
+    assert "Flooded roads, school closures" in after
     assert "Support TCT Today" in after
     assert "Give any amount. No subscription required." in after
     assert "Read for free" not in after
@@ -414,7 +414,7 @@ def test_homepage_current_donation_card_has_one_primary_action():
     assert "Stay informed" not in card
     assert "tct-membership-options" not in card
     assert "Try 1 Month" not in card
-    assert "Your community. Your news. Your support." in card
+    assert "Local news needs you." in card
 
 
 def test_homepage_donation_styles_have_visible_single_cta():
