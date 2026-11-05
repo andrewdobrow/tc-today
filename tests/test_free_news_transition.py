@@ -402,7 +402,7 @@ def test_homepage_current_donation_card_has_one_primary_action():
     page = Path("index.html").read_text(encoding="utf-8")
     import re
     cards = re.findall(
-        r'<a\\b(?=[^>]*\\bdata-support-card="true")[^>]*>[\\s\\S]*?</a>',
+        r'<a\b(?=[^>]*\bdata-support-card="true")[^>]*>[\s\S]*?</a>',
         page,
     )
     assert len(cards) == 1
