@@ -519,6 +519,9 @@ jobs:
             python scripts/prepare_membership_paywall.py
           fi
 
+      - name: Place voluntary reader-support appeal before article newsletter signups
+        run: python scripts/sync_article_reader_support.py
+
       - name: Sync editor-selected author photos on published custom articles
         run: python scripts/sync_custom_author_photos.py
 
