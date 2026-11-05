@@ -4242,118 +4242,111 @@ html.kit-sticky-visible .article-reading-progress {
    Not rendered unless TCT_MEMBERSHIP_UI_ENABLED is explicitly enabled.
    The coral treatment intentionally contrasts with TCT's forest-green chrome.
    ================================================================ */
-.articles-grid > .tct-membership-card {
+/* Homepage reader-support card: one clear, voluntary donation request. */
+.articles-grid > .tct-membership-card.tct-donation-card {
   position: relative;
   isolation: isolate;
   display: flex !important;
   flex-direction: column;
-  justify-content: stretch;
+  justify-content: center;
   min-height: 100%;
   overflow: hidden;
   border: 0;
-  background: #f26445 !important;
-  color: #171717 !important;
+  border-radius: 10px;
+  background: #174f3d !important;
+  color: #fff !important;
   text-decoration: none !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
-.articles-grid > .tct-membership-card::before {
+.articles-grid > .tct-donation-card::before {
   content: "";
   position: absolute;
-  z-index: -1;
   inset: 0;
-  background:
-    radial-gradient(circle at 88% 12%, rgba(255,255,255,.28), transparent 32%),
-    linear-gradient(145deg, #f57a5f 0%, #f26445 58%, #e95437 100%);
+  z-index: -1;
+  background: radial-gradient(circle at 100% 0%, rgba(255,255,255,.12), transparent 60%),
+              linear-gradient(145deg, #205b48 0%, #174f3d 72%, #0e382b 100%);
 }
 
-.articles-grid > .tct-membership-card::after {
+.articles-grid > .tct-donation-card::after {
   content: "TCT";
   position: absolute;
-  right: -12px;
-  bottom: -30px;
   z-index: -1;
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 112px;
-  line-height: 1;
-  font-weight: 700;
-  color: rgba(23,23,23,.06);
+  right: -10px;
+  bottom: -28px;
+  font: 700 116px/1 "Fraunces", Georgia, serif;
+  color: rgba(255,255,255,.055);
   pointer-events: none;
 }
 
-.tct-membership-card-inner {
+.tct-donation-card .tct-membership-card-inner {
   display: flex !important;
-  flex: 1 1 auto;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 12px;
   width: 100%;
   min-height: 100%;
-  padding: clamp(26px, 3vw, 42px);
+  gap: 15px;
+  padding: clamp(25px, 3vw, 38px);
 }
 
-.tct-membership-kicker {
-  font-size: 11px;
-  line-height: 1.2;
-  font-weight: 800;
-  letter-spacing: .13em;
-  text-transform: uppercase;
+.tct-donation-card .tct-membership-kicker {
+  color: #f9b3a1;
+  font: 800 10px/1.35 "DM Sans", sans-serif;
+  letter-spacing: .14em;
 }
 
-.tct-membership-headline {
-  max-width: 18ch;
+.tct-donation-card .tct-membership-headline {
+  max-width: 19ch;
   margin: 0;
-  font-family: "Fraunces", Georgia, serif;
-  font-size: clamp(24px, 2vw, 32px);
-  font-weight: 650;
-  line-height: 1.08;
-  letter-spacing: -.025em;
+  color: #fff;
+  font: 650 clamp(26px, 2.4vw, 35px)/1.1 "Fraunces", Georgia, serif;
+  letter-spacing: -.024em;
   text-wrap: balance;
 }
 
-.tct-membership-copy {
-  max-width: 46ch;
+.tct-donation-card .tct-membership-copy {
+  max-width: 48ch;
   margin: 0;
-  font-size: 13px;
-  line-height: 1.58;
+  color: rgba(255,255,255,.91);
+  font: 400 13px/1.56 "DM Sans", sans-serif;
 }
 
-.tct-membership-options {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 7px;
+.tct-donation-card .tct-membership-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 49px;
+  margin-top: 3px;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 7px;
+  background: #f26445;
+  color: #fff;
+  font: 800 14px/1.2 "DM Sans", sans-serif;
+  box-shadow: 0 5px 14px rgba(0,0,0,.14);
 }
 
-.tct-membership-options span {
-  display: inline-flex;
-  padding: 5px 9px;
-  border: 1px solid rgba(23,23,23,.24);
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-  background: rgba(255,255,255,.34);
+.tct-donation-card .tct-membership-cta-arrow { margin-left: auto; }
+.tct-donation-card .tct-membership-cta-heart { font-size: 16px; line-height: 1; }
+.tct-donation-card .tct-membership-assurance {
+  align-self: center;
+  color: rgba(255,255,255,.78);
+  font: 600 11px/1.3 "DM Sans", sans-serif;
+  text-align: center;
 }
 
-.tct-membership-cta {
-  margin-top: 4px;
-  padding-bottom: 3px;
-  border-bottom: 1px solid rgba(23,23,23,.62);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.tct-membership-card:focus-visible {
-  outline: 3px solid #171717;
-  outline-offset: -6px;
-}
+.tct-donation-card:hover .tct-membership-cta,
+.tct-donation-card:focus-visible .tct-membership-cta { background: #fa7b5d; }
+.tct-donation-card:focus-visible { outline: 3px solid #f9b3a1; outline-offset: -5px; }
 
 @media (max-width: 680px) {
-  .articles-grid > .tct-membership-card { min-height: 330px; }
-  .tct-membership-card-inner { padding: 30px 24px; }
-  .tct-membership-headline { max-width: 18ch; font-size: 28px; }
+  .articles-grid > .tct-donation-card { min-height: 340px; }
+  .tct-donation-card .tct-membership-card-inner { padding: 27px 24px; }
+  .tct-donation-card .tct-membership-headline { font-size: 30px; }
 }
 
 /* ================================================================
