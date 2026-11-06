@@ -45,8 +45,8 @@ def test_kit_exclusively_controls_modal_ui_and_lifecycle():
 def test_sitewide_script_cache_version_is_refreshed():
     audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.123"' in audience
-    assert "/main.js?v=1.13.9.123" in home
+    assert 'ASSET_VERSION = "1.13.9.124"' in audience
+    assert "/main.js?v=1.13.9.124" in home
 
 
 def test_initialization_inserts_only_the_official_kit_embed_once():
