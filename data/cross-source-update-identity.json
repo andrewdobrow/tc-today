@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-06T04:10:16Z",
+  "generated_at": "2026-11-06T05:20:38Z",
   "policy": "candidate_retrieval_is_not_canonical_write_authority",
   "passed": true,
   "summary": {
-    "observation_count": 80,
-    "match_count": 6,
-    "verified_same_event_count": 6,
+    "observation_count": 79,
+    "match_count": 5,
+    "verified_same_event_count": 5,
     "possible_relationship_count": 74,
-    "write_authorized_count": 6,
+    "write_authorized_count": 5,
     "unauthorized_destructive_count": 0,
     "updated_existing_count": 0,
     "preserved_or_held_count": 74,
-    "canonical_bound_before_generation_count": 6
+    "canonical_bound_before_generation_count": 5
   },
   "authority_contract": {
     "allowed_write_outcome": "same_event_verified",
@@ -22,6 +22,36 @@
   },
   "violations": [],
   "matches": [
+    {
+      "incoming_headline": "‘I miss him’: Friends mourn Boca Raton teen killed in e-bike crash",
+      "publisher": "www.wptv.com",
+      "resolved_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/i-miss-him-friends-mourn-boca-raton-teen-killed-in-e-bike-crash",
+      "matched_canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+      "matched_canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
+      "incoming_story_id": "story_025245",
+      "canonical_story_id": "story_025245",
+      "evidence_dimensions": [
+        "incident",
+        "story"
+      ],
+      "confidence": 0.99,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "same_event_verified",
+      "identity_outcome": "same_event_verified",
+      "evidence_tier": "exact_identity",
+      "write_authorized": true,
+      "proof_type": "exact_structured_incident_key",
+      "reason_codes": [
+        "deterministic_identity_key",
+        "incident_specific_anchor"
+      ],
+      "match_reason": "exact_structured_incident_key",
+      "decision_trace": [
+        "deterministic_identity_keys=incident:named-person-death:boca-raton,story:story_025245",
+        "write_authorized=True"
+      ],
+      "final_publication_action": "canonical_bound_before_generation"
+    },
     {
       "incoming_headline": "Palm Beach County flooding prompts questions about drainage, development and emergency response",
       "publisher": "www.wptv.com",
@@ -413,34 +443,47 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
-      "incoming_headline": "‘I miss him’: Friends mourn Boca Raton teen killed in e-bike crash",
-      "publisher": "www.wptv.com",
-      "resolved_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/i-miss-him-friends-mourn-boca-raton-teen-killed-in-e-bike-crash",
-      "matched_canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
-      "matched_canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
-      "incoming_story_id": "story_025245",
-      "canonical_story_id": "story_025245",
+      "incoming_headline": "The Brief Athens police arrested a 38-year-old man for obscene internet contact with a minor following an investigation into online exploitation. Authorities executed a search warrant at the suspect's residence after teaming up with Alabama investigators and fe - Instagram",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9XU0ZOcDNXZ3pjSjZ3dkVUaGpFRUI3N0JiU01qdHhFTVFxQXViOVdIMC02RE5kMjVKbFppWnR5a2plcFA1Q3NDTGdpN3lVT0Q2c0E",
+      "matched_canonical_slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
+      "matched_canonical_headline": "Missing Jensen Beach Man Nicklaus Cantor Found Safe",
+      "incoming_story_id": "story_025946",
+      "canonical_story_id": "story_018726",
       "evidence_dimensions": [
-        "incident",
-        "story"
+        "bounded_time_window",
+        "shared_headline_topic",
+        "distinctive_fact_overlap"
       ],
-      "confidence": 0.99,
+      "confidence": 0.5,
       "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "same_event_verified",
-      "identity_outcome": "same_event_verified",
-      "evidence_tier": "exact_identity",
-      "write_authorized": true,
-      "proof_type": "exact_structured_incident_key",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
       "reason_codes": [
-        "deterministic_identity_key",
-        "incident_specific_anchor"
+        "candidate_only",
+        "write_forbidden"
       ],
-      "match_reason": "exact_structured_incident_key",
+      "match_reason": "possible_relationship_without_hard_event_proof",
       "decision_trace": [
-        "deterministic_identity_keys=incident:named-person-death:boca-raton,story:story_025245",
-        "write_authorized=True"
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=36",
+        "shared_locality=[]",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['old', 'search']",
+        "shared_distinctive_token_count=4",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
       ],
-      "final_publication_action": "canonical_bound_before_generation"
+      "final_publication_action": "candidate_only_no_write"
     },
     {
       "incoming_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - WPEC",
@@ -659,13 +702,13 @@
       "final_publication_action": "canonical_bound_before_generation"
     },
     {
-      "incoming_headline": "The Brief Athens police arrested a 38-year-old man for obscene internet contact with a minor following an investigation into online exploitation. Authorities executed a search warrant at the suspect's residence after teaming up with Alabama investigators and fe - Instagram",
+      "incoming_headline": "Operation Iron Scale: Nearly 40 pounds of cocaine seized, 12 arrested in massive multi-agency drug sweep - WPTA | 21Alive | Fort Wayne, IN",
       "publisher": "news.google.com",
-      "resolved_url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9XU0ZOcDNXZ3pjSjZ3dkVUaGpFRUI3N0JiU01qdHhFTVFxQXViOVdIMC02RE5kMjVKbFppWnR5a2plcFA1Q3NDTGdpN3lVT0Q2c0E",
-      "matched_canonical_slug": "2026-10-01-martin-county-deputies-search-for-missing-autistic-man-last-seen-in-jensen-beach",
-      "matched_canonical_headline": "Missing Jensen Beach Man Nicklaus Cantor Found Safe",
-      "incoming_story_id": "story_025946",
-      "canonical_story_id": "story_018726",
+      "resolved_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQejNqeEZUdTN3TTJIQkx6SVFqeHVnVmw5bFliSGQ2Qk1ZNExaSzBUUGc4a0lHM3dKdFpCMzdlRU5qWGRuQkcwY2pVbU9LWF9xeHZqWlo4clA2X1A5cWlfOU44MFhwaVJYOWZIZlFPY3NaaGlqX0hIelMxLUNOaGVlelFxcVZ5VEVMX3JZT1Q2VUwxUTVWaDNralhnVEpVaWhqLW9IUTNaSmxwenJ2NG5tV2xwZUdjUlJQZWRjeTlLUTIzRUp3czR1dGFNTTBJRjlfN1HSAeYBQVVfeXFMT2o4aDF2dUpEWTZuT3JYWUVONVJlMDVnMF9qTnRzT0VaVTVvemFMMk1vTkEwYktZX0ZtUFgwTXQ4bGlnUXlQUXNnUngycXZUN2htdjNlbDFocGsyakYwRXJMU2sxQUJkbDdzUVRWNGd2Mk1YWjFqci1peWNQWnUtMkJLSENvZnRiRzBOa1NJRXNPVzljcmxQbzlBcGRRSzVzVncwZ1JPWXpRbmhVU0FmU19wWFAwSTBqTExNYUkyVTA3OGdqNktVWWFmNWRURlFjWlVEQjRMMHdkMFhuQWUtb25YVlZPNnc",
+      "matched_canonical_slug": "2026-09-28-former-fort-pierce-city-manager-nick-mimms-bid-tampering-trial-begins-monday",
+      "matched_canonical_headline": "Fort Pierce Ex-City Manager Nick Mimms Convicted of Misconduct, Cleared on Bid Tampering",
+      "incoming_story_id": "story_025956",
+      "canonical_story_id": "story_017375",
       "evidence_dimensions": [
         "bounded_time_window",
         "shared_headline_topic",
@@ -686,14 +729,14 @@
       "decision_trace": [
         "left_identity_origin=legacy_archive_derived",
         "right_identity_origin=source_derived",
-        "publication_gap_days=36",
+        "publication_gap_days=39",
         "shared_locality=[]",
         "shared_event_families=[]",
         "shared_named_people=[]",
         "shared_precise_locations=[]",
         "shared_agencies=[]",
         "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['old', 'search']",
+        "shared_headline_topic_core=['fort', 'nearly']",
         "shared_distinctive_token_count=4",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
@@ -1305,6 +1348,48 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
+      "incoming_headline": "Recent New York Mets All-Star Immediately Becomes Free Agent - Heavy.com",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQWWQyOTVUUXBNNWk0cFlSMFk3QklYLWY5SnEzd3NMclBzME16b2ROV1FXUVpia1E3dVdfLUw4bjF6Nk13SDRVZkhzTGd6OGZKVmFHVFMyT1A3ZEJfQmZzdlVFQ3l1b1NoVWhrWkhfdEJZc21Nal91V0lXSmpfbXpaYURTYy1OeTA",
+      "matched_canonical_slug": "2026-09-27-cement-truck-rollover-blocks-all-lanes-on-orange-avenue-in-fort-pierce",
+      "matched_canonical_headline": "Cement truck rollover blocks all lanes on Orange Avenue in Fort Pierce",
+      "incoming_story_id": "story_024921",
+      "canonical_story_id": "story_017840",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_headline_topic"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=37",
+        "shared_locality=[]",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['all', 'com']",
+        "shared_distinctive_token_count=3",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
       "incoming_headline": "Palm Beach County students help scientists track where trash drifts in local waterways",
       "publisher": "www.wptv.com",
       "resolved_url": "https://www.wptv.com/shining-a-light/palm-beach-county-students-help-scientists-track-where-trash-drifts-in-local-waterways",
@@ -1817,48 +1902,6 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
-      "incoming_headline": "Florida Chamber of Commerce Honors Mangrove Property Insurance with Chairs Award - Bergen Record",
-      "publisher": "news.google.com",
-      "resolved_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQZXgwYkhhVHN6S0Ixamd6WkgwS1JjYWxMLVp4UnRGU3luc2wwZFJwZF84WjNrYUF5a1VMdnpLVkI3d2dXcDQwODEyb2psZHlxUV9UMl81RG5adHNheUIwMHpfdGtlXzVyTmxYdzVPeGNfUzdfcWJSX18tcEhKWHh2Vkd4c1pyRzN1QkpPS2Joek93czY3NGlLemFtbzlrY21TS1pRdFQ0NzFtTExhd19DVnpiQzZVSURGVmI1dmpOQk0weC1tM0xRSVd1T01EX2t5TkE",
-      "matched_canonical_slug": "2026-09-23-donalds-backs-amendment-3-homestead-exemption-jolly-opposes-debate-off-the-table",
-      "matched_canonical_headline": "Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table",
-      "incoming_story_id": "story_025921",
-      "canonical_story_id": "story_015413",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_headline_topic"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=legacy_archive_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=43",
-        "shared_locality=[]",
-        "shared_event_families=[]",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=[]",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['insurance', 'property']",
-        "shared_distinctive_token_count=2",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
       "incoming_headline": "What’s next as affordability drives Florida election results - WLRN",
       "publisher": "news.google.com",
       "resolved_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPTE5VUmZFYmxDY1d1dHg3X0cydlFHczQ0WUFGM3l5WHA3WXRSQ0dUT0JTQWk2UG5GUkxrcXcwdDVvSE9KVmh5b2o1OWl4dHZzVS1iVTFRTEtNdXdFREpJZlFneEJMV1NBYTBVWW5WX2p4aUJPRFBqMFZCRGd3SEl2cjh6QUtmeUpCNUoxQ3lWLUpXTWZYVjh3",
@@ -2328,6 +2371,90 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
+      "incoming_headline": "Florida Chamber of Commerce Honors Mangrove Property Insurance with Chairs Award - The Columbus Dispatch",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOMFQydlZjWGs3dnRwU2p6NGxDUGltYUFSdnJtLTRMaUI0YXlPT3laZlhvQzR4b0tNbk1Ha09hTmVOeVFxQ0RSZ3hXdG16NHlCUlh6ZE43bGFvbE53ZXdyVl80WEVuTmIwUjExOGZjQWpId1psWkRKZWVmbjFRTmJLZU1TVGlUZHF6TFRISlF5ZFF2YW9NR2pnQTFoS2FtTEtjLWJyZ1lBeHI3QWdJcWN4b2tmU3dTMFprWFlSTXdEOGhhSTN1RndOYTlZbExkUQ",
+      "matched_canonical_slug": "2026-09-23-donalds-backs-amendment-3-homestead-exemption-jolly-opposes-debate-off-the-table",
+      "matched_canonical_headline": "Donalds backs Amendment 3 homestead exemption; Jolly opposes, debate off the table",
+      "incoming_story_id": "story_025957",
+      "canonical_story_id": "story_015413",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_headline_topic"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=43",
+        "shared_locality=[]",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['insurance', 'property']",
+        "shared_distinctive_token_count=2",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
+      "incoming_headline": "Florida town advances data center moratorium, 3 proposals exempted - Treasure Coast News",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNRDBJWkJlOFRTcExzSThhUExlcWp6aXBoalh1ekxpanRRV3pEb1hYQndiTGQ2a0d6UWJIX2ZnTG9ERTFOa0hJYjBYdTJVTk9BdUFFWDBjMVNDeUNmdkpaRnYta3JIM3RjZXQyYVRYVVBqaXJkYjZ5bDhUZG5YRmx4WGJLZVpIdXVCWHFpVFVwV0V2Vk52bWZjWWNBcUpFVEd3ekdtZDZvMlRXYzVQcG1PRFoyaVNONmVGME52QzhxOUJ3QmJaNGZqNXJvbUdFUTQtUVlMS2FqLV85b2M",
+      "matched_canonical_slug": "2026-09-22-indiantown-data-center-plan-returns-with-waterless-design-but-residents-remain-o",
+      "matched_canonical_headline": "Indiantown data center plan returns with waterless design, but residents remain opposed",
+      "incoming_story_id": "story_025949",
+      "canonical_story_id": "story_019631",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_headline_topic"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=45",
+        "shared_locality=[]",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['cent', 'data']",
+        "shared_distinctive_token_count=2",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
       "incoming_headline": "Palm Bay hosts flood recovery sessions, meal distribution for residents - Florida Today",
       "publisher": "news.google.com",
       "resolved_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxQeVlPMXB4Q0h2QnRqWjB4Zng2Ml9tRW9jQ2xjVnY5MjlIWG03NDFHRGVlcXNKcU44amRKTUVqUGFCZXhRNjhoZU9POW8xaHZyaEs1V3R1VXlGZWR2Wk1FQ09nd2ZTUnVTNTAyQ3lacmZZb1NSUUVzWEhacnk1QndYcFlIU0VlUzJ1cEJINGR4eE5aaFdMWG9DWnk3M19zVWpzRFZQb0lZaHVBOW54SzNKb3Zna2J1MFhYcXJWRC1UaGs0cUloS0JyY0NXb2JYVXlmNEJhSm03VQ",
@@ -2448,50 +2575,6 @@
         "shared_subject_phrases=[]",
         "shared_headline_topic_core=['flood', 'palm']",
         "shared_distinctive_token_count=3",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "Florida man dies in crash with tractor-trailer on Warfield Boulevard - Treasure Coast News",
-      "publisher": "news.google.com",
-      "resolved_url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQdktabzJWY1I5T0g3U2hFWmN4aVFOTlhXQzVwTnc0VHhFSmtWeE93Z21FOXlIVDV2T3ZtZl8zY29Xbmlycmd3ZFRpZ0YxYnp1LXVIY19QaVF0amtfQWNLT3AxaTJJQ1g3NFhrdnNRWFRkUmU0c2ZtSlhZTEFPYUJuS2NTN3VwRHYyd1NfbTI1cFl5SThWTWVMTXk2NHVXZ3NFQ29JZVhjRDlObWc3NVNDcU11Uno3MDFzZWxGck9wV1JMWnV2TjJJV3R3bUc0M3J1azZRcEd4ZnZMVDBVYVJr",
-      "matched_canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-      "matched_canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
-      "incoming_story_id": "story_025808",
-      "canonical_story_id": "story_017379",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_event_family",
-        "shared_headline_topic",
-        "distinctive_fact_overlap"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=legacy_archive_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=38",
-        "shared_locality=[]",
-        "shared_event_families=['crash']",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=[]",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['crash', 'tractor', 'trail']",
-        "shared_distinctive_token_count=4",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
         "write_authorized=False"
@@ -2760,18 +2843,16 @@
       "final_publication_action": "canonical_bound_before_generation"
     },
     {
-      "incoming_headline": "Three-vehicle crash shuts down all I-95 northbound lanes in Martin County - WPEC",
-      "publisher": "cbs12.com",
-      "resolved_url": "https://cbs12.com/news/local/three-vehicle-crash-shuts-down-all-i-95-northbound-lanes-in-martin-county-florida-news-local-news-florida-trafic-local-traffic",
+      "incoming_headline": "Florida man dies in crash with tractor-trailer on Warfield Boulevard - Coral Springs News",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE10bE5ldGtMTm9kWHNKbzF6MF9rUFRPdG1TR2dRZXNMSVFmVGUxdV9xV3ZPU3NGby1XUzl3ZDBBdlV4WFl1YWJfeW00eWV1Q0JUY2ZzUXpPNmlmeXp4TEVCb1NEQ1l6NHVlNk5Lc2pR",
       "matched_canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
       "matched_canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
-      "incoming_story_id": "story_025948",
+      "incoming_story_id": "story_025808",
       "canonical_story_id": "story_017379",
       "evidence_dimensions": [
         "bounded_time_window",
-        "shared_locality",
         "shared_event_family",
-        "shared_agency",
         "shared_headline_topic",
         "distinctive_fact_overlap"
       ],
@@ -2788,59 +2869,17 @@
       ],
       "match_reason": "possible_relationship_without_hard_event_proof",
       "decision_trace": [
-        "left_identity_origin=source_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=39",
-        "shared_locality=['martin-county']",
-        "shared_event_families=['crash']",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=['martin-county-sheriff']",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['crash', 'down', 'shut', 'wpec']",
-        "shared_distinctive_token_count=17",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "Florida town advances data center moratorium, 3 proposals exempted - Treasure Coast News",
-      "publisher": "news.google.com",
-      "resolved_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNRDBJWkJlOFRTcExzSThhUExlcWp6aXBoalh1ekxpanRRV3pEb1hYQndiTGQ2a0d6UWJIX2ZnTG9ERTFOa0hJYjBYdTJVTk9BdUFFWDBjMVNDeUNmdkpaRnYta3JIM3RjZXQyYVRYVVBqaXJkYjZ5bDhUZG5YRmx4WGJLZVpIdXVCWHFpVFVwV0V2Vk52bWZjWWNBcUpFVEd3ekdtZDZvMlRXYzVQcG1PRFoyaVNONmVGME52QzhxOUJ3QmJaNGZqNXJvbUdFUTQtUVlMS2FqLV85b2M",
-      "matched_canonical_slug": "2026-09-22-indiantown-data-center-plan-returns-with-waterless-design-but-residents-remain-o",
-      "matched_canonical_headline": "Indiantown data center plan returns with waterless design, but residents remain opposed",
-      "incoming_story_id": "story_025949",
-      "canonical_story_id": "story_019631",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_headline_topic"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
         "left_identity_origin=legacy_archive_derived",
         "right_identity_origin=source_derived",
-        "publication_gap_days=45",
+        "publication_gap_days=38",
         "shared_locality=[]",
-        "shared_event_families=[]",
+        "shared_event_families=['crash']",
         "shared_named_people=[]",
         "shared_precise_locations=[]",
         "shared_agencies=[]",
         "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['cent', 'data']",
-        "shared_distinctive_token_count=2",
+        "shared_headline_topic_core=['crash', 'tractor', 'trail']",
+        "shared_distinctive_token_count=4",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
         "write_authorized=False"
@@ -2883,6 +2922,49 @@
         "shared_subject_phrases=[]",
         "shared_headline_topic_core=['second', 'wpec']",
         "shared_distinctive_token_count=3",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
+      "incoming_headline": "Florida Police Rescue 2 People From Sinking Van in Port St. Lucie - WIOD",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNOHhzWFhjblZ5WnNGQnM2ZXRDb19zS182Rll6N3NXUXk4bndmdzNxdTFYLVo4aTlJTVVYa0pReENjX2xITVl2TlRUcnVVaFNmdHp0T1F0aFhMOFhON0lGQy03ZkdLX19pN3ZQQTdwcVZ1OWFPS19vcTJyTjF1dXRncFM0MGFrXzh4cUc0YXhLWEpSWXdxLUprTnVncmdDWVdSRGJVUE5CVXpRblotR2FLQ2RFZndab2FhTUVGMTR1bEpBdEVKanJ3RHFn0gG0AUFVX3lxTE9iYVR4RHI0S3FOS2VnTk9NYUFZaWJJY2FqbVBvNmlPQ19CYUJqWHAzOElOVGpPczZadkRzYWF5YmhSVWlIWThTYmx1bzFGT3pLWF9tNkw4SFBSY1hrX25ObjNsc1ZWREV4WUV5Zm5IbW82bEIwWmljLU9SVXltSlU5MnFwQkpER2ZZWVRndV9lUjk1cEJJUHh0cnVFN19wX3NrTVNzLU9XTjdENHBGMXR5aTdvUA",
+      "matched_canonical_slug": "2026-11-05-port-st-lucie-dialysis-patient-recalls-canal-rescue-as-body-camera-video-is-rele",
+      "matched_canonical_headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
+      "incoming_story_id": "story_025925",
+      "canonical_story_id": "story_025952",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_locality",
+        "shared_headline_topic"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=0",
+        "shared_locality=['port-st-lucie', 'st-lucie']",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['rescue', 'van']",
+        "shared_distinctive_token_count=2",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
         "write_authorized=False"
@@ -2975,6 +3057,94 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
+      "incoming_headline": "Port St. Lucie flood rescue: Bodycam video of van in canal - The Weather Channel",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPU1Qyb0hQaUt5VmQxY2Nrdy1DMXoyaGR5ZWgxVW5hbEU5djJXQU5QdTdKY2xSa1FtZ2NiaV9BQmQ4WDhaeHVBdFBDZWZvSlBSRXZ1ckZOWGpNSXMxLWh1OXZRQTBrbHQ1TmxiM2ZuZ1RQb3V3R21GNjB1V3R1THJNVHdJWWVxWmFjdWxic3lycmlhT1JGOGg2MzVMdUZ4VDlY",
+      "matched_canonical_slug": "2026-11-05-port-st-lucie-dialysis-patient-recalls-canal-rescue-as-body-camera-video-is-rele",
+      "matched_canonical_headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
+      "incoming_story_id": "story_025893",
+      "canonical_story_id": "story_025952",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_locality",
+        "shared_subject_phrase",
+        "shared_headline_topic",
+        "distinctive_fact_overlap"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=0",
+        "shared_locality=['port-st-lucie', 'st-lucie']",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=['flood-rescue-van']",
+        "shared_headline_topic_core=['canal', 'flood', 'rescue', 'van']",
+        "shared_distinctive_token_count=4",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
+      "incoming_headline": "Watch: Marine life spotted swimming through Florida streets amid intense and historical flooding - FOX Weather",
+      "publisher": "news.google.com",
+      "resolved_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQRXVlVU1aLUxmVTlTYjB6cWowakZmQ0F2d3M1eVN1MnJEZllwR0tQb19YTS1pQXNYOWE4a3dwQ1FNNEh2aEJpN19taUJXWm5ablliVGlHV2pXS2kzdUxJcTRQU3gxOHpUVUFqa3l5dGVFR2RDZjB4Mm5ySC05VzVFVVIxS0lNejMyOUlPY09BRFVDZ3dzZ1dhZXMyY9IBoAFBVV95cUxOMVZBQVpia1hOanJkdEU1S0NIZV8tREkwRnJHQ29zZ2NxUFJVWVdlWGhpTXFsVDBiNTFTUEM1eEFrMkl6dUpCWDRkSWs5Nm9lbElwNlpTcmVlMVlNaUdhVzZyX1VQQ29nRXVZd3U3c1dZTGJwNEo1aG9nMVdsOE5fSVRlNVF5UU5kSElHQ19TTEViUk9HMWI2Snk5THQ0cnNP",
+      "matched_canonical_slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+      "matched_canonical_headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
+      "incoming_story_id": "story_025856",
+      "canonical_story_id": "story_025245",
+      "evidence_dimensions": [
+        "bounded_time_window",
+        "shared_headline_topic",
+        "distinctive_fact_overlap"
+      ],
+      "confidence": 0.5,
+      "confidence_semantics": "legacy_compatibility_score_not_probability",
+      "relationship": "possible_relationship",
+      "identity_outcome": "possible_relationship",
+      "evidence_tier": "candidate_only",
+      "write_authorized": false,
+      "proof_type": "candidate_similarity",
+      "reason_codes": [
+        "candidate_only",
+        "write_forbidden"
+      ],
+      "match_reason": "possible_relationship_without_hard_event_proof",
+      "decision_trace": [
+        "left_identity_origin=legacy_archive_derived",
+        "right_identity_origin=source_derived",
+        "publication_gap_days=3",
+        "shared_locality=[]",
+        "shared_event_families=[]",
+        "shared_named_people=[]",
+        "shared_precise_locations=[]",
+        "shared_agencies=[]",
+        "shared_subject_phrases=[]",
+        "shared_headline_topic_core=['amid', 'flood', 'watch']",
+        "shared_distinctive_token_count=5",
+        "identity_outcome=possible_relationship",
+        "evidence_tier=candidate_only",
+        "write_authorized=False"
+      ],
+      "final_publication_action": "candidate_only_no_write"
+    },
+    {
       "incoming_headline": "Port St. Lucie recovery efforts continue after record breaking floods - WPEC",
       "publisher": "cbs12.com",
       "resolved_url": "https://cbs12.com/news/local/port-st-lucie-police-recovery-efforts-record-breaking-floods-shelter-schools-reopen-historic-heavy-rain-support-community-conditions-medical-needs-shelter-florida-news",
@@ -3012,123 +3182,6 @@
         "shared_subject_phrases=[]",
         "shared_headline_topic_core=['flood', 'wpec']",
         "shared_distinctive_token_count=22",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - cw34.com",
-      "publisher": "cw34.com",
-      "resolved_url": "https://cw34.com/news/local/multi-agency-investigation-targets-23rd-street-gang-in-st-lucie-county-st-lucie-county-sheriff-fort-pierce-police-atf-fbi-dea-fdle-us-marshals-homeland-security?teaserSource=trending",
-      "matched_canonical_slug": "2026-11-05-40-arrested-in-rico-investigation-targeting-fort-pierces-23rd-street-gang",
-      "matched_canonical_headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
-      "incoming_story_id": "story_025790",
-      "canonical_story_id": "story_025911",
-      "evidence_dimensions": [
-        "incident"
-      ],
-      "confidence": 0.99,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "same_event_verified",
-      "identity_outcome": "same_event_verified",
-      "evidence_tier": "exact_identity",
-      "write_authorized": true,
-      "proof_type": "exact_structured_incident_key",
-      "reason_codes": [
-        "deterministic_identity_key",
-        "incident_specific_anchor"
-      ],
-      "match_reason": "exact_structured_incident_key",
-      "decision_trace": [
-        "deterministic_identity_keys=incident:law-enforcement-operation:score-board",
-        "write_authorized=True"
-      ],
-      "final_publication_action": "canonical_bound_before_generation"
-    },
-    {
-      "incoming_headline": "Port St. Lucie grandmother grateful after flood rescue from van swept into canal - WPEC",
-      "publisher": "cbs12.com",
-      "resolved_url": "https://cbs12.com/news/local/port-st-lucie-grandmother-grateful-after-flood-rescue-from-van-swept-into-canal-florida-news-port-st-lucie-flooding",
-      "matched_canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-      "matched_canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-      "incoming_story_id": "story_025952",
-      "canonical_story_id": "story_015504",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_locality",
-        "shared_headline_topic",
-        "distinctive_fact_overlap"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=source_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=43",
-        "shared_locality=['port-st-lucie', 'st-lucie']",
-        "shared_event_families=[]",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=[]",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['rescue', 'wpec']",
-        "shared_distinctive_token_count=23",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "Viral video of student swimming home raises safety concerns in Port St. Lucie - WPBF",
-      "publisher": "www.wpbf.com",
-      "resolved_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-schools/74349573",
-      "matched_canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
-      "matched_canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
-      "incoming_story_id": "story_025953",
-      "canonical_story_id": "story_016373",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_locality",
-        "shared_headline_topic",
-        "distinctive_fact_overlap"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=source_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=41",
-        "shared_locality=['st-lucie']",
-        "shared_event_families=[]",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=[]",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['concern', 'wpbf']",
-        "shared_distinctive_token_count=25",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
         "write_authorized=False"
@@ -3264,59 +3317,13 @@
       "final_publication_action": "candidate_only_no_write"
     },
     {
-      "incoming_headline": "Three-vehicle crash injures seven, closes northbound I-95 in Martin County",
+      "incoming_headline": "St. Lucie County moving flood shelters to help public schools reopen",
       "publisher": "cbs12.com",
-      "resolved_url": "https://cbs12.com/news/local/three-vehicle-crash-shuts-down-all-i-95-northbound-lanes-in-martin-county-florida-news-local-news-florida-trafic-local-traffic",
-      "matched_canonical_slug": "2026-09-28-driver-killed-after-honda-slams-into-box-truck-bursts-into-flames-on-i-95-in-mar",
-      "matched_canonical_headline": "I-95 northbound in Martin County reopens after fatal crash closes lanes over 7 hours",
-      "incoming_story_id": "story_025948",
-      "canonical_story_id": "story_017379",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_locality",
-        "shared_event_family",
-        "shared_agency",
-        "shared_headline_topic",
-        "distinctive_fact_overlap"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=source_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=39",
-        "shared_locality=['martin-county']",
-        "shared_event_families=['crash']",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=['martin-county-sheriff']",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['crash', 'down', 'shut', 'wpec']",
-        "shared_distinctive_token_count=17",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "Student swims from school bus in Port St. Lucie floodwater, raising safety questions",
-      "publisher": "www.wpbf.com",
-      "resolved_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-schools/74349573",
-      "matched_canonical_slug": "2026-09-25-south-florida-water-management-district-could-lose-98-million-annually-by-2030-i",
-      "matched_canonical_headline": "South Florida Water Management District could lose $98 million annually by 2030 if Amendment 3 passes",
-      "incoming_story_id": "story_025953",
-      "canonical_story_id": "story_016373",
+      "resolved_url": "https://cbs12.com/news/local/port-st-lucie-police-recovery-efforts-record-breaking-floods-shelter-schools-reopen-historic-heavy-rain-support-community-conditions-medical-needs-shelter-florida-news",
+      "matched_canonical_slug": "2026-10-07-port-st-lucie-flooding-continues-more-rain-expected-this-week",
+      "matched_canonical_headline": "Port St. Lucie Flooding: Barricades Remain on California Boulevard",
+      "incoming_story_id": "story_025587",
+      "canonical_story_id": "story_019779",
       "evidence_dimensions": [
         "bounded_time_window",
         "shared_locality",
@@ -3338,59 +3345,15 @@
       "decision_trace": [
         "left_identity_origin=source_derived",
         "right_identity_origin=source_derived",
-        "publication_gap_days=41",
-        "shared_locality=['st-lucie']",
-        "shared_event_families=[]",
-        "shared_named_people=[]",
-        "shared_precise_locations=[]",
-        "shared_agencies=[]",
-        "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['concern', 'wpbf']",
-        "shared_distinctive_token_count=25",
-        "identity_outcome=possible_relationship",
-        "evidence_tier=candidate_only",
-        "write_authorized=False"
-      ],
-      "final_publication_action": "candidate_only_no_write"
-    },
-    {
-      "incoming_headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
-      "publisher": "cbs12.com",
-      "resolved_url": "https://cbs12.com/news/local/port-st-lucie-grandmother-grateful-after-flood-rescue-from-van-swept-into-canal-florida-news-port-st-lucie-flooding",
-      "matched_canonical_slug": "2026-09-24-fire-at-wendys-on-jensen-beach-boulevard-caused-by-burned-out-ac-fan-motor",
-      "matched_canonical_headline": "Fire at Wendy's on Jensen Beach Boulevard caused by burned-out AC fan motor",
-      "incoming_story_id": "story_025952",
-      "canonical_story_id": "story_015504",
-      "evidence_dimensions": [
-        "bounded_time_window",
-        "shared_locality",
-        "shared_headline_topic",
-        "distinctive_fact_overlap"
-      ],
-      "confidence": 0.5,
-      "confidence_semantics": "legacy_compatibility_score_not_probability",
-      "relationship": "possible_relationship",
-      "identity_outcome": "possible_relationship",
-      "evidence_tier": "candidate_only",
-      "write_authorized": false,
-      "proof_type": "candidate_similarity",
-      "reason_codes": [
-        "candidate_only",
-        "write_forbidden"
-      ],
-      "match_reason": "possible_relationship_without_hard_event_proof",
-      "decision_trace": [
-        "left_identity_origin=source_derived",
-        "right_identity_origin=source_derived",
-        "publication_gap_days=43",
+        "publication_gap_days=28",
         "shared_locality=['port-st-lucie', 'st-lucie']",
         "shared_event_families=[]",
         "shared_named_people=[]",
         "shared_precise_locations=[]",
         "shared_agencies=[]",
         "shared_subject_phrases=[]",
-        "shared_headline_topic_core=['rescue', 'wpec']",
-        "shared_distinctive_token_count=23",
+        "shared_headline_topic_core=['flood', 'wpec']",
+        "shared_distinctive_token_count=22",
         "identity_outcome=possible_relationship",
         "evidence_tier=candidate_only",
         "write_authorized=False"
