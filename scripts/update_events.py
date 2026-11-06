@@ -2132,9 +2132,17 @@ def validate_outputs() -> None:
         raise RuntimeError("events.html event-submission callout must remain visually prominent")
     if "gathered from official local calendars and venue schedules" in page:
         raise RuntimeError("events.html must not expose the retired source-method hero copy")
-    newsletter = page_soup.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]')
-    if newsletter is None or "Start your day with local headlines" not in newsletter.get_text(" ", strip=True):
-        raise RuntimeError("events.html must use the shared Morning Brief masthead callout")
+    app_badge = page_soup.select_one(
+        'a.masthead-app-store[href="https://apps.apple.com/us/app/treasure-coast-today/id6821545564"]'
+    )
+    if app_badge is None or app_badge.select_one(
+        'img[src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"]'
+    ) is None:
+        raise RuntimeError("events.html must display the official linked App Store badge in the masthead")
+    if page_soup.select_one(
+        'nav#tct-mobile-nav a[data-tct-app-store-link][href="https://apps.apple.com/us/app/treasure-coast-today/id6821545564"]'
+    ) is None:
+        raise RuntimeError("events.html must offer the TCT iPhone app in the mobile menu")
     if page_soup.select_one(".masthead-top-row .wordmark") is None:
         raise RuntimeError("events.html must use the shared centered TCT masthead")
     if page_soup.select_one(".masthead-nav-row #tct-live-time") is None:

@@ -7366,3 +7366,31 @@ body.tct-member-authenticated .membership-header-welcome { display: inline-flex;
   margin: 0 0 16px;
 }
 .membership-inactive-notice a { color: inherit; text-decoration: underline; }
+
+/* TCT App Store masthead badge: retain Apple's official artwork and clear space. */
+.site-masthead .masthead-app-store {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 60px;
+  padding: 10px 0;
+  border: 0;
+  text-decoration: none;
+}
+.site-masthead .masthead-app-store img {
+  display: block;
+  width: 135px;
+  height: 40px;
+  max-width: 100%;
+  object-fit: contain;
+}
+.site-masthead .masthead-app-store:focus-visible {
+  outline: 2px solid var(--tct-green, #103f2b);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* The compact mobile masthead uses its left slot for menu/search controls.
+   Offer the app link in the mobile More menu rather than crowding that row. */
+@media (max-width: 900px) {
+  .site-masthead .masthead-app-store { display: none !important; }
+}
