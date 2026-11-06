@@ -115,3 +115,61 @@ def test_current_weekend_guide_is_available_through_sunday_evening(monkeypatch, 
     _as_of(monkeypatch, engine, datetime(2026, 10, 26, 0, 0, tzinfo=timezone.utc))
     published = engine.load_custom_articles()
     assert any(x.get("custom_id") == CURRENT_ID for x in published)
+
+
+def test_november_6_8_roundup_is_only_active_custom_story_and_uses_requested_image():
+    """The editorial queue must contain only this new custom assignment."""
+    entries = _items()
+    assert len(entries) == 1
+    guide = entries[0]
+    assert guide["custom_id"] == "treasure-coast-top-five-weekend-2026-11-06-08"
+    assert guide["category"] == "things_to_do"
+    assert guide["publish_on"] == "2026-11-05"
+    assert guide["expires"] == "2026-11-09"
+    assert guide["image_url"] == "https://treasurecoast.today/images/first-friday-walk.webp"
+    assert guide["sponsored"] is False
+    assert guide["force_hero"] is False
+    assert guide["body"].count("\\n## ") == 5
+    assert guide["headline"].endswith("Nov. 6-8")
+    for title in (
+        "First Friday Art Walk",
+        "41st Annual Navy SEAL Museum Muster",
+        "Treasure Coast Caribbean Food & Music Festival",
+        "St. Johns Wood",
+        "Shopapalooza Fall Sidewalk Sale",
+    ):
+        assert title in guide["body"]
+
+
+def test_november_roundup_matches_current_events_calendar():
+    """Protect against publishing roundup items absent from the event data."""
+    events = json.loads((ROOT / "data/events.json").read_text(encoding="utf-8"))["events"]
+    guide = _items()[0]
+    source_titles = (
+        ("First Friday Art Walk", "2026-11-06"),
+        ("41st Annual Navy SEAL Museum Muster", "2026-11-07"),
+        ("Treasure Coast Caribbean Food & Music Festival", "2026-11-07"),
+        ("St. Johns Wood", "2026-11-07"),
+        ("Shopapalooza Fall Sidewalk Sale", "2026-11-08"),
+    )
+    for title, day in source_titles:
+        matches = [x for x in events if x.get("title") == title and str(x.get("starts_at", "")).startswith(day)]
+        assert matches, f"Weekend guide event not in calendar: {title} ({day})"
+        assert matches[0]["event_url"] in guide["body"]
+
+
+def test_november_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
+    """An 8 p.m. Eastern reader on Nov. 8 should still see the guide."""
+    (tmp_path / "custom_articles.json").write_text(json.dumps(_items()), encoding="utf-8")
+    engine = _engine()
+    monkeypatch.setattr(engine, "OUTPUT_DIR", tmp_path)
+    _as_of(monkeypatch, engine, datetime(2026, 11, 9, 1, 0, tzinfo=timezone.utc))
+    assert any(
+        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-06-08"
+        for story in engine.load_custom_articles()
+    )
+    _as_of(monkeypatch, engine, datetime(2026, 11, 10, 12, 0, tzinfo=timezone.utc))
+    assert not any(
+        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-06-08"
+        for story in engine.load_custom_articles()
+    )
