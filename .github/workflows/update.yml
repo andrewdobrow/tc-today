@@ -528,6 +528,9 @@ jobs:
       - name: Keep sponsored articles out of the general homepage hero
         run: python scripts/enforce_editorial_main_hero.py
 
+      - name: Route all donation CTAs directly to Stripe
+        run: python scripts/direct_donation_links.py
+
       - name: Validate final SEO and audience contracts
         run: |
           # Events can cross their exact 30-day expiry cutoff after the earlier
