@@ -13,7 +13,7 @@
 <meta name="geo.region" content="US-FL">
 <meta name="geo.placename" content="Treasure Coast, Florida">
 <link rel="icon" href="/favicon.png" type="image/png">
-<link rel="stylesheet" href="/style.css?v=1.13.9.123">
+<link rel="stylesheet" href="/style.css?v=1.13.9.124">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Send a News Tip | Treasure Coast Today","url":"https://treasurecoast.today/news-tip.html","description":"Contact the Treasure Coast Today newsroom with a local news tip."}</script>
@@ -235,5 +235,49 @@
     <div class="footer-bottom">© 2026 Treasure Coast Today. Operated by Treasure Coast Today LLC. All rights reserved.</div>
   </footer>
   <script async data-uid="be625cadfe" src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>
-<script src="/main.js?v=1.13.9.123"></script>
+<script data-tct-mobile-nav-boot>
+(function () {
+  // Independent of main.js and third-party scripts, including Kit.
+  var media = window.matchMedia("(max-width: 900px)");
+  function setOpen(button, panel, open) {
+    if (!button || !panel) return;
+    var active = Boolean(open && media.matches);
+    panel.hidden = !active;
+    button.setAttribute("aria-expanded", active ? "true" : "false");
+    button.setAttribute("aria-label", active ? "Close navigation menu" : "Open navigation menu");
+    document.documentElement.classList.toggle("mobile-nav-open", active);
+  }
+  document.addEventListener("click", function(event) {
+    var button = event.target.closest && event.target.closest(".mobile-nav-toggle-button");
+    var panel = document.getElementById("tct-mobile-nav");
+    if (button && panel) {
+      // Capture before legacy main.js handlers; prevent a double toggle.
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(button, panel, panel.hidden);
+      return;
+    }
+    if (!panel || panel.hidden) return;
+    var toggle = document.querySelector(".mobile-nav-toggle-button");
+    if (panel.contains(event.target) && !(event.target.closest && event.target.closest("a"))) return;
+    setOpen(toggle, panel, false);
+  }, true);
+  document.addEventListener("keydown", function(event) {
+    if (event.key !== "Escape") return;
+    var panel = document.getElementById("tct-mobile-nav");
+    if (!panel || panel.hidden) return;
+    var button = document.querySelector(".mobile-nav-toggle-button");
+    setOpen(button, panel, false);
+    if (button) button.focus();
+  }, true);
+  function onResize() {
+    if (media.matches) return;
+    setOpen(document.querySelector(".mobile-nav-toggle-button"),
+            document.getElementById("tct-mobile-nav"), false);
+  }
+  if (media.addEventListener) media.addEventListener("change", onResize);
+  else if (media.addListener) media.addListener(onResize);
+})();
+</script>
+  <script src="/main.js?v=1.13.9.124"></script>
 </body></html>
