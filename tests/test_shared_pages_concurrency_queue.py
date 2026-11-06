@@ -42,3 +42,19 @@ def test_events_and_missing_persons_still_use_their_existing_publish_guards():
     # no independently verifiable county must stay red rather than publish stale.
     assert "python -u scripts/update_missing_persons.py" in missing
     assert "python scripts/update_missing_persons.py --validate-only" in missing
+
+
+def test_all_pages_deployments_have_bounded_attempts_and_diagnostics():
+    for path in WORKFLOWS:
+        workflow = (ROOT / path).read_text(encoding="utf-8")
+        deploy = workflow.split("\n  deploy:", 1)[1]
+        assert "    timeout-minutes: 22" in deploy, path
+        assert deploy.count("uses: actions/deploy-pages@v4") == 3, path
+        assert deploy.count("          timeout: 300000") == 3, path
+        assert "Wait before retry 1" in deploy, path
+        assert "Wait before retry 2" in deploy, path
+        assert "Summarize Pages deployment attempts" in deploy, path
+        assert "steps.d1.outcome" in deploy, path
+        assert "steps.d2.outcome" in deploy, path
+        assert "steps.d3.outcome" in deploy, path
+        assert "GITHUB_STEP_SUMMARY" in deploy, path
