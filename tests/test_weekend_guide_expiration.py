@@ -129,7 +129,7 @@ def test_november_6_8_roundup_is_only_active_custom_story_and_uses_requested_ima
     assert guide["image_url"] == "https://treasurecoast.today/images/first-friday-walk.webp"
     assert guide["sponsored"] is False
     assert guide["force_hero"] is False
-    assert guide["body"].count("\\n## ") == 5
+    assert guide["body"].count("\n## ") == 5
     assert guide["headline"].endswith("Nov. 6-8")
     for title in (
         "First Friday Art Walk",
