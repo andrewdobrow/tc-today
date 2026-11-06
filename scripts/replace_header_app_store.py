@@ -29,19 +29,18 @@ LEGACY_MASTHEAD = re.compile(
     r'<a\b[^>]*\bclass="masthead-newsletter"[^>]*>.*?</a>',
     re.I | re.S,
 )
-MOBILE_EVENTS_LINK = '<a href="/events.html" class="mobile-nav-link">Events</a>'
+MOBILE_EVENTS_LINK = re.compile(r'<a href="/events\\.html" class="mobile-nav-link[^"]*"[^>]*>Events</a>', re.I)
 
 
 def replace_header_promo(html: str) -> str:
     # Only replace the header promo, not the independent newsletter signups.
     updated = LEGACY_MASTHEAD.sub(APP_BADGE, html)
     if ('id="tct-mobile-nav"' in updated
-            and 'data-tct-app-store-link' not in updated
-            and MOBILE_EVENTS_LINK in updated):
-        updated = updated.replace(
-            MOBILE_EVENTS_LINK,
-            MOBILE_LINK + "\n          " + MOBILE_EVENTS_LINK,
-            1,
+            and 'data-tct-app-store-link' not in updated):
+        updated = MOBILE_EVENTS_LINK.sub(
+            lambda match: MOBILE_LINK + "\\n          " + match.group(0),
+            updated,
+            count=1,
         )
     return updated
 
