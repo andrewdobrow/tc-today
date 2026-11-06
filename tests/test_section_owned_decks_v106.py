@@ -52,4 +52,4 @@ def test_more_stories_excludes_dedicated_section_cards():
 
 def test_asset_version_bumped_for_new_filter_behavior():
     audience = Path("scripts/build_audience_features.py").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.123"' in audience
+    assert 'ASSET_VERSION = "1.13.9.124"' in audience
