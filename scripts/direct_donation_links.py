@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STRIPE_DONATION_URL = "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
 # Anchors only; never alter page canonicals, metadata, legal documents or forms.
 ANCHOR = re.compile(r"<a\b[^>]*>", re.I)
-LINK = re.compile(r'(?P<attr>\bhref\s*=\s*)(?P<quote>["\\'])(?P<href>[^"\\']+)(?P=quote)', re.I)
+LINK = re.compile(r"""(?P<attr>\bhref\s*=\s*)(?P<quote>["'])(?P<href>[^"']+)(?P=quote)""", re.I)
 
 
 def direct_donation_links(html: str) -> str:
