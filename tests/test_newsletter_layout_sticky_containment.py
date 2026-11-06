@@ -40,21 +40,17 @@ def test_sitewide_kit_modal_replaces_temporary_mobile_subscription_funnel():
     assert "--kit-sticky-height" not in js
 
 
-def test_mobile_kit_modal_is_bounded_with_dismissible_backdrop_space():
+def test_kit_modal_overlay_is_not_styled_by_tct():
     css = _read("style.css")
-    responsive = css.index("TCT v1.12.2.9 — sitewide newsletter modal presentation")
-    tail = css[responsive:]
-    assert '@media (max-width: 680px)' in tail
-    assert '.formkit-modal .formkit-form' in tail
-    assert 'width: calc(100vw - 48px) !important' in tail
-    assert 'max-width: 420px !important' in tail
-    assert 'max-height: calc(100dvh - 64px) !important' in tail
-    assert 'margin: 32px auto !important' in tail
+    # Kit manages its popup layout, visibility and dismissal. Sitewide
+    # overrides could capture touches over unrelated header controls.
+    assert ".formkit-modal" not in css
+    assert ".formkit-overlay" not in css
+    assert '.formkit-form[data-format="modal"]' not in css
 
 
-def test_modal_layer_is_above_masthead_without_page_offset():
+def test_retired_sticky_bar_does_not_shift_site_masthead():
     css = _read("style.css")
     js = _read("main.js")
-    assert "z-index: 2147483000 !important" in css
     assert "kit-sticky-visible" not in js
-    assert "padding-top: var(--kit-sticky-height)" not in css[css.index("TCT v1.12.2.9"):]
+    assert "--kit-sticky-height" not in js
