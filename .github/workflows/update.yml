@@ -608,7 +608,7 @@ jobs:
     needs: update
     if: ${{ always() && (inputs.deploy_only || needs.update.result == 'success') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 22
     environment:
       name: github-pages
       url: ${{ steps.d1.outputs.page_url || steps.d2.outputs.page_url || steps.d3.outputs.page_url }}
@@ -630,10 +630,20 @@ jobs:
         with:
           path: '.'
 
+      - name: Record deployment start
+        id: deploy_start
+        run: |
+          echo "unix=$(date +%s)" >> "$GITHUB_OUTPUT"
+          echo "Deployment run: $GITHUB_RUN_ID (attempt $GITHUB_RUN_ATTEMPT)"
+          echo "Deploy source: $(git rev-parse HEAD)"
+          echo "GitHub Pages action logs contain the deployment ID and detailed status."
+
       - name: Deploy attempt 1
         id: d1
         continue-on-error: true
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 300000  # Cap each attempt at five minutes
 
       - name: Wait before retry 1
         if: steps.d1.outcome == 'failure'
@@ -644,6 +654,8 @@ jobs:
         if: steps.d1.outcome == 'failure'
         continue-on-error: true
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 300000  # Cap each attempt at five minutes
 
       - name: Wait before retry 2
         if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
@@ -653,3 +665,30 @@ jobs:
         id: d3
         if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 300000  # Cap each attempt at five minutes
+ 
+      - name: Summarize Pages deployment attempts
+        if: ${{ always() }}
+        env:
+          FIRST: ${{ steps.d1.outcome }}
+          SECOND: ${{ steps.d2.outcome }}
+          THIRD: ${{ steps.d3.outcome }}
+          START_UNIX: ${{ steps.deploy_start.outputs.unix }}
+        run: |
+          now=$(date +%s)
+          elapsed="unknown"
+          if [[ "$START_UNIX" =~ ^[0-9]+$ ]]; then
+            elapsed="$((now - START_UNIX))s"
+          fi
+          echo "Pages deployment results: attempt 1=$FIRST; attempt 2=$SECOND; attempt 3=$THIRD; elapsed=$elapsed"
+          {
+            echo "### GitHub Pages deployment diagnostics"
+            echo "- Workflow run: $GITHUB_RUN_ID / attempt $GITHUB_RUN_ATTEMPT"
+            echo "- Commit: $(git rev-parse HEAD)"
+            echo "- Deployment elapsed: $elapsed"
+            echo "- Attempt 1: $FIRST"
+            echo "- Attempt 2: $SECOND"
+            echo "- Attempt 3: $THIRD"
+            echo "- Deployment IDs and status transitions: see the Deploy attempt logs above."
+          } >> "$GITHUB_STEP_SUMMARY"
