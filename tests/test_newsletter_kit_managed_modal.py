@@ -51,8 +51,8 @@ def test_mobile_modal_touch_target_is_unchanged():
 def test_sitewide_script_cache_version_is_refreshed():
     audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.120"' in audience
-    assert "/main.js?v=1.13.9.120" in home
+    assert 'ASSET_VERSION = "1.13.9.121"' in audience
+    assert "/main.js?v=1.13.9.121" in home
 
 
 def test_initialization_inserts_only_the_official_kit_embed_once():

@@ -29,7 +29,7 @@ DONATE_HTML = """<!-- TCT_ARTICLE_READER_SUPPORT_START -->
     <p>Every story is free to read. If TCT is part of your day, your contribution helps keep it that way.</p>
   </div>
   <div class="tct-article-reader-support__action">
-    <a href="/donate.html" class="tct-article-reader-support__button"><span aria-hidden="true">&#9829;</span> Support TCT Today <span aria-hidden="true">&rarr;</span></a>
+    <a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" class="tct-article-reader-support__button"><span aria-hidden="true">&#9829;</span> Support TCT Today <span aria-hidden="true">&rarr;</span></a>
     <small>Give any amount. No subscription required.</small>
   </div>
 </section>

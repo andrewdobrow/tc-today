@@ -342,6 +342,48 @@ document.addEventListener("keydown", (event) => {
 });
 
 
+// -- LOW-FRICTION DONATION LINKS --
+// Direct every website donation CTA to the Stripe-hosted contribution page,
+// including cached article and event HTML from before this change. This does
+// not rewrite the /donate.html document URL or its canonical metadata.
+(() => {
+  const STRIPE_DONATION_URL = "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01";
+
+  function isDonationPageLink(link) {
+    if (!(link instanceof HTMLAnchorElement)) return false;
+    try {
+      const url = new URL(link.getAttribute("href") || "", document.baseURI);
+      return url.origin === window.location.origin &&
+        url.pathname.replace(/\\/+$/, "") === "/donate.html";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function directDonationLink(link) {
+    if (!isDonationPageLink(link)) return;
+    link.href = STRIPE_DONATION_URL;
+    link.rel = [link.rel, "noopener", "noreferrer"].filter(Boolean).join(" ");
+  }
+
+  function directAllDonationLinks() {
+    document.querySelectorAll('a[href*="donate.html"]').forEach(directDonationLink);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", directAllDonationLinks, { once: true });
+  } else {
+    directAllDonationLinks();
+  }
+
+  // Handles dynamically inserted links and clicks before DOMContentLoaded,
+  // without changing how normal navigation or middle-clicking works.
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest?.("a[href]");
+    if (link) directDonationLink(link);
+  }, true);
+})();
+
 // -- SITEWIDE KIT NEWSLETTER MODAL --
 // The Morning Brief is the lower-friction acquisition step on both desktop and
 // mobile. Subscription conversion stays inside the article paywall.

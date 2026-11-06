@@ -77,7 +77,7 @@ def test_existing_paid_readers_keep_ad_free_tracking_and_account_access():
         '</body></html>'
     )
     public = _rewrite_chrome(source, "article.html")
-    assert 'href="/donate.html"' in public
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in public
     assert public.count('href="/subscribe.html?signin=1"') == 1
     assert 'class="membership-header-welcome"' in public
     assert "mv-no-ads" in public
@@ -101,7 +101,7 @@ def test_main_bar_advertise_after_events_and_out_of_desktop_dropdown():
     nav = re.search(r'<nav class="category-nav.*?</nav>', page, re.S).group()
     assert nav.index('>Events</a>') < nav.index('>Advertise</a>')
     assert nav.count('href="/advertise.html"') == 1
-    assert 'href="/donate.html"' in page
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in page
     assert ">Subscribe</span>" not in page
     assert 'aria-label="Support Treasure Coast Today"' in page
     assert _rewrite_chrome(page, "index.html") == page
@@ -111,7 +111,7 @@ def test_homepage_support_card_no_longer_sells_subscriptions():
     before = ('<a href="/subscribe.html" class="grid-card tct-membership-card" '
               'data-support-card="true"><div>Membership $1/month</div></a>')
     after = _rewrite_home_support(before)
-    assert 'href="/donate.html"' in after
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in after
     assert "Local news needs local support." in after
     assert "From local government decisions and public safety updates" in after
     assert "Support TCT Today" in after
@@ -212,7 +212,8 @@ def test_ownership_and_about_funding_disclosures_are_consistent():
     assert "not charitable tax-deductible donations" in ownership
     assert "independent reporting" in ownership
     assert "All Treasure Coast Today news articles are free to read." in about
-    assert 'href="/donate.html"' in about
+    from scripts.direct_donation_links import direct_donation_links
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in direct_donation_links(about)
     assert 'href="/advertise.html"' in about
     assert "independent coverage" in about
     assert _rewrite_ownership(ownership) == ownership
@@ -383,7 +384,7 @@ def test_real_site_migration_dry_run_restores_custom_article_without_publish(tmp
     assert '"isAccessibleForFree":true' in published
     actual_custom = dest.read_text(encoding="utf-8")
     assert "data-tct-paywall" not in actual_custom
-    assert 'href="/donate.html"' in actual_custom
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in actual_custom
     assert 'href="/advertise.html"' in actual_custom
     assert "tct_member_entitled_hint" in actual_custom, "Honor paid-through ad-free users"
     assert (tmp_path / "donate.html").is_file()
@@ -409,7 +410,7 @@ def test_homepage_current_donation_card_has_one_primary_action():
     )
     assert len(cards) == 1
     card = cards[0]
-    assert 'href="/donate.html"' in card
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in card
     assert "Support TCT Today" in card
     assert "No subscription required." in card
     assert "Read for free" not in card
