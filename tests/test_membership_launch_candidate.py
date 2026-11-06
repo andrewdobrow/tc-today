@@ -71,7 +71,7 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
         backend = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
         assert 'id="tct-legacy-membership-notice"' in page
         assert "All TCT news is now free" in page
-        assert "/donate.html" in page
+        assert "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" in page
         assert "noindex,follow" in page
         assert ".tct-subscriptions-closed [data-membership-plans]" in css
         assert "TCT_DISABLE_NEW_SUBSCRIPTIONS" in backend
