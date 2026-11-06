@@ -273,7 +273,7 @@ def test_events_page_has_no_retired_subscription_conversion_banner():
     ):
         assert obsolete not in page
     # The site's actual free-news conversion remains available in its header.
-    assert 'href="/donate.html"' in page
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in page
 
 
 
@@ -320,10 +320,11 @@ def test_events_page_uses_shared_publication_masthead_with_live_utility_row():
     navrow = soup.select_one(".masthead-nav-row")
     assert top is not None
     assert navrow is not None
-    newsletter = top.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]')
-    assert newsletter is not None
-    assert "Morning Brief" in newsletter.get_text(" ", strip=True)
-    assert "Start your day with local headlines" in newsletter.get_text(" ", strip=True)
+    app_badge = top.select_one('a.masthead-app-store[href="https://apps.apple.com/us/app/treasure-coast-today/id6821545564"]')
+    assert app_badge is not None
+    assert app_badge.select_one('img[src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"]') is not None
+    assert top.select_one(".masthead-newsletter") is None
+    assert soup.select_one("nav#tct-mobile-nav a[data-tct-app-store-link]") is not None
     assert "Free local news email" not in page
     assert top.select_one(".header-top .wordmark") is not None
     assert top.select_one(".header-actions .membership-subscribe-btn") is not None
@@ -834,7 +835,10 @@ def test_homepage_uses_balanced_publication_masthead_without_legacy_strip():
     top = soup.select_one(".masthead-top-row")
     navrow = soup.select_one(".masthead-nav-row")
     assert top is not None and navrow is not None
-    assert top.select_one('a.masthead-newsletter[href="https://treasure-coast-today.kit.com/cb848255f8"]') is not None
+    app_badge = top.select_one('a.masthead-app-store[href="https://apps.apple.com/us/app/treasure-coast-today/id6821545564"]')
+    assert app_badge is not None
+    assert app_badge.select_one('img[src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"]') is not None
+    assert soup.select_one("nav#tct-mobile-nav a[data-tct-app-store-link]") is not None
     assert top.select_one(".header-top .wordmark") is not None
     assert top.select_one(".header-actions .membership-subscribe-btn") is not None
     assert navrow.select_one("#tct-live-time") is not None
