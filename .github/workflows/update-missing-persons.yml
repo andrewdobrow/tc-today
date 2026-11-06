@@ -108,6 +108,9 @@ jobs:
       - name: Apply App Store badge and native Kit modal embed
         run: python scripts/replace_header_app_store.py
 
+      - name: Validate shared JavaScript syntax
+        run: node --check main.js
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
