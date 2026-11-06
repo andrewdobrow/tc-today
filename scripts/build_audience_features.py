@@ -122,6 +122,12 @@ def _page_footer() -> str:
     footer = match.group(0)
     if '/main.js' not in footer:
         footer += f'\n<script src="/main.js?v={ASSET_VERSION}"></script>'
+    # Use Kit's official HTML embed directly, rather than depending on
+    # the rest of TCT's main.js to load it. Kit owns all popup rules.
+    kit_tag = ('<script async data-uid="be625cadfe" '
+               'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>')
+    if 'data-uid="be625cadfe"' not in footer:
+        footer = footer.replace('<script src="/main.js', kit_tag + '\n<script src="/main.js', 1)
     return footer
 
 
