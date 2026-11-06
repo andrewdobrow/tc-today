@@ -39,7 +39,7 @@ CSS_ASSET_VERSION = re.search(
 if CSS_ASSET_VERSION is None:
     raise RuntimeError("Unable to resolve TCT shared CSS version")
 CSS_ASSET_VERSION = CSS_ASSET_VERSION.group(1)
-CSS_REFERENCE = re.compile(r'(/style\\.css\\?v=)\\d+(?:\\.\\d+)+')
+CSS_REFERENCE = re.compile(r'(/style\.css\?v=)\d+(?:\.\d+)+')
 
 def replace_header_promo(html: str) -> str:
     # Only replace the header promo, not the independent newsletter signups.
