@@ -45,23 +45,18 @@ KIT_MODAL_EMBED = (
     '<script async data-uid="be625cadfe" '
     'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>'
 )
-MAIN_JS_SCRIPT = re.compile(r'<script\\b[^>]*src=["\\']/main\\.js(?:\\?[^"\\']*)?["\\'][^>]*></script>', re.I)
+MAIN_JS_SCRIPT = re.compile(r"""<script\b[^>]*src=["']/main\.js(?:\?[^"']*)?["'][^>]*></script>""", re.I)
 
 def ensure_official_kit_embed(html: str) -> str:
-    """Embed Kit's own script directly, independent of TCT's main.js runtime.
-
-    The Kit script controls all display rules; it must appear once, and only
-    on site pages. Retain the old main.js loader as a no-op fallback for
-    previously cached pages (it detects the script's data-uid).
-    """
+    """Install Kit's HTML embed once, with timing and frequency owned by Kit."""
     if 'site-masthead' not in html or '</body>' not in html.lower():
         return html
-    if re.search(r'<script\\b[^>]*data-uid=["\\']be625cadfe["\\']', html, re.I):
+    if re.search(r"""<script\b[^>]*data-uid=["']be625cadfe["']""", html, re.I):
         return html
     match = MAIN_JS_SCRIPT.search(html)
     if match:
-        return html[:match.start()] + KIT_MODAL_EMBED + "\\n  " + html[match.start():]
-    return re.sub(r'</body>', KIT_MODAL_EMBED + "\\n</body>", html, count=1, flags=re.I)
+        return html[:match.start()] + KIT_MODAL_EMBED + "\n  " + html[match.start():]
+    return re.sub(r'</body>', KIT_MODAL_EMBED + "\n</body>", html, count=1, flags=re.I)
 
 
 def replace_header_promo(html: str) -> str:
