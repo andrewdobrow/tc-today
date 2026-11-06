@@ -212,7 +212,8 @@ def test_ownership_and_about_funding_disclosures_are_consistent():
     assert "not charitable tax-deductible donations" in ownership
     assert "independent reporting" in ownership
     assert "All Treasure Coast Today news articles are free to read." in about
-    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in about
+    from scripts.direct_donation_links import direct_donation_links
+    assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in direct_donation_links(about)
     assert 'href="/advertise.html"' in about
     assert "independent coverage" in about
     assert _rewrite_ownership(ownership) == ownership
