@@ -2,7 +2,7 @@
 
 Regression for the Nov 5 rollout: first-party 50% scroll gate and manual
 click created a second trigger that conflicted with Kit's own 50% setting.
-Keep the accessible close button and dismissal fallback intact.
+Do not add first-party dismissal controls or popup triggers.
 """
 from pathlib import Path
 
@@ -30,29 +30,23 @@ def test_kit_embed_loads_once_at_initialization_without_firing_popup():
         assert obsolete not in script
 
 
-def test_existing_easy_to_dismiss_mobile_controls_are_preserved():
+def test_kit_exclusively_controls_modal_ui_and_lifecycle():
     script = _modal_script()
-    assert 'const dismissCopy = "No thanks, I’ll keep reading";' in script
-    assert 'dismiss.className = "tct-kit-modal-dismiss"' in script
-    assert 'Dismiss newsletter signup and continue reading' in script
-    assert 'submit.insertAdjacentElement("afterend", dismiss)' in script
-    assert "new MutationObserver" in script
-    assert "close.click()" in script
-    assert 'key: "Escape"' in script
-
-
-def test_mobile_modal_touch_target_is_unchanged():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert ".tct-kit-modal-dismiss {" in css
-    assert "min-height: 44px !important;" in css
-    assert "text-decoration: underline !important;" in css
+    for forbidden in (
+        "MutationObserver", "tct-kit-modal-dismiss", "dismissCopy",
+        "formkit-close", "KeyboardEvent", "addMobileDismissLink",
+        "trigger.click()", "scroll", "requestAnimationFrame",
+    ):
+        assert forbidden not in script
+    assert ".tct-kit-modal-dismiss" not in css
 
 
 def test_sitewide_script_cache_version_is_refreshed():
     audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
     home = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.122"' in audience
-    assert "/main.js?v=1.13.9.122" in home
+    assert 'ASSET_VERSION = "1.13.9.123"' in audience
+    assert "/main.js?v=1.13.9.123" in home
 
 
 def test_initialization_inserts_only_the_official_kit_embed_once():
