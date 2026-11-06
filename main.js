@@ -354,7 +354,7 @@ document.addEventListener("keydown", (event) => {
     try {
       const url = new URL(link.getAttribute("href") || "", document.baseURI);
       return url.origin === window.location.origin &&
-        url.pathname.replace(/\\/+$/, "") === "/donate.html";
+        url.pathname.replace(/\/+$/, "") === "/donate.html";
     } catch (_) {
       return false;
     }
