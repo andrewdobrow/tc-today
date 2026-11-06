@@ -26,7 +26,7 @@ def test_main_javascript_parses_before_any_deployment():
 
 def test_donation_url_normalization_uses_valid_trailing_slash_regex():
     js = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert r'url.pathname.replace(/\\/+$/, "")' in js
+    assert r'url.pathname.replace(/\/+$/, "")' in js
     assert 'isDonationPageLink' in js
 
 
