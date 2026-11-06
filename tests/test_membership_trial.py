@@ -68,7 +68,7 @@ def test_subscribe_page_and_checkout_copy_match_intro_offer():
         presentation = (ROOT / "donation-model.css").read_text()
         assert 'id="tct-legacy-membership-notice"' in page
         assert "All TCT news is now free" in page
-        assert "donate.html" in page
+        assert "https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" in page
         assert ".tct-subscriptions-closed [data-membership-plans]" in presentation
         assert "TCT_DISABLE_NEW_SUBSCRIPTIONS" in backend
         assert "Your annual membership is active." in browser
