@@ -99,3 +99,37 @@ console.log(JSON.stringify({before, inserted, popupCommands}));
     assert json.loads(result.stdout) == {
         "before": 0, "inserted": 1, "popupCommands": 0
     }
+
+
+def test_native_kit_embed_is_direct_and_deploy_safe():
+    """Kit loads independently from main.js; repeated passes cannot duplicate it."""
+    from scripts.replace_header_app_store import ensure_official_kit_embed
+
+    embed = (
+        '<script async data-uid="be625cadfe" '
+        'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>'
+    )
+    for name in ("index.html", "events.html"):
+        page = (ROOT / name).read_text(encoding="utf-8")
+        assert page.count(embed) == 1, name
+        assert page.index(embed) < page.index('<script src="/main.js'), name
+        assert ensure_official_kit_embed(page) == page, name
+
+    old_page = (
+        '<html><body><header class="site-masthead"></header>'
+        '<script src="/main.js?v=1.13.9.122"></script></body></html>'
+    )
+    migrated = ensure_official_kit_embed(old_page)
+    assert migrated.count(embed) == 1
+    assert migrated.index(embed) < migrated.index('<script src="/main.js')
+    assert ensure_official_kit_embed(migrated) == migrated
+
+
+def test_all_deploy_pipelines_install_native_kit_embed():
+    for workflow in (
+        ".github/workflows/update.yml",
+        ".github/workflows/update-events.yml",
+        ".github/workflows/update-missing-persons.yml",
+    ):
+        text = (ROOT / workflow).read_text(encoding="utf-8")
+        assert "python scripts/replace_header_app_store.py" in text, workflow
