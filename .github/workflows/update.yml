@@ -531,6 +531,9 @@ jobs:
       - name: Route all donation CTAs directly to Stripe
         run: python scripts/direct_donation_links.py
 
+      - name: Replace masthead Morning Brief callout with App Store badge
+        run: python scripts/replace_header_app_store.py
+
       - name: Validate final SEO and audience contracts
         run: |
           # Events can cross their exact 30-day expiry cutoff after the earlier
@@ -618,6 +621,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: Apply App Store badge to every page (including deploy-only)
+        run: python scripts/replace_header_app_store.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
