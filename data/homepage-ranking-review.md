@@ -12,30 +12,32 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise | Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise | 59 | importance 0; freshness 99.97; urgency 7/10 |
-| 2 | Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood | Indian River County, St. Lucie schools closed Friday; Monday return planned | 57 | importance 0; freshness 93.79; urgency 4/10; validated material update |
-| 3 | Indian River County, St. Lucie schools closed Friday; Monday return planned | Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood | 54 | importance 0; freshness 65.25; urgency 6/10; validated material update |
-| 4 | St. Lucie County relocates flood shelters to help public schools reopen | St. Lucie County relocates flood shelters to help public schools reopen | 50 | importance 0; freshness 48.45; urgency 6/10; validated material update |
-| 5 | About 75% of Creekside homes evacuated in St. Lucie County; power remains off | About 75% of Creekside homes evacuated in St. Lucie County; power remains off | 47 | importance 0; freshness 93.78; urgency 2/10; -4 county saturation |
-| 6 | James Uthmeier projected to defeat Rodriguez in Florida attorney general race | Nixon concedes as Moody is projected to win Florida U.S. Senate special election | 40 | importance 0; freshness 40.15; urgency 2/10; validated material update |
-| 7 | Brian Mast wins reelection in Florida's 21st Congressional District | Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup | 40 | importance 0; freshness 40.14; urgency 2/10; validated material update |
-| 8 | Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday | Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County | 40 | importance 0; freshness 43.57; urgency 2/10; validated material update; -6 category saturation |
-| 9 | Florida special session expected to implement Amendment 3 homestead tax relief | Florida special session expected to implement Amendment 3 homestead tax relief | 33 | importance 0; freshness 53.62; urgency 2/10 |
-| 10 | Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County | Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday | 38 | importance 0; freshness 56.89; urgency 2/10; -12 county saturation |
-| 11 | Nixon concedes as Moody is projected to win Florida U.S. Senate special election | James Uthmeier projected to defeat Rodriguez in Florida attorney general race | 31 | importance 0; freshness 28.4; urgency 4/10; -6 category saturation |
-| 12 | Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup | Rick Meltzer wins open Port St. Lucie City Council District 1 seat | 30 | importance 0; freshness 28.4; urgency 2/10; -12 category saturation |
+| 1 | Martin County delays drainage repairs as Trailside flooding threatens cattle, access | Martin County delays drainage repairs as Trailside flooding threatens cattle, access | 63 | importance 0; freshness 99.97; urgency 9/10 |
+| 2 | Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood | Indian River County, St. Lucie schools closed Friday; Monday return planned | 56 | importance 0; freshness 88.77; urgency 4/10; validated material update |
+| 3 | Indian River County, St. Lucie schools closed Friday; Monday return planned | Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood | 53 | importance 0; freshness 60.23; urgency 6/10; validated material update |
+| 4 | Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise | About 75% of Creekside homes evacuated in St. Lucie County; power remains off | 45 | importance 0; freshness 88.76; urgency 2/10 |
+| 5 | About 75% of Creekside homes evacuated in St. Lucie County; power remains off | Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise | 47 | importance 0; freshness 94.95; urgency 2/10; -6 category saturation |
+| 6 | St. Lucie County relocates flood shelters to help public schools reopen | St. Lucie County relocates flood shelters to help public schools reopen | 45 | importance 0; freshness 43.43; urgency 4/10; validated material update; -4 county saturation |
+| 7 | James Uthmeier projected to defeat Rodriguez in Florida attorney general race | Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup | 38 | importance 0; freshness 35.12; urgency 2/10; validated material update |
+| 8 | Brian Mast wins reelection in Florida's 21st Congressional District | Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County | 39 | importance 0; freshness 38.55; urgency 2/10; validated material update; -6 category saturation |
+| 9 | Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday | Florida special session expected to implement Amendment 3 homestead tax relief | 31 | importance 0; freshness 48.6; urgency 2/10 |
+| 10 | Florida special session expected to implement Amendment 3 homestead tax relief | Nixon concedes as Moody is projected to win Florida U.S. Senate special election | 38 | importance 0; freshness 35.13; urgency 2/10; validated material update; -8 county saturation |
+| 11 | Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County | Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday | 36 | importance 0; freshness 51.87; urgency 2/10; -12 county saturation |
+| 12 | Nixon concedes as Moody is projected to win Florida U.S. Senate special election | James Uthmeier projected to defeat Rodriguez in Florida attorney general race | 30 | importance 0; freshness 23.38; urgency 4/10; -6 category saturation |
 
 ## Recommended moves
 
-- **Rick Meltzer wins open Port St. Lucie City Council District 1 seat**: 52 → 12 — importance 0; freshness 28.4; urgency 2/10; -12 category saturation
-- **Brian Mast wins reelection in Florida's 21st Congressional District**: 7 → 13 — importance 0; freshness 25.1; urgency 4/10
-- **Nixon concedes as Moody is projected to win Florida U.S. Senate special election**: 11 → 6 — importance 0; freshness 40.15; urgency 2/10; validated material update
-- **Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup**: 12 → 7 — importance 0; freshness 40.14; urgency 2/10; validated material update
-- **James Uthmeier projected to defeat Rodriguez in Florida attorney general race**: 6 → 11 — importance 0; freshness 28.4; urgency 4/10; -6 category saturation
-- **Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County**: 10 → 8 — importance 0; freshness 43.57; urgency 2/10; validated material update; -6 category saturation
-- **Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday**: 8 → 10 — importance 0; freshness 56.89; urgency 2/10; -12 county saturation
-- **Indian River County, St. Lucie schools closed Friday; Monday return planned**: 3 → 2 — importance 0; freshness 93.79; urgency 4/10; validated material update
-- **Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood**: 2 → 3 — importance 0; freshness 65.25; urgency 6/10; validated material update
+- **Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup**: 20 → 7 — importance 0; freshness 35.12; urgency 2/10; validated material update
+- **James Uthmeier projected to defeat Rodriguez in Florida attorney general race**: 7 → 12 — importance 0; freshness 23.38; urgency 4/10; -6 category saturation
+- **Brian Mast wins reelection in Florida's 21st Congressional District**: 8 → 13 — importance 0; freshness 20.08; urgency 4/10
+- **Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County**: 11 → 8 — importance 0; freshness 38.55; urgency 2/10; validated material update; -6 category saturation
+- **Nixon concedes as Moody is projected to win Florida U.S. Senate special election**: 12 → 10 — importance 0; freshness 35.13; urgency 2/10; validated material update; -8 county saturation
+- **Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday**: 9 → 11 — importance 0; freshness 51.87; urgency 2/10; -12 county saturation
+- **Indian River County, St. Lucie schools closed Friday; Monday return planned**: 3 → 2 — importance 0; freshness 88.77; urgency 4/10; validated material update
+- **Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood**: 2 → 3 — importance 0; freshness 60.23; urgency 6/10; validated material update
+- **Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise**: 4 → 5 — importance 0; freshness 94.95; urgency 2/10; -6 category saturation
+- **About 75% of Creekside homes evacuated in St. Lucie County; power remains off**: 5 → 4 — importance 0; freshness 88.76; urgency 2/10
+- **Florida special session expected to implement Amendment 3 homestead tax relief**: 10 → 9 — importance 0; freshness 48.6; urgency 2/10
 
 ## Guardrails
 
