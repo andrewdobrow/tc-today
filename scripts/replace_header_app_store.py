@@ -59,6 +59,64 @@ def ensure_official_kit_embed(html: str) -> str:
     return re.sub(r'</body>', KIT_MODAL_EMBED + "\n</body>", html, count=1, flags=re.I)
 
 
+
+MOBILE_NAV_BOOTSTRAP = """<script data-tct-mobile-nav-boot>
+(function () {
+  // Independent of main.js and third-party scripts, including Kit.
+  var media = window.matchMedia("(max-width: 900px)");
+  function setOpen(button, panel, open) {
+    if (!button || !panel) return;
+    var active = Boolean(open && media.matches);
+    panel.hidden = !active;
+    button.setAttribute("aria-expanded", active ? "true" : "false");
+    button.setAttribute("aria-label", active ? "Close navigation menu" : "Open navigation menu");
+    document.documentElement.classList.toggle("mobile-nav-open", active);
+  }
+  document.addEventListener("click", function(event) {
+    var button = event.target.closest && event.target.closest(".mobile-nav-toggle-button");
+    var panel = document.getElementById("tct-mobile-nav");
+    if (button && panel) {
+      // Capture before legacy main.js handlers; prevent a double toggle.
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(button, panel, panel.hidden);
+      return;
+    }
+    if (!panel || panel.hidden) return;
+    var toggle = document.querySelector(".mobile-nav-toggle-button");
+    if (panel.contains(event.target) && !(event.target.closest && event.target.closest("a"))) return;
+    setOpen(toggle, panel, false);
+  }, true);
+  document.addEventListener("keydown", function(event) {
+    if (event.key !== "Escape") return;
+    var panel = document.getElementById("tct-mobile-nav");
+    if (!panel || panel.hidden) return;
+    var button = document.querySelector(".mobile-nav-toggle-button");
+    setOpen(button, panel, false);
+    if (button) button.focus();
+  }, true);
+  function onResize() {
+    if (media.matches) return;
+    setOpen(document.querySelector(".mobile-nav-toggle-button"),
+            document.getElementById("tct-mobile-nav"), false);
+  }
+  if (media.addEventListener) media.addEventListener("change", onResize);
+  else if (media.addListener) media.addListener(onResize);
+})();
+</script>"""
+
+
+def ensure_mobile_nav_bootstrap(html: str) -> str:
+    """Install a small independent hamburger handler on every mobile-nav page."""
+    if 'mobile-nav-toggle-button' not in html or 'id="tct-mobile-nav"' not in html:
+        return html
+    if 'data-tct-mobile-nav-boot' in html:
+        return html
+    match = MAIN_JS_SCRIPT.search(html)
+    if match:
+        return html[:match.start()] + MOBILE_NAV_BOOTSTRAP + "\n  " + html[match.start():]
+    return re.sub(r'</body>', MOBILE_NAV_BOOTSTRAP + "\n</body>", html, count=1, flags=re.I)
+
 def replace_header_promo(html: str) -> str:
     # Only replace the header promo, not the independent newsletter signups.
     updated = LEGACY_MASTHEAD.sub(APP_BADGE, html)
@@ -75,7 +133,7 @@ def replace_header_promo(html: str) -> str:
         updated = CSS_REFERENCE.sub(
             lambda match: match.group(1) + CSS_ASSET_VERSION, updated
         )
-    return ensure_official_kit_embed(updated)
+    return ensure_mobile_nav_bootstrap(ensure_official_kit_embed(updated))
 
 
 def reconcile(root: Path = ROOT) -> dict[str, int]:
