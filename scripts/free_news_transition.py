@@ -132,7 +132,7 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
         text, flags=re.I | re.S,
     )
     # If a legacy site/page uses an Advertise primary CTA, route it to the Support TCT donation page.
-    text = re.sub(r'(<a\b(?=[^>]*class="[^"]*\bsupport-btn\b)[^>]*href=")/advertise\.html(")', r'\1/donate.html\2', text, flags=re.I)
+    text = re.sub(r'(<a\b(?=[^>]*class="[^"]*\bsupport-btn\b)[^>]*href=")/advertise\.html(")', r'\1https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01\2', text, flags=re.I)
     # The primary desktop nav gets Advertise immediately after Events. Mobile
     # retains a discoverable Advertise link in its hamburger drawer.
     def nav_update(match: re.Match) -> str:
