@@ -29,8 +29,17 @@ LEGACY_MASTHEAD = re.compile(
     r'<a\b[^>]*\bclass="masthead-newsletter"[^>]*>.*?</a>',
     re.I | re.S,
 )
-MOBILE_EVENTS_LINK = re.compile(r'<a href="/events\\.html" class="mobile-nav-link[^"]*"[^>]*>Events</a>', re.I)
+MOBILE_EVENTS_LINK = re.compile(r'<a href="/events\.html" class="mobile-nav-link[^"]*"[^>]*>Events</a>', re.I)
 
+
+CSS_ASSET_VERSION = re.search(
+    r'ASSET_VERSION = "([^"]+)"',
+    (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8"),
+)
+if CSS_ASSET_VERSION is None:
+    raise RuntimeError("Unable to resolve TCT shared CSS version")
+CSS_ASSET_VERSION = CSS_ASSET_VERSION.group(1)
+CSS_REFERENCE = re.compile(r'(/style\\.css\\?v=)\\d+(?:\\.\\d+)+')
 
 def replace_header_promo(html: str) -> str:
     # Only replace the header promo, not the independent newsletter signups.
@@ -38,9 +47,15 @@ def replace_header_promo(html: str) -> str:
     if ('id="tct-mobile-nav"' in updated
             and 'data-tct-app-store-link' not in updated):
         updated = MOBILE_EVENTS_LINK.sub(
-            lambda match: MOBILE_LINK + "\\n          " + match.group(0),
+            lambda match: MOBILE_LINK + "\n          " + match.group(0),
             updated,
             count=1,
+        )
+    if 'class="masthead-app-store"' in updated:
+        # Older archives may still reference cached CSS that doesn't know the
+        # new badge. Ensure every served page gets the current mobile layout.
+        updated = CSS_REFERENCE.sub(
+            lambda match: match.group(1) + CSS_ASSET_VERSION, updated
         )
     return updated
 
