@@ -127,7 +127,7 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
     # entitlement and manage their already-paid subscriptions.
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bmembership-subscribe-btn\b)[^>]*>.*?</a>',
-        '<a href="/donate.html" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Support Treasure Coast Today">' +
+        '<a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" class="support-btn membership-subscribe-btn tct-donate-header" aria-label="Support Treasure Coast Today">' +
         DONATE_HEART_SVG + ' <span class="membership-subscribe-label">Support TCT</span></a>',
         text, flags=re.I | re.S,
     )
@@ -173,10 +173,10 @@ def _rewrite_chrome(text: str, page_name: str) -> str:
         )
         text = text.replace(' class="footer-column footer-connect footer-membership-ask"',
                             ' class="footer-column footer-connect footer-donation-ask"')
-    text = text.replace('<a href="/subscribe.html">Membership</a>', f'<a href="/donate.html">{DONATE_HEART_SVG} Donate</a>')
+    text = text.replace('<a href="/subscribe.html">Membership</a>', f'<a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01">{DONATE_HEART_SVG} Donate</a>')
     text = re.sub(
         r'<a\b(?=[^>]*class="[^"]*\bfooter-subscribe-cta\b)[^>]*>.*?</a>',
-        f'<a class="footer-subscribe-cta" href="/donate.html"><span>{DONATE_HEART_SVG} Donate to local news</span>'
+        f'<a class="footer-subscribe-cta" href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"><span>{DONATE_HEART_SVG} Donate to local news</span>'
         '<small>Every story stays free</small></a>', text, flags=re.I | re.S,
     )
     text = text.replace('Unlimited articles. Help fund independent Treasure Coast reporting.',
@@ -196,7 +196,7 @@ def _rewrite_home_support(text: str) -> str:
         r'<a\b(?=[^>]*\bdata-support-card="true")[^>]*>.*?</a>',
         re.I | re.S,
     )
-    replacement = f"""<a href="/donate.html" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
+    replacement = f"""<a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" class="grid-card tct-membership-card tct-donation-card" data-cat="all" data-support-card="true" aria-label="Support Treasure Coast Today with a voluntary contribution">
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">A NOTE TO OUR READERS</span>
           <h2 class="tct-membership-headline">Local news needs local support.</h2>
@@ -396,7 +396,7 @@ def _rewrite_about(text: str) -> str:
             '<p>All Treasure Coast Today news articles are free to read. '
             'Our reporting is supported by local sponsorships, advertising and '
             'voluntary reader contributions. You never have to pay or donate '
-            'to access a story. <a href="/donate.html" class="about-contact">'
+            'to access a story. <a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01" class="about-contact">'
             'Support TCT with a one-time contribution &rarr;</a></p>'
             '<p>Treasure Coast Today LLC is a for-profit local news business, '
             'so contributions are not charitable tax-deductible donations. '
@@ -414,7 +414,7 @@ def _close_new_subscriptions(text: str) -> str:
     if 'id="tct-legacy-membership-notice"' not in text:
         notice = ('<section id="tct-legacy-membership-notice" role="status">'
                   '<h1>All TCT news is now free.</h1>'
-                  '<p>We are no longer offering new paid reading memberships. Existing subscribers can still sign in to review their account and manage billing. If you would like to help fund independent reporting, <a href="/donate.html">make a voluntary donation</a>.</p>'
+                  '<p>We are no longer offering new paid reading memberships. Existing subscribers can still sign in to review their account and manage billing. If you would like to help fund independent reporting, <a href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01">make a voluntary donation</a>.</p>'
                   '<p>For cancellation or billing support, email <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>.</p>'
                   '</section>')
         text = text.replace('<main class="membership-landing">', '<main class="membership-landing">\n' + notice, 1)
