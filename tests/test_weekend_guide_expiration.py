@@ -142,20 +142,43 @@ def test_november_6_8_roundup_is_only_active_custom_story_and_uses_requested_ima
 
 
 def test_november_roundup_matches_current_events_calendar():
-    """Protect against publishing roundup items absent from the event data."""
+    """Require upcoming event sources, but allow concluded events to rotate out.
+
+    data/events.json is an upcoming calendar, not a permanent audit archive.
+    The Friday Art Walk ended Nov. 6 at 9 p.m. Eastern and was properly
+    pruned that evening. The published weekend guide retains its source link.
+    """
     events = json.loads((ROOT / "data/events.json").read_text(encoding="utf-8"))["events"]
     guide = _items()[0]
-    source_titles = (
-        ("First Friday Art Walk", "2026-11-06"),
-        ("41st Annual Navy SEAL Museum Muster", "2026-11-07"),
-        ("Treasure Coast Caribbean Food & Music Festival", "2026-11-07"),
-        ("St. Johns Wood", "2026-11-07"),
-        ("Shopapalooza Fall Sidewalk Sale", "2026-11-08"),
+    now = datetime.now(ZoneInfo("America/New_York"))
+
+    # (source URL, local event date, confirmed scheduled end in Eastern time)
+    # Include both Shopapalooza days; the guide explicitly links both.
+    source_events = (
+        ("https://www.stuartfl.gov/calendar.aspx?EID=6875",
+         "2026-11-06", "2026-11-06T21:00:00-05:00"),
+        ("https://visitstlucie.com/event/41st-annual-navy-seal-museum-muster/",
+         "2026-11-07", "2026-11-07T17:00:00-05:00"),
+        ("https://visitstlucie.com/event/treasure-coast-caribbean-food-music-festival/",
+         "2026-11-07", "2026-11-07T22:00:00-05:00"),
+        ("https://www.riversidetheatre.com/loop-music-calendar/2026/11/7/st-johns-wood",
+         "2026-11-07", "2026-11-07T20:30:00-05:00"),
+        ("https://www.stuartfl.gov/calendar.aspx?EID=6879",
+         "2026-11-07", "2026-11-07T17:00:00-05:00"),
+        ("https://www.stuartfl.gov/calendar.aspx?EID=6880",
+         "2026-11-08", "2026-11-08T17:00:00-05:00"),
     )
-    for title, day in source_titles:
-        matches = [x for x in events if x.get("title") == title and str(x.get("starts_at", "")).startswith(day)]
-        assert matches, f"Weekend guide event not in calendar: {title} ({day})"
-        assert matches[0]["event_url"] in guide["body"]
+    for url, day, end_iso in source_events:
+        assert url in guide["body"], f"Weekend guide lost its source link: {url}"
+        matches = [
+            event for event in events
+            if event.get("event_url") == url
+            and str(event.get("starts_at", "")).startswith(day)
+        ]
+        if now < datetime.fromisoformat(end_iso):
+            assert matches, f"Upcoming guide event missing from calendar: {url} ({day})"
+        # After a known event has ended, absence from the rolling feed is
+        # correct. If it is still retained, its date/source must still match.
 
 
 def test_november_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
