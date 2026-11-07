@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-07T21:50:10Z",
+  "generated_at": "2026-11-07T23:51:26Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 1,
-    "placements_after": 1,
+    "placements_before": 2,
+    "placements_after": 2,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,27 +49,27 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 179,
+    "candidates_processed": 183,
     "routes": {
-      "generate_new": 21,
-      "skip": 158
+      "generate_new": 17,
+      "skip": 166
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 132,
-      "publishable": 45
+      "low_value": 134,
+      "publishable": 47
     },
     "source_classes": {
-      "aggregator": 134,
+      "aggregator": 136,
       "local_news": 27,
-      "regional_news": 15,
+      "regional_news": 17,
       "unknown": 3
     },
     "rejected_count": 2,
     "rejected_examples": [
       {
-        "headline": "3200 N Highway A1a Apt 505, Fort Pierce, FL 34949 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbk1GRW9wck5IZ2taMTU5Q29NSVBVaHlfaHEwOHI5dFNKZldDbmJuNm9iQVJva041aDMtZXlhek9nbTVVZmZ2UDkzNjdPMm9ITGF1bWxHUG5Scng5UXVZaVFaNHRGQmVKSGVDQUotQ1VOd1lvelg4bDJLWndhNUF1THloczBQbTFjbFFudVJJVGFkNG4wWnc0SFRfZVE3WnRfVmRXTkszQl9DUQ?oc=5",
+        "headline": "4627 56th Ln, Vero Beach, FL 32967 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQy1RQ3dzQ3RoaVFQTkc1SkFtT1V6cG9mV09mN1NidUVORkVVQlJxcTRpdTNGU3Zjc3VpSl9OSHpRaEN5Zi1wNmE4akc4NXJBRTRUWG50MF96c25KVUlKM3Y2anVUb0loV2hMY2twVmRJeDA2SjZwNmdBSXl2bHM0RnhDZ012c2dxME1LTEFB?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -77,8 +77,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "4627 56th Ln, Vero Beach, FL 32967 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQy1RQ3dzQ3RoaVFQTkc1SkFtT1V6cG9mV09mN1NidUVORkVVQlJxcTRpdTNGU3Zjc3VpSl9OSHpRaEN5Zi1wNmE4akc4NXJBRTRUWG50MF96c25KVUlKM3Y2anVUb0loV2hMY2twVmRJeDA2SjZwNmdBSXl2bHM0RnhDZ012c2dxME1LTEFB?oc=5",
+        "headline": "3200 N Highway A1a Apt 505, Fort Pierce, FL 34949 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNbk1GRW9wck5IZ2taMTU5Q29NSVBVaHlfaHEwOHI5dFNKZldDbmJuNm9iQVJva041aDMtZXlhek9nbTVVZmZ2UDkzNjdPMm9ITGF1bWxHUG5Scng5UXVZaVFaNHRGQmVKSGVDQUotQ1VOd1lvelg4bDJLWndhNUF1THloczBQbTFjbFFudVJJVGFkNG4wWnc0SFRfZVE3WnRfVmRXTkszQl9DUQ?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -90,9 +90,21 @@
   "relationships": {
     "counts": {
       "new_story": 18,
-      "same_event": 161
+      "same_event": 165
     },
     "examples": [
+      {
+        "story_id": "story_026293",
+        "title": "Chimp sanctuary delivers an ape’s food by drone amid Florida floods - KX News",
+        "event_key": "unknown-event-cfa43b4ccc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_023150",
         "title": "St. Lucie County firefighter Austin Hodge honored at funeral Saturday",
@@ -113,10 +125,11 @@
         "event_key": "unknown-event-b6df52bf15",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -132,6 +145,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026294",
+        "title": "Cowboys saddle up to save cattle from Okeechobee floodwaters - WPEC",
+        "event_key": "unknown-event-35a88b3551",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -163,6 +188,18 @@
         ]
       },
       {
+        "story_id": "story_026295",
+        "title": "FL: STUDENT WADES THROUGH CHEST-DEEP WATER - KOAM News Now",
+        "event_key": "unknown-event-5a5b1d9e54",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_026136",
         "title": "FHSAA Football Playoffs: What to know about Treasure Coast's four qualifiers - Treasure Coast News",
         "event_key": "unknown-event-7b4a290307",
@@ -189,6 +226,15 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "",
+        "title": "4627 56th Ln, Vero Beach, FL 32967 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
       },
       {
         "story_id": "story_026132",
@@ -306,62 +352,6 @@
         "story_id": "story_026039",
         "title": "St. Lucie County asks residents, businesses to report flood damage through online survey",
         "event_key": "unknown-event-4a81ed1e90",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026040",
-        "title": "Shocking video shows suspected shark swimming through flooded streets of coastal Florida city - Yahoo",
-        "event_key": "unknown-event-6ca4bd0393",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026061",
-        "title": "Florida students will be back in school after floodwaters recede - Yahoo",
-        "event_key": "unknown-event-a1a2030a58",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026042",
-        "title": "Strong El Niño could bring wetter winter, increased flood and severe weather risk to South Florida",
-        "event_key": "unknown-event-9d2999e68b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026186",
-        "title": "Brevard schools superintendent departs for new role - Florida Today",
-        "event_key": "unknown-event-ef00f0ebce",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -375,6 +365,19 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_026293",
+        "title": "Chimp sanctuary delivers an ape’s food by drone amid Florida floods - KX News",
+        "event_key": "unknown-event-cfa43b4ccc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_023150",
         "title": "St. Lucie County firefighter Austin Hodge honored at funeral Saturday",
         "event_key": "named-person-death:austin-hodge",
@@ -396,10 +399,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -416,6 +420,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026294",
+        "title": "Cowboys saddle up to save cattle from Okeechobee floodwaters - WPEC",
+        "event_key": "unknown-event-35a88b3551",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -446,6 +463,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026295",
+        "title": "FL: STUDENT WADES THROUGH CHEST-DEEP WATER - KOAM News Now",
+        "event_key": "unknown-event-5a5b1d9e54",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -617,51 +647,6 @@
         "story_id": "story_026040",
         "title": "Shocking video shows suspected shark swimming through flooded streets of coastal Florida city - Yahoo",
         "event_key": "unknown-event-6ca4bd0393",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026061",
-        "title": "Florida students will be back in school after floodwaters recede - Yahoo",
-        "event_key": "unknown-event-a1a2030a58",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026042",
-        "title": "Strong El Niño could bring wetter winter, increased flood and severe weather risk to South Florida",
-        "event_key": "unknown-event-9d2999e68b",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026186",
-        "title": "Brevard schools superintendent departs for new role - Florida Today",
-        "event_key": "unknown-event-ef00f0ebce",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -678,13 +663,59 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "death": 1
+    },
+    "reason_codes": {
+      "agency_match": 1,
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "Family dog dies in RV fire in Jensen Beach - WPBF",
+        "event_key": "fire-jensen-beach-043814e8f9",
+        "current_story_id": "story_026302",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_024266",
+        "candidate_confidence": 0.742857,
+        "candidate_milestones": [
+          "death"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_024266",
+          "Novel milestones: death",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.43",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.74"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 17,
     "retrospective_high_confidence_candidate_count": 7,
     "retrospective_activation_eligible_candidate_count": 4,
@@ -692,16 +723,17 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 382,
-      "timeline_entries_examined": 1091,
-      "transitions_examined": 673,
+      "timeline_entries_examined": 1094,
+      "transitions_examined": 676,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 17,
       "high_confidence_candidate_count": 7,
       "activation_eligible_candidate_count": 4,
-      "same_source_evolution_count": 5,
+      "same_source_evolution_count": 6,
       "same_source_evolution_milestones": {
         "arrest": 1,
         "death": 3,
+        "election_result": 1,
         "opening": 1
       },
       "same_source_evolution_examples": [
@@ -739,6 +771,41 @@
             "title": "Father of co-pilot killed in Palm Beach County Learjet crash speaks as family seeks answers - WPLG Local 10",
             "source": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONGZfNGlfblRLN2czNjBBM0dGeTBYRjZDcjRmT1NuZ2dUR2EwTHkwZ1FxcW14RlJxcW5ZQnRDYzBxMzQxS2xIajVjSkRwalBzTmJJVVlGMGhVcEdYMlc2MG53LVlpbnRpX21JWWFFclM5Y0xqMkIyOWZJZDJoR1M4ZHBsaEpSSXVWdklBNlRtR0lYaHFhbTVMMmtURi1UaHJvSUYwX2dzdEVuaXlCNXVNSnFUY3dHWktrOXRv?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONGZfNGlfblRLN2czNjBBM0dGeTBYRjZDcjRmT1NuZ2dUR2EwTHkwZ1FxcW14RlJxcW5ZQnRDYzBxMzQxS2xIajVjSkRwalBzTmJJVVlGMGhVcEdYMlc2MG53LVlpbnRpX21JWWFFclM5Y0xqMkIyOWZJZDJoR1M4ZHBsaEpSSXVWdklBNlRtR0lYaHFhbTVMMmtURi1UaHJvSUYwX2dzdEVuaXlCNXVNSnFUY3dHWktrOXRv?oc=5"
+          }
+        },
+        {
+          "story_id": "story_026287",
+          "story_title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
+          "milestones": [
+            "election_result"
+          ],
+          "matched_phrases": {
+            "election_result": [
+              "elected"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-274c6b7c4836a051d596",
+            "event_key": "unknown-event-8e55a5d5c1",
+            "published_at": "2026-11-07T23:42:34.970395+00:00",
+            "title": "Full Results: Mayor of Port St. Lucie - WPBF",
+            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
+            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
+          },
+          "newer_article": {
+            "article_id": "rss-7087c764887f9223ee69",
+            "event_key": "unknown-event-24bdfc0370",
+            "published_at": "2026-11-07T23:42:34.970395+00:00",
+            "title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
+            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
+            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
           }
         },
         {
@@ -2437,35 +2504,36 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 671,
-      "treasure_coast_local": 483,
+      "florida": 675,
+      "treasure_coast_local": 485,
       "treasure_coast_region": 170,
-      "unknown": 1277
+      "unknown": 1283
     },
-    "average_score": 58.73
+    "average_score": 58.72
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 671,
-      "treasure_coast_local": 483,
+      "florida": 675,
+      "treasure_coast_local": 485,
       "treasure_coast_region": 170,
-      "unknown": 1277
+      "unknown": 1283
     },
-    "average_priority": 2.95
+    "average_priority": 2.97
   },
   "story_lifecycle": {
     "counts": {
       "active": 1498,
-      "developing": 76,
-      "ongoing": 1027
+      "breaking": 1,
+      "developing": 71,
+      "ongoing": 1043
     }
   },
   "registry_health": {
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2586,
-    "active_stories_after": 2586,
+    "active_stories_before": 2593,
+    "active_stories_after": 2593,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2490,25 +2558,149 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 45,
+    "incident_anchor_to_story_count": 44,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-07T19:41:25Z",
-    "quarantined_story_records_retained": 4973,
-    "active_story_count": 2601
+    "generated_at": "2026-11-07T23:41:23Z",
+    "quarantined_story_records_retained": 4978,
+    "active_story_count": 2613
   },
   "stories": {
-    "total": 2601,
+    "total": 2613,
     "importance_levels": {
       "breaking": 5,
       "high": 63,
-      "normal": 317,
-      "low": 2216,
+      "normal": 319,
+      "low": 2226,
       "archived": 0
     },
-    "average_importance": 7.15,
+    "average_importance": 7.14,
     "top": [
+      {
+        "story_id": "story_026284",
+        "title": "St. Lucie County Fire District confirms firefighter’s death - WPBF",
+        "score": 85,
+        "editorial_priority": 96,
+        "editorial_score": 96,
+        "score_breakdown": {
+          "score": 96,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 0.0
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Port St. Lucie",
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "breaking",
+          "reason": "Breaking importance with a current or undated update",
+          "last_updated": "2026-11-07T23:42:34.970395+00:00",
+          "hours_since_update": 0.0,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_026302",
+        "title": "Family dog dies in RV fire in Jensen Beach - WPBF",
+        "score": 65,
+        "editorial_priority": 73,
+        "editorial_score": 73,
+        "score_breakdown": {
+          "score": 73,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 0.05
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Jensen Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-11-07T23:42:34.970395+00:00",
+          "hours_since_update": 0.05,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
       {
         "story_id": "story_026263",
         "title": "Family dog dies in RV fire in Stuart - WPBF",
@@ -2522,7 +2714,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.04
+          "age_hours": 4.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2560,7 +2752,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 2.04,
+          "hours_since_update": 4.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2578,7 +2770,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 26.01
+          "age_hours": 28.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2616,7 +2808,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-06T19:42:02.254300+00:00",
-          "hours_since_update": 26.01,
+          "hours_since_update": 28.02,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2634,7 +2826,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 56.32
+          "age_hours": 58.33
         },
         "level": "high",
         "importance_reasons": [
@@ -2670,7 +2862,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T13:23:10.322798+00:00",
-          "hours_since_update": 56.32,
+          "hours_since_update": 58.33,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2688,7 +2880,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.04
+          "age_hours": 4.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2722,7 +2914,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 2.04,
+          "hours_since_update": 4.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2740,7 +2932,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 40.46
+          "age_hours": 42.48
         },
         "level": "high",
         "importance_reasons": [
@@ -2779,82 +2971,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-06T05:14:27.024725+00:00",
-          "hours_since_update": 40.46,
+          "hours_since_update": 42.48,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_023149",
-        "title": "St. Lucie County Fire District confirms firefighter’s death - WPBF",
-        "score": 95,
-        "editorial_priority": 59,
-        "editorial_score": 59,
-        "score_breakdown": {
-          "score": 59,
-          "importance": 95,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 334.93
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County",
-            "Indian River County"
-          ],
-          "places": [
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Multi-event story remains open but is no longer rapidly developing",
-          "last_updated": "2026-10-24T22:46:38.426958+00:00",
-          "hours_since_update": 334.93,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -2870,7 +2989,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 251.0
+          "age_hours": 253.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2926,7 +3045,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-28T10:42:38.998617+00:00",
-          "hours_since_update": 251.0,
+          "hours_since_update": 253.01,
           "event_count": 9,
           "timeline_entries": 9
         }
@@ -2944,7 +3063,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 129.99
+          "age_hours": 132.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2988,7 +3107,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 129.99,
+          "hours_since_update": 132.0,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -3006,7 +3125,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 48.44
+          "age_hours": 50.45
         },
         "level": "high",
         "importance_reasons": [
@@ -3044,7 +3163,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T21:15:45.981160+00:00",
-          "hours_since_update": 48.44,
+          "hours_since_update": 50.45,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3062,7 +3181,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 52.99
+          "age_hours": 55.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3100,7 +3219,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T16:42:43.274376+00:00",
-          "hours_since_update": 52.99,
+          "hours_since_update": 55.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3118,7 +3237,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 168.99
+          "age_hours": 171.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3168,7 +3287,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-31T20:42:28.931873+00:00",
-          "hours_since_update": 168.99,
+          "hours_since_update": 171.01,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -3186,7 +3305,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 293.94
+          "age_hours": 295.95
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3235,7 +3354,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T15:45:46.965295+00:00",
-          "hours_since_update": 293.94,
+          "hours_since_update": 295.95,
           "event_count": 13,
           "timeline_entries": 13
         }
@@ -3253,7 +3372,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 144.04
+          "age_hours": 146.05
         },
         "level": "high",
         "importance_reasons": [
@@ -3294,7 +3413,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-01T21:42:33.213938+00:00",
-          "hours_since_update": 144.04,
+          "hours_since_update": 146.05,
           "event_count": 29,
           "timeline_entries": 29
         }
@@ -3312,7 +3431,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 10.02
+          "age_hours": 12.03
         },
         "level": "normal",
         "importance_reasons": [
@@ -3355,7 +3474,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-07T11:42:11.437708+00:00",
-          "hours_since_update": 10.02,
+          "hours_since_update": 12.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3373,7 +3492,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 290.94
+          "age_hours": 292.95
         },
         "level": "high",
         "importance_reasons": [
@@ -3417,7 +3536,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T18:45:37.276499+00:00",
-          "hours_since_update": 290.94,
+          "hours_since_update": 292.95,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3435,7 +3554,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 305.54
+          "age_hours": 307.55
         },
         "level": "high",
         "importance_reasons": [
@@ -3478,7 +3597,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-26T04:09:45.816789+00:00",
-          "hours_since_update": 305.54,
+          "hours_since_update": 307.55,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3496,7 +3615,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 82.0
+          "age_hours": 84.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3539,7 +3658,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-04T11:42:02.057431+00:00",
-          "hours_since_update": 82.0,
+          "hours_since_update": 84.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3557,7 +3676,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 201.02
+          "age_hours": 203.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3595,7 +3714,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 201.02,
+          "hours_since_update": 203.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3613,7 +3732,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 243.69
+          "age_hours": 245.7
         },
         "level": "high",
         "importance_reasons": [
@@ -3659,66 +3778,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-28T18:00:54.226569+00:00",
-          "hours_since_update": 243.69,
+          "hours_since_update": 245.7,
           "event_count": 8,
           "timeline_entries": 8
-        }
-      },
-      {
-        "story_id": "story_025655",
-        "title": "Florida authorities say 2 dead at Tampa office complex, including gunman shot by security guard",
-        "score": 75,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 75,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 69.99
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-04T23:42:46.816895+00:00",
-          "hours_since_update": 69.99,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       }
     ]
@@ -3726,7 +3788,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-07T21:45:52Z",
+    "generated_at": "2026-11-07T23:46:55Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3742,25 +3804,26 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 6,
+        "generated_live": 1,
         "generation_failed_archive_recovery": 1,
-        "no_publishable_sources": 2
+        "no_publishable_sources": 1
       },
       "failures": {
         "invalid_json": 1,
         "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 2,
-      "model_elapsed_seconds": 6.56,
-      "archive_recovery_requested_count": 9,
+      "model_attempt_count": 3,
+      "model_elapsed_seconds": 15.546,
+      "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 45,
+      "published_story_duplicate_suppression_count": 47,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 29,
+      "material_update_promotion_evaluation_count": 28,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 24,
+      "material_update_promotion_cache_hit_count": 23,
       "material_update_promotion_model_call_count": 5
     },
     "categories": [
@@ -3768,9 +3831,9 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 29,
+        "fetched_candidate_count": 30,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 10,
+        "publishable_source_count": 9,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3779,7 +3842,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 3.143,
+            "elapsed_seconds": 3.015,
             "result": "invalid_json",
             "error_type": "ValueError",
             "error_summary": "Assignment editor returned no valid hero source"
@@ -3787,13 +3850,13 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 3.418,
+            "elapsed_seconds": 3.268,
             "result": "invalid_json",
             "error_type": "ValueError",
             "error_summary": "Assignment editor returned no valid hero source"
           }
         ],
-        "model_elapsed_seconds": 6.56,
+        "model_elapsed_seconds": 6.284,
         "failure_code": "invalid_json",
         "failure_summary": "Assignment editor returned no valid hero source",
         "sports_expired_event_preview_count": 0,
@@ -3807,7 +3870,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3846,6 +3909,16 @@
             "editorial_story_id": "story_026039",
             "canonical_slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
             "canonical_headline": "St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indian River County deputies tussle with alligator displaced by heavy flooding - WPEC",
+            "source_url": "https://cbs12.com/news/local/indian-river-county-deputies-tussle-with-alligator-displaced-by-heavy-flooding-wranlged-residential-driveway-indian-river-county-sheriffs-office-florida-news",
+            "editorial_story_id": "story_026025",
+            "canonical_slug": "2026-11-06-deputies-remove-flood-displaced-alligator-from-indian-river-county-residential-d",
+            "canonical_headline": "Deputies remove flood-displaced alligator from Indian River County residential driveway",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3925,16 +3998,16 @@
             "semantic_action": "duplicate_use_existing_canonical",
             "confidence": 0.98,
             "shared_anchors": [
-              "Death of St. Lucie County firefighter-paramedic Austin Hodge",
-              "His brother Jarius, also a firefighter, died in 2025",
-              "Exact same source URL and matching named-person death anchor"
+              "St. Lucie County firefighter-paramedic Austin Hodge's on-duty death",
+              "His brother Jarius, also a firefighter, died the previous year",
+              "Identical source URL and matching named-person death anchor"
             ],
             "novel_facts": [
               "Family, friends and first responders attended Hodge's funeral Saturday",
-              "An honor guard and procession paid tribute to his nine years of service",
-              "Friends and relatives shared personal remembrances"
+              "The tribute included an honor guard, a procession and a final salute",
+              "Friend Jeff Lewis and sister Alexis Hodge shared personal remembrances"
             ],
-            "reason": "The incoming article adds funeral coverage and remembrance to the same firefighter's death already covered by the canonical. It reports no new cause finding, investigation, or other consequential development, and the tribute does not establish an independently newsworthy follow-up.",
+            "reason": "The incoming article continues coverage of the same firefighter's death. Funeral ceremonies and personal tributes add memorial color, but no material finding, consequential development or distinct public-interest question warrants an update or a separate URL.",
             "validation_errors": []
           },
           {
@@ -4005,6 +4078,21 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-asks-residents-businesses-to-report-flood-damage-through-online-survey",
             "canonical_slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
             "canonical_headline": "St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Indian River County deputies tussle with alligator displaced by heavy flooding - WPEC",
+            "source_url": "https://cbs12.com/news/local/indian-river-county-deputies-tussle-with-alligator-displaced-by-heavy-flooding-wranlged-residential-driveway-indian-river-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-11-06-deputies-remove-flood-displaced-alligator-from-indian-river-county-residential-d",
+            "canonical_headline": "Deputies remove flood-displaced alligator from Indian River County residential driveway",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4116,7 +4204,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 41.499
+        "elapsed_seconds": 41.995
       },
       {
         "category_key": "crime",
@@ -4124,7 +4212,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 28,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 6,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4242,12 +4330,12 @@
             "semantic_action": "hold",
             "confidence": 0.99,
             "shared_anchors": [
-              "Both reports involve Fort Pierce police and Okeechobee Road, but these are geographic and agency overlaps rather than incident-identifying anchors."
+              "Both reports involve Fort Pierce police and Okeechobee Road."
             ],
             "novel_facts": [
-              "Pablo Rojas Castro and Alberto Guia Hernandez were arrested over the alleged theft of 34 aluminum light poles valued at $6,800.",
+              "Pablo Rojas Castro and Alberto Guia Hernandez were arrested after allegedly stealing 34 aluminum light poles valued at $6,800.",
               "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding state of emergency.",
-              "Investigators used a drone to observe property being loaded into a truck before deputies stopped it on Okeechobee Road."
+              "Investigators used a drone to observe the removal of property before deputies stopped the suspects' truck on Okeechobee Road."
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4270,18 +4358,17 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
+            "confidence": 0.99,
             "shared_anchors": [
               "Death of St. Lucie County firefighter-paramedic Austin Hodge",
-              "His brother Jarius was also a firefighter and died the previous year",
-              "Exact source URL and persistent story identity match",
-              "Candidate source headline already describes Hodge's Saturday funeral"
+              "His brother Jarius, also a firefighter, died in 2025",
+              "Identical source URL and matching persistent story identity"
             ],
             "novel_facts": [
-              "The incoming text describes Saturday's funeral, including an honor guard and procession",
-              "Friends and family offer personal tributes to Hodge"
+              "Saturday's funeral included an honor guard, procession and final salute",
+              "Friends and family shared personal tributes to Hodge"
             ],
-            "reason": "The incoming article concerns the same named firefighter's death and uses the canonical's exact source URL. Funeral coverage and personal remembrances add commemorative detail, not a material investigative, legal, medical, or accountability development warranting an update or separate URL.",
+            "reason": "The incoming article continues the same named firefighter's death story on the identical source page. Funeral coverage and personal tributes add memorial detail, not a material development or a distinct accountability or public-interest follow-up.",
             "validation_errors": []
           },
           {
@@ -4422,15 +4509,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 37.719
+        "elapsed_seconds": 26.822
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 17,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4450,7 +4537,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4521,6 +4608,16 @@
             "canonical_headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Flooding leaves Creekside community in St. Lucie County without power, most homes evacuated",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
+            "editorial_story_id": "story_025827",
+            "canonical_slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
+            "canonical_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -4546,18 +4643,17 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
+            "confidence": 0.99,
             "shared_anchors": [
               "Death of St. Lucie County firefighter-paramedic Austin Hodge",
-              "His brother Jarius was also a firefighter and died the previous year",
-              "Exact source URL and persistent story identity match",
-              "Candidate source headline already describes Hodge's Saturday funeral"
+              "His brother Jarius, also a firefighter, died in 2025",
+              "Identical source URL and matching persistent story identity"
             ],
             "novel_facts": [
-              "The incoming text describes Saturday's funeral, including an honor guard and procession",
-              "Friends and family offer personal tributes to Hodge"
+              "Saturday's funeral included an honor guard, procession and final salute",
+              "Friends and family shared personal tributes to Hodge"
             ],
-            "reason": "The incoming article concerns the same named firefighter's death and uses the canonical's exact source URL. Funeral coverage and personal remembrances add commemorative detail, not a material investigative, legal, medical, or accountability development warranting an update or separate URL.",
+            "reason": "The incoming article continues the same named firefighter's death story on the identical source page. Funeral coverage and personal tributes add memorial detail, not a material development or a distinct accountability or public-interest follow-up.",
             "validation_errors": []
           },
           {
@@ -4627,9 +4723,9 @@
             "confidence": 0.99,
             "shared_anchors": [],
             "novel_facts": [
-              "Kenneth \"Kenny\" Donahue, 18, died while riding as a passenger on an e-bike struck by a 2025 blue Corvette in Boca Raton.",
-              "The crash occurred shortly before 2 a.m. on West Palmetto Park Road between Interstate 95 and Military Trail.",
-              "The 16-year-old e-bike operator was hospitalized in stable condition, and police are investigating whether criminal charges will be filed."
+              "Kenneth \"Kenny\" Donahue, 18, died when a 2025 blue Corvette struck an e-bike on West Palmetto Park Road in Boca Raton shortly before 2 a.m.",
+              "The 16-year-old e-bike operator was hospitalized in stable condition.",
+              "Friends are mourning Donahue and seeking witnesses while Boca Raton police investigate."
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4712,10 +4808,25 @@
             ],
             "reason": "The canonical headline and lead already cover the same Friday closure extension, planned Monday reopening, athletics cancellations and SAT postponement. Additional childcare logistics and scheduling detail do not establish a material new development or an independently newsworthy follow-up.",
             "validation_errors": []
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Flooding leaves Creekside community in St. Lucie County without power, most homes evacuated",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
+            "canonical_slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
+            "canonical_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 27.314
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 26.602
       },
       {
         "category_key": "sports",
@@ -4753,7 +4864,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.957
+        "elapsed_seconds": 14.573
       },
       {
         "category_key": "things_to_do",
@@ -4761,7 +4872,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 4,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4791,7 +4902,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.611
+        "elapsed_seconds": 15.079
       },
       {
         "category_key": "florida",
@@ -4829,21 +4940,28 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.631
+        "elapsed_seconds": 15.267
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "no_publishable_sources",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 9.262,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 9.262,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4854,7 +4972,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 4,
@@ -5005,7 +5123,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.619
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home",
+        "generated_card_count": 0,
+        "elapsed_seconds": 26.176
       },
       {
         "category_key": "st_lucie",
@@ -5067,11 +5189,11 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fort Pierce chimp sanctuary seeks help after historic flooding - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-chimp-sanctuary-seeks-help-after-historic-flooding",
-            "editorial_story_id": "story_026059",
-            "canonical_slug": "2026-11-06-flooding-equipment-failures-hamper-care-at-save-the-chimps-in-st-lucie-county",
-            "canonical_headline": "Flooding, equipment failures hamper care at Save the Chimps in St. Lucie County",
+            "source_headline": "Port St. Lucie grandmother grateful after flood rescue from van swept into canal - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxObHh4M2NTZjVIYjVkSWlJNFhlclJEZXFTbDZQSTRES1ZsZXF3bnZEbnFSY2lycEFlaXJUZG9aUG90TEpXWXVrTVdVZDh1WkhpQmtrNXZ6eUlaVHVfcjBvZ0pqZUpaWjZiNTFKQnlSTmlTQlBZLTNaVjdYUGRKbDBIdm16VU1Edm5FWmhwNmpjUHFLdFo3dHRGa0lWeTVWUDNmWGtoSEROTG1vazNRelJMX04xeTJWQlgzNDgtLTFQV3hTRUhUVG5iQmgyR3dxaXNGdnpSSThiY29LRW01eFFmZkF1T0k5NGRSQjhROWEzREVQMHhITkJuMg",
+            "editorial_story_id": "story_025952",
+            "canonical_slug": "2026-11-05-port-st-lucie-dialysis-patient-recalls-canal-rescue-as-body-camera-video-is-rele",
+            "canonical_headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5137,16 +5259,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Flooding leaves Creekside community in St. Lucie County without power, most homes evacuated - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
-            "editorial_story_id": "story_025827",
-            "canonical_slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
-            "canonical_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - WPEC",
             "source_url": "https://cbs12.com/news/local/multi-agency-investigation-targets-23rd-street-gang-in-st-lucie-county-st-lucie-county-sheriff-fort-pierce-police-atf-fbi-dea-fdle-us-marshals-homeland-security",
             "editorial_story_id": "story_025911",
@@ -5154,13 +5266,23 @@
             "canonical_headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
             "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County flips blue after 14 years as voters increase turnout despite floods - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-flips-blue-after-14-years-as-voters-increase-voter-turnout-despite-floods-st-lucie-county-st-lucie-county-election-florida-election-2026-david-jolly-byron-donalds-florida-governor-race-st-lucie-county-flips-blue-democratic-victory-rep",
+            "editorial_story_id": "story_025622",
+            "canonical_slug": "2026-11-04-david-jolly-wins-st-lucie-county-as-turnout-rises-despite-flooding",
+            "canonical_headline": "David Jolly wins St. Lucie County as turnout rises despite flooding",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 7,
+        "material_update_promotion_evaluation_count": 6,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 6,
+        "material_update_promotion_cache_hit_count": 5,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
@@ -5209,18 +5331,17 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
+            "confidence": 0.99,
             "shared_anchors": [
               "Death of St. Lucie County firefighter-paramedic Austin Hodge",
-              "His brother Jarius was also a firefighter and died the previous year",
-              "Exact source URL and persistent story identity match",
-              "Candidate source headline already describes Hodge's Saturday funeral"
+              "His brother Jarius, also a firefighter, died in 2025",
+              "Identical source URL and matching persistent story identity"
             ],
             "novel_facts": [
-              "The incoming text describes Saturday's funeral, including an honor guard and procession",
-              "Friends and family offer personal tributes to Hodge"
+              "Saturday's funeral included an honor guard, procession and final salute",
+              "Friends and family shared personal tributes to Hodge"
             ],
-            "reason": "The incoming article concerns the same named firefighter's death and uses the canonical's exact source URL. Funeral coverage and personal remembrances add commemorative detail, not a material investigative, legal, medical, or accountability development warranting an update or separate URL.",
+            "reason": "The incoming article continues the same named firefighter's death story on the identical source page. Funeral coverage and personal tributes add memorial detail, not a material development or a distinct accountability or public-interest follow-up.",
             "validation_errors": []
           },
           {
@@ -5258,34 +5379,18 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Fort Pierce chimp sanctuary seeks help after historic flooding - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-chimp-sanctuary-seeks-help-after-historic-flooding",
-            "canonical_slug": "2026-11-06-flooding-equipment-failures-hamper-care-at-save-the-chimps-in-st-lucie-county",
-            "canonical_headline": "Flooding, equipment failures hamper care at Save the Chimps in St. Lucie County",
+            "source_headline": "Port St. Lucie grandmother grateful after flood rescue from van swept into canal - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxObHh4M2NTZjVIYjVkSWlJNFhlclJEZXFTbDZQSTRES1ZsZXF3bnZEbnFSY2lycEFlaXJUZG9aUG90TEpXWXVrTVdVZDh1WkhpQmtrNXZ6eUlaVHVfcjBvZ0pqZUpaWjZiNTFKQnlSTmlTQlBZLTNaVjdYUGRKbDBIdm16VU1Edm5FWmhwNmpjUHFLdFo3dHRGa0lWeTVWUDNmWGtoSEROTG1vazNRelJMX04xeTJWQlgzNDgtLTFQV3hTRUhUVG5iQmgyR3dxaXNGdnpSSThiY29LRW01eFFmZkF1T0k5NGRSQjhROWEzREVQMHhITkJuMg",
+            "canonical_slug": "2026-11-05-port-st-lucie-dialysis-patient-recalls-canal-rescue-as-body-camera-video-is-rele",
+            "canonical_headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
             "promoted": false,
-            "cache_hit": true,
+            "cache_hit": false,
             "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.99,
-            "shared_anchors": [
-              "Flooding at Save the Chimps sanctuary in Fort Pierce",
-              "More than 200 chimpanzees remain safe",
-              "Floodwaters and equipment failures disrupt sanctuary operations",
-              "Staff use tractors, trailers and a drone to deliver care and supplies"
-            ],
-            "novel_facts": [
-              "Facilities director Mark Yohannan reports 19 inches of rain and nearly 15 disabled golf carts",
-              "The sanctuary requests donations and temporary access to taller four-wheel-drive vehicles",
-              "Staff plan to raise concerns at a St. Lucie County Commission meeting next week"
-            ],
-            "reason": "Both articles cover the same sanctuary flooding and resulting care-access and equipment problems. The incoming report adds operational details, requests for assistance and a planned commission appearance, but no consequential government action or other material development. These additions do not warrant rewriting the canonical or creating a separate follow-up.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -5416,21 +5521,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Flooding leaves Creekside community in St. Lucie County without power, most homes evacuated - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/flooding-leaves-creekside-community-in-st-lucie-county-without-power-most-homes-evacuated",
-            "canonical_slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
-            "canonical_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - WPEC",
             "source_url": "https://cbs12.com/news/local/multi-agency-investigation-targets-23rd-street-gang-in-st-lucie-county-st-lucie-county-sheriff-fort-pierce-police-atf-fbi-dea-fdle-us-marshals-homeland-security",
             "canonical_slug": "2026-11-05-40-arrested-in-rico-investigation-targeting-fort-pierces-23rd-street-gang",
@@ -5443,17 +5533,32 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County flips blue after 14 years as voters increase turnout despite floods - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-flips-blue-after-14-years-as-voters-increase-voter-turnout-despite-floods-st-lucie-county-st-lucie-county-election-florida-election-2026-david-jolly-byron-donalds-florida-governor-race-st-lucie-county-flips-blue-democratic-victory-rep",
+            "canonical_slug": "2026-11-04-david-jolly-wins-st-lucie-county-as-turnout-rises-despite-flooding",
+            "canonical_headline": "David Jolly wins St. Lucie County as turnout rises despite flooding",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.932
+        "elapsed_seconds": 24.115
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
+        "fetched_candidate_count": 25,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5560,18 +5665,17 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
+            "confidence": 0.99,
             "shared_anchors": [
               "Death of St. Lucie County firefighter-paramedic Austin Hodge",
-              "His brother Jarius was also a firefighter and died the previous year",
-              "Exact source URL and persistent story identity match",
-              "Candidate source headline already describes Hodge's Saturday funeral"
+              "His brother Jarius, also a firefighter, died in 2025",
+              "Identical source URL and matching persistent story identity"
             ],
             "novel_facts": [
-              "The incoming text describes Saturday's funeral, including an honor guard and procession",
-              "Friends and family offer personal tributes to Hodge"
+              "Saturday's funeral included an honor guard, procession and final salute",
+              "Friends and family shared personal tributes to Hodge"
             ],
-            "reason": "The incoming article concerns the same named firefighter's death and uses the canonical's exact source URL. Funeral coverage and personal remembrances add commemorative detail, not a material investigative, legal, medical, or accountability development warranting an update or separate URL.",
+            "reason": "The incoming article continues the same named firefighter's death story on the identical source page. Funeral coverage and personal tributes add memorial detail, not a material development or a distinct accountability or public-interest follow-up.",
             "validation_errors": []
           },
           {
@@ -5681,7 +5785,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.946
+        "elapsed_seconds": 20.716
       }
     ]
   }
