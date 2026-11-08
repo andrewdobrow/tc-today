@@ -26,4 +26,4 @@ def test_newsletter_inline_signup_is_still_available():
 def test_generated_pages_no_longer_insert_popup():
     audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
     assert "be625cadfe" not in audience
-    assert "newsletter-inline-slot" in audience
+    assert "NEWSLETTER_URL" in audience
