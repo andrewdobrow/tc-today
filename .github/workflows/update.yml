@@ -531,7 +531,7 @@ jobs:
       - name: Route all donation CTAs directly to Stripe
         run: python scripts/direct_donation_links.py
 
-      - name: Replace masthead Morning Brief callout with App Store badge
+      - name: Maintain App Store badge and remove retired Kit popup
         run: python scripts/replace_header_app_store.py
 
       - name: Validate final SEO and audience contracts
@@ -622,7 +622,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Apply App Store badge to every page (including deploy-only)
+      - name: Apply App Store badge and remove Kit popup sitewide (including deploy-only)
         run: python scripts/replace_header_app_store.py
 
       - name: Validate shared JavaScript syntax

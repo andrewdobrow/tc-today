@@ -33,7 +33,7 @@ PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
 COMMUNITY_PARTNER_URL = "https://www.facebook.com/groups/188814797289161"
 COMMUNITY_PARTNER_IMAGE = "/images/tccn-circle.png"
 COMMUNITY_PARTNER_NAME = "Treasure Coast Community News"
-ASSET_VERSION = "1.13.9.124"
+ASSET_VERSION = "1.13.9.125"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -122,12 +122,6 @@ def _page_footer() -> str:
     footer = match.group(0)
     if '/main.js' not in footer:
         footer += f'\n<script src="/main.js?v={ASSET_VERSION}"></script>'
-    # Use Kit's official HTML embed directly, rather than depending on
-    # the rest of TCT's main.js to load it. Kit owns all popup rules.
-    kit_tag = ('<script async data-uid="be625cadfe" '
-               'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>')
-    if 'data-uid="be625cadfe"' not in footer:
-        footer = footer.replace('<script src="/main.js', kit_tag + '\n<script src="/main.js', 1)
     return footer
 
 

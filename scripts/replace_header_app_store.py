@@ -3,7 +3,8 @@
 
 Runs after article/event generation and also in deploy-only, so archived pages,
 regional landing pages, and untouched pages all receive the same masthead.
-This intentionally leaves Kit's newsletter signup forms and modal alone.
+Keep the inline Kit newsletter signup forms, but remove the sitewide popup
+for a temporary SEO experiment.
 """
 from __future__ import annotations
 
@@ -42,23 +43,17 @@ CSS_ASSET_VERSION = CSS_ASSET_VERSION.group(1)
 CSS_REFERENCE = re.compile(r'(/style\.css\?v=)\d+(?:\.\d+)+')
 JS_REFERENCE = re.compile(r'(/main\.js\?v=)\d+(?:\.\d+)+')
 
-KIT_MODAL_EMBED = (
-    '<script async data-uid="be625cadfe" '
-    'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>'
+# Only the sitewide popup is retired. Preserve other Kit embeds, including
+# the inline Morning Brief signup (data-uid="30e15672d3").
+KIT_POPUP_SCRIPT = re.compile(
+    r"""[ \t]*<script\b(?=[^>]*(?:\bdata-uid\s*=\s*["']be625cadfe["']|\bsrc\s*=\s*["']https://treasure-coast-today\.kit\.com/be625cadfe/index\.js["']))[^>]*>\s*</script>[ \t]*(?:\r?\n)?""",
+    re.I,
 )
-MAIN_JS_SCRIPT = re.compile(r"""<script\b[^>]*src=["']/main\.js(?:\?[^"']*)?["'][^>]*></script>""", re.I)
 
-def ensure_official_kit_embed(html: str) -> str:
-    """Install Kit's HTML embed once, with timing and frequency owned by Kit."""
-    if 'site-masthead' not in html or '</body>' not in html.lower():
-        return html
-    if re.search(r"""<script\b[^>]*data-uid=["']be625cadfe["']""", html, re.I):
-        return html
-    match = MAIN_JS_SCRIPT.search(html)
-    if match:
-        return html[:match.start()] + KIT_MODAL_EMBED + "\n  " + html[match.start():]
-    return re.sub(r'</body>', KIT_MODAL_EMBED + "\n</body>", html, count=1, flags=re.I)
 
+def remove_kit_popup_embed(html: str) -> str:
+    """Strip legacy Kit popup scripts from retained and newly generated pages."""
+    return KIT_POPUP_SCRIPT.sub("", html)
 
 
 def replace_header_promo(html: str) -> str:
@@ -82,7 +77,7 @@ def replace_header_promo(html: str) -> str:
     updated = JS_REFERENCE.sub(
         lambda match: match.group(1) + CSS_ASSET_VERSION, updated
     )
-    return ensure_official_kit_embed(updated)
+    return remove_kit_popup_embed(updated)
 
 
 def reconcile(root: Path = ROOT) -> dict[str, int]:

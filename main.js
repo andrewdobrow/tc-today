@@ -384,28 +384,7 @@ document.addEventListener("keydown", (event) => {
   }, true);
 })();
 
-// -- SITEWIDE KIT NEWSLETTER MODAL --
-// TCT only loads the official Kit embed. Kit dashboard settings exclusively
-// control display triggers, audience rules, frequency and dismissal.
-(() => {
-  const config = {
-    uid: "be625cadfe",
-    src: "https://treasure-coast-today.kit.com/be625cadfe/index.js",
-    mode: "sitewide-modal"
-  };
-
-  function loadSitewideKitModal() {
-    if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
-    const script = document.createElement("script");
-    script.async = true;
-    script.dataset.uid = config.uid;
-    script.dataset.tctNewsletterMode = config.mode;
-    script.src = config.src;
-    document.body.appendChild(script);
-  }
-
-  window.setTimeout(loadSitewideKitModal, 0);
-})();
+// Sitewide Kit popup disabled during the SEO experiment; inline signups remain.
 
 // -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
 (() => {

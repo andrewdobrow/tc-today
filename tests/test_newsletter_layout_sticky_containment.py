@@ -28,16 +28,13 @@ def test_desktop_latest_rail_stretches_beside_hero_and_newsletter_stack():
     assert "overflow-y: auto !important" in css
 
 
-def test_sitewide_kit_modal_replaces_temporary_mobile_subscription_funnel():
+def test_inline_newsletter_remains_without_sitewide_popup():
     js = _read("main.js")
-    assert "SITEWIDE KIT NEWSLETTER MODAL" in js
-    assert 'uid: "be625cadfe"' in js
-    assert 'mode: "sitewide-modal"' in js
-    assert "loadSitewideKitModal" in js
-    assert "showMobileSubscriptionModal" not in js
+    source = _read("scripts/generate.py")
+    assert "be625cadfe" not in js
+    assert "loadSitewideKitModal" not in js
+    assert "_newsletter_inline_embed" in source
     assert "4edef44197" not in js
-    assert "KIT STICKY BAR LAYERING" not in js
-    assert "--kit-sticky-height" not in js
 
 
 def test_kit_modal_overlay_is_not_styled_by_tct():

@@ -1,54 +1,29 @@
+"""The temporary SEO experiment disables the sitewide Kit popup on mobile and desktop."""
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_modal_is_not_hardcoded_into_generated_page_footer():
-    source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
-    assert "be625cadfe" not in source
-
-
-def test_kit_morning_brief_modal_runs_on_desktop_and_mobile():
-    js = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert js.count('uid: "be625cadfe"') == 1
-    assert 'mode: "sitewide-modal"' in js
-    assert "loadSitewideKitModal" in js
-    assert "window.setTimeout(loadSitewideKitModal, 0)" in js
-    assert "SCROLL_THRESHOLD" not in js
-    assert "maybeLoadSitewideKitModal" not in js
-    assert "data-formkit-toggle" not in js
-    assert "script.dataset.uid = config.uid" in js
-    assert "RESPONSIVE ACQUISITION MODAL" not in js
-    assert "showMobileSubscriptionModal" not in js
-    assert "MOBILE_DELAY_MS" not in js
-    assert "MOBILE_SCROLL_RATIO" not in js
-    assert "SUBSCRIBE NOW" not in js
-
-
-def test_mobile_subscription_modal_styles_are_retired():
+def test_no_sitewide_popup_loader_or_old_mobile_subscription_overlay():
+    main = (ROOT / "main.js").read_text(encoding="utf-8")
     css = (ROOT / "style.css").read_text(encoding="utf-8")
-    assert "TCT v1.13.9.9 — Morning Brief modal restored on mobile" in css
+    assert "be625cadfe" not in main
+    assert "loadSitewideKitModal" not in main
+    assert "showMobileSubscriptionModal" not in main
     assert ".tct-mobile-subscription-overlay" not in css
     assert ".tct-mobile-subscription-modal" not in css
-    assert ".tct-mobile-subscription-card" not in css
+    assert ".formkit-modal" not in css
+    assert ".formkit-overlay" not in css
 
 
-def test_monthly_free_anchored_banner_is_retired_while_newsletter_modal_remains():
-    membership = (ROOT / "membership.js").read_text(encoding="utf-8")
-    main = (ROOT / "main.js").read_text(encoding="utf-8")
-    assert "armFreeArticleBanner" not in membership
-    assert "tct-free-article-banner" not in membership
-    assert 'mode: "sitewide-modal"' in main
+def test_newsletter_inline_signup_is_still_available():
+    homepage = (ROOT / "index.html").read_text(encoding="utf-8")
+    source = (ROOT / "scripts/generate.py").read_text(encoding="utf-8")
+    assert 'data-uid="30e15672d3"' in homepage
+    assert "_newsletter_inline_embed" in source
 
 
-def test_modal_has_no_first_party_dismissal_or_display_trigger():
-    js = (ROOT / "main.js").read_text(encoding="utf-8")
-    css = (ROOT / "style.css").read_text(encoding="utf-8")
-    section = js.split("// -- SITEWIDE KIT NEWSLETTER MODAL --", 1)[1].split("// -- FIRST-PARTY MOST READ", 1)[0]
-    for forbidden in (
-        "MutationObserver", "tct-kit-modal-dismiss", "addMobileDismissLink",
-        "formkit-close", "KeyboardEvent", "scroll", "trigger.click()",
-    ):
-        assert forbidden not in section
-    assert ".tct-kit-modal-dismiss" not in css
+def test_generated_pages_no_longer_insert_popup():
+    audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
+    assert "be625cadfe" not in audience
+    assert "newsletter-inline-slot" in audience
