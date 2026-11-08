@@ -12,9 +12,9 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 44 | importance 0; freshness 66.68; urgency 4/10 |
-| 2 | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | 32 | importance 0; freshness 32.66; urgency 2/10 |
-| 3 | Indian River County floodwaters recede as crews drain roads and assess damage | Indian River County floodwaters recede as crews drain roads and assess damage | 32 | importance 0; freshness 32.66; urgency 2/10 |
+| 1 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 43 | importance 0; freshness 63.36; urgency 4/10 |
+| 2 | Indian River County floodwaters recede as crews drain roads and assess damage | Indian River County floodwaters recede as crews drain roads and assess damage | 31 | importance 0; freshness 29.34; urgency 2/10 |
+| 3 | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | 31 | importance 0; freshness 29.34; urgency 2/10 |
 
 ## Recommended moves
 
