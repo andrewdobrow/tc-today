@@ -4,17 +4,17 @@
 
 ## Hero
 
-- Current: **Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain**
-- Recommended: **Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home**
-- Recommendation: CHANGE (not enforced)
+- Current: **Cape Coral man arrested over alleged threats against Martin County student, school**
+- Recommended: **Cape Coral man arrested over alleged threats against Martin County student, school**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 45 | importance 0; freshness 71.64; urgency 4/10 |
-| 2 | Indian River County floodwaters recede as crews drain roads and assess damage | Indian River County floodwaters recede as crews drain roads and assess damage | 33 | importance 0; freshness 37.62; urgency 2/10 |
-| 3 | St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery | St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery | 30 | importance 0; freshness 23.35; urgency 2/10 |
+| 1 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 44 | importance 0; freshness 66.68; urgency 4/10 |
+| 2 | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | 32 | importance 0; freshness 32.66; urgency 2/10 |
+| 3 | Indian River County floodwaters recede as crews drain roads and assess damage | Indian River County floodwaters recede as crews drain roads and assess damage | 32 | importance 0; freshness 32.66; urgency 2/10 |
 
 ## Recommended moves
 
