@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-11-08T01:44:09.817831+00:00",
+  "generated_at": "2026-11-08T02:46:17.026736+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -81,12 +81,12 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 23,
+    "pre_generation_materiality_evaluations": 24,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 20,
+    "pre_generation_materiality_duplicates": 21,
     "pre_generation_materiality_holds": 3,
     "pre_generation_materiality_model_calls": 4,
-    "pre_generation_materiality_cache_hits": 19,
+    "pre_generation_materiality_cache_hits": 20,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
     "terminal_permalink_model_calls": 1,
@@ -240,12 +240,12 @@
       "semantic_action": "hold",
       "confidence": 0.99,
       "shared_anchors": [
-        "Both mention Okeechobee Road and the Fort Pierce Police Department."
+        "Both mention Fort Pierce police and Okeechobee Road, but these are generic overlaps rather than incident-identifying anchors."
       ],
       "novel_facts": [
         "Pablo Rojas Castro and Alberto Guia Hernandez were arrested in connection with the theft of 34 aluminum light poles valued at $6,800.",
         "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding state of emergency.",
-        "Investigators used a drone to observe property being loaded into a truck before deputies stopped it on Okeechobee Road."
+        "Investigators used a drone to observe the removal of property before deputies stopped the suspects' truck on Okeechobee Road."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -449,12 +449,12 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 1.0,
+      "confidence": 0.99,
       "shared_anchors": [],
       "novel_facts": [
-        "Kenneth \"Kenny\" Donahue, 18, died when a 2025 blue Corvette struck an e-bike on West Palmetto Park Road in Boca Raton.",
+        "Kenneth \"Kenny\" Donahue, 18, died when a 2025 blue Corvette struck an e-bike on West Palmetto Park Road in Boca Raton shortly before 2 a.m. after Halloween night.",
         "The 16-year-old e-bike operator was hospitalized in stable condition.",
-        "Friends are mourning Donahue, and police are investigating whether criminal charges will be filed."
+        "Friends mourn Donahue, and police are investigating whether criminal charges will be filed."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -563,8 +563,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -599,12 +599,12 @@
       "semantic_action": "hold",
       "confidence": 0.99,
       "shared_anchors": [
-        "Both mention Fort Pierce police and Okeechobee Road, but these are incidental overlaps."
+        "Both mention Fort Pierce police and Okeechobee Road, but these are contextual overlaps rather than incident identifiers."
       ],
       "novel_facts": [
-        "Pablo Rojas Castro and Alberto Guia Hernandez allegedly stole 34 aluminum light poles valued at $6,800 from the 3500 block of Eleven Mile Road.",
-        "Investigators used a drone to observe the removal before deputies stopped the suspects' truck on Okeechobee Road.",
-        "The suspects face burglary and theft charges tied to the flooding state of emergency."
+        "Pablo Rojas Castro and Alberto Guia Hernandez were arrested in connection with the theft of 34 aluminum light poles valued at $6,800.",
+        "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding-related state of emergency.",
+        "Investigators used a drone to observe property being loaded into a truck before deputies stopped it on Okeechobee Road."
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -671,6 +671,33 @@
         "Yohannan reports 19 inches of rain and the worst flooding in the sanctuary's 25 years in Fort Pierce"
       ],
       "reason": "Both articles cover the same sanctuary flooding and disrupted animal-care operations. The incoming report adds equipment counts, recovery needs and a planned appeal to commissioners, but no consequential government action, changed animal status or distinct accountability development. These are additional operational and recovery details, not a material update or independently newsworthy follow-up.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "St. Lucie County asks residents, businesses to report flood damage through online survey - WFLX",
+      "source_url": "https://www.wflx.com/2026/11/06/st-lucie-county-asks-residents-businesses-report-flood-damage-through-online-survey",
+      "canonical_slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
+      "canonical_headline": "St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "St. Lucie County's request for flood-damage reports through an online survey",
+        "Survey directed to residents, businesses and agricultural property owners affected by recent flooding",
+        "Reports intended to document flood impacts and guide recovery efforts",
+        "Matching source headline and publication timing"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles cover the same county flood-damage survey initiative, not merely separate consequences of the same flooding. The incoming article adds survey instructions, safety cautions and contact information but reports no changed policy, finding, assistance award or other material development.",
       "validation_errors": []
     },
     {
@@ -1614,9 +1641,9 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "St. Lucie County asks residents, businesses to report flood damage in survey",
-      "incoming_source_url": "https://www.wflx.com/2026/11/06/st-lucie-county-asks-residents-businesses-report-flood-damage-through-online-survey",
-      "incoming_story_id": "story_026039",
+      "incoming_headline": "Trailside flooding crowds Hungryland Farms cattle onto high ground in Martin County",
+      "incoming_source_url": "https://cw34.com/news/local/trailside-flooding-threatens-florida-cracker-cattle-and-renews-calls-for-drainage-fix-in-martin-county-florida-news-flooding-updates",
+      "incoming_story_id": "story_025939",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1637,131 +1664,136 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "gpt-6.1-sol",
-      "incoming_headline": "St. Lucie County asks residents, businesses to report flood damage in survey",
-      "incoming_source_url": "https://www.wflx.com/2026/11/06/st-lucie-county-asks-residents-businesses-report-flood-damage-through-online-survey",
-      "incoming_story_id": "story_026039",
+      "incoming_headline": "Trailside flooding crowds Hungryland Farms cattle onto high ground in Martin County",
+      "incoming_source_url": "https://cw34.com/news/local/trailside-flooding-threatens-florida-cracker-cattle-and-renews-calls-for-drainage-fix-in-martin-county-florida-news-flooding-updates",
+      "incoming_story_id": "story_025939",
       "candidates": [
         {
-          "slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
-          "headline": "St. Lucie County seeks flood-damage reports through Nov. 20 to guide recovery",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 1.037,
-          "retrieval_score": 1.0,
+          "slug": "2026-11-05-martin-county-delays-drainage-repairs-as-trailside-flooding-threatens-cattle-acc",
+          "headline": "Martin County delays drainage repairs as Trailside flooding threatens cattle, access",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.8327,
+          "retrieval_score": 0.6957,
           "reasons": [
-            "strong_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
             "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-11-06-flooding-equipment-failures-hamper-care-at-save-the-chimps-in-st-lucie-county",
+          "headline": "Flooding, equipment failures hamper care at Save the Chimps in St. Lucie County",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6703,
+          "retrieval_score": 0.5303,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-port-st-lucie-dialysis-patient-recalls-canal-rescue-as-body-camera-video-is-rele",
+          "headline": "Port St. Lucie dialysis patient recalls canal rescue as body-camera video is released",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5608,
+          "retrieval_score": 0.4238,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-11-07-family-dog-dies-in-jensen-beach-rv-fire-crews-keep-flames-from-nearby-home",
+          "headline": "Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5181,
+          "retrieval_score": 0.3811,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+          "headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.4768,
+          "retrieval_score": 0.3578,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_18_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-11-04-martin-county-judge-rejects-dismissal-of-palm-city-dog-trainer-nikki-camerlengos",
+          "headline": "Martin County judge rejects dismissal of Palm City dog trainer Nikki Camerlengo’s cruelty case",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.4661,
+          "retrieval_score": 0.3321,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
+          "headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5398,
+          "retrieval_score": 0.5208,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5395,
+          "retrieval_score": 0.5295,
+          "reasons": [
+            "publication_gap_10_days"
           ]
         },
         {
           "slug": "2026-11-06-st-lucie-county-residents-affected-by-flooding-can-call-for-food-assistance",
           "headline": "St. Lucie County residents affected by flooding can call for food assistance",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6515,
-          "retrieval_score": 0.6145,
+          "terminal_recall_score": 0.5155,
+          "retrieval_score": 0.4755,
           "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_1_days"
+            "publication_gap_0_days"
           ]
         },
         {
-          "slug": "2026-11-03-st-lucie-county-opening-temporary-shelters-nov-3-for-flooded-out-residents",
-          "headline": "St. Lucie County relocates flood shelters to help public schools reopen",
+          "slug": "2026-11-05-flooding-forces-palm-citys-happy-place-ranch-to-close-as-animal-care-costs-rise",
+          "headline": "Flooding forces Palm City's Happy Place Ranch to close as animal-care costs rise",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5919,
-          "retrieval_score": 0.5609,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-11-06-st-lucie-county-search-warrant-operation-includes-two-fort-pierce-homes",
-          "headline": "St. Lucie County search-warrant operation includes two Fort Pierce homes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5429,
-          "retrieval_score": 0.5059,
+          "terminal_recall_score": 0.5019,
+          "retrieval_score": 0.4649,
           "reasons": [
             "publication_gap_1_days"
           ]
         },
         {
-          "slug": "2026-11-04-david-jolly-wins-st-lucie-county-as-turnout-rises-despite-flooding",
-          "headline": "David Jolly wins St. Lucie County as turnout rises despite flooding",
+          "slug": "2026-11-05-three-vehicle-crash-injures-seven-closes-northbound-i-95-in-martin-county",
+          "headline": "Three-vehicle crash injures seven, closes northbound I-95 in Martin County",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5408,
-          "retrieval_score": 0.5098,
+          "terminal_recall_score": 0.5013,
+          "retrieval_score": 0.4643,
           "reasons": [
-            "publication_gap_3_days"
+            "publication_gap_1_days"
           ]
         },
         {
-          "slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-          "headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
+          "slug": "2026-11-05-flooding-closes-south-25th-street-near-two-schools-in-st-lucie-county",
+          "headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5095,
-          "retrieval_score": 0.4905,
+          "terminal_recall_score": 0.4804,
+          "retrieval_score": 0.4434,
           "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-11-02-flooding-moves-indian-river-county-precinct-7-voting-to-sebastian-elks-lodge",
-          "headline": "Flood-related polling relocations extend beyond Precinct 90 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4873,
-          "retrieval_score": 0.4563,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-28-port-st-lucie-man-arrested-accused-of-trying-to-extort-state-rep-meg-weinberger",
-          "headline": "Port St. Lucie man arrested, accused of trying to extort State Rep. Meg Weinberger",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4752,
-          "retrieval_score": 0.4652,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-st-lucie-public-schools-to-close-wednesday-after-flooding-expects-thursday-reope",
-          "headline": "Indian River County, St. Lucie schools closed Friday; Monday return planned",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4608,
-          "retrieval_score": 0.4268,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-10-26-coastal-flood-warning-covers-st-lucie-county-through-2-am-thursday",
-          "headline": "Coastal flood warning covers St. Lucie County through 2 a.m. Thursday",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.459,
-          "retrieval_score": 0.455,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-10-09-port-st-lucie-police-seek-help-identifying-critically-injured-man-found-on-roadw",
-          "headline": "Port St. Lucie Police Arrest Eric Saint Aude in Oct. 9 Hit-and-Run",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4518,
-          "retrieval_score": 0.4508,
-          "reasons": [
-            "publication_gap_29_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-11-04-port-st-lucie-allocates-1-million-for-flood-repairs-pre-applications-open-thursd",
-          "headline": "Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4496,
-          "retrieval_score": 0.4186,
-          "reasons": [
-            "publication_gap_3_days"
+            "publication_gap_1_days"
           ]
         }
       ],
@@ -1769,23 +1801,21 @@
         "status": "validated",
         "action": "duplicate_use_existing_canonical",
         "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
+        "selected_candidate_slug": "2026-11-05-martin-county-delays-drainage-repairs-as-trailside-flooding-threatens-cattle-acc",
         "same_real_world_event": true,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.99,
+        "confidence": 0.97,
         "shared_anchors": [
-          "St. Lucie County's online survey seeking reports of recent flood damage",
-          "Survey directed to residents, businesses and agricultural property owners",
-          "Damage reporting intended to assess flooding impacts and guide recovery",
-          "Matching source headlines published one day apart"
+          "Flooding in Martin County’s Trailside community threatens cattle and access to farm property.",
+          "A drainage breach requires repairs that Martin County is delaying until water levels recede."
         ],
         "novel_facts": [
-          "Incoming provides survey instructions, including separate submissions for multiple affected structures and questions about wells and septic systems.",
-          "Incoming clarifies that completing the survey is not an assistance application or a guarantee of funding.",
-          "Incoming supplies safety guidance and Community Services contact information."
+          "The incoming report names Hungryland Farms and owner Melissa Chirico.",
+          "The herd consists of Florida Cracker cattle crowded onto an elevated driveway and house pad.",
+          "The incoming report adds background on the county’s acquisition of the 315-acre Elise J. conservation property."
         ],
-        "reason": "Both articles cover the same county damage-survey initiative, not merely consequences of the same flooding. The incoming adds procedural details and guidance but reports no changed deadline, assistance award, official finding or other material development. Preserve the existing canonical.",
+        "reason": "The candidate already covers the distinctive combination of Trailside cattle flooding, impaired farm access and deferred drainage-breach repairs. The incoming article adds farm identification, scene detail and background, but reports no changed repair decision, established cause, animal deaths or distinct accountability finding. Preserve the existing canonical without rewriting it.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1794,23 +1824,21 @@
         "status": "validated",
         "action": "duplicate_use_existing_canonical",
         "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-06-st-lucie-county-seeks-flood-damage-reports-through-nov-20-to-guide-recovery",
+        "selected_candidate_slug": "2026-11-05-martin-county-delays-drainage-repairs-as-trailside-flooding-threatens-cattle-acc",
         "same_real_world_event": true,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.99,
+        "confidence": 0.97,
         "shared_anchors": [
-          "St. Lucie County's online survey seeking reports of recent flood damage",
-          "Survey directed to residents, businesses and agricultural property owners",
-          "Damage reporting intended to assess flooding impacts and guide recovery",
-          "Matching source headlines published one day apart"
+          "Flooding in Martin County’s Trailside community threatens cattle and access to farm property.",
+          "A drainage breach requires repairs that Martin County is delaying until water levels recede."
         ],
         "novel_facts": [
-          "Incoming provides survey instructions, including separate submissions for multiple affected structures and questions about wells and septic systems.",
-          "Incoming clarifies that completing the survey is not an assistance application or a guarantee of funding.",
-          "Incoming supplies safety guidance and Community Services contact information."
+          "The incoming report names Hungryland Farms and owner Melissa Chirico.",
+          "The herd consists of Florida Cracker cattle crowded onto an elevated driveway and house pad.",
+          "The incoming report adds background on the county’s acquisition of the 315-acre Elise J. conservation property."
         ],
-        "reason": "Both articles cover the same county damage-survey initiative, not merely consequences of the same flooding. The incoming adds procedural details and guidance but reports no changed deadline, assistance award, official finding or other material development. Preserve the existing canonical.",
+        "reason": "The candidate already covers the distinctive combination of Trailside cattle flooding, impaired farm access and deferred drainage-breach repairs. The incoming article adds farm identification, scene detail and background, but reports no changed repair decision, established cause, animal deaths or distinct accountability finding. Preserve the existing canonical without rewriting it.",
         "validation_errors": [],
         "consistency_repairs": []
       }
