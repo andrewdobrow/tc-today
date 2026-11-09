@@ -4,21 +4,21 @@
 
 ## Hero
 
-- Current: **Cape Coral man arrested over alleged threats against Martin County student, school**
-- Recommended: **Cape Coral man arrested over alleged threats against Martin County student, school**
+- Current: **Temporary housing sought for Jensen Beach residents displaced by flooding**
+- Recommended: **Temporary housing sought for Jensen Beach residents displaced by flooding**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | Floodwater still fills Hyline Drive homes in Jensen Beach five days after historic rain | 44 | importance 0; freshness 20.95; urgency 9/10 |
-| 2 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 41 | importance 0; freshness 54.97; urgency 4/10 |
-| 3 | Indian River County floodwaters recede as crews drain roads and assess damage | Indian River County floodwaters recede as crews drain roads and assess damage | 29 | importance 0; freshness 20.96; urgency 2/10 |
+| 1 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Cape Coral man arrested over alleged threats against Martin County student, school | 41 | importance 0; freshness 73.23; urgency 2/10 |
+| 2 | Cape Coral man arrested over alleged threats against Martin County student, school | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 38 | importance 0; freshness 39.95; urgency 4/10 |
 
 ## Recommended moves
 
-No top-deck moves recommended.
+- **Cape Coral man arrested over alleged threats against Martin County student, school**: 2 → 1 — importance 0; freshness 73.23; urgency 2/10
+- **Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home**: 1 → 2 — importance 0; freshness 39.95; urgency 4/10
 
 ## Guardrails
 
