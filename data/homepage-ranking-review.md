@@ -12,9 +12,9 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Temporary housing sought for Jensen Beach residents displaced by flooding | Temporary housing sought for Jensen Beach residents displaced by flooding | 50 | importance 0; freshness 85.67; urgency 2/10; validated material update |
-| 2 | Port St. Lucie cooking class teaches adults with disabilities skills for independence | Port St. Lucie cooking class teaches adults with disabilities skills for independence | 45 | importance 0; freshness 88.95; urgency 2/10 |
-| 3 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 34 | importance 0; freshness 25.67; urgency 4/10 |
+| 1 | Temporary housing sought for Jensen Beach residents displaced by flooding | Temporary housing sought for Jensen Beach residents displaced by flooding | 50 | importance 0; freshness 83.27; urgency 2/10; validated material update |
+| 2 | Port St. Lucie cooking class teaches adults with disabilities skills for independence | Port St. Lucie cooking class teaches adults with disabilities skills for independence | 45 | importance 0; freshness 86.55; urgency 2/10 |
+| 3 | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | Family dog dies in Jensen Beach RV fire; crews keep flames from nearby home | 34 | importance 0; freshness 23.26; urgency 4/10 |
 
 ## Recommended moves
 
