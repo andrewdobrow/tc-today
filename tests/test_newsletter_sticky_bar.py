@@ -1,4 +1,4 @@
-"""The retired sticky bar and popup must not return through main.js."""
+"""The official Kit popup is HTML-embedded, never loaded by main.js."""
 from pathlib import Path
 import re
 

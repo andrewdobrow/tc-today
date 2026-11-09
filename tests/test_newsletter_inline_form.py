@@ -44,7 +44,7 @@ def test_inline_form_is_rendered_beneath_hero_inside_lead_stack():
     assert source.index(slot, homepage) < source.index(rail, homepage)
 
 
-def test_inline_signup_remains_while_sitewide_kit_popup_is_disabled():
+def test_inline_signup_and_kit_owned_popup_are_independent():
     source = _source()
     runtime = (Path(__file__).resolve().parents[1] / "main.js").read_text(
         encoding="utf-8"

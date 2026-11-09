@@ -1,10 +1,10 @@
-"""The temporary SEO experiment disables the sitewide Kit popup on mobile and desktop."""
+"""Kit owns the sitewide popup on desktop and mobile; inline signups remain."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_no_sitewide_popup_loader_or_old_mobile_subscription_overlay():
+def test_sitewide_popup_is_html_embedded_not_manually_triggered():
     main = (ROOT / "main.js").read_text(encoding="utf-8")
     css = (ROOT / "style.css").read_text(encoding="utf-8")
     assert "be625cadfe" not in main
@@ -23,7 +23,7 @@ def test_newsletter_inline_signup_is_still_available():
     assert "_newsletter_inline_embed" in source
 
 
-def test_generated_pages_no_longer_insert_popup():
+def test_generated_pages_include_official_kit_embed():
     audience = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
-    assert "be625cadfe" not in audience
+    assert 'data-uid="be625cadfe"' in audience
     assert "NEWSLETTER_URL" in audience

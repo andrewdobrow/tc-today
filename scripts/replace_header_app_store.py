@@ -3,8 +3,8 @@
 
 Runs after article/event generation and also in deploy-only, so archived pages,
 regional landing pages, and untouched pages all receive the same masthead.
-Keep the inline Kit newsletter signup forms, but remove the sitewide popup
-for a temporary SEO experiment.
+Keep inline Kit newsletter signup forms, and load the sitewide Kit popup
+through its official embed without any TCT-controlled display behavior.
 """
 from __future__ import annotations
 
@@ -43,17 +43,34 @@ CSS_ASSET_VERSION = CSS_ASSET_VERSION.group(1)
 CSS_REFERENCE = re.compile(r'(/style\.css\?v=)\d+(?:\.\d+)+')
 JS_REFERENCE = re.compile(r'(/main\.js\?v=)\d+(?:\.\d+)+')
 
-# Only the sitewide popup is retired. Preserve other Kit embeds, including
-# the inline Morning Brief signup (data-uid="30e15672d3").
-KIT_POPUP_SCRIPT = re.compile(
+# Exact Kit embed: Kit handles timing, targeting, frequency and dismissal.
+# The inline Morning Brief forms use other UIDs and remain untouched.
+KIT_MODAL_EMBED = (
+    '<script async data-uid="be625cadfe" '
+    'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>'
+)
+KIT_MODAL_SCRIPT = re.compile(
     r"""[ \t]*<script\b(?=[^>]*(?:\bdata-uid\s*=\s*["']be625cadfe["']|\bsrc\s*=\s*["']https://treasure-coast-today\.kit\.com/be625cadfe/index\.js["']))[^>]*>\s*</script>[ \t]*(?:\r?\n)?""",
+    re.I,
+)
+MAIN_JS_SCRIPT = re.compile(
+    r"""<script\b[^>]*src=["']/main\.js(?:\?[^"']*)?["'][^>]*></script>""",
     re.I,
 )
 
 
-def remove_kit_popup_embed(html: str) -> str:
-    """Strip legacy Kit popup scripts from retained and newly generated pages."""
-    return KIT_POPUP_SCRIPT.sub("", html)
+def ensure_kit_modal_embed(html: str) -> str:
+    """Insert one official Kit script per TCT page, without manual triggers."""
+    if 'site-masthead' not in html or not re.search(r"</body\s*>", html, re.I):
+        return html
+    matches = KIT_MODAL_SCRIPT.findall(html)
+    if len(matches) == 1 and KIT_MODAL_EMBED in html:
+        return html
+    clean = KIT_MODAL_SCRIPT.sub("", html)
+    match = MAIN_JS_SCRIPT.search(clean)
+    if match:
+        return clean[:match.start()] + KIT_MODAL_EMBED + "\n  " + clean[match.start():]
+    return re.sub(r"</body\s*>", KIT_MODAL_EMBED + "\n</body>", clean, count=1, flags=re.I)
 
 
 def replace_header_promo(html: str) -> str:
@@ -77,7 +94,7 @@ def replace_header_promo(html: str) -> str:
     updated = JS_REFERENCE.sub(
         lambda match: match.group(1) + CSS_ASSET_VERSION, updated
     )
-    return remove_kit_popup_embed(updated)
+    return ensure_kit_modal_embed(updated)
 
 
 def reconcile(root: Path = ROOT) -> dict[str, int]:

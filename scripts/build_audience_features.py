@@ -122,6 +122,11 @@ def _page_footer() -> str:
     footer = match.group(0)
     if '/main.js' not in footer:
         footer += f'\n<script src="/main.js?v={ASSET_VERSION}"></script>'
+    # Direct official Kit embed; Kit controls all popup settings.
+    kit_tag = ('<script async data-uid="be625cadfe" '
+               'src="https://treasure-coast-today.kit.com/be625cadfe/index.js"></script>')
+    if 'data-uid="be625cadfe"' not in footer:
+        footer = footer.replace('<script src="/main.js', kit_tag + '\n<script src="/main.js', 1)
     return footer
 
 
