@@ -71,6 +71,43 @@ def _headline_geography_anchors(value: object) -> set[str]:
     return {name for name, pattern in _HEADLINE_GEOGRAPHY_PATTERNS.items() if re.search(pattern, text, re.I)}
 
 
+# Generic "suspect" updates must retain the original incident, not just
+# a location and new procedural development.
+_INCIDENT_CONTEXT_PATTERNS = {
+    "threat": r"\bthreat(?:s|en(?:ed|ing|s)?)?\b",
+    "shooting": r"\b(?:shoot(?:ing|ings|er|ers)?|shot|gunfire)\b",
+    "stabbing": r"\b(?:stab(?:s|bed|bing|bings)?|knife attack)\b",
+    "crash": r"\b(?:crash(?:es|ed)?|collision|collid(?:ed|es))\b",
+    "fire": r"\b(?:fire|fires|blaze|arson)\b",
+    "robbery": r"\b(?:robbery|robber(?:y|ies)?|robbed)\b",
+    "burglary": r"\b(?:burglary|burglar(?:y|ies|ized)?)\b",
+    "assault": r"\b(?:assault(?:s|ed)?|battery)\b",
+    "fraud": r"\b(?:fraud|scam(?:s|med)?|embezzl(?:ed|ement))\b",
+    "kidnapping": r"\b(?:kidnap(?:ped|ping|pings)?|abduct(?:ed|ion)?)\b",
+    "dui": r"\b(?:dui|impaired driving|drunk driving)\b",
+}
+
+
+def _headline_missing_original_event_context(
+    updated_headline: object, canonical_headline: object
+) -> bool:
+    """Reject 'Suspect released...' without the original alleged offense."""
+    updated = _plain(updated_headline)
+    original = _plain(canonical_headline)
+    if not re.match(
+        r"^(?:(?:the|a|an)\s+)?(?:suspect|defendant|person of interest)\b",
+        updated, re.I,
+    ):
+        return False
+    patterns = [
+        pattern for pattern in _INCIDENT_CONTEXT_PATTERNS.values()
+        if re.search(pattern, original, re.I)
+    ]
+    return bool(
+        patterns and not any(re.search(pattern, updated, re.I) for pattern in patterns)
+    )
+
+
 def _plain(value: object) -> str:
     text = str(value or "")
     text = re.sub(r"<[^>]+>", " ", text)
@@ -246,6 +283,8 @@ def validate_material_update(
     geography_hits = sorted(canonical_geography & updated_geography)
     if canonical_geography and not geography_hits:
         errors.append("headline_missing_canonical_geography")
+    if _headline_missing_original_event_context(headline, canonical.get("headline")):
+        errors.append("headline_missing_original_incident_context")
 
     baseline_required = min(2, len(canonical_headline_tokens))
     if baseline_required and len(baseline_hits) < baseline_required:
@@ -318,6 +357,7 @@ Editorial requirements:
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.
 - The headline MUST be refreshed to foreground the material development. Do not reuse or lightly paraphrase the old canonical headline when the story state has changed. It must remain accurate and locally specific.
+- Every refreshed headline must stand alone for readers who missed the original story. Identify the underlying incident and the new development. Never start with a generic label like "Suspect released" without explaining what the person is suspected of.
 - If the existing canonical headline names a meaningful place (for example Martin County, Fort Pierce, Port St. Lucie, I-95 or Florida's Turnpike), retain at least one of those original geographic anchors in the refreshed headline. A reader seeing only the new headline must still know what/where the underlying incident is.
 - Keep the refreshed headline concise and newspaper-style. Aim roughly for 65-95 characters when natural; a headline above about 110 characters should normally be rewritten more tightly instead of becoming a sentence-length summary. Preserve meaningful source-supported geographic proper names such as "Florida's Turnpike", "I-95", "Fort Pierce", or "Martin County", including meaningful possessives; do not normalize "Florida's Turnpike" to "Florida Turnpike". Keep the core development and meaningful named geography, then cut or compress secondary chronology, causal clauses, routine attribution, and granular locator details such as mile markers, exit numbers, block numbers, or street addresses unless those coordinates are themselves central to the news. Do not add formulaic labels such as "Deputies:" or "Police:" just to shorten it. Never mechanically truncate or sacrifice accuracy, clarity, or meaningful geographic specificity for length.
 - Every specific city, county, or monetary claim stated in the headline must also be explicitly stated in the FIRST paragraph.
@@ -393,6 +433,7 @@ def compose_material_update(
             "headline_not_refreshed_for_material_update",
             "headline_missing_material_development",
             "headline_missing_canonical_geography",
+            "headline_missing_original_incident_context",
             "headline_too_long",
         }
         errors = set(result.get("validation_errors") or [])
@@ -402,9 +443,10 @@ def compose_material_update(
         if errors and errors.issubset(headline_errors):
             retry_prompt = _prompt(canonical, incoming, decision) + (
                 "\n\nREVISION REQUIRED: Your previous article body passed validation, but "
-                "the headline did not visibly advance the material development. "
+                "the headline did not clearly explain the original incident and material development. "
                 f"Rejected headline: {result.get('headline','')!r}. "
                 "Return the complete JSON object again with a NEW headline that "
+                "identifies the original incident (not merely an unexplained suspect), "
                 "foregrounds at least one of the semantic gate's novel facts, reads "
                 "like a concise newspaper headline, and is at or below 110 characters "
                 "without removing meaningful named geography. Preserve at least one "

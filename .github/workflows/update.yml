@@ -534,6 +534,9 @@ jobs:
       - name: Maintain App Store badge and restore native Kit popup
         run: python scripts/replace_header_app_store.py
 
+      - name: Repair ambiguous editorial headline copyedits
+        run: python scripts/repair_headline_copyedits.py
+
       - name: Validate final SEO and audience contracts
         run: |
           # Events can cross their exact 30-day expiry cutoff after the earlier
@@ -624,6 +627,9 @@ jobs:
 
       - name: Apply App Store badge and official Kit popup (including deploy-only)
         run: python scripts/replace_header_app_store.py
+
+      - name: Repair ambiguous editorial headline copyedits
+        run: python scripts/repair_headline_copyedits.py
 
       - name: Validate shared JavaScript syntax
         run: node --check main.js
