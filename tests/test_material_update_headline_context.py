@@ -67,13 +67,26 @@ def test_exact_copyedit_repair_is_idempotent_and_allows_new_developments(tmp_pat
 
 
 def test_current_article_and_news_surfaces_are_consistently_corrected():
+    """Current story context should survive later updates and homepage rotation."""
+    import re
+    from html import unescape
+
     root = Path(__file__).resolve().parents[1]
-    headline = "Man accused of threatening Martin County school released on $100,000 bond; deputies to increase presence"
-    for path in [
-        "index.html",
-        "data.json",
-        "feed.xml",
-        "news-sitemap.xml",
-        "articles/2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo.html",
-    ]:
-        assert headline in (root / path).read_text(encoding="utf-8"), path
+    article_path = (
+        "articles/2026-11-08-cape-coral-man-arrested-over-alleged-threats-"
+        "against-martin-county-student-schoo.html"
+    )
+    article = (root / article_path).read_text(encoding="utf-8")
+    match = re.search(r"<h1\\b[^>]*>(.*?)</h1>", article, flags=re.I | re.S)
+    assert match, article_path
+    headline = unescape(re.sub(r"<[^>]+>", "", match.group(1))).strip()
+
+    # Do not freeze the headline to a particular update: the news can advance.
+    assert not _headline_missing_original_event_context(headline, ORIGINAL), headline
+    assert any(word in headline.lower() for word in ("threat", "school", "tiktok")), headline
+
+    # Rotating news surfaces may legitimately stop carrying this story. They
+    # must not, however, retain the original context-free copyedit.
+    for path in ["index.html", "data.json", "feed.xml", "news-sitemap.xml", article_path]:
+        content = (root / path).read_text(encoding="utf-8")
+        assert AMBIGUOUS not in content, path
