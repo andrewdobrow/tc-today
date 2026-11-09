@@ -77,7 +77,7 @@ def test_current_article_and_news_surfaces_are_consistently_corrected():
         "against-martin-county-student-schoo.html"
     )
     article = (root / article_path).read_text(encoding="utf-8")
-    match = re.search(r"<h1\\b[^>]*>(.*?)</h1>", article, flags=re.I | re.S)
+    match = re.search(r"<h1\b[^>]*>(.*?)</h1>", article, flags=re.I | re.S)
     assert match, article_path
     headline = unescape(re.sub(r"<[^>]+>", "", match.group(1))).strip()
 
