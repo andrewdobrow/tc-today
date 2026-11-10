@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.9",
-  "generated_at": "2026-11-10T20:29:15.316878+00:00",
+  "generated_at": "2026-11-10T21:48:18.601205+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,8 +70,8 @@
     "no_candidate_passes": 53,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
-    "retroactive_rows_retained": 51,
+    "new_stories_allowed": 1,
+    "retroactive_rows_retained": 52,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -80,23 +80,23 @@
     "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
-    "material_update_replays_suppressed": 1,
+    "material_update_replays_suppressed": 0,
     "pre_generation_materiality_evaluations": 4,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 4,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 0,
-    "pre_generation_materiality_cache_hits": 4,
-    "terminal_permalink_evaluations": 2,
-    "terminal_permalink_candidate_pairs": 24,
-    "terminal_permalink_model_calls": 2,
+    "pre_generation_materiality_duplicates": 3,
+    "pre_generation_materiality_holds": 1,
+    "pre_generation_materiality_model_calls": 1,
+    "pre_generation_materiality_cache_hits": 3,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 1,
-    "terminal_permalink_duplicates_blocked": 1,
+    "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
@@ -195,30 +195,33 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "Flooding leaves Creekside community in St. Lucie County without power, most homes evacuated - WFLX",
-      "source_url": "https://www.wflx.com/2026/11/05/flooding-leaves-creekside-community-st-lucie-county-without-power-most-homes-evacuated",
-      "canonical_slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
-      "canonical_headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+      "source_headline": "Two men accused of stealing light poles during St. Lucie County flooding emergency - WPEC",
+      "source_url": "https://cbs12.com/news/local/two-men-accused-of-stealing-light-poles-during-st-lucie-county-flooding-emergency-fort-pierce-st-lucie-county-aluminum-light-poles-light-pole-theft-theft-burglary-grand-theft-state-of-emergency-flooding-historic-flooding-eleven-mile-road-okee",
+      "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
+      "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
       "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
       "confidence": 0.99,
       "shared_anchors": [
-        "Flooding in the Creekside community in St. Lucie County",
-        "Roughly 75% of homes evacuated",
-        "Community power remains shut off",
-        "Thursday update from Sheriff Richard Del Toro"
+        "Both articles mention Fort Pierce police and Okeechobee Road, but in different incidents."
       ],
-      "novel_facts": [],
-      "reason": "The incoming article repeats the same Creekside flooding, evacuation percentage, power outage and sheriff's Thursday update already covered by the canonical. Additional operational details about security, assistance vehicles and submerged utility equipment do not establish a material new development or an independently newsworthy follow-up.",
-      "validation_errors": []
+      "novel_facts": [
+        "Pablo Rojas Castro and Alberto Guia Hernandez were arrested in connection with the theft of 34 aluminum light poles valued at $6,800.",
+        "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding state of emergency.",
+        "Investigators used a drone to observe the removal of property before deputies stopped the suspects' truck on Okeechobee Road."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
@@ -1243,10 +1246,30 @@
       }
     },
     {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations",
+      "incoming_source_url": "https://www.wptv.com/wptv-investigates/wptv-finds-15-5-million-in-political-contributions-tied-to-fight-over-floridas-free-kill-law",
+      "incoming_story_id": "story_026854",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
       "phase": "forward_publication",
-      "incoming_headline": "Overflowing pond threatens at least three graves at Jensen Beach cemetery",
-      "incoming_source_url": "https://cw34.com/news/local/were-going-to-have-floating-caskets-flooding-threatens-graves-at-jensen-beach-cemetery?teaserSource=trending",
-      "incoming_story_id": "story_026784",
+      "incoming_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+      "incoming_source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+      "incoming_story_id": "story_026857",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1267,322 +1290,128 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "gpt-6.1-sol",
-      "incoming_headline": "Overflowing pond threatens at least three graves at Jensen Beach cemetery",
-      "incoming_source_url": "https://cw34.com/news/local/were-going-to-have-floating-caskets-flooding-threatens-graves-at-jensen-beach-cemetery?teaserSource=trending",
-      "incoming_story_id": "story_026784",
+      "incoming_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+      "incoming_source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+      "incoming_story_id": "story_026857",
       "candidates": [
         {
-          "slug": "2026-11-10-flooding-threatens-at-least-three-graves-at-jensen-beach-cemetery",
-          "headline": "Flooding threatens at least three graves at Jensen Beach cemetery",
+          "slug": "2026-10-30-indian-river-county-early-voting-ends-saturday-ahead-of-tuesday-election",
+          "headline": "Indian River County early voting ends Saturday ahead of Tuesday election",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 1.04,
-          "retrieval_score": 1.0,
-          "reasons": [
-            "strong_fuzzy_headline",
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
-          "headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5247,
-          "retrieval_score": 0.4877,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-06-floodwater-still-fills-hyline-drive-homes-in-jensen-beach-five-days-after-histor",
-          "headline": "Martin County adds pumps to drain flooding that displaced Jensen Beach residents",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5112,
-          "retrieval_score": 0.4742,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-11-07-family-dog-dies-in-jensen-beach-rv-fire-crews-keep-flames-from-nearby-home",
-          "headline": "Electrical issue blamed for Jensen Beach RV fire that killed family dog",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4819,
-          "retrieval_score": 0.4449,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-11-03-martin-county-district-schools-closed-tuesday-after-school-activities-canceled",
-          "headline": "Water rises in Jensen Beach homes as Martin County cannot pump out neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4537,
-          "retrieval_score": 0.4317,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-10-30-flooding-forces-cancellation-of-nov-7-st-lucie-county-4-h-fall-festival",
-          "headline": "Flooding forces cancellation of Nov. 7 St. Lucie County 4-H Fall Festival",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4212,
-          "retrieval_score": 0.4142,
+          "terminal_recall_score": 0.59,
+          "retrieval_score": 0.583,
           "reasons": [
             "publication_gap_11_days"
           ]
         },
         {
-          "slug": "2026-10-26-jensen-beach-captures-district-13-4a-football-title-against-fort-pierce-westwood",
-          "headline": "Thornton’s four touchdowns power Jensen Beach to outright District 13-4A title",
+          "slug": "2026-11-02-port-st-lucie-flooding-strands-vehicles-as-police-urge-residents-to-avoid-travel",
+          "headline": "Schools remain closed Wednesday amid Port St. Lucie flooding emergency",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4041,
-          "retrieval_score": 0.3971,
+          "terminal_recall_score": 0.5399,
+          "retrieval_score": 0.5209,
           "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4034,
-          "retrieval_score": 0.3664,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-05-martin-county-delays-drainage-repairs-as-trailside-flooding-threatens-cattle-acc",
-          "headline": "Martin County delays drainage repairs as Trailside flooding threatens cattle, access",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3795,
-          "retrieval_score": 0.3545,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-          "headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3791,
-          "retrieval_score": 0.3421,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-06-flooding-equipment-failures-hamper-care-at-save-the-chimps-in-st-lucie-county",
-          "headline": "Flooding, equipment failures hamper care at Save the Chimps in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3745,
-          "retrieval_score": 0.3465,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-11-05-flooding-closes-south-25th-street-near-two-schools-in-st-lucie-county",
-          "headline": "Flooding closes South 25th Street near two schools in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3681,
-          "retrieval_score": 0.3431,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-10-flooding-threatens-at-least-three-graves-at-jensen-beach-cemetery",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [
-          "Same CW34 source article and November 10, 2026 publication date",
-          "Flooding threatens at least three graves at a Jensen Beach cemetery",
-          "A neighboring pond overflowed onto cemetery grounds during last week's heavy rain",
-          "Families fear further flooding could cause buried caskets to float"
-        ],
-        "novel_facts": [],
-        "reason": "The incoming article is a fuller rendering of the same source report already represented by the canonical. Family names, delayed burial plans and the sinking-casket account elaborate that report rather than establish a subsequent material development or independently newsworthy follow-up.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-10-flooding-threatens-at-least-three-graves-at-jensen-beach-cemetery",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [
-          "Same CW34 source article and November 10, 2026 publication date",
-          "Flooding threatens at least three graves at a Jensen Beach cemetery",
-          "A neighboring pond overflowed onto cemetery grounds during last week's heavy rain",
-          "Families fear further flooding could cause buried caskets to float"
-        ],
-        "novel_facts": [],
-        "reason": "The incoming article is a fuller rendering of the same source report already represented by the canonical. Family names, delayed burial plans and the sinking-casket account elaborate that report rather than establish a subsequent material development or independently newsworthy follow-up.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations",
-      "incoming_source_url": "https://www.wptv.com/wptv-investigates/wptv-finds-15-5-million-in-political-contributions-tied-to-fight-over-floridas-free-kill-law",
-      "incoming_story_id": "story_026854",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "gpt-6.1-sol",
-      "incoming_headline": "Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations",
-      "incoming_source_url": "https://www.wptv.com/wptv-investigates/wptv-finds-15-5-million-in-political-contributions-tied-to-fight-over-floridas-free-kill-law",
-      "incoming_story_id": "story_026854",
-      "candidates": [
-        {
-          "slug": "2026-11-04-fort-pierce-restaurant-owner-promotes-free-books-renovates-space-for-reading-roo",
-          "headline": "Fort Pierce restaurant owner promotes free books, renovates space for reading room",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3914,
-          "retrieval_score": 0.3694,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-11-05-three-vehicle-crash-injures-seven-closes-northbound-i-95-in-martin-county",
-          "headline": "Three-vehicle crash injures seven, closes northbound I-95 in Martin County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3831,
-          "retrieval_score": 0.3581,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-10-29-florida-student-aid-breach-may-have-exposed-social-security-numbers-of-49-millio",
-          "headline": "Florida student aid breach may have exposed Social Security numbers of 4.9 million people",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3808,
-          "retrieval_score": 0.3768,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-10-31-man-wanted-in-broward-county-cases-arrested-after-reported-fort-pierce-hotel-ass",
-          "headline": "Man wanted in Broward County cases arrested after reported Fort Pierce hotel assault",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.378,
-          "retrieval_score": 0.368,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-10-29-state-review-finds-st-lucie-county-glioblastoma-cases-in-line-with-expectations",
-          "headline": "Updated state review finds St. Lucie County glioblastoma cases in line with expectations",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3757,
-          "retrieval_score": 0.3687,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-11-06-st-lucie-county-residents-affected-by-flooding-can-call-for-food-assistance",
-          "headline": "St. Lucie County residents affected by flooding can call for food assistance",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3666,
-          "retrieval_score": 0.3386,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-11-04-florida-special-session-expected-to-implement-amendment-3-homestead-tax-relief",
-          "headline": "Florida special session expected to implement Amendment 3 homestead tax relief",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3657,
-          "retrieval_score": 0.3437,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-10-29-martin-county-judge-imposes-effective-life-sentence-in-ai-child-exploitation-cas",
-          "headline": "Martin County judge imposes effective life sentence in AI child exploitation case",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3496,
-          "retrieval_score": 0.3456,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-11-07-family-dog-dies-in-jensen-beach-rv-fire-crews-keep-flames-from-nearby-home",
-          "headline": "Electrical issue blamed for Jensen Beach RV fire that killed family dog",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3492,
-          "retrieval_score": 0.3122,
-          "reasons": [
-            "publication_gap_3_days"
+            "publication_gap_8_days"
           ]
         },
         {
           "slug": "2026-10-29-treasure-coast-food-bank-dedicates-fort-pierce-center-with-larger-kitchen-food-s",
           "headline": "Treasure Coast Food Bank dedicates Fort Pierce center with larger kitchen, food storage",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3474,
-          "retrieval_score": 0.3434,
+          "terminal_recall_score": 0.517,
+          "retrieval_score": 0.513,
           "reasons": [
             "publication_gap_12_days"
           ]
         },
         {
-          "slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
-          "headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+          "slug": "2026-10-27-southbound-us-1-reopens-after-crash-near-treasure-coast-mall-disrupted-traffic",
+          "headline": "15-year-old and other driver seriously hurt in U.S. 1 crash near Treasure Coast Square Mall",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3448,
-          "retrieval_score": 0.3078,
+          "terminal_recall_score": 0.5049,
+          "retrieval_score": 0.5049,
           "reasons": [
-            "publication_gap_1_days"
+            "publication_gap_14_days"
           ]
         },
         {
-          "slug": "2026-11-04-port-st-lucie-allocates-1-million-for-flood-repairs-pre-applications-open-thursd",
-          "headline": "Port St. Lucie allocates $1 million for flood repairs; pre-applications open Thursday",
+          "slug": "2026-11-05-high-capacity-pump-starts-in-port-st-lucies-vitalia-as-flooding-forces-evacuatio",
+          "headline": "High-capacity pump starts in Port St. Lucie’s Vitalia as flooding forces evacuations",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.342,
-          "retrieval_score": 0.32,
+          "terminal_recall_score": 0.5008,
+          "retrieval_score": 0.4758,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-11-04-family-questions-walking-safety-on-port-st-lucie-boulevard-after-teens-death",
+          "headline": "Family questions walking safety on Port St. Lucie Boulevard after teen's death",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4945,
+          "retrieval_score": 0.4725,
           "reasons": [
             "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-about-75-of-creekside-homes-evacuated-in-st-lucie-county-power-remains-off",
+          "headline": "About 75% of Creekside homes evacuated in St. Lucie County; power remains off",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4943,
+          "retrieval_score": 0.4693,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-40-arrested-in-rico-investigation-targeting-fort-pierces-23rd-street-gang",
+          "headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4935,
+          "retrieval_score": 0.4685,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+          "headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4837,
+          "retrieval_score": 0.4437,
+          "reasons": [
+            "publication_gap_0_days"
+          ]
+        },
+        {
+          "slug": "2026-11-06-st-lucie-county-search-warrant-operation-includes-two-fort-pierce-homes",
+          "headline": "St. Lucie County search-warrant operation includes two Fort Pierce homes",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4797,
+          "retrieval_score": 0.4517,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-11-05-student-swims-from-school-bus-in-port-st-lucie-floodwater-raising-safety-questio",
+          "headline": "Student swims from school bus in Port St. Lucie floodwater, raising safety questions",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4537,
+          "retrieval_score": 0.4287,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-11-09-port-st-lucie-cooking-class-teaches-adults-with-disabilities-skills-for-independ",
+          "headline": "Port St. Lucie cooking class teaches adults with disabilities skills for independence",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4509,
+          "retrieval_score": 0.4139,
+          "reasons": [
+            "publication_gap_1_days"
           ]
         }
       ],
@@ -1592,16 +1421,17 @@
         "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
-        "material_new_update": true,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.99,
+        "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [
-          "WPTV identified more than $15.5 million in healthcare-interest and lobbying contributions to committees tied to repeal opponents and Gov. Ron DeSantis between 2017 and 2026.",
-          "Committees tied to DeSantis received approximately $12.7 million, including $170,000 in the weeks and months before his veto.",
-          "Groups contributed more than $700,000 tied to Sen. Gayle Harrell, including $28,000 in the weeks before the repeal vote."
+          "Stuart’s Nov. 11, 2026, Veterans Day parade starts at 10 a.m. on East Ocean Boulevard and ends at Memorial Park.",
+          "Port St. Lucie and Fort Pierce have Veterans Day ceremonies scheduled for 11 a.m.",
+          "VFW Post 8058 will host a free lunch with live entertainment at noon at 3475 Douglas Ave.",
+          "The incoming article provides additional Veterans Day event schedules across Indian River, Okeechobee and Palm Beach counties."
         ],
-        "reason": "No candidate covers HB 6017, the medical-malpractice restriction repeal, its veto, or the related campaign-finance findings. The candidate mentioning DeSantis concerns homestead tax relief, a separate government action. The incoming investigation warrants a new canonical; its records do not establish that donations influenced votes or the veto.",
+        "reason": "None of the candidates covers these Veterans Day observances. They concern elections, flooding, crashes, law enforcement, a food-bank dedication or a cooking class. Shared cities and regional terminology do not establish the same event.",
         "validation_errors": [],
         "consistency_repairs": []
       },
@@ -1612,16 +1442,17 @@
         "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
-        "material_new_update": true,
+        "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.99,
+        "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [
-          "WPTV identified more than $15.5 million in healthcare-interest and lobbying contributions to committees tied to repeal opponents and Gov. Ron DeSantis between 2017 and 2026.",
-          "Committees tied to DeSantis received approximately $12.7 million, including $170,000 in the weeks and months before his veto.",
-          "Groups contributed more than $700,000 tied to Sen. Gayle Harrell, including $28,000 in the weeks before the repeal vote."
+          "Stuart’s Nov. 11, 2026, Veterans Day parade starts at 10 a.m. on East Ocean Boulevard and ends at Memorial Park.",
+          "Port St. Lucie and Fort Pierce have Veterans Day ceremonies scheduled for 11 a.m.",
+          "VFW Post 8058 will host a free lunch with live entertainment at noon at 3475 Douglas Ave.",
+          "The incoming article provides additional Veterans Day event schedules across Indian River, Okeechobee and Palm Beach counties."
         ],
-        "reason": "No candidate covers HB 6017, the medical-malpractice restriction repeal, its veto, or the related campaign-finance findings. The candidate mentioning DeSantis concerns homestead tax relief, a separate government action. The incoming investigation warrants a new canonical; its records do not establish that donations influenced votes or the veto.",
+        "reason": "None of the candidates covers these Veterans Day observances. They concern elections, flooding, crashes, law enforcement, a food-bank dedication or a cooking class. Shared cities and regional terminology do not establish the same event.",
         "validation_errors": [],
         "consistency_repairs": []
       }
