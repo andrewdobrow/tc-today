@@ -30,56 +30,106 @@ def approved_url(root: Path) -> str:
     return url
 
 
+def _rewrite_approved_credit(text: str, approved: str) -> str:
+    pattern = (
+        r'(<img\b[^>]*\bsrc="' + re.escape(approved) +
+        r'"[^>]*>\s*<figcaption class="img-credit">)Photo: CBS12(</figcaption>)'
+    )
+    return re.sub(pattern, r"\1TCT illustrative image\2", text)
+
+
 def rewrite_text(path: Path, approved: str, *, require_slug: bool = False) -> bool:
     if not path.is_file():
         return False
     content = path.read_text(encoding="utf-8")
     if require_slug and SLUG not in content:
         return False
-    revised = content.replace(REJECTED_IMAGE, approved)
-    # Change a credit only when it immediately follows this precise image;
-    # unrelated CBS12-sourced images must retain their accurate attribution.
-    revised = re.sub(
-        r'(<img\b[^>]*\bsrc="' + re.escape(approved) +
-        r'"[^>]*>)(<figcaption class="img-credit">)Photo: CBS12(</figcaption>)',
-        r"\1\2TCT illustrative image\3",
-        revised,
-    )
-    if revised == content:
-        return False
-    path.write_text(revised, encoding="utf-8")
-    return True
+    revised = content
+    if path.name == SLUG + ".html":
+        # Generation may select an entirely NEW image URL. Never assume the
+        # rejected 1f... screenshot is the only possible replacement candidate.
+        sources = set(re.findall(
+            r'<meta\s+(?:property="og:image"|name="twitter:image")\s+content="([^"]+)"',
+            revised, flags=re.I,
+        ))
+        sources.update(re.findall(
+            r'<figure\b[^>]*class="[^"]*\barticle-hero-image\b[^"]*"[^>]*>\s*'
+            r'<img\b[^>]*\bsrc="([^"]+)"',
+            revised, flags=re.I | re.S,
+        ))
+        if not sources:
+            raise AssertionError("Crash article has no social or hero image metadata")
+        for source in sources:
+            if source != approved:
+                revised = revised.replace(source, approved)
+        revised = _rewrite_approved_credit(revised, approved)
+        if REJECTED_IMAGE in revised:
+            revised = revised.replace(REJECTED_IMAGE, approved)
+    else:
+        # Limit modifications on home, archive and category pages to the exact
+        # crash-story link; never rewrite imagery belonging to other articles.
+        target = re.compile(
+            r'<a\b[^>]*\bhref="[^"]*' + re.escape(SLUG) +
+            r'\.html[^"]*"[^>]*>.*?</a>',
+            flags=re.I | re.S,
+        )
+        def fix_card(match: re.Match[str]) -> str:
+            fragment = match.group(0)
+            fragment = re.sub(
+                r'(<img\b[^>]*\bsrc=")[^"]+(")',
+                lambda m: m.group(1) + approved + m.group(2),
+                fragment,
+                flags=re.I,
+            )
+            return _rewrite_approved_credit(fragment, approved)
+        revised = target.sub(fix_card, revised)
+    if revised != content:
+        path.write_text(revised, encoding="utf-8")
+        return True
+    return False
 
 
 def rewrite_feed(path: Path, approved: str) -> bool:
     if not path.is_file():
         return False
     original = path.read_text(encoding="utf-8")
-    def replace_item(match: re.Match[str]) -> str:
+    def fix_item(match: re.Match[str]) -> str:
         item = match.group(0)
-        return item.replace(REJECTED_IMAGE, approved) if SLUG in item else item
-    revised = re.sub(r"<item>.*?</item>", replace_item, original, flags=re.S)
-    if revised == original:
-        return False
-    path.write_text(revised, encoding="utf-8")
-    return True
+        if SLUG not in item:
+            return item
+        item = re.sub(
+            r'(<media:content\b[^>]*\burl=")[^"]+(")',
+            lambda m: m.group(1) + approved + m.group(2),
+            item,
+        )
+        item = re.sub(
+            r'(<enclosure\b[^>]*\burl=")[^"]+(")',
+            lambda m: m.group(1) + approved + m.group(2),
+            item,
+        )
+        return item
+    revised = re.sub(r"<item>.*?</item>", fix_item, original, flags=re.S)
+    if revised != original:
+        path.write_text(revised, encoding="utf-8")
+        return True
+    return False
 
 
 def rewrite_json(path: Path, approved: str) -> bool:
     if not path.is_file():
         return False
-    original = path.read_text(encoding="utf-8")
-    payload = json.loads(original)
+    payload = json.loads(path.read_text(encoding="utf-8"))
     changed = False
     def visit(value):
         nonlocal changed
         if isinstance(value, dict):
-            identity = any(SLUG in str(value.get(key) or "") for key in (
-                "slug", "url", "canonical_url", "article_url", "link", "permalink"
+            is_target = any(SLUG in str(value.get(key) or "") for key in (
+                "slug", "url", "canonical_url", "article_url", "link", "permalink",
             ))
-            if identity:
-                for key in IMAGE_KEYS + OTHER_IMAGE_KEYS:
-                    if value.get(key) == REJECTED_IMAGE:
+            if is_target:
+                # Keep source_image_url as original-source provenance.
+                for key in ("image_url", "rss_social_image_url", "thumbnail_url", "hero_image"):
+                    if key in value and value[key] != approved:
                         value[key] = approved
                         changed = True
             for child in value.values():
@@ -117,8 +167,14 @@ def apply(root: Path = ROOT) -> list[str]:
         if rewrite_json(root / name, approved):
             touched.append(name)
     article = page.read_text(encoding="utf-8")
-    if REJECTED_IMAGE in article or approved not in article:
-        raise AssertionError("Final article image does not match editor-approved override")
+    required = (
+        f'<meta property="og:image" content="{approved}">',
+        f'<meta name="twitter:image" content="{approved}">',
+    )
+    if any(tag not in article for tag in required) or (
+        f'src="{approved}"' not in article
+    ):
+        raise AssertionError("Crash article social tags or visible hero disagree with editorial override")
     return touched
 
 
