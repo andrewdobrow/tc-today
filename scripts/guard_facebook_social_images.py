@@ -13,12 +13,20 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FALLBACK = "https://treasurecoast.today/og-image.png"
 FACEBOOK_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+# Facebook Sharing Debugger confirmed these mirrored image URLs are unusable.
+KNOWN_FACEBOOK_REJECTED = {
+    "https://images.treasurecoast.today/articles/62/6205971a25bce589124fcbd42b1f3bcbc2e20465fce4c29e448ea115e4cab4f6.webp",
+    "https://images.treasurecoast.today/articles/1a/1a01f54a7662aa225be70d1cbd29881fc48b391e82a6e3736baea3a5f5d5bfeb.jpg",
+}
+
 OG = re.compile(r'(<meta\s+property="og:image"\s+content=")[^"]*("\s*/?>)', re.I)
 TW = re.compile(r'(<meta\s+name="twitter:image"\s+content=")[^"]*("\s*/?>)', re.I)
 DIMENSIONS = re.compile(r'\s*<meta\s+property="og:image:(?:width|height)"\s+content="[^"]*"\s*/?>', re.I)
 
 
 def image_usable(url, session):
+    if url in KNOWN_FACEBOOK_REJECTED:
+        return False
     parsed = urlparse(url)
     if parsed.scheme != "https" or not parsed.hostname:
         return False
