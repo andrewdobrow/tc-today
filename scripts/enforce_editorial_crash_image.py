@@ -40,9 +40,9 @@ def rewrite_text(path: Path, approved: str, *, require_slug: bool = False) -> bo
     # Change a credit only when it immediately follows this precise image;
     # unrelated CBS12-sourced images must retain their accurate attribution.
     revised = re.sub(
-        r'(<img\\b[^>]*\\bsrc="' + re.escape(approved) +
+        r'(<img\b[^>]*\bsrc="' + re.escape(approved) +
         r'"[^>]*>)(<figcaption class="img-credit">)Photo: CBS12(</figcaption>)',
-        r"\\1\\2TCT illustrative image\\3",
+        r"\1\2TCT illustrative image\3",
         revised,
     )
     if revised == content:
