@@ -13,9 +13,9 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FALLBACK = "https://treasurecoast.today/og-image.png"
 FACEBOOK_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
-OG = re.compile(r'(<meta\\s+property="og:image"\\s+content=")[^"]*("\\s*/?>)', re.I)
-TW = re.compile(r'(<meta\\s+name="twitter:image"\\s+content=")[^"]*("\\s*/?>)', re.I)
-DIMENSIONS = re.compile(r'\\s*<meta\\s+property="og:image:(?:width|height)"\\s+content="[^"]*"\\s*/?>', re.I)
+OG = re.compile(r'(<meta\s+property="og:image"\s+content=")[^"]*("\s*/?>)', re.I)
+TW = re.compile(r'(<meta\s+name="twitter:image"\s+content=")[^"]*("\s*/?>)', re.I)
+DIMENSIONS = re.compile(r'\s*<meta\s+property="og:image:(?:width|height)"\s+content="[^"]*"\s*/?>', re.I)
 
 
 def image_usable(url, session):
