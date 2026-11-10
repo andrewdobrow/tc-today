@@ -37,18 +37,14 @@ def rewrite_text(path: Path, approved: str, *, require_slug: bool = False) -> bo
     if require_slug and SLUG not in content:
         return False
     revised = content.replace(REJECTED_IMAGE, approved)
-    if path.name == SLUG + ".html":
-        # The old image attribution must not survive a replacement.
-        revised = revised.replace(
-            '<figcaption class="img-credit">Photo: CBS12</figcaption>',
-            '<figcaption class="img-credit">TCT illustrative image</figcaption>',
-        )
-    elif REJECTED_IMAGE in content:
-        # Do not credit the competitor for an approved TCT fallback.
-        revised = revised.replace(
-            '<figcaption class="img-credit">Photo: CBS12</figcaption>',
-            '<figcaption class="img-credit">TCT illustrative image</figcaption>',
-        )
+    # Change a credit only when it immediately follows this precise image;
+    # unrelated CBS12-sourced images must retain their accurate attribution.
+    revised = re.sub(
+        r'(<img\\b[^>]*\\bsrc="' + re.escape(approved) +
+        r'"[^>]*>)(<figcaption class="img-credit">)Photo: CBS12(</figcaption>)',
+        r"\\1\\2TCT illustrative image\\3",
+        revised,
+    )
     if revised == content:
         return False
     path.write_text(revised, encoding="utf-8")
