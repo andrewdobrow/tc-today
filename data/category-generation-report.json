@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-10T21:46:15Z",
+  "generated_at": "2026-11-10T23:49:37Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,44 +15,64 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 4,
-      "generated_live": 2,
-      "no_publishable_sources": 1
+      "generated_live": 1,
+      "generation_failed_archive_recovery": 2,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 4
+      "contextless_update_lead": 2,
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 49.75,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 162.459,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 5,
     "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 8,
-    "published_story_duplicate_suppression_count": 50,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 4,
+    "category_eligibility_rejection_count": 12,
+    "published_story_duplicate_suppression_count": 45,
+    "story_aware_update_context_count": 7,
+    "material_update_promotion_evaluation_count": 1,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 3,
-    "material_update_promotion_model_call_count": 1
+    "material_update_promotion_cache_hit_count": 1,
+    "material_update_promotion_model_call_count": 0
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "cache_hit",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 11,
-      "selected_source_count": 1,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "publishable_source_count": 15,
+      "selected_source_count": 2,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 25.932,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.955,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise"
+        }
+      ],
+      "model_elapsed_seconds": 47.887,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -61,9 +81,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Deputies fatally shoot man accused of stabbing woman inside Jupiter-area apartment, PBSO says",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/region-n-palm-beach-county/deputies-fatally-shoot-man-accused-of-stabbing-woman-inside-jupiter-area-apartment-pbso-says"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Treasure Coast woman loses second home in 2 years after devastating Fort Pierce flooding",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/treasure-coast-woman-loses-second-home-in-2-years-after-devastating-fort-pierce-flooding"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -107,20 +157,6 @@
           "local_nexus_signals": [],
           "headline": "Martin County school increases security after TikTok threat suspect is released on bond - WPEC",
           "source_url": "https://cbs12.com/news/crime/martin-county-school-felix-a-williams-increases-security-law-enforcement-presence-after-tiktok-threat-suspect-is-released-on-bond-lee-county-parents-concerned-"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Public schools, college across Palm Beaches, Treasure Coast to reopen after flooding - WPBF",
-          "source_url": "https://www.wpbf.com/article/public-schools-college-across-palm-beach-indian-river-st-lucie-reopen-flooding/74369008"
         }
       ],
       "published_story_duplicate_suppression_count": 10,
@@ -167,7 +203,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
           "editorial_story_id": "story_026761",
           "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
@@ -177,7 +213,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+          "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
           "editorial_story_id": "story_026761",
           "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
@@ -226,8 +262,48 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026930",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=27",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -295,7 +371,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
           "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
           "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
@@ -310,7 +386,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+          "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
           "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
           "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
@@ -385,24 +461,32 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton and One",
-      "elapsed_seconds": 20.126
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 86.226
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 12,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 13,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 18.872,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 18.872,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -411,7 +495,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
         {
@@ -425,8 +509,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
-          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches"
+          "headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -471,8 +555,18 @@
           "source_url": "https://cw34.com/news/local/martin-county-school-felix-a-williams-increases-security-law-enforcement-presence-after-tiktok-threat-suspect-is-released-on-bond-lee-county-parents-concerned-"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+          "editorial_story_id": "story_026857",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "WPTV finds $15.5 million in political contributions tied to fight over Florida's 'free kill' law",
@@ -515,26 +609,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
-          "source_url": "https://www.wpbf.com/article/michael-george-davis-cape-coral-man-florida-threat-martin-county-deputies-family/74379848",
-          "editorial_story_id": "story_026416",
-          "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Residents wait for FEMA assistance after Florida puts in request after widespread flooding",
-          "source_url": "https://www.wptv.com/news/state/florida-requests-federal-disaster-assistance-after-widespread-flooding",
-          "editorial_story_id": "story_026738",
-          "canonical_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
-          "canonical_headline": "Martin County counts 66 flood-damaged homes, 25 destroyed, as Florida seeks federal aid",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Cape Coral man arrested after threats against Martin County community - WPBF",
           "source_url": "https://www.wpbf.com/article/cape-coral-michael-george-davis-arrested-threat-student-martin-county-florida/74368626",
           "editorial_story_id": "story_026416",
@@ -554,13 +628,68 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026758",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=27",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "crime",
           "source_headline": "WPTV finds $15.5 million in political contributions tied to fight over Florida's 'free kill' law",
@@ -623,51 +752,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
-          "source_url": "https://www.wpbf.com/article/michael-george-davis-cape-coral-man-florida-threat-martin-county-deputies-family/74379848",
-          "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Cape Coral resident Michael Davis accused of making TikTok threats against a Martin County student and others",
-            "Martin County Sheriff's Office investigation and arrest",
-            "$100,000 bond"
-          ],
-          "novel_facts": [
-            "The targeted family says it does not recognize Davis or recall the beach incident he allegedly described",
-            "The sheriff says Davis appears to have lived in Martin County between 2006 and 2014",
-            "Investigators are pursuing leads that could support additional charges, but no additional charges are announced"
-          ],
-          "reason": "The incoming article covers the same Davis TikTok-threat case and arrest already represented by the canonical. Its additional sheriff comments and relationship background do not establish a material development or independently newsworthy follow-up. The canonical already reports his release on bond and a resisting-arrest allegation.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Residents wait for FEMA assistance after Florida puts in request after widespread flooding",
-          "source_url": "https://www.wptv.com/news/state/florida-requests-federal-disaster-assistance-after-widespread-flooding",
-          "canonical_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
-          "canonical_headline": "Martin County counts 66 flood-damaged homes, 25 destroyed, as Florida seeks federal aid",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Cape Coral man arrested after threats against Martin County community - WPBF",
           "source_url": "https://www.wpbf.com/article/cape-coral-michael-george-davis-arrested-threat-student-martin-county-florida/74368626",
           "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
@@ -698,7 +782,9 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.153
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 58.97
     },
     {
       "category_key": "business",
@@ -706,7 +792,7 @@
       "status": "cache_hit",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 19,
-      "publishable_source_count": 10,
+      "publishable_source_count": 11,
       "selected_source_count": 1,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -723,9 +809,67 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 3,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:indiantown"
+          ],
+          "headline": "Deputies fatally shoot man accused of stabbing woman inside Jupiter-area apartment, PBSO says",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/region-n-palm-beach-county/deputies-fatally-shoot-man-accused-of-stabbing-woman-inside-jupiter-area-apartment-pbso-says"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Treasure Coast woman loses second home in 2 years after devastating Fort Pierce flooding",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/treasure-coast-woman-loses-second-home-in-2-years-after-devastating-fort-pierce-flooding"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:martin county",
+            "source_locality:st lucie county",
+            "source_locality:stuart",
+            "source_locality:jensen beach",
+            "source_locality:hobe sound"
+          ],
+          "headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+        }
+      ],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
@@ -779,8 +923,48 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026758",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=27",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -864,7 +1048,7 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton and One",
-      "elapsed_seconds": 15.225
+      "elapsed_seconds": 24.077
     },
     {
       "category_key": "sports",
@@ -872,7 +1056,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -902,30 +1086,23 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.726
+      "elapsed_seconds": 15.092
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 7,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 6,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.209,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.209,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Things To Do category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -934,11 +1111,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+          "editorial_story_id": "story_026857",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Stuart bed races put fun on wheels to help Martin County families facing homelessness",
@@ -967,6 +1154,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Stuart bed races put fun on wheels to help Martin County families facing homelessness",
@@ -999,18 +1201,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-      "generated_card_count": 0,
-      "elapsed_seconds": 44.019
+      "elapsed_seconds": 19.324
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1031,7 +1229,7 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -1040,16 +1238,6 @@
           "editorial_story_id": "story_026854",
           "canonical_slug": "2026-11-10-florida-free-kill-repeal-opponents-desantis-linked-to-155-million-in-donations",
           "canonical_headline": "Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
-          "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event",
-          "editorial_story_id": "story_026732",
-          "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
-          "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1075,41 +1263,43 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
-          "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event",
-          "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
-          "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.082
+      "elapsed_seconds": 17.859
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "no_publishable_sources",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.224,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 18.82,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise"
+        }
+      ],
+      "model_elapsed_seconds": 40.044,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Martin County to establish some quiet zones to combat train noise",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1118,10 +1308,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -1185,30 +1375,99 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
-          "editorial_story_id": "story_026737",
-          "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-          "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
-          "source_url": "https://www.wpbf.com/article/michael-george-davis-cape-coral-man-florida-threat-martin-county-deputies-family/74379848",
-          "editorial_story_id": "story_026416",
-          "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
+          "source_headline": "Electrical issue blamed in Martin County RV blaze that killed family dog - WPEC",
+          "source_url": "https://cbs12.com/news/local/electrical-issue-blamed-in-martin-county-rv-blaze-that-killed-family-dog-florida-news-local-news-florida-fire-local-fire",
+          "editorial_story_id": "story_026302",
+          "canonical_slug": "2026-11-07-family-dog-dies-in-jensen-beach-rv-fire-crews-keep-flames-from-nearby-home",
+          "canonical_headline": "Electrical issue blamed for Jensen Beach RV fire that killed family dog",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026758",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=27",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026758",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=28",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1303,61 +1562,33 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
-          "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-          "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+          "source_headline": "Electrical issue blamed in Martin County RV blaze that killed family dog - WPEC",
+          "source_url": "https://cbs12.com/news/local/electrical-issue-blamed-in-martin-county-rv-blaze-that-killed-family-dog-florida-news-local-news-florida-fire-local-fire",
+          "canonical_slug": "2026-11-07-family-dog-dies-in-jensen-beach-rv-fire-crews-keep-flames-from-nearby-home",
+          "canonical_headline": "Electrical issue blamed for Jensen Beach RV fire that killed family dog",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "eligibility_reason": "material_update_source_already_absorbed",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
-          "source_url": "https://www.wpbf.com/article/michael-george-davis-cape-coral-man-florida-threat-martin-county-deputies-family/74379848",
-          "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Cape Coral resident Michael Davis accused of making TikTok threats against a Martin County student and others",
-            "Martin County Sheriff's Office investigation and arrest",
-            "$100,000 bond"
-          ],
-          "novel_facts": [
-            "The targeted family says it does not recognize Davis or recall the beach incident he allegedly described",
-            "The sheriff says Davis appears to have lived in Martin County between 2006 and 2014",
-            "Investigators are pursuing leads that could support additional charges, but no additional charges are announced"
-          ],
-          "reason": "The incoming article covers the same Davis TikTok-threat case and arrest already represented by the canonical. Its additional sheriff comments and relationship background do not establish a material development or independently newsworthy follow-up. The canonical already reports his release on bond and a resisting-arrest allegation.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.607
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 60.772
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 9,
+      "selected_source_count": 9,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1365,35 +1596,69 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.541,
+          "elapsed_seconds": 55.656,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 34.541,
+      "model_elapsed_seconds": 55.656,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 29,
+          "baseline_anchor": "shooting",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "boats",
+            "coast",
+            "fort",
+            "guard",
+            "information",
+            "pierce",
+            "unmanned"
+          ],
+          "semantic_novel_fact_hits": [],
+          "semantic_novel_fact_token_count": 0,
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Coast Guard seeks information about two drifting, unmanned boats off Fort Pierce - WPEC",
+          "headline": "Coast Guard suspends search after two unmanned boats spotted off Fort Pierce"
+        }
+      ],
       "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Fort Pierce police union declares impasse, says city offered no raises",
+          "headline": "Fort Pierce police union declares impasse over reported offer of no raises",
           "missing": [
             "named_measure_undefined_in_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": false,
-            "headline": "Fort Pierce police union declares impasse, says city offered no raises",
-            "lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. The association described the proposal in a Nov. 7 Facebook post following a fourth round of bargaining with the city.",
-            "lead_word_count": 46,
-            "headline_overlap_ratio": 0.727,
-            "new_context_token_count": 18,
+            "headline": "Fort Pierce police union declares impasse over reported offer of no raises",
+            "lead": "The Fort Pierce Police Officers Association says it declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. In a Nov. 7 Facebook post, the association said officers and representatives from the Coastal Florida Police Benevolent Association met with the city Nov. 5 for a fourth round of negotiations.",
+            "lead_word_count": 56,
+            "headline_overlap_ratio": 0.545,
+            "new_context_token_count": 22,
             "opaque_references": [
               "Amendment 3"
             ],
@@ -1419,8 +1684,8 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "Fort Pierce police union declares impasse, says city offered no raises",
-            "lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. The association described the proposal in a Nov. 7 Facebook post following a fourth round of bargaining with the city.",
+            "headline": "Fort Pierce police union declares impasse over reported offer of no raises",
+            "lead": "The Fort Pierce Police Officers Association says it declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. In a Nov. 7 Facebook post, the association said officers and representatives from the Coastal Florida Police Benevolent Association met with the city Nov. 5 for a fourth round of negotiations.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1442,19 +1707,19 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Fort Pierce police union declares impasse, says city offered no raises",
-            "generated_lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. The association described the proposal in a Nov.",
-            "source_title": "Fort Pierce police union declares impasse, says city cited Amendment 3 in 0% raise offer - cw34.com",
+            "generated_headline": "Fort Pierce police union declares impasse over reported offer of no raises",
+            "generated_lead": "The Fort Pierce Police Officers Association says it declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. In a Nov.",
+            "source_title": "Fort Pierce police union declares impasse, says city cited Amendment 3 in 0% raise offer - WPEC",
             "source_lead": "The Fort Pierce Police Officers Association says it declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. In a Facebook post dated Nov.",
             "title_similarity": {
-              "score": 0.6778,
-              "overlap": 0.7273,
-              "jaccard": 0.4211,
-              "sorted_sequence": 0.7826,
-              "ordered_sequence": 0.7702,
-              "shared_token_count": 8.0
+              "score": 0.6069,
+              "overlap": 0.7,
+              "jaccard": 0.3889,
+              "sorted_sequence": 0.7013,
+              "ordered_sequence": 0.6883,
+              "shared_token_count": 7.0
             },
-            "lead_token_overlap": 0.9,
+            "lead_token_overlap": 1.0,
             "missing": []
           },
           "source_jurisdiction": {
@@ -1476,10 +1741,10 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1540,34 +1805,38 @@
           "canonical_headline": "Flooding, equipment failures hamper care at Save the Chimps in St. Lucie County",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Brightline train strikes, kills pedestrian in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-brightline-train-strikes-kills-st-lucie-person/74369452",
-          "editorial_story_id": "story_026452",
-          "canonical_slug": "2026-11-08-brightline-train-strikes-kills-pedestrian-north-of-walton-road-in-st-lucie-count",
-          "canonical_headline": "Brightline train strikes, kills pedestrian north of Walton Road in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Two men accused of stealing light poles during St. Lucie County flooding emergency - WPEC",
-          "source_url": "https://cbs12.com/news/local/two-men-accused-of-stealing-light-poles-during-st-lucie-county-flooding-emergency-fort-pierce-st-lucie-county-aluminum-light-poles-light-pole-theft-theft-burglary-grand-theft-state-of-emergency-flooding-historic-flooding-eleven-mile-road-okee",
-          "editorial_story_id": "story_017609",
-          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Port St. Lucie cooking class helps adults with disabilities build skills, independence - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/cooking-up-confidence-program-helps-adults-with-disabilities-gain-independence",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-09-port-st-lucie-cooking-class-teaches-adults-with-disabilities-skills-for-independ",
+          "canonical_headline": "Port St. Lucie cooking class teaches adults with disabilities skills for independence",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_026538",
+            "source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/cooking-up-confidence-program-helps-adults-with-disabilities-gain-independence"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_026538,source:https://www.wptv.com/news/local-news/our-community/port-st-lucie/cooking-up-confidence-program-helps-adults-with-disabilities-gain-independence",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1673,67 +1942,22 @@
           ],
           "reason": "The incoming article covers the same sanctuary flooding and distinctive care disruptions as the canonical. Its additional facts describe receding water, restored access and routine recovery lessons, not a material development or a distinct accountability or policy story.",
           "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Brightline train strikes, kills pedestrian in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-brightline-train-strikes-kills-st-lucie-person/74369452",
-          "canonical_slug": "2026-11-08-brightline-train-strikes-kills-pedestrian-north-of-walton-road-in-st-lucie-count",
-          "canonical_headline": "Brightline train strikes, kills pedestrian north of Walton Road in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Two men accused of stealing light poles during St. Lucie County flooding emergency - WPEC",
-          "source_url": "https://cbs12.com/news/local/two-men-accused-of-stealing-light-poles-during-st-lucie-county-flooding-emergency-fort-pierce-st-lucie-county-aluminum-light-poles-light-pole-theft-theft-burglary-grand-theft-state-of-emergency-flooding-historic-flooding-eleven-mile-road-okee",
-          "canonical_slug": "2026-09-28-fort-pierce-driver-fled-police-twice-rammed-vehicle-during-traffic-stop",
-          "canonical_headline": "Fort Pierce driver fled police twice, rammed vehicle during traffic stop",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Both articles mention Fort Pierce police and Okeechobee Road, but in different incidents."
-          ],
-          "novel_facts": [
-            "Pablo Rojas Castro and Alberto Guia Hernandez were arrested in connection with the theft of 34 aluminum light poles valued at $6,800.",
-            "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding state of emergency.",
-            "Investigators used a drone to observe the removal of property before deputies stopped the suspects' truck on Okeechobee Road."
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton and One",
-      "generated_card_count": 0,
-      "elapsed_seconds": 53.916
+      "live_hero_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium",
+      "generated_card_count": 1,
+      "elapsed_seconds": 76.716
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1750,10 +1974,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1773,16 +1997,6 @@
           "canonical_slug": "2026-11-10-free-bed-races-return-to-stuart-saturday-to-help-martin-county-families",
           "canonical_headline": "Free Bed Races return to Stuart Saturday to help Martin County families",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Martin County commissioners revisit proposed train quiet zones",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
-          "editorial_story_id": "story_026758",
-          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
-          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
-          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1826,8 +2040,48 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County to establish some quiet zones to combat train noise",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "identity_keys": [
+            "story:story_026758",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['hobe-sound', 'martin-county']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=[]",
+            "shared_agencies=['martin-county-commission']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['quiet', 'train', 'zone']",
+            "shared_distinctive_token_count=27",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -1856,21 +2110,6 @@
           "canonical_headline": "Free Bed Races return to Stuart Saturday to help Martin County families",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Martin County commissioners revisit proposed train quiet zones",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
-          "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
-          "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1940,7 +2179,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.554
+      "elapsed_seconds": 23.639
     }
   ]
 }
