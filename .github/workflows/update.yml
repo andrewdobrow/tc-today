@@ -125,7 +125,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install feedparser anthropic 'openai>=2,<3' requests beautifulsoup4 json-repair pytest
+          python -m pip install feedparser anthropic 'openai>=2,<3' requests beautifulsoup4 json-repair pytest pillow
 
       - name: Set up Node for pinned Supabase CLI
         uses: actions/setup-node@v6
@@ -600,6 +600,9 @@ jobs:
           print(f"Editorial registry size before commit: {path.stat().st_size / (1024 * 1024):.2f} MiB")
           PY
           fi
+
+      - name: Guard Facebook social preview images
+        run: python scripts/guard_facebook_social_images.py --days 14
 
       - name: Commit and push
         id: push
