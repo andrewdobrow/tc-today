@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-10T11:50:25Z",
+  "generated_at": "2026-11-10T13:53:00Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 5,
-    "placements_after": 5,
+    "placements_before": 3,
+    "placements_after": 3,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,21 +49,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 177,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 54,
-      "skip": 123
+      "generate_new": 17,
+      "skip": 158,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 4,
-      "low_value": 122,
-      "publishable": 51
+      "low_value": 119,
+      "publishable": 53
     },
     "source_classes": {
-      "aggregator": 126,
-      "local_news": 19,
-      "regional_news": 25,
-      "unknown": 7
+      "aggregator": 123,
+      "local_news": 21,
+      "regional_news": 26,
+      "unknown": 6
     },
     "rejected_count": 4,
     "rejected_examples": [
@@ -107,14 +108,14 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 42,
-      "same_event": 135
+      "new_story": 16,
+      "same_event": 160
     },
     "examples": [
       {
-        "story_id": "story_026758",
-        "title": "Martin County commissioners revisit proposed train quiet zones",
-        "event_key": "unknown-event-e77563a6cc",
+        "story_id": "story_026796",
+        "title": "United Way of Indian River County Brings Flood Relief and Disaster Preparedness Directly to Residents - United Way Worldwide",
+        "event_key": "unknown-event-7526cc90f5",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -124,15 +125,67 @@
         ]
       },
       {
-        "story_id": "story_026759",
-        "title": "Palm Beach County shelter dog with endless energy lands new career in police K-9 work",
-        "event_key": "unknown-event-da8127fa27",
+        "story_id": "story_026797",
+        "title": "Knife-wielding man killed in deputy-involved shooting in northern Palm Beach County",
+        "event_key": "named-person-death:law-enforcement",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_026798",
+        "title": "Billionaires spent big to fight California wealth tax. Voters rejected it",
+        "event_key": "unknown-event-fb0449cc02",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_026799",
+        "title": "Florida leads nation in college affordability and on-time graduation - Tampa Bay Times",
+        "event_key": "unknown-event-0989d7a41e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_026758",
+        "title": "Martin County commissioners revisit proposed train quiet zones",
+        "event_key": "unknown-event-e77563a6cc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026759",
+        "title": "Palm Beach County shelter dog with endless energy lands new career in police K-9 work",
+        "event_key": "unknown-event-da8127fa27",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -141,10 +194,11 @@
         "event_key": "unknown-event-01e8c21b6d",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -152,48 +206,56 @@
         "story_id": "story_026760",
         "title": "Palm Beach County School District employee arrested after undercover sex crime investigation - WPBF",
         "event_key": "unknown-event-97172deb4f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026761",
         "title": "Western St. Lucie County residents seek answers after historic flooding",
         "event_key": "unknown-event-f729642f39",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026762",
         "title": "How Delegate-Elect Mathew Anderson plans to fight for Fayette County - AOL.com",
         "event_key": "unknown-event-f905b19ac3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026763",
         "title": "'Devastating': Flood assessments underway in Palm Beach and Okeechobee counties and Treasure Coast - WPBF",
         "event_key": "unknown-event-befa50b9b3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -202,10 +264,11 @@
         "event_key": "unknown-event-d8c297a57a",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -215,10 +278,11 @@
         "event_key": "unknown-event-d9e67df4c0",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -242,10 +306,11 @@
         "event_key": "traffic-crash-3a39e31b73-3a39e31b73",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -274,8 +339,8 @@
       },
       {
         "story_id": "story_026737",
-        "title": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-        "event_key": "unknown-event-54258c0fa5",
+        "title": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
+        "event_key": "unknown-event-5be87e41bc",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -283,6 +348,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026758",
+        "title": "Martin County commissioners revisit proposed train quiet zones - WFLX",
+        "event_key": "unknown-event-f7d3449ed9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -299,83 +377,13 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_024907",
-        "title": "NTSB recovers cockpit voice recorder from Learjet that crashed near Greenacres",
-        "event_key": "traffic-crash-8101a95a2e-8101a95a2e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026697",
-        "title": "Palm Beach County school district employee accused of soliciting person he believed was 14-year-old boy",
-        "event_key": "unknown-event-09024a4cfc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026698",
-        "title": "Palm Beach County proposes $250K grant program for businesses affected by Learjet crash",
-        "event_key": "traffic-crash-68a008899f-68a008899f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026700",
-        "title": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-        "event_key": "unknown-event-7f8a272f91",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026671",
-        "title": "West Palm Beach neighbors say they've been flooded in for a week with no answers on who will help them recover",
-        "event_key": "fire-14325ecb7e-14325ecb7e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_026758",
-        "title": "Martin County commissioners revisit proposed train quiet zones",
-        "event_key": "unknown-event-e77563a6cc",
+        "story_id": "story_026796",
+        "title": "United Way of Indian River County Brings Flood Relief and Disaster Preparedness Directly to Residents - United Way Worldwide",
+        "event_key": "unknown-event-7526cc90f5",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -383,19 +391,75 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_026797",
+        "title": "Knife-wielding man killed in deputy-involved shooting in northern Palm Beach County",
+        "event_key": "named-person-death:law-enforcement",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: conservative merge requirements were not met",
+        "decision_trace": [
+          "No sufficiently supported match",
+          "Threshold: 0.78"
+        ]
+      },
+      {
+        "story_id": "story_026798",
+        "title": "Billionaires spent big to fight California wealth tax. Voters rejected it",
+        "event_key": "unknown-event-fb0449cc02",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_026799",
+        "title": "Florida leads nation in college affordability and on-time graduation - Tampa Bay Times",
+        "event_key": "unknown-event-0989d7a41e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_026758",
+        "title": "Martin County commissioners revisit proposed train quiet zones",
+        "event_key": "unknown-event-e77563a6cc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026759",
         "title": "Palm Beach County shelter dog with endless energy lands new career in police K-9 work",
         "event_key": "unknown-event-da8127fa27",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -405,10 +469,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -416,52 +481,60 @@
         "story_id": "story_026760",
         "title": "Palm Beach County School District employee arrested after undercover sex crime investigation - WPBF",
         "event_key": "unknown-event-97172deb4f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026761",
         "title": "Western St. Lucie County residents seek answers after historic flooding",
         "event_key": "unknown-event-f729642f39",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026762",
         "title": "How Delegate-Elect Mathew Anderson plans to fight for Fayette County - AOL.com",
         "event_key": "unknown-event-f905b19ac3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_026763",
         "title": "'Devastating': Flood assessments underway in Palm Beach and Okeechobee counties and Treasure Coast - WPBF",
         "event_key": "unknown-event-befa50b9b3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -471,10 +544,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -485,10 +559,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -514,10 +589,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -538,8 +614,8 @@
       },
       {
         "story_id": "story_026737",
-        "title": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-        "event_key": "unknown-event-54258c0fa5",
+        "title": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
+        "event_key": "unknown-event-5be87e41bc",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -548,6 +624,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026758",
+        "title": "Martin County commissioners revisit proposed train quiet zones - WFLX",
+        "event_key": "unknown-event-f7d3449ed9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -580,147 +670,28 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_026697",
-        "title": "Palm Beach County school district employee accused of soliciting person he believed was 14-year-old boy",
-        "event_key": "unknown-event-09024a4cfc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026698",
-        "title": "Palm Beach County proposes $250K grant program for businesses affected by Learjet crash",
-        "event_key": "traffic-crash-68a008899f-68a008899f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026700",
-        "title": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-        "event_key": "unknown-event-7f8a272f91",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026671",
-        "title": "West Palm Beach neighbors say they've been flooded in for a week with no answers on who will help them recover",
-        "event_key": "fire-14325ecb7e-14325ecb7e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026610",
-        "title": "Vote for Audi Stuart Boys Athlete of the Week for Nov. 2-7 - Treasure Coast News",
-        "event_key": "unknown-event-9365088565",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "death": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "event_type_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1
-    },
-    "examples": [
-      {
-        "headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
-        "event_key": "named-person-death:toyota-rav",
-        "current_story_id": "story_026786",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_023680",
-        "candidate_confidence": 0.698182,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "event_type_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_023680",
-          "Novel milestones: death",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.18",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.70"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 15,
     "retrospective_high_confidence_candidate_count": 5,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 378,
-      "timeline_entries_examined": 1094,
-      "transitions_examined": 684,
+      "stories_with_timelines": 382,
+      "timeline_entries_examined": 1104,
+      "transitions_examined": 689,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 15,
       "high_confidence_candidate_count": 5,
@@ -840,41 +811,6 @@
           }
         },
         {
-          "story_id": "story_026122",
-          "story_title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
-          "milestones": [
-            "opening"
-          ],
-          "matched_phrases": {
-            "opening": [
-              "open"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-e98eb4bb45e65b99ea30",
-            "event_key": "unknown-event-44890e1cca",
-            "published_at": "2026-11-07T03:16:58.232077+00:00",
-            "title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
-            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
-          },
-          "newer_article": {
-            "article_id": "rss-57ed94d072136fc024ae",
-            "event_key": "unknown-event-743d1d6bdf",
-            "published_at": "2026-11-07T11:42:11.437708+00:00",
-            "title": "FHSAA Volleyball Finals: Horizon vs. DeLand, and No. 1 Orangewood seeks Open title - Orlando Sentinel",
-            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
-          }
-        },
-        {
           "story_id": "story_024360",
           "story_title": "Polk County sheriff unveils largest undercover sting in 281-arrest human trafficking sweep - WKMG",
           "milestones": [
@@ -907,6 +843,41 @@
             "title": "Polk County sheriff unveils largest undercover sting in 281-arrest human trafficking sweep - WKMG",
             "source": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQcmxRcnRQeW04dDBtaW1waV9MbWpyQ1dTODJVWERhNVFCWjY3R21waUNwREUxNVM4OXo5UUdOd2hkY3NDc3RwYzNGRUlRLXhzdjREUjRMdGcxTXdQMmNWME5rN0w2VERwWlFBX1pzczV5dGxlU1JKQnVzRVpDREJFSmJHdXlIMW5KeDRJUjVJRWI1Uk5NNW42LVhIRVFxQm9Ua2JfRlpXbHFMZE5BenFiQm5ZcXVtOVJld2FUbUI0YkgzWFNaV3VoVmJCZ2Znd00?oc=5",
             "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQcmxRcnRQeW04dDBtaW1waV9MbWpyQ1dTODJVWERhNVFCWjY3R21waUNwREUxNVM4OXo5UUdOd2hkY3NDc3RwYzNGRUlRLXhzdjREUjRMdGcxTXdQMmNWME5rN0w2VERwWlFBX1pzczV5dGxlU1JKQnVzRVpDREJFSmJHdXlIMW5KeDRJUjVJRWI1Uk5NNW42LVhIRVFxQm9Ua2JfRlpXbHFMZE5BenFiQm5ZcXVtOVJld2FUbUI0YkgzWFNaV3VoVmJCZ2Znd00?oc=5"
+          }
+        },
+        {
+          "story_id": "story_026122",
+          "story_title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
+          "milestones": [
+            "opening"
+          ],
+          "matched_phrases": {
+            "opening": [
+              "open"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-e98eb4bb45e65b99ea30",
+            "event_key": "unknown-event-44890e1cca",
+            "published_at": "2026-11-07T03:16:58.232077+00:00",
+            "title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
+            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-57ed94d072136fc024ae",
+            "event_key": "unknown-event-743d1d6bdf",
+            "published_at": "2026-11-07T11:42:11.437708+00:00",
+            "title": "FHSAA Volleyball Finals: Horizon vs. DeLand, and No. 1 Orangewood seeks Open title - Orlando Sentinel",
+            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
           }
         }
       ],
@@ -1241,11 +1212,11 @@
         "timeline_identity_unanchored": 9,
         "weak_title_continuity": 1
       },
-      "excluded_entry_count": 34,
+      "excluded_entry_count": 35,
       "exclusion_reasons": {
         "insufficient_title_detail": 7,
         "low_value_title": 2,
-        "social_source": 25
+        "social_source": 26
       },
       "examples": [
         {
@@ -2308,27 +2279,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 676,
-      "treasure_coast_local": 514,
+      "florida": 680,
+      "treasure_coast_local": 515,
       "treasure_coast_region": 162,
-      "unknown": 1273
+      "unknown": 1279
     },
-    "average_score": 59.16
+    "average_score": 59.13
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 676,
-      "treasure_coast_local": 514,
+      "florida": 680,
+      "treasure_coast_local": 515,
       "treasure_coast_region": 162,
-      "unknown": 1273
+      "unknown": 1279
     },
-    "average_priority": 2.83
+    "average_priority": 2.8
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1588,
-      "developing": 74,
-      "ongoing": 963
+      "active": 1620,
+      "developing": 75,
+      "ongoing": 941
     }
   },
   "registry_health": {
@@ -2367,19 +2338,80 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-10T02:41:11Z",
     "quarantined_story_records_retained": 5064,
-    "active_story_count": 2625
+    "active_story_count": 2636
   },
   "stories": {
-    "total": 2625,
+    "total": 2636,
     "importance_levels": {
       "breaking": 4,
       "high": 57,
-      "normal": 313,
-      "low": 2251,
+      "normal": 314,
+      "low": 2261,
       "archived": 0
     },
-    "average_importance": 6.81,
+    "average_importance": 6.8,
     "top": [
+      {
+        "story_id": "story_026722",
+        "title": "One person is dead following a crash in Indian River County - WPBF",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 2.1
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-10T11:41:55.165203+00:00",
+          "hours_since_update": 2.1,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
       {
         "story_id": "story_026284",
         "title": "St. Lucie County Fire District confirms firefighter’s death - WPBF",
@@ -2393,7 +2425,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 59.99
+          "age_hours": 61.99
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2443,7 +2475,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T23:42:34.970395+00:00",
-          "hours_since_update": 59.99,
+          "hours_since_update": 61.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2461,7 +2493,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 12.04
+          "age_hours": 14.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2505,25 +2537,25 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 12.04,
+          "hours_since_update": 14.05,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_026786",
-        "title": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
+        "story_id": "story_026785",
+        "title": "FHP probes fatal SUV-motorcycle crash on 37th Street in Martin County - cw34.com",
         "score": 65,
-        "editorial_priority": 73,
-        "editorial_score": 73,
+        "editorial_priority": 64,
+        "editorial_score": 64,
         "score_breakdown": {
-          "score": 73,
+          "score": 64,
           "importance": 65,
           "proximity_multiplier": 1.0,
           "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 0.04
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 2.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2542,11 +2574,9 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "Indian River County"
+            "Martin County"
           ],
-          "places": [
-            "Vero Beach"
-          ]
+          "places": []
         },
         "editorial_proximity": {
           "score": 100,
@@ -2555,13 +2585,13 @@
         },
         "event_count": 1,
         "timeline_entries": 1,
-        "relationship_decisions": 1,
+        "relationship_decisions": 0,
         "canonical_source_candidates": 1,
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 2.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2570,16 +2600,16 @@
         "story_id": "story_013476",
         "title": "Former Fox producer, podcaster Jennifer Eckhart found dead in Florida home (1) - Treasure Coast News",
         "score": 75,
-        "editorial_priority": 70,
-        "editorial_score": 70,
+        "editorial_priority": 63,
+        "editorial_score": 63,
         "score_breakdown": {
-          "score": 70,
+          "score": 63,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.0
+          "age_hours": 26.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2620,7 +2650,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 24.0,
+          "hours_since_update": 26.0,
           "event_count": 33,
           "timeline_entries": 33
         }
@@ -2629,16 +2659,16 @@
         "story_id": "story_026485",
         "title": "Fatal incident reported on Florida’s Turnpike near Fort Pierce Service Plaza - WPBF",
         "score": 65,
-        "editorial_priority": 70,
-        "editorial_score": 70,
+        "editorial_priority": 62,
+        "editorial_score": 62,
         "score_breakdown": {
-          "score": 70,
+          "score": 62,
           "importance": 65,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 24.0
+          "age_hours": 26.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2676,115 +2706,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 24.0,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_026722",
-        "title": "One person is dead following a crash in Indian River County - WPBF",
-        "score": 65,
-        "editorial_priority": 70,
-        "editorial_score": 70,
-        "score_breakdown": {
-          "score": 70,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 12.08
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 12.08,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_026785",
-        "title": "FHP probes fatal SUV-motorcycle crash on 37th Street in Martin County - cw34.com",
-        "score": 65,
-        "editorial_priority": 64,
-        "editorial_score": 64,
-        "score_breakdown": {
-          "score": 64,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 0.04
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 26.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2802,7 +2724,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 312.99
+          "age_hours": 314.99
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2858,7 +2780,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-28T10:42:38.998617+00:00",
-          "hours_since_update": 312.99,
+          "hours_since_update": 314.99,
           "event_count": 9,
           "timeline_entries": 9
         }
@@ -2876,7 +2798,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 63.99
+          "age_hours": 66.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2914,7 +2836,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 63.99,
+          "hours_since_update": 66.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2932,7 +2854,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 230.99
+          "age_hours": 233.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2982,7 +2904,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-31T20:42:28.931873+00:00",
-          "hours_since_update": 230.99,
+          "hours_since_update": 233.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -3000,7 +2922,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 88.0
+          "age_hours": 90.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3038,7 +2960,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-06T19:42:02.254300+00:00",
-          "hours_since_update": 88.0,
+          "hours_since_update": 90.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3056,7 +2978,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 118.31
+          "age_hours": 120.32
         },
         "level": "high",
         "importance_reasons": [
@@ -3092,7 +3014,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T13:23:10.322798+00:00",
-          "hours_since_update": 118.31,
+          "hours_since_update": 120.32,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3110,7 +3032,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 102.46
+          "age_hours": 104.46
         },
         "level": "high",
         "importance_reasons": [
@@ -3149,7 +3071,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-06T05:14:27.024725+00:00",
-          "hours_since_update": 102.46,
+          "hours_since_update": 104.46,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3167,7 +3089,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 191.99
+          "age_hours": 193.99
         },
         "level": "high",
         "importance_reasons": [
@@ -3211,7 +3133,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 191.99,
+          "hours_since_update": 193.99,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -3229,7 +3151,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 110.44
+          "age_hours": 112.44
         },
         "level": "high",
         "importance_reasons": [
@@ -3267,7 +3189,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T21:15:45.981160+00:00",
-          "hours_since_update": 110.44,
+          "hours_since_update": 112.44,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3285,7 +3207,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 114.99
+          "age_hours": 116.99
         },
         "level": "high",
         "importance_reasons": [
@@ -3323,7 +3245,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T16:42:43.274376+00:00",
-          "hours_since_update": 114.99,
+          "hours_since_update": 116.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3341,7 +3263,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 144.0
+          "age_hours": 146.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3384,7 +3306,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-04T11:42:02.057431+00:00",
-          "hours_since_update": 144.0,
+          "hours_since_update": 146.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3402,7 +3324,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.01
+          "age_hours": 2.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3441,7 +3363,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 0.01,
+          "hours_since_update": 2.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3459,7 +3381,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 262.99
+          "age_hours": 265.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3497,7 +3419,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 262.99,
+          "hours_since_update": 265.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3515,7 +3437,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 305.68
+          "age_hours": 307.69
         },
         "level": "high",
         "importance_reasons": [
@@ -3561,9 +3483,61 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-10-28T18:00:54.226569+00:00",
-          "hours_since_update": 305.68,
+          "hours_since_update": 307.69,
           "event_count": 8,
           "timeline_entries": 8
+        }
+      },
+      {
+        "story_id": "story_026797",
+        "title": "Knife-wielding man killed in deputy-involved shooting in northern Palm Beach County",
+        "score": 65,
+        "editorial_priority": 41,
+        "editorial_score": 41,
+        "score_breakdown": {
+          "score": 41,
+          "importance": 65,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-11-10T13:42:14.229739+00:00",
+          "hours_since_update": 0.01,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       }
     ]
@@ -3571,7 +3545,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-10T11:47:05Z",
+    "generated_at": "2026-11-10T13:48:11Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3586,36 +3560,37 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 4,
-        "generated_live": 4,
-        "generation_failed_archive_recovery": 1
+        "category_eligibility_archive_recovery": 5,
+        "generated_live": 2,
+        "generation_failed_archive_recovery": 2
       },
       "failures": {
+        "article_framing_integrity": 1,
         "invalid_json": 1,
-        "no_category_eligible_sources": 4
+        "no_category_eligible_sources": 5
       },
       "model_attempt_count": 6,
-      "model_elapsed_seconds": 127.796,
-      "archive_recovery_requested_count": 5,
+      "model_elapsed_seconds": 123.051,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 1,
-      "category_eligibility_rejection_count": 13,
-      "published_story_duplicate_suppression_count": 28,
-      "story_aware_update_context_count": 0,
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 8,
+      "published_story_duplicate_suppression_count": 46,
+      "story_aware_update_context_count": 1,
       "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 3
+      "material_update_promotion_cache_hit_count": 5,
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "generated_live",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 27,
-        "publishable_source_count": 17,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 14,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -3624,11 +3599,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.829,
+            "elapsed_seconds": 20.764,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 12.829,
+        "model_elapsed_seconds": 20.764,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3639,37 +3614,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 10,
-        "category_eligibility_rejection_count": 8,
+        "category_eligibility_assessed_count": 6,
+        "category_eligibility_rejection_count": 5,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Western St. Lucie County residents seek answers after historic flooding",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3739,44 +3686,60 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "St. Lucie County schools to reopen Monday after historic flooding - cw34.com",
-            "source_url": "https://cw34.com/newsletter-daily/st-lucie-county-schools-to-reopen-monday-after-historic-flooding-st-lucie-public-schools-slps-st-lucie-county-port-st-lucie-schools-reopen-school-reopening-nov-9-2026-historic-flooding-flood-recovery-flood-response-st-lucie-county-schools"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
             "headline": "St. Lucie County schools to reopen Monday after historic flooding - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-to-reopen-monday-after-historic-flooding-st-lucie-public-schools-slps-st-lucie-county-port-st-lucie-schools-reopen-school-reopening-nov-9-2026-historic-flooding-flood-recovery-flood-response-st-lucie-county-schools"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
-            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
-            "editorial_story_id": "story_026737",
-            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
-            "editorial_story_id": "story_026700",
-            "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
-            "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
+            "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event?teaserSource=trending",
+            "editorial_story_id": "story_026732",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
+            "editorial_story_id": "story_026737",
+            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
+            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3790,8 +3753,49 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/10/martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "publisher": "www.wflx.com",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "event-identity-authority:governing_body_plus_policy_subject",
+            "identity_keys": [
+              "story:story_026758",
+              "source:https://www.wflx.com/2026/11/10/martin-county-commissioners-revisit-proposed-train-quiet-zones"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_agency",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['hobe-sound', 'martin-county']",
+              "shared_event_families=['public-policy']",
+              "shared_named_people=[]",
+              "shared_precise_locations=[]",
+              "shared_agencies=['martin-county-commission']",
+              "shared_subject_phrases=['revisit-train-quiet', 'revisit-train-quiet-zone', 'train-quiet-zone']",
+              "shared_headline_topic_core=['quiet', 'revisit', 'train', 'zone']",
+              "shared_distinctive_token_count=139",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -3799,10 +3803,10 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
-            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
-            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -3814,12 +3818,57 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
-            "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
-            "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
+            "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event?teaserSource=trending",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-florida-news-florida-sports-port-st-lucie-news-local-news",
+            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
+            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -3846,18 +3895,18 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County commissioners to review train quiet-zone safety requirements Tuesday",
+        "live_hero_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
         "generated_card_count": 0,
-        "elapsed_seconds": 42.306
+        "elapsed_seconds": 63.73
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 12,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 11,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 2,
@@ -3865,7 +3914,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.047,
+            "elapsed_seconds": 6.601,
             "result": "invalid_json",
             "error_type": "ValueError",
             "error_summary": "Assignment editor returned no valid hero source"
@@ -3873,13 +3922,13 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.608,
+            "elapsed_seconds": 5.626,
             "result": "invalid_json",
             "error_type": "ValueError",
             "error_summary": "Assignment editor returned no valid hero source"
           }
         ],
-        "model_elapsed_seconds": 13.655,
+        "model_elapsed_seconds": 12.228,
         "failure_code": "invalid_json",
         "failure_summary": "Assignment editor returned no valid hero source",
         "sports_expired_event_preview_count": 0,
@@ -3890,23 +3939,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Martin County commissioners revisit proposed train quiet zones",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones"
-          },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
@@ -3936,8 +3971,28 @@
             "source_url": "https://cw34.com/news/local/martin-county-school-felix-a-williams-increases-security-law-enforcement-presence-after-tiktok-threat-suspect-is-released-on-bond-lee-county-parents-concerned-"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
@@ -3971,7 +4026,7 @@
           {
             "category_key": "crime",
             "source_headline": "Cape Coral man arrested after TikTok threats against Martin County student, deputies - cw34.com",
-            "source_url": "https://cw34.com/news/local/cape-coral-man-arrested-after-tiktok-threats-against-martin-county-student-deputies-cape-coral-martin-county-florida-micheal-george-davis-tiktok-threats-social-media-threats-school-threats-student-threats-threats-against-law-enforcement?teaserSource=trending",
+            "source_url": "https://cw34.com/news/local/cape-coral-man-arrested-after-tiktok-threats-against-martin-county-student-deputies-cape-coral-martin-county-florida-micheal-george-davis-tiktok-threats-social-media-threats-school-threats-student-threats-threats-against-law-enforcement",
             "editorial_story_id": "story_026416",
             "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
             "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
@@ -3983,9 +4038,39 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
@@ -3997,8 +4082,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4049,7 +4134,7 @@
           {
             "category_key": "crime",
             "source_headline": "Cape Coral man arrested after TikTok threats against Martin County student, deputies - cw34.com",
-            "source_url": "https://cw34.com/news/local/cape-coral-man-arrested-after-tiktok-threats-against-martin-county-student-deputies-cape-coral-martin-county-florida-micheal-george-davis-tiktok-threats-social-media-threats-school-threats-student-threats-threats-against-law-enforcement?teaserSource=trending",
+            "source_url": "https://cw34.com/news/local/cape-coral-man-arrested-after-tiktok-threats-against-martin-county-student-deputies-cape-coral-martin-county-florida-micheal-george-davis-tiktok-threats-social-media-threats-school-threats-student-threats-threats-against-law-enforcement",
             "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
             "canonical_headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
             "canonical_is_custom": false,
@@ -4065,15 +4150,15 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 37.254
+        "elapsed_seconds": 34.856
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 13,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4090,27 +4175,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "source_locality:treasure coast",
-              "source_locality:martin county",
-              "source_locality:hobe sound"
-            ],
-            "headline": "Martin County commissioners revisit proposed train quiet zones",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones"
-          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4130,8 +4197,28 @@
             "source_url": "https://www.wptv.com/news/state/florida-requests-federal-disaster-assistance-after-widespread-flooding"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
@@ -4162,6 +4249,36 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
             "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
             "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
             "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
@@ -4192,7 +4309,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.219
+        "elapsed_seconds": 20.588
       },
       {
         "category_key": "sports",
@@ -4230,7 +4347,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 12.773
+        "elapsed_seconds": 14.202
       },
       {
         "category_key": "things_to_do",
@@ -4238,7 +4355,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 3,
+        "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4255,7 +4372,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "local_attendable_activity_required",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -4295,14 +4412,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.801
+        "elapsed_seconds": 14.369
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4323,16 +4440,16 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "florida",
-            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
+            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOOHVuMU1xVEJDSHJRWHJLelRwTHp2QjEzeF9MMTQ1Wkw3V3BfVG9nckdIS1dNQS02cFJKYVJ6aDFfLWZsTUZiV1Q1ajBaQ3NmOVVzaTJvWTNFUEdsRkt1M0RNLU9ZZURFSVdlbXg5bmtCa1hSaE05TWJjSkYzekQycFlzTkFtTjFKRWFHb2JZQVZhVUJ1YUd6X29wQ3BmOUZ2YWktQVk3enJPQUpMckdIQnBST3ZwYmJXb3BGUmtRMXRrZjBjeEHSAcYBQVVfeXFMTjh1bjFNcVRCQ0hyUVhyS3pUcEx6dkIxM3hfTDE0NVpMN1dwX1RvZ3JHSEtXTUEtNnBSSmFSemgxXy1mbE1GYldUNWowWkNzZjlVc2kyb1kzRVBHbEZLdTNETS1PWWVERUlXZW14OW5rQmtYUmhNOU1iY0pGM3pEMnBZc05BbU4xSkVhR29iWUFWYVVCdWFHel9vcENwZjlGdmFpLUFZN3pyT0FKTHJHSEJwUk92cGJiV29wRlJrUTF0a2YwY3hB",
             "editorial_story_id": "story_026700",
             "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
             "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4343,6 +4460,16 @@
             "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
             "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "florida",
+            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
+            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
+            "editorial_story_id": "story_026700",
+            "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
+            "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4355,13 +4482,13 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "florida",
-            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
-            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
+            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOOHVuMU1xVEJDSHJRWHJLelRwTHp2QjEzeF9MMTQ1Wkw3V3BfVG9nckdIS1dNQS02cFJKYVJ6aDFfLWZsTUZiV1Q1ajBaQ3NmOVVzaTJvWTNFUEdsRkt1M0RNLU9ZZURFSVdlbXg5bmtCa1hSaE05TWJjSkYzekQycFlzTkFtTjFKRWFHb2JZQVZhVUJ1YUd6X29wQ3BmOUZ2YWktQVk3enJPQUpMckdIQnBST3ZwYmJXb3BGUmtRMXRrZjBjeEHSAcYBQVVfeXFMTjh1bjFNcVRCQ0hyUVhyS3pUcEx6dkIxM3hfTDE0NVpMN1dwX1RvZ3JHSEtXTUEtNnBSSmFSemgxXy1mbE1GYldUNWowWkNzZjlVc2kyb1kzRVBHbEZLdTNETS1PWWVERUlXZW14OW5rQmtYUmhNOU1iY0pGM3pEMnBZc05BbU4xSkVhR29iWUFWYVVCdWFHel9vcENwZjlGdmFpLUFZN3pyT0FKTHJHSEJwUk92cGJiV29wRlJrUTF0a2YwY3hB",
             "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
             "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4382,19 +4509,34 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "florida",
+            "source_headline": "Flood-damaged Florida homeowners may qualify for property tax break. Here's what to know",
+            "source_url": "https://www.wptv.com/money/real-estate-news/flood-damaged-florida-homeowners-may-qualify-for-property-tax-break-heres-what-to-know",
+            "canonical_slug": "2026-11-09-florida-homeowners-hit-by-flooding-may-qualify-for-partial-property-tax-refunds",
+            "canonical_headline": "Florida homeowners hit by flooding may qualify for partial property tax refunds",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 10.253
+        "elapsed_seconds": 14.204
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 5,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4402,11 +4544,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 38.743,
+            "elapsed_seconds": 27.435,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 38.743,
+        "model_elapsed_seconds": 27.435,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4417,11 +4559,41 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
+            "source_url": "https://cbs12.com/news/local/fhp-probes-deadly-suv-motorcycle-crash-on-37th-street-in-indian-river-county-florida-news-florida-crash-local-crash",
+            "editorial_story_id": "story_026722",
+            "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
@@ -4502,6 +4674,51 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
+            "source_url": "https://cbs12.com/news/local/fhp-probes-deadly-suv-motorcycle-crash-on-37th-street-in-indian-river-county-florida-news-florida-crash-local-crash",
+            "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Cape Coral man accused of threatening Martin County deputies and family - WPBF",
             "source_url": "https://www.wpbf.com/article/michael-george-davis-cape-coral-man-florida-threat-martin-county-deputies-family/74379848",
             "canonical_slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
@@ -4624,149 +4841,73 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+        "live_hero_headline": "Flooding threatens at least three graves at Jensen Beach cemetery",
         "generated_card_count": 1,
-        "elapsed_seconds": 55.886
+        "elapsed_seconds": 75.38
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
-        "selected_source_count": 6,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 50.49,
-            "result": "success"
+            "elapsed_seconds": 30.882,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Fort Pierce police union declares bargaining impasse over proposed pay freeze"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 31.742,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Fort Pierce police union declares bargaining impasse over proposed pay freeze"
           }
         ],
-        "model_elapsed_seconds": 50.49,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 62.624,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Fort Pierce police union declares bargaining impasse over proposed pay freeze",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Fort Pierce police union declares bargaining impasse over proposed pay freeze",
-            "missing": [
-              "named_measure_undefined_in_lead"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": false,
-              "headline": "Fort Pierce police union declares bargaining impasse over proposed pay freeze",
-              "lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed freezing officers’ pay, with no raises or step increases. The declaration moves the dispute into a formal process for resolving bargaining disagreements.",
-              "lead_word_count": 41,
-              "headline_overlap_ratio": 0.636,
-              "new_context_token_count": 20,
-              "opaque_references": [
-                "Amendment 3"
-              ],
-              "undefined_references": [
-                "Amendment 3"
-              ],
-              "story_form": "standard",
-              "surname_first_reference": {
-                "required": false,
-                "passed": true,
-                "missing": [],
-                "candidates": []
-              },
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": [
-                "named_measure_undefined_in_lead"
-              ]
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "Fort Pierce police union declares bargaining impasse over proposed pay freeze",
-              "lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed freezing officers’ pay, with no raises or step increases. The declaration moves the dispute into a formal process for resolving bargaining disagreements.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "fort_pierce"
-              ],
-              "lead_jurisdictions": [
-                "fort_pierce"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Fort Pierce police union declares bargaining impasse over proposed pay freeze",
-              "generated_lead": "The Fort Pierce Police Officers Association says it has declared an impasse in contract negotiations after the city proposed freezing officers’ pay, with no raises or step increases. The declaration moves the dispute into a formal process for resolving bargaining disagreements.",
-              "source_title": "Fort Pierce police union declares impasse, says city cited Amendment 3 in 0% raise offer - WPEC",
-              "source_lead": "The Fort Pierce Police Officers Association says it declared an impasse in contract negotiations after the city proposed no raises or step increases for officers. In a Facebook post dated Nov.",
-              "title_similarity": {
-                "score": 0.528,
-                "overlap": 0.6,
-                "jaccard": 0.3158,
-                "sorted_sequence": 0.625,
-                "ordered_sequence": 0.6,
-                "shared_token_count": 6.0
-              },
-              "lead_token_overlap": 0.81,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "temporal_integrity": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPd19VQUpuc1lOUGp2ZThoUzJvNmFxSm9uRC1tbTZfa0ZPcjJMemdaWUVkd2pjYWNua2Q1cnI5akJ2ZFZCcmZQWWYtNTNwVDBjc3JaQWZXYWhMY0lIOGU2aGVKbzFsTVpzS0tYNm9MdTY4ZEM1VUs1SUVLU3gxa2RxLThiTXFIbUdFek52QWh6UnNmTFpUV0FLcXNOUnNyY2sxX3BWT1Z0RVppcU5Cb3pYSDNhbWpWanpMT3I5ODN1dU1JRTN1bVBVYWgzczhIM3VlU2JXYUJFc296eGhWQTNBUWFkbVdGY1o1QklF",
-            "editorial_story_id": "story_026737",
-            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
+            "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event?teaserSource=trending",
+            "editorial_story_id": "story_026732",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4776,6 +4917,16 @@
             "editorial_story_id": "story_026737",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
             "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/10/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4828,24 +4979,49 @@
             "canonical_headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/multi-agency-investigation-targets-23rd-street-gang-in-st-lucie-county-st-lucie-county-sheriff-fort-pierce-police-atf-fbi-dea-fdle-us-marshals-homeland-security",
+            "editorial_story_id": "story_025911",
+            "canonical_slug": "2026-11-05-40-arrested-in-rico-investigation-targeting-fort-pierces-23rd-street-gang",
+            "canonical_headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPd19VQUpuc1lOUGp2ZThoUzJvNmFxSm9uRC1tbTZfa0ZPcjJMemdaWUVkd2pjYWNua2Q1cnI5akJ2ZFZCcmZQWWYtNTNwVDBjc3JaQWZXYWhMY0lIOGU2aGVKbzFsTVpzS0tYNm9MdTY4ZEM1VUs1SUVLU3gxa2RxLThiTXFIbUdFek52QWh6UnNmTFpUV0FLcXNOUnNyY2sxX3BWT1Z0RVppcU5Cb3pYSDNhbWpWanpMT3I5ODN1dU1JRTN1bVBVYWgzczhIM3VlU2JXYUJFc296eGhWQTNBUWFkbVdGY1o1QklF",
-            "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-            "canonical_headline": "Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
+            "source_url": "https://cbs12.com/news/local/floodwaters-linger-a-week-at-greene-sugars-farm-after-10-inches-of-rain-overnight-florida-news-local-news-florida-flooding-event?teaserSource=trending",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4869,6 +5045,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/10/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Fort Pierce chimp sanctuary recovers after historic flooding - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-fort-pierce-chimp-sanctuary-flooding/74378796",
             "canonical_slug": "2026-11-06-flooding-equipment-failures-hamper-care-at-save-the-chimps-in-st-lucie-county",
@@ -4878,8 +5069,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4930,12 +5121,12 @@
             "semantic_action": "hold",
             "confidence": 0.99,
             "shared_anchors": [
-              "Both mention Fort Pierce police and Okeechobee Road, but these are incidental overlaps rather than event-identifying anchors."
+              "Both reports involve Fort Pierce police and Okeechobee Road."
             ],
             "novel_facts": [
-              "Pablo Rojas Castro and Alberto Guia Hernandez were arrested in connection with the theft of 34 aluminum light poles valued at $6,800.",
-              "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding state of emergency.",
-              "Investigators used a drone to observe property being loaded into a truck before deputies stopped it on Okeechobee Road."
+              "Pablo Rojas Castro and Alberto Guia Hernandez were arrested after allegedly stealing 34 aluminum light poles valued at $6,800.",
+              "The alleged theft occurred at a property in the 3500 block of Eleven Mile Road during a flooding-related state of emergency.",
+              "Investigators used a drone to observe the removal of property before deputies stopped the suspects' truck on Okeechobee Road."
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -4996,37 +5187,43 @@
             "novel_facts": [],
             "reason": "The incoming article repeats the same operation and arrest announcement from the identical source story. Its additional operational details and quotations do not establish a subsequent arrest, charge, finding, or other material development. The later publication date alone does not justify an update or new URL.",
             "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "23rd Street gang investigation leads to nearly 40 arrests in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/multi-agency-investigation-targets-23rd-street-gang-in-st-lucie-county-st-lucie-county-sheriff-fort-pierce-police-atf-fbi-dea-fdle-us-marshals-homeland-security",
+            "canonical_slug": "2026-11-05-40-arrested-in-rico-investigation-targeting-fort-pierces-23rd-street-gang",
+            "canonical_headline": "40 arrested in RICO investigation targeting Fort Pierce’s 23rd Street Gang",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
-        "generated_card_count": 0,
-        "elapsed_seconds": 79.581
+        "elapsed_seconds": 86.562
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 10,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 7,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.079,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 12.079,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Indian River County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5035,11 +5232,51 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 10,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "editorial_story_id": "story_026758",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
+            "source_url": "https://cbs12.com/news/local/fhp-probes-deadly-suv-motorcycle-crash-on-37th-street-in-indian-river-county-florida-news-florida-crash-local-crash",
+            "editorial_story_id": "story_026722",
+            "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxQM3dfN0ZUdFdpcVROampsZFBYQVBVbWJLS2hoWmdwbklhOEE5d1NtYm1jUnc5NkprY1FEOE5uQVdNVlo0ZGFxRUUzWF9JZnotaFNjbGtxTlBIX0hZMFFPSkU1SVlSaHdfcmtzVnppdG9Ucmc4RkJRVjl4S05TRWJJN0NnZWp6MEphZ2gxbjFwZUZsVFZQcDhndy1sWGJnc1dNYVo4VllOMDh1MDJrWkVQNnRhSXUyREtDQTJQVDEweHJ3ODc2NkNpZl9FWkR1SXRkN1pZWDZpV20waHlqQnNXWG1wREtRbUllaEY3MWFSRkhLeGs5SE1V",
+            "editorial_story_id": "story_026732",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
@@ -5056,7 +5293,7 @@
             "source_url": "https://www.wpbf.com/article/one-person-is-dead-following-a-crash-in-indian-river-county/74380100",
             "editorial_story_id": "story_026722",
             "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
-            "canonical_headline": "At least one dead in crash on 37th Street in Indian River County",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -5068,6 +5305,66 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Martin County commissioners revisit proposed train quiet zones",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/today-martin-county-commissioners-revisit-proposed-train-quiet-zones",
+            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+            "canonical_headline": "Martin County commissioners to review safety requirements for train quiet zones",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - WPEC",
+            "source_url": "https://cbs12.com/news/local/fhp-probes-deadly-suv-motorcycle-crash-on-37th-street-in-indian-river-county-florida-news-florida-crash-local-crash",
+            "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxQM3dfN0ZUdFdpcVROampsZFBYQVBVbWJLS2hoWmdwbklhOEE5d1NtYm1jUnc5NkprY1FEOE5uQVdNVlo0ZGFxRUUzWF9JZnotaFNjbGtxTlBIX0hZMFFPSkU1SVlSaHdfcmtzVnppdG9Ucmc4RkJRVjl4S05TRWJJN0NnZWp6MEphZ2gxbjFwZUZsVFZQcDhndy1sWGJnc1dNYVo4VllOMDh1MDJrWkVQNnRhSXUyREtDQTJQVDEweHJ3ODc2NkNpZl9FWkR1SXRkN1pZWDZpV20waHlqQnNXWG1wREtRbUllaEY3MWFSRkhLeGs5SE1V",
+            "canonical_slug": "2026-11-09-flooding-leaves-greene-sugars-farm-groves-in-vero-beach-underwater-for-over-a-we",
+            "canonical_headline": "Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach family citrus grove reels after historic South Florida flooding damages crops - WPEC",
@@ -5088,7 +5385,7 @@
             "source_headline": "One person is dead following a crash in Indian River County - WPBF",
             "source_url": "https://www.wpbf.com/article/one-person-is-dead-following-a-crash-in-indian-river-county/74380100",
             "canonical_slug": "2026-11-09-at-least-one-dead-in-crash-on-37th-street-in-indian-river-county",
-            "canonical_headline": "At least one dead in crash on 37th Street in Indian River County",
+            "canonical_headline": "SUV turned into motorcycle’s path in fatal Indian River County crash, FHP says",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5100,11 +5397,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "FHP investigates fatal SUV-motorcycle crash on 37th Street in Indian River County",
-        "generated_card_count": 0,
-        "elapsed_seconds": 26.437
+        "elapsed_seconds": 17.903
       }
     ]
   }
