@@ -37200,28 +37200,7 @@ def write_archives(all_categories, top_cat):
         if k not in _best_by_slug or _publication_copy_rank(entry) > _publication_copy_rank(_best_by_slug[k]):
             _best_by_slug[k] = entry
     for _coalesce_key, _entry in _best_by_slug.items():
-        # The final ranked copy is the only one that will reach a canonical write.
-        # Bind all FINAL selected URLs coalesced into that single transaction so an
-        # explicit context hold can account for every source it represents.
-        _candidate = _entry[2]
-        _target_slug = str(
-            _candidate.get("_pre_generation_material_update_canonical_slug") or ""
-        ).strip()
-        if _target_slug and _has_self_consistent_pre_generation_material_update_authority(_candidate):
-            _receipt = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.get(_target_slug) or {}
-            _selected_urls = {
-                _normalized_external_source_url(url)
-                for url in (_receipt.get("source_urls") or [])
-                if _normalized_external_source_url(url)
-            }
-            _chosen_url = _normalized_external_source_url(
-                _candidate.get("source_url") or _candidate.get("_source_url")
-                or _candidate.get("link")
-            )
-            if _chosen_url and _chosen_url in _selected_urls:
-                _candidate["_final_coalesced_material_update_source_urls"] = sorted(
-                    _selected_urls
-                )
+        _stamp_final_coalesced_material_update_sources(_entry[2])
         _apply_category_memberships(
             _entry[2], _entry[0], _memberships_by_slug.get(_coalesce_key, set())
         )
@@ -40317,6 +40296,33 @@ def _has_self_consistent_pre_generation_material_update_authority(item):
         and authorization_matches_target is not None
         and authorization_matches_target(authorization, canonical_slug)
     )
+
+
+def _stamp_final_coalesced_material_update_sources(item):
+    """Bind only actually selected same-canonical sources to ONE ranked final copy.
+
+    This happens after deck/hidden-queue coalescing, never during provisional
+    selection. A final explicit quality hold may then account for every selected
+    source this one publication transaction actually represents.
+    """
+    if not isinstance(item, dict):
+        return False
+    slug = str(item.get("_pre_generation_material_update_canonical_slug") or "").strip()
+    if not slug or not _has_self_consistent_pre_generation_material_update_authority(item):
+        return False
+    receipt = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.get(slug) or {}
+    selected_urls = {
+        _normalized_external_source_url(url)
+        for url in (receipt.get("source_urls") or [])
+        if _normalized_external_source_url(url)
+    }
+    chosen_url = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    if not chosen_url or chosen_url not in selected_urls:
+        return False
+    item["_final_coalesced_material_update_source_urls"] = sorted(selected_urls)
+    return True
 
 
 def _waive_selected_material_update_target(item, canonical_slug, reason):
