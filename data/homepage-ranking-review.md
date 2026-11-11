@@ -4,40 +4,37 @@
 
 ## Hero
 
-- Current: **Martin County reaches one-year emergency contract for phased MARTY transit return**
-- Recommended: **Martin County reaches one-year emergency contract for phased MARTY transit return**
+- Current: **Martin County flooding affects 77 homes; recovery help opens at Hoke Library**
+- Recommended: **Martin County flooding affects 77 homes; recovery help opens at Hoke Library**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Flood-displaced residents press Martin County for action; warning review planned | Flood-displaced residents press Martin County for action; warning review planned | 63 | importance 0; freshness 99.95; urgency 9/10 |
-| 2 | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | 49 | importance 0; freshness 78.24; urgency 2/10; validated material update |
-| 3 | Martin County adds pumps to drain flooding that displaced Jensen Beach residents | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | 47 | importance 0; freshness 94.95; urgency 2/10 |
-| 4 | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | 45 | importance 0; freshness 89.31; urgency 2/10 |
-| 5 | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | Electrical issue blamed for Jensen Beach RV fire that killed family dog | 43 | importance 0; freshness 54.89; urgency 2/10; validated material update |
-| 6 | Free Bed Races return to Stuart Saturday to help Martin County families | Martin County counts 66 flood-damaged homes, 25 destroyed, as Florida seeks federal aid | 44 | importance 0; freshness 83.3; urgency 2/10; -6 category saturation |
-| 7 | Martin County counts 66 flood-damaged homes, 25 destroyed, as Florida seeks federal aid | Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week | 38 | importance 0; freshness 59.9; urgency 2/10 |
-| 8 | Western St. Lucie County flooding prompts emergency meeting, push for faster study | Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One | 38 | importance 0; freshness 59.89; urgency 2/10 |
-| 9 | Electrical issue blamed for Jensen Beach RV fire that killed family dog | Florida homeowners hit by flooding may qualify for partial property tax refunds | 37 | importance 0; freshness 54.89; urgency 2/10 |
-| 10 | Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week | Western St. Lucie County flooding prompts emergency meeting, push for faster study | 42 | importance 0; freshness 74.86; urgency 2/10; -6 category saturation; -4 county saturation |
-| 11 | Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One | Martin County adds pumps to drain flooding that displaced Jensen Beach residents | 47 | importance 0; freshness 54.88; urgency 4/10; validated material update; -12 category saturation; -8 county saturation |
-| 12 | Florida homeowners hit by flooding may qualify for partial property tax refunds | Port St. Lucie cooking class teaches adults with disabilities skills for independence | 33 | importance 0; freshness 38.16; urgency 2/10; -8 county saturation |
+| 1 | St. Lucie County rejects land-use change that could allow nearly 500 homes | St. Lucie County rejects land-use change that could allow nearly 500 homes | 63 | importance 0; freshness 99.96; urgency 9/10 |
+| 2 | Martin County reaches one-year emergency contract for phased MARTY transit return | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | 59 | importance 0; freshness 99.97; urgency 7/10 |
+| 3 | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | Martin County reaches one-year emergency contract for phased MARTY transit return | 57 | importance 0; freshness 72.57; urgency 9/10 |
+| 4 | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | 40 | importance 0; freshness 67.59; urgency 2/10 |
+| 5 | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | 39 | importance 0; freshness 61.95; urgency 2/10 |
+| 6 | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | 42 | importance 0; freshness 50.89; urgency 2/10; validated material update; -6 category saturation; -4 county saturation |
+| 7 | Free Bed Races return to Stuart Saturday to help Martin County families | Western St. Lucie County flooding prompts emergency meeting, push for faster study | 35 | importance 0; freshness 47.5; urgency 2/10; -4 county saturation |
+| 8 | Western St. Lucie County flooding prompts emergency meeting, push for faster study | Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week | 31 | importance 0; freshness 32.54; urgency 2/10 |
+| 9 | Electrical issue blamed for Jensen Beach RV fire that killed family dog | Florida homeowners hit by flooding may qualify for partial property tax refunds | 30 | importance 0; freshness 27.53; urgency 2/10 |
+| 10 | Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week | Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One | 31 | importance 0; freshness 32.53; urgency 2/10; -8 county saturation |
+| 11 | Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One | Electrical issue blamed for Jensen Beach RV fire that killed family dog | 36 | importance 0; freshness 27.53; urgency 2/10; validated material update; -6 category saturation; -8 county saturation |
+| 12 | Florida homeowners hit by flooding may qualify for partial property tax refunds | Free Bed Races return to Stuart Saturday to help Martin County families | 37 | importance 0; freshness 55.95; urgency 2/10; -12 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Martin County adds pumps to drain flooding that displaced Jensen Beach residents**: 3 → 11 — importance 0; freshness 54.88; urgency 4/10; validated material update; -12 category saturation; -8 county saturation
-- **Free Bed Races return to Stuart Saturday to help Martin County families**: 6 → 13 — importance 0; freshness 83.31; urgency 2/10
-- **Electrical issue blamed for Jensen Beach RV fire that killed family dog**: 9 → 5 — importance 0; freshness 54.89; urgency 2/10; validated material update
-- **Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday**: 5 → 2 — importance 0; freshness 78.24; urgency 2/10; validated material update
-- **Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week**: 10 → 7 — importance 0; freshness 59.9; urgency 2/10
-- **Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One**: 11 → 8 — importance 0; freshness 59.89; urgency 2/10
-- **Florida homeowners hit by flooding may qualify for partial property tax refunds**: 12 → 9 — importance 0; freshness 54.89; urgency 2/10
-- **Port St. Lucie cooking class teaches adults with disabilities skills for independence**: 15 → 12 — importance 0; freshness 38.16; urgency 2/10; -8 county saturation
-- **Western St. Lucie County flooding prompts emergency meeting, push for faster study**: 8 → 10 — importance 0; freshness 74.86; urgency 2/10; -6 category saturation; -4 county saturation
-- **Flooding damages Terry Polk's Fort Pierce home two years after tornado loss**: 2 → 3 — importance 0; freshness 94.95; urgency 2/10
-- **Martin County counts 66 flood-damaged homes, 25 destroyed, as Florida seeks federal aid**: 7 → 6 — importance 0; freshness 83.3; urgency 2/10; -6 category saturation
+- **Free Bed Races return to Stuart Saturday to help Martin County families**: 7 → 12 — importance 0; freshness 55.95; urgency 2/10; -12 category saturation; -12 county saturation
+- **Florida homeowners hit by flooding may qualify for partial property tax refunds**: 12 → 9 — importance 0; freshness 27.53; urgency 2/10
+- **Electrical issue blamed for Jensen Beach RV fire that killed family dog**: 9 → 11 — importance 0; freshness 27.53; urgency 2/10; validated material update; -6 category saturation; -8 county saturation
+- **Flooding leaves Greene Sugars Farm groves in Vero Beach underwater for over a week**: 10 → 8 — importance 0; freshness 32.54; urgency 2/10
+- **Jensen Beach family seeks housing and repair funding after flooding destroys home interior**: 3 → 2 — importance 0; freshness 99.97; urgency 7/10
+- **Martin County reaches one-year emergency contract for phased MARTY transit return**: 2 → 3 — importance 0; freshness 72.57; urgency 9/10
+- **Western St. Lucie County flooding prompts emergency meeting, push for faster study**: 8 → 7 — importance 0; freshness 47.5; urgency 2/10; -4 county saturation
+- **Port St. Lucie approves site plan for 6,000-seat soccer stadium at Walton & One**: 11 → 10 — importance 0; freshness 32.53; urgency 2/10; -8 county saturation
 
 ## Guardrails
 
