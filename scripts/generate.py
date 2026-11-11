@@ -37200,6 +37200,28 @@ def write_archives(all_categories, top_cat):
         if k not in _best_by_slug or _publication_copy_rank(entry) > _publication_copy_rank(_best_by_slug[k]):
             _best_by_slug[k] = entry
     for _coalesce_key, _entry in _best_by_slug.items():
+        # The final ranked copy is the only one that will reach a canonical write.
+        # Bind all FINAL selected URLs coalesced into that single transaction so an
+        # explicit context hold can account for every source it represents.
+        _candidate = _entry[2]
+        _target_slug = str(
+            _candidate.get("_pre_generation_material_update_canonical_slug") or ""
+        ).strip()
+        if _target_slug and _has_self_consistent_pre_generation_material_update_authority(_candidate):
+            _receipt = CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.get(_target_slug) or {}
+            _selected_urls = {
+                _normalized_external_source_url(url)
+                for url in (_receipt.get("source_urls") or [])
+                if _normalized_external_source_url(url)
+            }
+            _chosen_url = _normalized_external_source_url(
+                _candidate.get("source_url") or _candidate.get("_source_url")
+                or _candidate.get("link")
+            )
+            if _chosen_url and _chosen_url in _selected_urls:
+                _candidate["_final_coalesced_material_update_source_urls"] = sorted(
+                    _selected_urls
+                )
         _apply_category_memberships(
             _entry[2], _entry[0], _memberships_by_slug.get(_coalesce_key, set())
         )
@@ -40323,6 +40345,40 @@ def _waive_selected_material_update_target(item, canonical_slug, reason):
     })
     if source_url not in row["source_urls"]:
         row["source_urls"].append(source_url)
+    # A final publication transaction may consolidate two independently validated
+    # news sources for the SAME canonical into one copy. If that one final copy is
+    # explicitly rejected by the stricter context or replay gate, both coalesced
+    # source obligations were intentionally held; otherwise the terminal invariant
+    # would fail on the unchosen clone indefinitely. The coalesced list is stamped
+    # only after publication ranking and checked against the actual selected
+    # receipts, so unrelated future sources remain fail-closed.
+    selected_urls = {
+        _normalized_external_source_url(url)
+        for url in (
+            (CURRENT_RUN_SELECTED_MATERIAL_UPDATE_TARGETS.get(slug) or {}).get(
+                "source_urls"
+            ) or []
+        )
+        if _normalized_external_source_url(url)
+    }
+    coalesced_urls = {
+        _normalized_external_source_url(url)
+        for url in (item.get("_final_coalesced_material_update_source_urls") or [])
+        if _normalized_external_source_url(url)
+    }
+    if (
+        reason in {
+            "contextless_update_preserve_existing",
+            "semantic_material_update_source_already_absorbed",
+        }
+        and source_url in selected_urls
+        and coalesced_urls == selected_urls
+        and str(item.get("_pre_generation_material_update_canonical_slug") or "") == slug
+        and _has_self_consistent_pre_generation_material_update_authority(item)
+    ):
+        for held_url in sorted(coalesced_urls):
+            if held_url not in row["source_urls"]:
+                row["source_urls"].append(held_url)
     headline = str(
         item.get("source_headline")
         or item.get("source_title")
