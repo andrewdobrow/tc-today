@@ -34,7 +34,7 @@ def _load_generate():
 
 
 SLUG = "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones"
-WFLX = "https://www.wflx.com/2026/11/10/martin-county-approves-quiet-zones-three-crossings/"
+WFLX = "https://www.wflx.com/2026/11/10/martin-county-approves-quiet-zones-three-crossings"
 WPTV = "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-to-establish-some-quiet-zones-to-combat-train-noise"
 
 
