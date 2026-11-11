@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-11T21:45:42Z",
+  "generated_at": "2026-11-11T23:48:03Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 28,
-    "rejected_count": 9,
+    "assessed_count": 30,
+    "rejected_count": 10,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,8 +34,8 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 4,
-      "rejected_count": 3,
+      "assessed_count": 3,
+      "rejected_count": 2,
       "rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -48,8 +48,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "MARTY bus service begins phased return in Martin County after monthlong shutdown",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/marty-bus-service-begins-phased-return-in-martin-county-after-monthlong-shutdown"
+          "headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -64,22 +64,6 @@
           "local_nexus_signals": [],
           "headline": "Lighthouse for the Blind teaches skills that help people navigate independently in West Palm Beach",
           "source_url": "https://www.wptv.com/shining-a-light/lighthouse-for-the-blind-teaches-skills-that-help-people-navigate-independently-in-west-palm-beach"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Deputies fatally shoot man accused of stabbing woman inside Jupiter-area apartment, PBSO says",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/region-n-palm-beach-county/deputies-fatally-shoot-man-accused-of-stabbing-woman-inside-jupiter-area-apartment-pbso-says"
         }
       ]
     },
@@ -88,7 +72,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 2,
       "rejections": [
         {
@@ -127,8 +111,25 @@
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
       "assessed_count": 4,
-      "rejected_count": 3,
+      "rejected_count": 4,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:port st lucie"
+          ],
+          "headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -201,8 +202,24 @@
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
       "assessed_count": 2,
-      "rejected_count": 1,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service"
+        },
         {
           "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
@@ -235,7 +252,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -244,7 +261,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     },
@@ -253,7 +270,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 9,
+      "assessed_count": 10,
       "rejected_count": 0,
       "rejections": []
     }
