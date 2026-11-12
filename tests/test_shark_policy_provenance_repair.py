@@ -52,7 +52,7 @@ def test_canonical_shark_policy_page_contains_only_policy_update_context():
     assert "Normandy Beach" not in page
     assert "12-foot shark" not in page
     assert "hammerhead shark" not in page.lower()
-    assert "Photo: WPTV" in page
+    # Photo-credit display was intentionally removed sitewide; source provenance\n    # remains protected by the archive/source-history assertions above.\n    assert "Photo: WPTV" not in page
 
     # This regression protects source/provenance integrity. Membership markup is
     # validated in dedicated membership tests and can legitimately exist in a
