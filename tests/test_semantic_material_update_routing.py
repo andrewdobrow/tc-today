@@ -940,7 +940,7 @@ def test_recent_source_image_reconciliation_repairs_visible_fallback_without_ref
     html = article_path.read_text(encoding="utf-8")
     assert f'<figure class="article-hero-image"><img src="{source_image}"' in html
     assert fallback_image not in html
-    assert '<figcaption class="img-credit">Photo: CBS12</figcaption>' in html
+    assert '<figcaption class="img-credit">' not in html
     assert archive[0]["image_url"] == source_image
     assert archive[0]["source_image_url"] == source_image
 
