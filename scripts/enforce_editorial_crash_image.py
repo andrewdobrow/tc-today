@@ -31,11 +31,12 @@ def approved_url(root: Path) -> str:
 
 
 def _rewrite_approved_credit(text: str, approved: str) -> str:
+    # The image override must never reintroduce a visible photo credit.
     pattern = (
         r'(<img\b[^>]*\bsrc="' + re.escape(approved) +
-        r'"[^>]*>\s*<figcaption class="img-credit">)Photo: CBS12(</figcaption>)'
+        r'"[^>]*>)\s*<figcaption class="img-credit">.*?</figcaption>'
     )
-    return re.sub(pattern, r"\1TCT illustrative image\2", text)
+    return re.sub(pattern, r"\1", text, flags=re.IGNORECASE | re.DOTALL)
 
 
 def rewrite_text(path: Path, approved: str, *, require_slug: bool = False) -> bool:
