@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-12T11:54:08Z",
+  "generated_at": "2026-11-12T13:51:23Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 6,
-    "placements_after": 6,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,30 +49,30 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 168,
+    "candidates_processed": 167,
     "routes": {
-      "generate_new": 34,
-      "skip": 134
+      "generate_new": 24,
+      "skip": 143
     },
     "eligibility": {
       "listing": 4,
-      "low_value": 115,
-      "publishable": 49
+      "low_value": 112,
+      "publishable": 51
     },
     "source_classes": {
-      "aggregator": 119,
+      "aggregator": 116,
       "local_news": 30,
       "regional_news": 15,
-      "unknown": 4
+      "unknown": 6
     },
     "rejected_count": 4,
     "rejected_examples": [
       {
-        "headline": "Warner Robins surgeon indicted on 40 felonies, accused of buying stolen cars for rental business, prosecutors say - 13WMAZ",
-        "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQSTZPMTY2UjZaZzJ2TFFoQVVyMjVCWGs1RExXV3lCRFlEZFF3b1RZeWdzVEd3cnNUdC1JWUNxb2E0WFAzZVlUaE9jRUUyRXg3YWptNmhpcVVCOHBYM1ZMQVQ5SlNBQ0gyaTFtWVlxMmlWTkxTendySXJxZTdWeThsMWVKcWU3czFXSHYtNW9KZmlXRzBfR2hZbjRDcTctWlZKZ3F3S2JsMW03SmxkcG9URmFRRGRIcFlmRDZOeXpzTWV5NUVzc01lWTZJT0p2M2s5dGYxUQ?oc=5",
+        "headline": "Adult Kids Are Warning Parents About Retiring in Florida. Moving Twice Could Cost Them - 24/7 Wall St.",
+        "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNQkdtWEctVklRM3RZMnM0ZGJBeUxCSEVvdklfc2xjY1BTU25RV2hPelI0dXJGczNSYVptX1FMZ05vTk5meC03bzQ5a2RkZ1NmX3dlS1pObGROSTdoYjkwVXlGVTUxaGhzcDk4YVpCWEVaeldLcXprTFdMb2doQU9SbTlUaE5sOHBkdEo1X0pBWm1HYWZUUHdGeE43bUlSX3gxejZjUXNJOUx2MVViSE9CbjVKRTRoX3dPbF9zNU1oNzNDQVI0emR6S2Q3SnJ3QVZWYlE?oc=5",
         "status": "listing",
         "reasons": [
-          "Headline matches listing pattern 'for rent'"
+          "Headline resembles a property listing rather than a news event"
         ],
         "source_class": "aggregator"
       },
@@ -107,44 +107,74 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 31,
-      "same_event": 137
+      "new_story": 24,
+      "same_event": 143
     },
     "examples": [
       {
-        "story_id": "story_027193",
-        "title": "Florida School Board reviewing applicants for next superintendent - Treasure Coast News",
-        "event_key": "unknown-event-e810adc0d5",
+        "story_id": "story_027220",
+        "title": "Let's Hear It: Visit WPTV in Martin County on Nov. 16!",
+        "event_key": "unknown-event-c2e9623cf7",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027221",
+        "title": "Pinellas, Pasco schools name finalists for teacher of the year awards - Tampa Bay Times",
+        "event_key": "unknown-event-4fee48e5df",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027193",
+        "title": "Florida School Board reviewing applicants for next superintendent - Treasure Coast News",
+        "event_key": "unknown-event-e810adc0d5",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027194",
         "title": "Tight Florida congressional race, others deserve attention | Opinion - Treasure Coast News",
         "event_key": "unknown-event-705e6c6ae5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027195",
         "title": "Florida high school football: FHSAA playoff scores from Treasure Coast - Treasure Coast News",
         "event_key": "unknown-event-7333a9234f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -153,23 +183,26 @@
         "event_key": "unknown-event-94e0b735d9",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_027196",
+        "story_id": "story_026928",
         "title": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
         "event_key": "unknown-event-76fd9dc5ad",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -178,10 +211,11 @@
         "event_key": "unknown-event-3d67514d44",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -200,15 +234,30 @@
         ]
       },
       {
+        "story_id": "story_027179",
+        "title": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
+        "event_key": "unknown-event-d428df6928",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_027197",
         "title": "Cape Coral man held without bond after rearrest in Martin County threats case - Gulf Coast News and Weather",
         "event_key": "unknown-event-84d26bb68d",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -327,48 +376,6 @@
         "story_id": "story_026857",
         "title": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WFLX",
         "event_key": "unknown-event-03f9608ad4",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026967",
-        "title": "MARTY bus service begins phased return in Martin County after monthlong shutdown",
-        "event_key": "unknown-event-6aecb29ce3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027104",
-        "title": "Florida homeowner touts $10K My Safe Florida Home grant program, offers these tips",
-        "event_key": "unknown-event-d5cd3f50e6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027105",
-        "title": "Florida to cover costs of rebranding President Donald J. Trump International Airport",
-        "event_key": "unknown-event-17ae82f2fe",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -382,9 +389,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_027193",
-        "title": "Florida School Board reviewing applicants for next superintendent - Treasure Coast News",
-        "event_key": "unknown-event-e810adc0d5",
+        "story_id": "story_027220",
+        "title": "Let's Hear It: Visit WPTV in Martin County on Nov. 16!",
+        "event_key": "unknown-event-c2e9623cf7",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -392,32 +399,64 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027221",
+        "title": "Pinellas, Pasco schools name finalists for teacher of the year awards - Tampa Bay Times",
+        "event_key": "unknown-event-4fee48e5df",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027193",
+        "title": "Florida School Board reviewing applicants for next superintendent - Treasure Coast News",
+        "event_key": "unknown-event-e810adc0d5",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027194",
         "title": "Tight Florida congressional race, others deserve attention | Opinion - Treasure Coast News",
         "event_key": "unknown-event-705e6c6ae5",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027195",
         "title": "Florida high school football: FHSAA playoff scores from Treasure Coast - Treasure Coast News",
         "event_key": "unknown-event-7333a9234f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -427,24 +466,27 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_027196",
+        "story_id": "story_026928",
         "title": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
         "event_key": "unknown-event-76fd9dc5ad",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -454,10 +496,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -477,16 +520,32 @@
         ]
       },
       {
+        "story_id": "story_027179",
+        "title": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
+        "event_key": "unknown-event-d428df6928",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_027197",
         "title": "Cape Coral man held without bond after rearrest in Martin County threats case - Gulf Coast News and Weather",
         "event_key": "unknown-event-84d26bb68d",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -613,51 +672,6 @@
         "story_id": "story_026857",
         "title": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WFLX",
         "event_key": "unknown-event-03f9608ad4",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_026967",
-        "title": "MARTY bus service begins phased return in Martin County after monthlong shutdown",
-        "event_key": "unknown-event-6aecb29ce3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027104",
-        "title": "Florida homeowner touts $10K My Safe Florida Home grant program, offers these tips",
-        "event_key": "unknown-event-d5cd3f50e6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027105",
-        "title": "Florida to cover costs of rebranding President Donald J. Trump International Airport",
-        "event_key": "unknown-event-17ae82f2fe",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -674,69 +688,75 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "arrest": 1
+    },
+    "reason_codes": {
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1
+    },
+    "examples": [
+      {
+        "headline": "Driver with revoked license arrested after police pursuit from Stuart into Martin County - WPEC",
+        "event_key": "unknown-event-d5fd6cf7c0",
+        "current_story_id": "story_027225",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_025396",
+        "candidate_confidence": 0.622222,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_025396",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.22",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.62"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 11,
     "retrospective_high_confidence_candidate_count": 3,
     "retrospective_activation_eligible_candidate_count": 2,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 378,
-      "timeline_entries_examined": 1070,
+      "stories_with_timelines": 380,
+      "timeline_entries_examined": 1073,
       "transitions_examined": 664,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 11,
       "high_confidence_candidate_count": 3,
       "activation_eligible_candidate_count": 2,
-      "same_source_evolution_count": 6,
+      "same_source_evolution_count": 5,
       "same_source_evolution_milestones": {
         "arrest": 1,
         "death": 3,
-        "election_result": 1,
         "opening": 1
       },
       "same_source_evolution_examples": [
-        {
-          "story_id": "story_027188",
-          "story_title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
-          "milestones": [
-            "election_result"
-          ],
-          "matched_phrases": {
-            "election_result": [
-              "elected"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-274c6b7c4836a051d596",
-            "event_key": "unknown-event-8e55a5d5c1",
-            "published_at": "2026-11-12T11:42:16.607309+00:00",
-            "title": "Full Results: Mayor of Port St. Lucie - WPBF",
-            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
-            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
-          },
-          "newer_article": {
-            "article_id": "rss-7087c764887f9223ee69",
-            "event_key": "unknown-event-24bdfc0370",
-            "published_at": "2026-11-12T11:42:16.607309+00:00",
-            "title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
-            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
-            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
-          }
-        },
         {
           "story_id": "story_026021",
           "story_title": "Father of deceased co-pilot killed in Palm Beach County jet crash speaks as family seeks answers - WPLG Local 10",
@@ -1172,11 +1192,11 @@
         "timeline_identity_unanchored": 7,
         "weak_title_continuity": 1
       },
-      "excluded_entry_count": 30,
+      "excluded_entry_count": 31,
       "exclusion_reasons": {
         "insufficient_title_detail": 7,
         "low_value_title": 2,
-        "social_source": 21
+        "social_source": 22
       },
       "examples": [
         {
@@ -1949,28 +1969,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 650,
+      "florida": 656,
       "treasure_coast_local": 523,
       "treasure_coast_region": 154,
-      "unknown": 1193
+      "unknown": 1192
     },
-    "average_score": 59.89
+    "average_score": 59.92
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 650,
+      "florida": 656,
       "treasure_coast_local": 523,
       "treasure_coast_region": 154,
-      "unknown": 1193
+      "unknown": 1192
     },
-    "average_priority": 2.8
+    "average_priority": 2.78
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1602,
+      "active": 1642,
       "breaking": 1,
-      "developing": 93,
-      "ongoing": 824
+      "developing": 95,
+      "ongoing": 787
     }
   },
   "registry_health": {
@@ -2008,19 +2028,19 @@
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-12T11:41:16Z",
-    "quarantined_story_records_retained": 5141,
-    "active_story_count": 2520
+    "quarantined_story_records_retained": 5142,
+    "active_story_count": 2525
   },
   "stories": {
-    "total": 2520,
+    "total": 2525,
     "importance_levels": {
       "breaking": 3,
       "high": 58,
       "normal": 291,
-      "low": 2168,
+      "low": 2173,
       "archived": 0
     },
-    "average_importance": 6.79,
+    "average_importance": 6.78,
     "top": [
       {
         "story_id": "story_022411",
@@ -2035,7 +2055,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 8.52
+          "age_hours": 10.51
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2085,7 +2105,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 8.52,
+          "hours_since_update": 10.51,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2103,7 +2123,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 60.01
+          "age_hours": 62.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2147,7 +2167,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 60.01,
+          "hours_since_update": 62.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2165,7 +2185,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 48.02
+          "age_hours": 50.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2209,7 +2229,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 48.02,
+          "hours_since_update": 50.01,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2227,7 +2247,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 16.11
+          "age_hours": 18.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2268,7 +2288,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 16.11,
+          "hours_since_update": 18.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2286,7 +2306,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 16.53
+          "age_hours": 18.53
         },
         "level": "high",
         "importance_reasons": [
@@ -2325,7 +2345,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 16.53,
+          "hours_since_update": 18.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2343,7 +2363,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 8.0
+          "age_hours": 9.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2381,7 +2401,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-12T03:43:30.467718+00:00",
-          "hours_since_update": 8.0,
+          "hours_since_update": 9.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2399,7 +2419,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 108.0
+          "age_hours": 110.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2449,7 +2469,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T23:42:34.970395+00:00",
-          "hours_since_update": 108.0,
+          "hours_since_update": 110.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2467,7 +2487,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 16.54
+          "age_hours": 18.53
         },
         "level": "high",
         "importance_reasons": [
@@ -2506,7 +2526,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 16.54,
+          "hours_since_update": 18.53,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2524,7 +2544,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.02
+          "age_hours": 50.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2560,7 +2580,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 48.02,
+          "hours_since_update": 50.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2578,7 +2598,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 33.05
+          "age_hours": 35.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2616,7 +2636,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-11T02:42:16.459843+00:00",
-          "hours_since_update": 33.05,
+          "hours_since_update": 35.03,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2634,7 +2654,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 72.01
+          "age_hours": 74.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2675,7 +2695,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 72.01,
+          "hours_since_update": 74.0,
           "event_count": 33,
           "timeline_entries": 33
         }
@@ -2693,7 +2713,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 136.01
+          "age_hours": 138.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2731,61 +2751,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-06T19:42:02.254300+00:00",
-          "hours_since_update": 136.01,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_025769",
-        "title": "Fatal crash involving semi-truck in Martin County - WPBF",
-        "score": 65,
-        "editorial_priority": 51,
-        "editorial_score": 51,
-        "score_breakdown": {
-          "score": 51,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 166.33
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-11-05T13:23:10.322798+00:00",
-          "hours_since_update": 166.33,
+          "hours_since_update": 138.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2803,7 +2769,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 72.0
+          "age_hours": 74.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2841,7 +2807,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 72.0,
+          "hours_since_update": 74.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2859,7 +2825,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 150.47
+          "age_hours": 152.46
         },
         "level": "high",
         "importance_reasons": [
@@ -2898,7 +2864,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-06T05:14:27.024725+00:00",
-          "hours_since_update": 150.47,
+          "hours_since_update": 152.46,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2916,7 +2882,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 240.0
+          "age_hours": 241.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2960,7 +2926,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 240.0,
+          "hours_since_update": 241.99,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -2978,7 +2944,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 158.44
+          "age_hours": 160.44
         },
         "level": "high",
         "importance_reasons": [
@@ -3016,7 +2982,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T21:15:45.981160+00:00",
-          "hours_since_update": 158.44,
+          "hours_since_update": 160.44,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3034,7 +3000,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 162.99
+          "age_hours": 164.99
         },
         "level": "high",
         "importance_reasons": [
@@ -3072,7 +3038,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-05T16:42:43.274376+00:00",
-          "hours_since_update": 162.99,
+          "hours_since_update": 164.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3090,7 +3056,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 112.01
+          "age_hours": 114.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3128,7 +3094,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 112.01,
+          "hours_since_update": 114.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3146,7 +3112,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 311.01
+          "age_hours": 313.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3184,9 +3150,66 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 311.01,
+          "hours_since_update": 313.0,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_026797",
+        "title": "Knife-wielding man killed in deputy-involved shooting in northern Palm Beach County",
+        "score": 75,
+        "editorial_priority": 40,
+        "editorial_score": 40,
+        "score_breakdown": {
+          "score": 40,
+          "importance": 75,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 41.33
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-10T20:22:17.218591+00:00",
+          "hours_since_update": 41.33,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -3194,7 +3217,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-12T11:49:18Z",
+    "generated_at": "2026-11-12T13:47:02Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3209,235 +3232,52 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 4,
-        "generated_live": 4,
+        "category_eligibility_archive_recovery": 6,
+        "generated_live": 2,
         "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 4
+        "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 66.72,
-      "archive_recovery_requested_count": 5,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 52.167,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 1,
-      "article_framing_rejection_count": 1,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 4,
-      "published_story_duplicate_suppression_count": 54,
-      "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 27,
-      "material_update_promotion_count": 2,
-      "material_update_promotion_cache_hit_count": 19,
-      "material_update_promotion_model_call_count": 8
+      "published_story_duplicate_suppression_count": 62,
+      "story_aware_update_context_count": 0,
+      "material_update_promotion_evaluation_count": 24,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 21,
+      "material_update_promotion_model_call_count": 3
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 11,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 15,
+        "publishable_source_count": 8,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.665,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.665,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Local Government category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "hero",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 51,
-            "baseline_anchor": "infrastructure_issue",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "commissioners",
-              "martin",
-              "quiet",
-              "tuesday"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
-            "novelty_anchor": "semantic_gate_novel_fact",
-            "novelty_present": true,
-            "novelty_token_hits": [
-              "train",
-              "zones"
-            ],
-            "semantic_novel_fact_hits": [
-              "27",
-              "beach",
-              "crossings",
-              "initial",
-              "jensen",
-              "mariner",
-              "narrowed",
-              "near",
-              "railroad",
-              "sands"
-            ],
-            "semantic_novel_fact_token_count": 26,
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "source_title": "Martin County to establish some quiet zones to combat train noise - WFLX",
-            "headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings"
-          }
-        ],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "hero",
-            "required": true,
-            "passed": false,
-            "headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings",
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": false,
-              "headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings",
-              "lead": "Martin County commissioners voted 3-2 Tuesday to pursue train quiet zones at three railroad crossings in Jensen Beach and near Mariner Sands, reversing last year’s unanimous rejection of quiet zones. The decision followed complaints about train horns and narrowed an initial proposal covering all 27 crossings in the county.",
-              "lead_word_count": 51,
-              "headline_overlap_ratio": 0.889,
-              "new_context_token_count": 25,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "update",
-              "surname_first_reference": {
-                "required": false,
-                "passed": true,
-                "missing": [],
-                "candidates": []
-              },
-              "update_diagnostics": {
-                "required": true,
-                "passed": false,
-                "story_form": "update",
-                "lead_word_count": 51,
-                "baseline_anchor": "infrastructure_issue",
-                "baseline_present": false,
-                "baseline_anchor_present": false,
-                "baseline_details_present": true,
-                "baseline_context_hits": [
-                  "commissioners",
-                  "martin",
-                  "quiet",
-                  "tuesday"
-                ],
-                "baseline_context_required": 2,
-                "canonical_context_available": true,
-                "canonical_context_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
-                "novelty_anchor": "semantic_gate_novel_fact",
-                "novelty_present": true,
-                "novelty_token_hits": [
-                  "train",
-                  "zones"
-                ],
-                "semantic_novel_fact_hits": [
-                  "27",
-                  "beach",
-                  "crossings",
-                  "initial",
-                  "jensen",
-                  "mariner",
-                  "narrowed",
-                  "near",
-                  "railroad",
-                  "sands"
-                ],
-                "semantic_novel_fact_token_count": 26,
-                "missing": [
-                  "original_event_context_missing"
-                ],
-                "source_title": "Martin County to establish some quiet zones to combat train noise - WFLX",
-                "headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings"
-              },
-              "missing": [
-                "original_event_context_missing"
-              ]
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings",
-              "lead": "Martin County commissioners voted 3-2 Tuesday to pursue train quiet zones at three railroad crossings in Jensen Beach and near Mariner Sands, reversing last year’s unanimous rejection of quiet zones. The decision followed complaints about train horns and narrowed an initial proposal covering all 27 crossings in the county.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "martin_county"
-              ],
-              "lead_jurisdictions": [
-                "jensen_beach",
-                "martin_county"
-              ],
-              "missing_jurisdictions": [],
-              "headline_judge_claims": [],
-              "lead_judge_claims": [],
-              "missing_judge_claims": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings",
-              "generated_lead": "Martin County commissioners voted 3-2 Tuesday to pursue train quiet zones at three railroad crossings in Jensen Beach and near Mariner Sands, reversing last year’s unanimous rejection of quiet zones. The decision followed complaints about train horns and narrowed an initial proposal covering all 27 crossings in the county.",
-              "source_title": "Martin County to establish some quiet zones to combat train noise - WFLX",
-              "source_lead": "To combat complaints over train horns, Martin County commissioners voted Tuesday to enact some quiet zones in the county. A motion was first made to turn all 27 railroad crossings into quiet zones, but then a second motion narrowed the scope.",
-              "title_similarity": {
-                "score": 0.4738,
-                "overlap": 0.4,
-                "jaccard": 0.2353,
-                "sorted_sequence": 0.5692,
-                "ordered_sequence": 0.5385,
-                "shared_token_count": 4.0
-              },
-              "lead_token_overlap": 0.556,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "official_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            },
-            "temporal_integrity": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -3451,8 +3291,8 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "77 homes hit by Martin County flooding. Where to get help now - cw34.com",
-            "source_url": "https://cw34.com/news/local/77-martin-county-homes-affected-by-flooding-hoke-library-for-assistance-connecting-residents-recovery-resources-agencies-services-fema-assistance-florida-news?teaserSource=trending"
+            "headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/12/martin-county-looks-flood-fixes-after-port-st-lucie-pumping-into-savannas-preserve/?outputType=amp"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3461,18 +3301,46 @@
             "policy": "central_government_action_required",
             "eligible": false,
             "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
+            "reason": "missing_central_government_action",
             "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:arrest"
-            ],
+            "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case/?outputType=amp"
+            "headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending"
           }
         ],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "77 homes hit by Martin County flooding. Where to get help now - cw34.com",
+            "source_url": "https://cw34.com/news/local/77-martin-county-homes-affected-by-flooding-hoke-library-for-assistance-connecting-residents-recovery-resources-agencies-services-fema-assistance-florida-news?teaserSource=trending",
+            "editorial_story_id": "story_026738",
+            "canonical_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
+            "canonical_headline": "Martin County flooding affects 77 homes; recovery help opens at Hoke Library",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-home-flooded/74405756",
+            "editorial_story_id": "story_026928",
+            "canonical_slug": "2026-11-10-flooding-damages-terry-polks-fort-pierce-home-two-years-after-tornado-loss",
+            "canonical_headline": "Flooding damages Terry Polk's Fort Pierce home two years after tornado loss",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPOF9wbzhGck9BaUdVUGpXSDg4RC12ek8zeUItWjN6alhNZFRiMTJEU1NnVXZzRGlaLWtZVmpldTBHRllzUzJTaGdZYUxYNklvS3Jzb0t3dG1XQTZHakRKbHBLYUE5ZVZTTkQwSEJOZ3NSMVFqSVh6ejRVMnlxVU5iekRTUE1vTS1PelotRjc3Z1RuREQ2eUJmUm9MdzdvT3lLLVdrejdLOGM5Wk4ySGpWSUwwalo5QTU5Zmc",
+            "editorial_story_id": "story_022712",
+            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+            "canonical_headline": "Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve",
@@ -3499,7 +3367,17 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
+            "editorial_story_id": "story_022411",
+            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3545,6 +3423,16 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "Stuart bed races put fun on wheels to help Martin County families facing homelessness - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/10/stuart-bed-races-put-fun-wheels-help-martin-county-families-facing-homelessness",
+            "editorial_story_id": "story_026820",
+            "canonical_slug": "2026-11-10-free-bed-races-return-to-stuart-saturday-to-help-martin-county-families",
+            "canonical_headline": "Free Bed Races return to Stuart Saturday to help Martin County families",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "FHP probes fatal SUV-motorcycle crash on 37th Street in Indian River County - cw34.com",
             "source_url": "https://cw34.com/news/local/fhp-probes-deadly-suv-motorcycle-crash-on-37th-street-in-indian-river-county-florida-news-florida-crash-local-crash",
             "editorial_story_id": "story_026722",
@@ -3554,53 +3442,90 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Martin County to establish some quiet zones to combat train noise - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/10/martin-county-establish-some-quiet-zones-combat-train-noise?outputType=amp",
-            "publisher": "www.wflx.com",
-            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
-            "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
-            "basis": "event-identity-authority:governing_body_plus_policy_subject",
-            "identity_keys": [
-              "story:story_026758",
-              "source:https://www.wflx.com/2026/11/10/martin-county-establish-some-quiet-zones-combat-train-noise?outputType=amp"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['hobe-sound', 'martin-county']",
-              "shared_event_families=['public-policy']",
-              "shared_named_people=[]",
-              "shared_precise_locations=[]",
-              "shared_agencies=['martin-county-commission']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['quiet', 'train', 'zone']",
-              "shared_distinctive_token_count=27",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 6,
-        "material_update_promotion_count": 2,
-        "material_update_promotion_cache_hit_count": 5,
-        "material_update_promotion_model_call_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 5,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "77 homes hit by Martin County flooding. Where to get help now - cw34.com",
+            "source_url": "https://cw34.com/news/local/77-martin-county-homes-affected-by-flooding-hoke-library-for-assistance-connecting-residents-recovery-resources-agencies-services-fema-assistance-florida-news?teaserSource=trending",
+            "canonical_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
+            "canonical_headline": "Martin County flooding affects 77 homes; recovery help opens at Hoke Library",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "The same Martin County residential flooding affecting 77 homes",
+              "Flood recovery assistance at Hoke Library in Jensen Beach",
+              "Income-qualified state disaster housing assistance",
+              "Florida's request for federal disaster assistance"
+            ],
+            "novel_facts": [
+              "Lisa French's home on Hyline Drive is being cleared out, and her family is staying with her parents without flood insurance.",
+              "Alaura Macpherson is collecting cleanup supplies and helping affected families.",
+              "Sally Waite estimates about 24 homes were destroyed, compared with the canonical's earlier count of 25."
+            ],
+            "reason": "The canonical already covers these flooded homes, the 77-home count, and recovery assistance at Hoke Library. The incoming article adds cleanup scenes, resident experiences and resource logistics, but no new aid approval, accountability finding or other consequential development. The approximate destroyed-home estimate is not a meaningful casualty or damage revision.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-home-flooded/74405756",
+            "canonical_slug": "2026-11-10-flooding-damages-terry-polks-fort-pierce-home-two-years-after-tornado-loss",
+            "canonical_headline": "Flooding damages Terry Polk's Fort Pierce home two years after tornado loss",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Fort Pierce resident identified as Terri Polk in the incoming article and Terry Polk in the candidate",
+              "Flooding severely damaged Polk's current home",
+              "Polk previously lost her home to a tornado two years earlier",
+              "Flood insurance may not cover all repairs"
+            ],
+            "novel_facts": [
+              "The flooded house was Polk's childhood home, built by her parents",
+              "Polk moved there to care for her mother, who has Alzheimer's",
+              "Floodwater reached the tops of the beds, and dehumidifiers are now operating inside"
+            ],
+            "reason": "The named resident, location, flooding loss and distinctive prior tornado loss establish the same event despite the first-name spelling variation. The incoming report adds family background, personal reactions and damage details, not a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPOF9wbzhGck9BaUdVUGpXSDg4RC12ek8zeUItWjN6alhNZFRiMTJEU1NnVXZzRGlaLWtZVmpldTBHRllzUzJTaGdZYUxYNklvS3Jzb0t3dG1XQTZHakRKbHBLYUE5ZVZTTkQwSEJOZ3NSMVFqSVh6ejRVMnlxVU5iekRTUE1vTS1PelotRjc3Z1RuREQ2eUJmUm9MdzdvT3lLLVdrejdLOGM5Wk4ySGpWSUwwalo5QTU5Zmc",
+            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+            "canonical_headline": "Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve",
@@ -3636,61 +3561,30 @@
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.92,
-            "shared_anchors": [
-              "October removal of more than 100 cats from a Port St. Lucie home in an alleged hoarding case",
-              "A woman's arrest on 29 felony animal cruelty charges"
-            ],
-            "novel_facts": [
-              "The Humane Society of St. Lucie County reports taking in 114 cats from the case.",
-              "The shelter and BISSELL Pet Foundation are holding a two-day emergency Empty the Shelters event with adoption fees waived for all cats and kittens.",
-              "The adoption event is at 8890 Glades Cut-Off Road and is intended to relieve shelter capacity."
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "local_gov",
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
             "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
-            "cache_hit": true,
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
             "model_call": false,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.94,
-            "shared_anchors": [
-              "More than 100 cats removed from a Port St. Lucie home in an alleged hoarding case",
-              "A woman arrested on 29 felony animal cruelty charges",
-              "The incoming article places the rescue in the previous month, consistent with the October canonical"
-            ],
-            "novel_facts": [
-              "The Humane Society of St. Lucie County reports taking in 114 cats from the case and facing a capacity crunch",
-              "The shelter is partnering with BISSELL Pet Foundation for a two-day emergency adoption event",
-              "Adoption fees will be waived for all cats and kittens during the event at 8890 Glades Cut-Off Road"
-            ],
-            "reason": "The rescue circumstances and distinctive 29-count arrest identify the same underlying case. The emergency fee-waiver event is a substantive, actionable development that warrants updating the canonical, but it remains a direct placement response to the rescue rather than an independently newsworthy accountability or policy follow-up. The 114-cat shelter intake does not necessarily contradict the earlier 124-cat removal total.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "local_gov",
@@ -3796,32 +3690,18 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Martin County to establish some quiet zones to combat train noise - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/10/martin-county-establish-some-quiet-zones-combat-train-noise?outputType=amp",
-            "canonical_slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
-            "canonical_headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+            "source_headline": "Stuart bed races put fun on wheels to help Martin County families facing homelessness - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/10/stuart-bed-races-put-fun-wheels-help-martin-county-families-facing-homelessness",
+            "canonical_slug": "2026-11-10-free-bed-races-return-to-stuart-saturday-to-help-martin-county-families",
+            "canonical_headline": "Free Bed Races return to Stuart Saturday to help Martin County families",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
-            "cache_hit": true,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
             "model_call": false,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.99,
-            "shared_anchors": [
-              "Martin County commissioners' November 10, 2026 consideration of train quiet zones",
-              "The same commission proceeding addressing residents' train-horn complaints and railroad-crossing safety"
-            ],
-            "novel_facts": [
-              "Commissioners approved a narrowed quiet-zone motion by a 3-2 vote.",
-              "An initial motion proposed quiet zones at all 27 railroad crossings before the scope was narrowed.",
-              "Initial work will target County Line Road and Skyline Drive crossings in Jensen Beach and a Dixie Highway crossing near Mariner Sands in Hobe Sound."
-            ],
-            "reason": "The candidate previews the same commission proceeding that the incoming article reports has concluded with a consequential vote. The approval and selected crossings materially update the meeting coverage and belong in the existing canonical, not a separate follow-up URL.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "local_gov",
@@ -3839,19 +3719,15 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County votes 3-2 to pursue quiet zones at three railroad crossings",
-        "generated_card_count": 0,
-        "elapsed_seconds": 57.217
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 48.47
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3872,7 +3748,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3910,7 +3786,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3933,24 +3809,14 @@
             "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
-            "editorial_story_id": "story_026967",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
@@ -3963,8 +3829,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4014,31 +3880,15 @@
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.9,
-            "shared_anchors": [
-              "October rescue of more than 100 cats from a Port St. Lucie home",
-              "Woman arrested on 29 felony animal cruelty charges"
-            ],
-            "novel_facts": [
-              "Humane Society of St. Lucie County reports taking in 114 cats from the rescue",
-              "Shelter and BISSELL Pet Foundation are holding a two-day emergency adoption event with fees waived for all cats and kittens",
-              "Adoptions are being promoted to address a shelter capacity shortage at 8890 Glades Cut-Off Road"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "crime",
@@ -4098,25 +3948,10 @@
             ],
             "reason": "Both articles cover the same phased MARTY service restoration. Despite its headline, the incoming body still describes ADA service as expected to return and does not establish a newly completed restart. Its temporary-assistance figures and rider experiences add context, not a material development or independently newsworthy follow-up.",
             "validation_errors": []
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 35.263
+        "elapsed_seconds": 21.694
       },
       {
         "category_key": "business",
@@ -4124,7 +3959,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 16,
-        "publishable_source_count": 9,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4189,7 +4024,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4246,10 +4081,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 3,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
@@ -4286,32 +4121,15 @@
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.9,
-            "shared_anchors": [
-              "October removal of more than 100 cats from a Port St. Lucie home",
-              "Alleged hoarding case resulting in a woman's arrest on 29 felony animal cruelty charges"
-            ],
-            "novel_facts": [
-              "The Humane Society of St. Lucie County and BISSELL Pet Foundation are holding a two-day emergency adoption event.",
-              "Adoption fees will be waived for all cats and kittens.",
-              "The shelter reports a capacity crunch after receiving 114 cats from the home.",
-              "The adoption event will take place at 8890 Glades Cut-Off Road."
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "business",
@@ -4434,14 +4252,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 34.386
+        "elapsed_seconds": 21.091
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 23,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4462,7 +4280,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 2,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "sports",
@@ -4472,6 +4290,16 @@
             "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
             "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
             "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "sports",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+            "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+            "editorial_story_id": "story_026857",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4509,33 +4337,41 @@
             ],
             "reason": "The incoming article recaps the same Port St. Lucie ceremony included in the canonical event preview. Its additions are attendee remarks and routine ceremony details, not a material development or an independently newsworthy follow-up.",
             "validation_errors": []
+          },
+          {
+            "category_key": "sports",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+            "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 19.312
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 16.883
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 5,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.507,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 12.507,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Things To Do category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4544,7 +4380,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "local_attendable_activity_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -4564,12 +4400,22 @@
             "source_url": "https://www.wptv.com/shining-a-light/lighthouse-for-the-blind-teaches-skills-that-help-people-navigate-independently-in-west-palm-beach"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
             "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
+            "editorial_story_id": "story_026857",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
             "editorial_story_id": "story_026857",
             "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
             "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
@@ -4609,10 +4455,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "things_to_do",
@@ -4642,6 +4488,34 @@
               "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover"
             ],
             "reason": "The incoming article reports from the same Port St. Lucie ceremony included in the canonical preview. Its additions are participant reactions and routine ceremony details, not a consequential development or an independently newsworthy follow-up.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Both are Nov. 10, 2026 guides to Veterans Day events on Wednesday, Nov. 11, across the same five counties.",
+              "Both identify the Stuart parade on East Ocean Boulevard.",
+              "Both identify the Port St. Lucie ceremony at 2100 S.E. Veterans Memorial Parkway and the Fort Pierce gathering at VFW Post 8058, 3475 Douglas Ave.",
+              "Both list the same precise venues in Wellington, North Palm Beach and Royal Palm Beach.",
+              "Retrieval evidence confirms a persistent story identity match."
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article repeats the same regional event guide carried by the canonical, with matching dates, events and exact venues. It reports no identifiable schedule change, cancellation or other material development; publication by another outlet does not warrant a new URL.",
             "validation_errors": []
           },
           {
@@ -4691,11 +4565,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Stuart parade, local ceremonies were planned for Veterans Day on the Treasure Coast",
-        "generated_card_count": 0,
-        "elapsed_seconds": 46.248
+        "elapsed_seconds": 23.578
       },
       {
         "category_key": "florida",
@@ -4733,7 +4603,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.225
+        "elapsed_seconds": 15.105
       },
       {
         "category_key": "martin",
@@ -4741,8 +4611,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4750,11 +4620,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.046,
+            "elapsed_seconds": 23.266,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.046,
+        "model_elapsed_seconds": 23.266,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4765,7 +4635,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 8,
@@ -4822,21 +4692,21 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
+            "editorial_story_id": "story_026967",
+            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
+            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
             "editorial_story_id": "story_027015",
             "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
             "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
-            "editorial_story_id": "story_026967",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4853,10 +4723,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
@@ -4869,8 +4739,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4977,25 +4847,36 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
+            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
+            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Martin County's one-year emergency contract with MTM Transit, LLC",
+              "Phased restoration of MARTY public transportation services",
+              "Priority restoration for riders who depend on ADA paratransit"
+            ],
+            "novel_facts": [],
+            "reason": "Both articles report the same emergency transit contract and phased service restoration. The incoming article repeats that announcement with background, scheduling information and an official quote, but establishes no subsequent material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
             "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
             "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
             "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
             "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5024,18 +4905,18 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Jensen Beach residents begin cleanup as floodwater recedes near Hyline Drive",
-        "generated_card_count": 0,
-        "elapsed_seconds": 36.839
+        "live_hero_headline": "Martin County signs emergency contract to restore MARTY bus service in phases",
+        "generated_card_count": 1,
+        "elapsed_seconds": 45.003
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -5043,11 +4924,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 30.502,
+            "elapsed_seconds": 28.901,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 30.502,
+        "model_elapsed_seconds": 28.901,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5058,11 +4939,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 11,
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-home-flooded/74405756",
+            "editorial_story_id": "story_026928",
+            "canonical_slug": "2026-11-10-flooding-damages-terry-polks-fort-pierce-home-two-years-after-tornado-loss",
+            "canonical_headline": "Flooding damages Terry Polk's Fort Pierce home two years after tornado loss",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County family seeks answers after teen struck, killed",
@@ -5075,27 +4966,37 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
-            "editorial_story_id": "story_022411",
-            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
+            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
+            "editorial_story_id": "story_022411",
+            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
+            "editorial_story_id": "story_022411",
+            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
             "editorial_story_id": "story_026857",
             "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
@@ -5105,7 +5006,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
             "editorial_story_id": "story_026857",
             "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
@@ -5176,11 +5077,42 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-home-flooded/74405756",
+            "canonical_slug": "2026-11-10-flooding-damages-terry-polks-fort-pierce-home-two-years-after-tornado-loss",
+            "canonical_headline": "Flooding damages Terry Polk's Fort Pierce home two years after tornado loss",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Fort Pierce resident identified as Terri Polk in the incoming article and Terry Polk in the candidate",
+              "Flooding severely damaged Polk's current home",
+              "Polk previously lost her home to a tornado two years earlier",
+              "Flood insurance may not cover all repairs"
+            ],
+            "novel_facts": [
+              "The flooded house was Polk's childhood home, built by her parents",
+              "Polk moved there to care for her mother, who has Alzheimer's",
+              "Floodwater reached the tops of the beds, and dehumidifiers are now operating inside"
+            ],
+            "reason": "The named resident, location, flooding loss and distinctive prior tornado loss establish the same event despite the first-name spelling variation. The incoming report adds family background, personal reactions and damage details, not a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County family seeks answers after teen struck, killed",
@@ -5198,66 +5130,77 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
-            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.86,
-            "shared_anchors": [
-              "October removal of more than 100 cats from a Port St. Lucie home",
-              "Related arrest of a woman on 29 felony animal cruelty charges"
-            ],
-            "novel_facts": [
-              "The Humane Society of St. Lucie County and BISSELL Pet Foundation are holding an emergency two-day adoption event.",
-              "Adoption fees will be waived for all cats and kittens.",
-              "The shelter reports a capacity crunch after receiving 114 cats from the case.",
-              "The adoption event will take place at 8890 Glades Cut-Off Road."
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
+            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
+            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.94,
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.95,
             "shared_anchors": [
-              "October rescue of more than 100 cats from a Port St. Lucie home",
-              "Related arrest of a woman on 29 felony animal cruelty charges"
+              "Port St. Lucie Veterans Day ceremony on November 11, 2026",
+              "Veterans Memorial Park, identified in the candidate's location metadata"
             ],
             "novel_facts": [
-              "The Humane Society of St. Lucie County reports taking in 114 cats from the case and facing a capacity crunch.",
-              "The shelter and BISSELL Pet Foundation are holding a two-day emergency Empty the Shelters event with adoption fees waived for cats and kittens.",
-              "The adoption event is at 8890 Glades Cut-Off Road, with available animals spayed or neutered, vaccinated and microchipped."
+              "Veterans Michael Greene, Wayne Thomas and Robert Vogel attended and discussed their service.",
+              "Retired Air Force Master Sgt. Vincent Lavelle Jr. delivered the keynote.",
+              "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover."
             ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
+            "reason": "The incoming article reports the Port St. Lucie ceremony already included in the candidate's Veterans Day preview. Its additional interviews and ceremony details are routine event coverage and color, not a material development or an independently newsworthy follow-up.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5287,35 +5230,6 @@
               "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover"
             ],
             "reason": "The incoming article reports from the same Port St. Lucie ceremony included in the canonical preview. Its additions are participant reactions and routine ceremony details, not a consequential development or an independently newsworthy follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
-            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
-            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Port St. Lucie Veterans Day ceremony on November 11, 2026",
-              "Veterans Memorial Park, identified in the candidate's location metadata"
-            ],
-            "novel_facts": [
-              "Veterans Michael Greene, Wayne Thomas and Robert Vogel attended and discussed their service.",
-              "Retired Air Force Master Sgt. Vincent Lavelle Jr. delivered the keynote.",
-              "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover."
-            ],
-            "reason": "The incoming article reports the Port St. Lucie ceremony already included in the candidate's Veterans Day preview. Its additional interviews and ceremony details are routine event coverage and color, not a material development or an independently newsworthy follow-up.",
             "validation_errors": []
           },
           {
@@ -5412,9 +5326,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-        "generated_card_count": 1,
-        "elapsed_seconds": 83.112
+        "live_hero_headline": "Fort Pierce veterans, military families honored at Veterans Day ceremony",
+        "generated_card_count": 0,
+        "elapsed_seconds": 53.879
       },
       {
         "category_key": "indian_river",
@@ -5422,7 +5336,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 19,
-        "publishable_source_count": 8,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5439,7 +5353,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 7,
@@ -5470,7 +5384,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5517,10 +5431,10 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 3,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
@@ -5557,33 +5471,15 @@
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "Woman arrested on 29 felony cruelty counts after Port St. Lucie cat rescue",
+            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.93,
-            "shared_anchors": [
-              "October mass cat rescue from a Port St. Lucie home",
-              "Woman arrested on 29 felony animal cruelty charges",
-              "More than 100 cats removed in the alleged hoarding case"
-            ],
-            "novel_facts": [
-              "Humane Society of St. Lucie County reports taking in 114 cats from the case",
-              "Shelter is partnering with BISSELL Pet Foundation for a two-day emergency Empty the Shelters adoption event",
-              "Adoption fees will be waived for all cats and kittens",
-              "Adoption event will take place at 8890 Glades Cut-Off Road in Port St. Lucie"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "indian_river",
@@ -5691,7 +5587,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 33.74
+        "elapsed_seconds": 23.143
       }
     ]
   }

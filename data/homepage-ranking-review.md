@@ -4,38 +4,33 @@
 
 ## Hero
 
-- Current: **St. Lucie County shelter to waive cat adoption fees after taking in 114 cats**
-- Recommended: **St. Lucie County shelter to waive cat adoption fees after taking in 114 cats**
-- Recommendation: KEEP (not enforced)
+- Current: **Fort Pierce veterans, military families honored at Veterans Day ceremony**
+- Recommended: **Jensen Beach flood cleanup begins; recovery center opens at Hoke Library**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Jensen Beach flood cleanup begins; recovery center opens at Hoke Library | Jensen Beach flood cleanup begins; recovery center opens at Hoke Library | 64 | importance 0; freshness 85.68; urgency 8/10; validated material update |
-| 2 | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | Martin County flooding affects 77 homes; recovery help opens at Hoke Library | 47 | importance 0; freshness 72.32; urgency 2/10; validated material update |
-| 3 | Looking for something to do this weekend? Here are the Top 5 local events for Nov. 13–15 | Looking for something to do this weekend? Here are the Top 5 local events for Nov. 13–15 | 46 | importance 0; freshness 86.61; urgency 4/10 |
-| 4 | Family seeks North Boulevard safety improvements after 18-year-old killed | Family seeks North Boulevard safety improvements after 18-year-old killed | 45 | importance 0; freshness 86.61; urgency 2/10 |
-| 5 | Martin County weighs unified Savannas management after Jensen Beach flooding | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | 45 | importance 0; freshness 39.95; urgency 7/10 |
-| 6 | Martin County flooding affects 77 homes; recovery help opens at Hoke Library | St. Lucie County residents demand drainage improvements after historic flooding | 41 | importance 0; freshness 73.17; urgency 2/10 |
-| 7 | St. Lucie County residents demand drainage improvements after historic flooding | St. Lucie County rejects land-use change that could allow nearly 500 homes | 41 | importance 0; freshness 72.32; urgency 2/10 |
-| 8 | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | Martin County weighs unified Savannas management after Jensen Beach flooding | 45 | importance 0; freshness 86.6; urgency 2/10; -6 category saturation |
-| 9 | St. Lucie County rejects land-use change that could allow nearly 500 homes | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | 41 | importance 0; freshness 72.33; urgency 2/10; -12 category saturation; -8 county saturation |
-| 10 | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | 32 | importance 0; freshness 34.31; urgency 2/10; -12 county saturation |
-| 11 | Martin County reaches one-year emergency contract for phased MARTY transit return | Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday | 40 | importance 0; freshness 23.24; urgency 4/10; validated material update; -18 category saturation; -12 county saturation |
-| 12 | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | Martin County reaches one-year emergency contract for phased MARTY transit return | 35 | importance 0; freshness 44.93; urgency 2/10; -21 category saturation; -12 county saturation |
+| 1 | Jensen Beach flood cleanup begins; recovery center opens at Hoke Library | Jensen Beach flood cleanup begins; recovery center opens at Hoke Library | 63 | importance 0; freshness 82.42; urgency 8/10; validated material update |
+| 2 | Martin County reaches one-year emergency contract for phased MARTY transit return | Martin County reaches one-year emergency contract for phased MARTY transit return | 49 | importance 0; freshness 41.67; urgency 9/10 |
+| 3 | Looking for something to do this weekend? Here are the Top 5 local events for Nov. 13–15 | Looking for something to do this weekend? Here are the Top 5 local events for Nov. 13–15 | 45 | importance 0; freshness 83.35; urgency 4/10 |
+| 4 | Family seeks North Boulevard safety improvements after 18-year-old killed | Family seeks North Boulevard safety improvements after 18-year-old killed | 44 | importance 0; freshness 83.35; urgency 2/10 |
+| 5 | Martin County weighs unified Savannas management after Jensen Beach flooding | St. Lucie County residents demand drainage improvements after historic flooding | 41 | importance 0; freshness 69.91; urgency 2/10 |
+| 6 | St. Lucie County residents demand drainage improvements after historic flooding | St. Lucie County rejects land-use change that could allow nearly 500 homes | 40 | importance 0; freshness 69.06; urgency 2/10 |
+| 7 | St. Lucie County rejects land-use change that could allow nearly 500 homes | Martin County weighs unified Savannas management after Jensen Beach flooding | 44 | importance 0; freshness 83.34; urgency 2/10; -6 category saturation |
+| 8 | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | 33 | importance 0; freshness 36.69; urgency 2/10; -8 county saturation |
+| 9 | Flooding damages Terry Polk's Fort Pierce home two years after tornado loss | Jensen Beach family seeks housing and repair funding after flooding destroys home interior | 41 | importance 0; freshness 69.07; urgency 2/10; -12 category saturation; -8 county saturation |
+| 10 | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations | 31 | importance 0; freshness 31.05; urgency 2/10; -12 county saturation |
+| 11 | Free Bed Races return to Stuart Saturday to help Martin County families | Free Bed Races return to Stuart Saturday to help Martin County families | 30 | importance 0; freshness 25.05; urgency 2/10; -18 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Martin County flooding affects 77 homes; recovery help opens at Hoke Library**: 6 → 2 — importance 0; freshness 72.32; urgency 2/10; validated material update
-- **Flooding damages Terry Polk's Fort Pierce home two years after tornado loss**: 2 → 5 — importance 0; freshness 39.95; urgency 7/10
-- **Martin County weighs unified Savannas management after Jensen Beach flooding**: 5 → 8 — importance 0; freshness 86.6; urgency 2/10; -6 category saturation
-- **St. Lucie County rejects land-use change that could allow nearly 500 homes**: 9 → 7 — importance 0; freshness 72.32; urgency 2/10
-- **Florida 'free kill' repeal opponents, DeSantis linked to $15.5 million in donations**: 12 → 10 — importance 0; freshness 34.31; urgency 2/10; -12 county saturation
-- **St. Lucie County residents demand drainage improvements after historic flooding**: 7 → 6 — importance 0; freshness 73.17; urgency 2/10
-- **Jensen Beach family seeks housing and repair funding after flooding destroys home interior**: 8 → 9 — importance 0; freshness 72.33; urgency 2/10; -12 category saturation; -8 county saturation
-- **Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday**: 10 → 11 — importance 0; freshness 23.24; urgency 4/10; validated material update; -18 category saturation; -12 county saturation
-- **Martin County reaches one-year emergency contract for phased MARTY transit return**: 11 → 12 — importance 0; freshness 44.93; urgency 2/10; -21 category saturation; -12 county saturation
+- **Martin County weighs unified Savannas management after Jensen Beach flooding**: 5 → 7 — importance 0; freshness 83.34; urgency 2/10; -6 category saturation
+- **St. Lucie County residents demand drainage improvements after historic flooding**: 6 → 5 — importance 0; freshness 69.91; urgency 2/10
+- **Jensen Beach family seeks housing and repair funding after flooding destroys home interior**: 8 → 9 — importance 0; freshness 69.07; urgency 2/10; -12 category saturation; -8 county saturation
+- **St. Lucie County rejects land-use change that could allow nearly 500 homes**: 7 → 6 — importance 0; freshness 69.06; urgency 2/10
+- **Flooding damages Terry Polk's Fort Pierce home two years after tornado loss**: 9 → 8 — importance 0; freshness 36.69; urgency 2/10; -8 county saturation
 
 ## Guardrails
 
