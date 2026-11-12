@@ -117,82 +117,75 @@ def test_current_weekend_guide_is_available_through_sunday_evening(monkeypatch, 
     assert any(x.get("custom_id") == CURRENT_ID for x in published)
 
 
-def test_november_6_8_roundup_is_only_active_custom_story_and_uses_requested_image():
-    """The editorial queue must contain only this new custom assignment."""
+def test_november_13_15_roundup_is_only_active_custom_story_and_uses_air_show_image():
+    """Only this week's submitted guide may be in the current editorial queue."""
     entries = _items()
     assert len(entries) == 1
     guide = entries[0]
-    assert guide["custom_id"] == "treasure-coast-top-five-weekend-2026-11-06-08"
+    assert guide["custom_id"] == "treasure-coast-top-five-weekend-2026-11-13-15"
     assert guide["category"] == "things_to_do"
-    assert guide["publish_on"] == "2026-11-05"
-    assert guide["expires"] == "2026-11-09"
-    assert guide["image_url"] == "https://treasurecoast.today/images/first-friday-walk.webp"
+    assert guide["publish_on"] == "2026-11-12"
+    assert guide["expires"] == "2026-11-16"
+    assert guide["image_url"].endswith("/2026-Stuart-AirShow.jpg")
     assert guide["sponsored"] is False
     assert guide["force_hero"] is False
     assert guide["body"].count("\n## ") == 5
-    assert guide["headline"].endswith("Nov. 6-8")
+    assert guide["headline"].endswith("Nov. 13–15")
     for title in (
-        "First Friday Art Walk",
-        "41st Annual Navy SEAL Museum Muster",
-        "Treasure Coast Caribbean Food & Music Festival",
-        "St. Johns Wood",
-        "Shopapalooza Fall Sidewalk Sale",
+        "Stuart Air Show",
+        "Mr Motwn",
+        "PalmCon",
+        "Pick, Paddle & Play Beach Jam",
+        "Hispanic Heritage Festival",
     ):
         assert title in guide["body"]
 
 
-def test_november_roundup_matches_current_events_calendar():
-    """Require upcoming event sources, but allow concluded events to rotate out.
+def test_november_13_15_roundup_matches_live_events_calendar():
+    """Editorial source links are intact and upcoming source events are present.
 
-    data/events.json is an upcoming calendar, not a permanent audit archive.
-    The Friday Art Walk ended Nov. 6 at 9 p.m. Eastern and was properly
-    pruned that evening. The published weekend guide retains its source link.
+    Rolling event feeds can correctly prune concluded listings after their day.
+    The weekend guide is checked against the available calendar while it is live.
     """
     events = json.loads((ROOT / "data/events.json").read_text(encoding="utf-8"))["events"]
     guide = _items()[0]
     now = datetime.now(ZoneInfo("America/New_York"))
-
-    # (source URL, local event date, confirmed scheduled end in Eastern time)
-    # Include both Shopapalooza days; the guide explicitly links both.
+    # (event title fragment, local date, confirmed end time, organizer link)
     source_events = (
-        ("https://www.stuartfl.gov/calendar.aspx?EID=6875",
-         "2026-11-06", "2026-11-06T21:00:00-05:00"),
-        ("https://visitstlucie.com/event/41st-annual-navy-seal-museum-muster/",
-         "2026-11-07", "2026-11-07T17:00:00-05:00"),
-        ("https://visitstlucie.com/event/treasure-coast-caribbean-food-music-festival/",
-         "2026-11-07", "2026-11-07T22:00:00-05:00"),
-        ("https://www.riversidetheatre.com/loop-music-calendar/2026/11/7/st-johns-wood",
-         "2026-11-07", "2026-11-07T20:30:00-05:00"),
-        ("https://www.stuartfl.gov/calendar.aspx?EID=6879",
-         "2026-11-07", "2026-11-07T17:00:00-05:00"),
-        ("https://www.stuartfl.gov/calendar.aspx?EID=6880",
-         "2026-11-08", "2026-11-08T17:00:00-05:00"),
+        ("Stuart Air Show", "2026-11-13", "2026-11-15T17:00:00-05:00",
+         "https://www.stuartairshow.com/"),
+        ("Mr Motwn", "2026-11-13", "2026-11-13T20:30:00-05:00",
+         "https://www.riversidetheatre.com/loop-music-calendar"),
+        ("PalmCon", "2026-11-14", "2026-11-15T17:00:00-05:00",
+         "https://palmcon.net/treasure-coast"),
+        ("Pick, Paddle & Play Beach Jam", "2026-11-14", "2026-11-14T20:00:00-05:00",
+         "https://www.stabilizerevitalizefortpierce.org/pick-paddle-and-play-beach-jam"),
+        ("Hispanic Heritage Festival", "2026-11-15", "2026-11-15T20:00:00-05:00",
+         "https://www.stuartfl.gov/m/calendar/event/detail/6883"),
     )
-    for url, day, end_iso in source_events:
-        assert url in guide["body"], f"Weekend guide lost its source link: {url}"
+    for title, day, end_iso, organizer_url in source_events:
+        assert organizer_url in guide["body"], f"Weekend guide lost its organizer link: {organizer_url}"
         matches = [
             event for event in events
-            if event.get("event_url") == url
-            and str(event.get("starts_at", "")).startswith(day)
+            if title.lower() in str(event.get("title") or "").lower()
+            and str(event.get("starts_at") or "").startswith(day)
         ]
         if now < datetime.fromisoformat(end_iso):
-            assert matches, f"Upcoming guide event missing from calendar: {url} ({day})"
-        # After a known event has ended, absence from the rolling feed is
-        # correct. If it is still retained, its date/source must still match.
+            assert matches, f"Upcoming weekend event missing from calendar: {title} ({day})"
 
 
-def test_november_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
-    """An 8 p.m. Eastern reader on Nov. 8 should still see the guide."""
+def test_november_13_15_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
+    """An 8 p.m. Eastern reader on Nov. 15 can still see the current guide."""
     (tmp_path / "custom_articles.json").write_text(json.dumps(_items()), encoding="utf-8")
     engine = _engine()
     monkeypatch.setattr(engine, "OUTPUT_DIR", tmp_path)
-    _as_of(monkeypatch, engine, datetime(2026, 11, 9, 1, 0, tzinfo=timezone.utc))
+    _as_of(monkeypatch, engine, datetime(2026, 11, 16, 1, 0, tzinfo=timezone.utc))
     assert any(
-        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-06-08"
+        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-13-15"
         for story in engine.load_custom_articles()
     )
-    _as_of(monkeypatch, engine, datetime(2026, 11, 10, 12, 0, tzinfo=timezone.utc))
+    _as_of(monkeypatch, engine, datetime(2026, 11, 17, 12, 0, tzinfo=timezone.utc))
     assert not any(
-        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-06-08"
+        story.get("custom_id") == "treasure-coast-top-five-weekend-2026-11-13-15"
         for story in engine.load_custom_articles()
     )
