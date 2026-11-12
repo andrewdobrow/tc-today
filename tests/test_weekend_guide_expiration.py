@@ -126,7 +126,7 @@ def test_november_13_15_roundup_is_only_active_custom_story_and_uses_air_show_im
     assert guide["category"] == "things_to_do"
     assert guide["publish_on"] == "2026-11-12"
     assert guide["expires"] == "2026-11-16"
-    assert guide["image_url"].endswith("/2026-Stuart-AirShow.jpg")
+    assert guide["image_url"] == "https://treasurecoast.today/images/stuart-air-show.webp"
     assert guide["sponsored"] is False
     assert guide["force_hero"] is False
     assert guide["body"].count("\n## ") == 5
