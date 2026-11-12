@@ -63,7 +63,8 @@ def test_automated_editorial_disclosures_removed_from_public_pages_and_generator
     standards = (ROOT / "editorial-standards.html").read_text(encoding="utf-8")
     privacy = (ROOT / "privacy.html").read_text(encoding="utf-8")
     generator = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
-    for html in (standards, privacy, generator):
+    legacy_generator = (ROOT / "generate.py").read_text(encoding="utf-8")
+    for html in (standards, privacy, generator, legacy_generator):
         assert "uses automated tools" not in html
         assert "We use technology to help us cover more local news more quickly" not in html
     assert "<h2>Editorial responsibility</h2>" in standards
@@ -73,4 +74,6 @@ def test_automated_editorial_disclosures_removed_from_public_pages_and_generator
     # Image-source metadata is preserved internally, but no visible credit is rendered.
     assert "credit_html = \"\"" in generator
     assert "credit = \"\"" in generator
+    assert "credit_html = \"\"" in legacy_generator
+    assert "credit   = \"\"" in legacy_generator
     assert "restore the publisher credit too" not in generator
