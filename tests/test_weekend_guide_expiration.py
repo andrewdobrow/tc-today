@@ -124,7 +124,7 @@ def test_november_13_15_roundup_is_only_active_custom_story_and_uses_air_show_im
     guide = entries[0]
     assert guide["custom_id"] == "treasure-coast-top-five-weekend-2026-11-13-15"
     assert guide["category"] == "things_to_do"
-    assert guide["publish_on"] == "2026-11-12"
+    assert guide["publish_on"] == "2026-11-11"
     assert guide["expires"] == "2026-11-16"
     assert guide["image_url"] == "https://treasurecoast.today/images/stuart-air-show.webp"
     assert guide["sponsored"] is False
