@@ -11121,7 +11121,7 @@ def render_index(all_categories, top_cat):
         paragraphs = make_paragraphs(hero.get("body", ""))
         img_url    = hero.get("image_url", "")
         img_credit = hero.get("image_credit", "")
-        credit_html = f'<figcaption class="img-credit">Photo: {img_credit}</figcaption>' if img_url and img_credit else ""
+        credit_html = ""
         img_html    = f'<figure class="hero-image-wrap"><img class="hero-image" src="{img_url}" alt="" loading="lazy">{credit_html}</figure>' if img_url else ""
         pub_time    = _format_category_hero_timestamp(hero, archive)
         display     = "" if visible else ' style="display:none"'
@@ -13023,7 +13023,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             _fb, _ = get_fallback_image("top_news", hero.get("headline", ""), item=hero)
         _art_img = _fb or f"{SITE_URL}/og-image.png"
     if _art_img:
-        credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        credit   = ""
         img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
 
     head   = _page_head(
@@ -17593,9 +17593,9 @@ def render_editorial_standards_page():
         <h2>Sourcing</h2>
         <p>Our reporting draws on public records, official statements and releases from government agencies, law enforcement, school districts and other public bodies, publicly available reporting, and information provided directly to us by residents and organizations. We aim to attribute information to its source so readers can judge it for themselves.</p>
 
-        <h2>How our coverage is produced</h2>
-        <p>Treasure Coast Today uses automated tools to help gather, organize and synthesize information from public sources and to assist in drafting and surfacing coverage. All coverage is produced and published under the editorial oversight of the publisher, Andrew Dobrow, who is responsible for what appears on this site.</p>
-        <p>We use technology to help us cover more local news more quickly, but the editorial responsibility for accuracy, fairness and judgment rests with us, not with any tool.</p>
+        <h2>Editorial responsibility</h2>
+        <p>Treasure Coast Today covers local developments using public records, official statements, firsthand information and published reporting, with an emphasis on details relevant to Treasure Coast residents. We seek to provide clear context, identify important developments and distinguish verified facts from unresolved claims.</p>
+        <p>Publisher Andrew Dobrow is responsible for editorial decisions, accuracy, fairness and corrections on this site.</p>
 
         <h2>Accuracy and corrections</h2>
         <p>We work to get things right, and when we get something wrong we correct it promptly and transparently. If you spot an error, please tell us. See our <a href="/corrections-policy.html">Corrections Policy</a> for how we handle mistakes.</p>
