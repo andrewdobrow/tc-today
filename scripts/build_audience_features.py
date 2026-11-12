@@ -623,6 +623,18 @@ def _breadcrumb_for(entry: dict) -> tuple[str, dict]:
     return visible, schema
 
 
+def _iso8601_article_date(value: str) -> str:
+    """Normalize persisted news dates without changing the represented instant.
+
+    Source records may be RFC 2822 or ISO 8601. Google Article structured data
+    should consistently use ISO 8601 with an explicit UTC offset.
+    """
+    parsed = _archive_parse_datetime(value)
+    if parsed is None:
+        raise ValueError(f"Missing or unparseable article publication date: {value!r}")
+    return parsed.astimezone(ZoneInfo("America/New_York")).isoformat(timespec="seconds")
+
+
 def _ensure_newsarticle_schema(text: str, entry: dict) -> str:
     pattern = re.compile(r'(<script\s+type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)', re.I | re.S)
     desired_author = {"@type":"Person","name":"Andrew Dobrow","url":f"{SITE_URL}/author/andrew-dobrow.html"}
@@ -649,8 +661,8 @@ def _ensure_newsarticle_schema(text: str, entry: dict) -> str:
         image = str(entry.get("image_url") or "").strip()
         if image and not target.get("image"):
             target["image"] = [image]
-        target["datePublished"] = target.get("datePublished") or published or _entry_date(entry)
-        target["dateModified"] = target.get("dateModified") or modified or target.get("datePublished")
+        target["datePublished"] = _iso8601_article_date(target.get("datePublished") or published or _entry_date(entry))
+        target["dateModified"] = _iso8601_article_date(target.get("dateModified") or modified or target["datePublished"])
         target["author"] = desired_author
         target["publisher"] = target.get("publisher") or {"@type":"Organization","name":"Treasure Coast Today","url":SITE_URL,"logo":{"@type":"ImageObject","url":f"{SITE_URL}/logo.png","width":1200,"height":120}}
         target["articleSection"] = target.get("articleSection") or str(entry.get("category_label") or "Local News")
@@ -668,8 +680,8 @@ def _ensure_newsarticle_schema(text: str, entry: dict) -> str:
         return text
     data = {
         "@context":"https://schema.org","@type":"NewsArticle","headline":str(entry.get("headline") or ""),
-        "description":_clean_text(entry.get("teaser")),"datePublished":published or _entry_date(entry),
-        "dateModified":modified or published or _entry_date(entry),"author":desired_author,
+        "description":_clean_text(entry.get("teaser")),"datePublished":_iso8601_article_date(published or _entry_date(entry)),
+        "dateModified":_iso8601_article_date(modified or published or _entry_date(entry)),"author":desired_author,
         "publisher":{"@type":"Organization","name":"Treasure Coast Today","url":SITE_URL,"logo":{"@type":"ImageObject","url":f"{SITE_URL}/logo.png","width":1200,"height":120}},
         "articleSection":str(entry.get("category_label") or "Local News"),"url":url,
         "mainEntityOfPage":{"@type":"WebPage","@id":url},"isAccessibleForFree":not paywalled,
