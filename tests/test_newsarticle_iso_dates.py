@@ -13,7 +13,7 @@ from scripts.build_audience_features import (
 
 def _article_jsonld(html):
     return json.loads(re.search(
-        r'<script type="application/ld\\+json">([^<]+)</script>', html
+        r'<script type="application/ld\+json">([^<]+)</script>', html
     ).group(1))
 
 
