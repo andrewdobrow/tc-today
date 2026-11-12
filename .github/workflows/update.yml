@@ -564,6 +564,11 @@ jobs:
       - name: Enforce editor-approved crash image after all generation
         run: python scripts/enforce_editorial_crash_image.py
 
+      - name: Remove photo credits from all published pages
+        run: |
+          python scripts/clean_public_image_attributions.py
+          python scripts/clean_public_image_attributions.py --check
+
       - name: Upload generation diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -636,6 +641,11 @@ jobs:
 
       - name: Enforce editor-approved crash image for deploy-only runs
         run: python scripts/enforce_editorial_crash_image.py
+
+      - name: Remove legacy photo credits for deploy-only
+        run: |
+          python scripts/clean_public_image_attributions.py
+          python scripts/clean_public_image_attributions.py --check
 
       - name: Validate shared JavaScript syntax
         run: node --check main.js
