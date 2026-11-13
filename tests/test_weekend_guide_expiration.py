@@ -165,9 +165,10 @@ def test_november_13_15_roundup_matches_live_events_calendar():
     events = json.loads((ROOT / "data/events.json").read_text(encoding="utf-8"))["events"]
     guide = NOV_WEEKEND_ARTICLE.read_text(encoding="utf-8")
     now = datetime.now(ZoneInfo("America/New_York"))
-    # (event title fragment, local date, confirmed end time, organizer link)
+    # (event title fragment, calendar listing date, confirmed end time, organizer link)
+    # The Stuart Air Show calendar lists Nov. 14–15; Friday is its kickoff party.
     source_events = (
-        ("Stuart Air Show", "2026-11-13", "2026-11-15T17:00:00-05:00",
+        ("Stuart Air Show", "2026-11-14", "2026-11-15T17:00:00-05:00",
          "https://www.stuartairshow.com/"),
         ("Mr Motwn", "2026-11-13", "2026-11-13T20:30:00-05:00",
          "https://www.riversidetheatre.com/loop-music-calendar"),
