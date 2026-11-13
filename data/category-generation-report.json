@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-13T19:47:00Z",
+  "generated_at": "2026-11-13T23:26:46Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,36 +15,38 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 3,
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 2,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5,
+      "contextless_update_lead": 2,
+      "no_category_eligible_sources": 4,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 64.703,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 86.937,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 4,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 11,
-    "published_story_duplicate_suppression_count": 54,
-    "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 8,
+    "published_story_duplicate_suppression_count": 55,
+    "story_aware_update_context_count": 8,
+    "material_update_promotion_evaluation_count": 16,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 6,
-    "material_update_promotion_model_call_count": 2
+    "material_update_promotion_cache_hit_count": 10,
+    "material_update_promotion_model_call_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -75,8 +77,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county"
+          "headline": "South Florida families turn to resale shopping to save money as holiday season approaches",
+          "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -99,12 +101,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
           "local_nexus_signals": [],
-          "headline": "Riviera Beach's Lone Pine community faces devastation after historic flooding",
-          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/riviera-beach/riviera-beachs-lone-pine-community-faces-devastation-after-historic-flooding"
+          "headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -121,8 +125,28 @@
           "source_url": "https://www.wflx.com/2026/11/12/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "editorial_story_id": "story_027514",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -155,22 +179,22 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537",
           "editorial_story_id": "story_027334",
           "canonical_slug": "2026-11-12-indian-river-county-beaches-recover-after-erosion-some-access-points-remain-clos",
           "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - cw34.com",
+          "source_url": "https://cw34.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
+          "editorial_story_id": "story_026946",
+          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
+          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -214,13 +238,81 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Stuart Air Show at Witham Field in Stuart",
+            "Both articles published Nov. 13, 2026, concerning the same air-show weekend",
+            "Incoming article explicitly references the traffic, parking and access coverage described by the candidate"
+          ],
+          "novel_facts": [
+            "The 37th annual show runs through Sunday, Nov. 15",
+            "The program includes the F-16 Viper Demonstration Team and pilot Maj. Taylor Hiester",
+            "Participating students received aviation and weather-related STEM instruction"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show. The incoming article adds program details, pilot comments and educational activities, but no consequential development or distinct accountability question. These are routine event details and a different presentation angle, not grounds for a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -255,9 +347,9 @@
           "confidence": 0.99,
           "shared_anchors": [],
           "novel_facts": [
-            "Omari Linzell Williams, 18, died after a westbound Chevrolet sedan struck him while he was walking on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
-            "The driver was a 30-year-old Vero Beach resident who was uninjured and cooperated with law enforcement.",
-            "Williams' family raised pedestrian-safety concerns, and a candlelight vigil was scheduled at Lakewood Park."
+            "Omari Linzell Williams, 18, died after a Chevrolet sedan struck him while he walked on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
+            "The driver was a 30-year-old Vero Beach resident who cooperated with law enforcement.",
+            "Williams’ family raised pedestrian-safety concerns, and a candlelight vigil was scheduled at Lakewood Park."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -270,21 +362,6 @@
           "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
           "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
           "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -319,6 +396,34 @@
           ],
           "novel_facts": [],
           "reason": "The incoming article repeats the same WPBF report already represented by the canonical, with an exact source match and matching location, erosion event, recovery status, and access closures. Its additional detail does not establish a material development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - cw34.com",
+          "source_url": "https://cw34.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
+          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
+          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Martin County Firefighters Union's request to restore a canceled January firefighter hiring class",
+            "Planned recruitment of about 25 firefighters",
+            "Staffing-shortage concerns at Martin County Fire Rescue",
+            "Matching source-story URL paths across CW34 and WPEC",
+            "Retrieval evidence identifies a persistent same-story match"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same union appeal concerning the same January hiring class. The matching source-story paths and persistent-story evidence support a syndicated repeat. No subsequent hiring decision, consequential government action, or other material development is established.",
           "validation_errors": []
         },
         {
@@ -396,23 +501,40 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 31.341
+      "elapsed_seconds": 51.117
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 18,
+      "fresh_candidate_count": 17,
       "publishable_source_count": 8,
-      "selected_source_count": 0,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 17.381,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 17.696,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County"
+        }
+      ],
+      "model_elapsed_seconds": 35.077,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -421,7 +543,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -435,12 +557,32 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county"
+          "headline": "South Florida families turn to resale shopping to save money as holiday season approaches",
+          "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "editorial_story_id": "story_027514",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
@@ -490,25 +632,124 @@
           "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
+          "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
+          "basis": "event-identity-authority:participant_plus_precise_location",
+          "identity_keys": [
+            "story:story_027549",
+            "source:https://cbs12.com/newsletter-daily/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['vehicle-chase']",
+            "shared_named_people=['or has information']",
+            "shared_precise_locations=['kentucky-avenue']",
+            "shared_agencies=['st-lucie-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['burglary', 'suspect']",
+            "shared_distinctive_token_count=46",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Stuart Air Show at Witham Field in Stuart",
+            "Both articles published Nov. 13, 2026, concerning the same air-show weekend",
+            "Incoming article explicitly references the traffic, parking and access coverage described by the candidate"
+          ],
+          "novel_facts": [
+            "The 37th annual show runs through Sunday, Nov. 15",
+            "The program includes the F-16 Viper Demonstration Team and pilot Maj. Taylor Hiester",
+            "Participating students received aviation and weather-related STEM instruction"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show. The incoming article adds program details, pilot comments and educational activities, but no consequential development or distinct accountability question. These are routine event details and a different presentation angle, not grounds for a new URL.",
+          "validation_errors": []
         },
         {
           "category_key": "crime",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "crime",
           "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
@@ -583,33 +824,20 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.658
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 60.349
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 12,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 11,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -626,8 +854,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -636,19 +864,14 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
+          "reason": "missing_primary_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [
-            "schools_education:students"
-          ],
+          "competing_signals": [],
           "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:martin county",
-            "source_locality:stuart",
-            "source_locality:fort pierce"
+            "source_locality:port st lucie"
           ],
-          "headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county"
+          "headline": "South Florida families turn to resale shopping to save money as holiday season approaches",
+          "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -666,6 +889,27 @@
           ],
           "headline": "Florida flooding survivors praise heroes who came to their aid",
           "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/flooding-survivors-praise-heroes-who-came-to-their-aid"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [
+            "business_opening_closure_expansion:shuts down"
+          ],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:indian river county"
+          ],
+          "headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -701,8 +945,28 @@
           "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "editorial_story_id": "story_027514",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -720,16 +984,6 @@
           "editorial_story_id": "story_027485",
           "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
           "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -762,35 +1016,83 @@
           "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County family seeks answers after teen struck, killed",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-family-seeks-answers-after-teen-struck-killed",
-          "editorial_story_id": "story_027180",
-          "canonical_slug": "2026-11-11-family-seeks-north-boulevard-safety-improvements-after-18-year-old-killed",
-          "canonical_headline": "Family seeks North Boulevard safety improvements after 18-year-old killed",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Stuart Air Show at Witham Field in Stuart",
+            "Both articles published Nov. 13, 2026, concerning the same air-show weekend",
+            "Incoming article explicitly references the traffic, parking and access coverage described by the candidate"
+          ],
+          "novel_facts": [
+            "The 37th annual show runs through Sunday, Nov. 15",
+            "The program includes the F-16 Viper Demonstration Team and pilot Maj. Taylor Hiester",
+            "Participating students received aviation and weather-related STEM instruction"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show. The incoming article adds program details, pilot comments and educational activities, but no consequential development or distinct accountability question. These are routine event details and a different presentation angle, not grounds for a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -812,21 +1114,6 @@
           "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
           "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
           "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -880,48 +1167,18 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County family seeks answers after teen struck, killed",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-family-seeks-answers-after-teen-struck-killed",
-          "canonical_slug": "2026-11-11-family-seeks-north-boulevard-safety-improvements-after-18-year-old-killed",
-          "canonical_headline": "Family seeks North Boulevard safety improvements after 18-year-old killed",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.037
+      "elapsed_seconds": 25.74
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 5,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -990,16 +1247,16 @@
           "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 11.317
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 15.185
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 4,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1008,11 +1265,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.551,
+          "elapsed_seconds": 8.892,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 8.551,
+      "model_elapsed_seconds": 8.892,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -1023,25 +1280,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-attendable-activity-focus",
-          "category_key": "things_to_do",
-          "mode": "enforce",
-          "policy": "local_attendable_activity_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_attendable_activity_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "treasure_coast_locality"
-          ],
-          "headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service"
-        },
         {
           "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
@@ -1059,8 +1300,18 @@
           "source_url": "https://www.wptv.com/shining-a-light/lighthouse-for-the-blind-teaches-skills-that-help-people-navigate-independently-in-west-palm-beach"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
+          "editorial_story_id": "story_026857",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - cw34.com",
@@ -1104,11 +1355,41 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
+          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Port St. Lucie Veterans Day ceremony on Wednesday, Nov. 11, 2026",
+            "Veterans Memorial Park in Port St. Lucie",
+            "The Port St. Lucie ceremony is among the events covered by the canonical preview"
+          ],
+          "novel_facts": [
+            "Veterans Michael Greene, Wayne Thomas and Robert Vogel shared reflections on their service",
+            "Retired Air Force Master Sgt. Vincent Lavelle Jr. delivered the keynote",
+            "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover"
+          ],
+          "reason": "The incoming article reports from the same Port St. Lucie ceremony included in the canonical preview. Its additions are participant reactions and routine ceremony details, not a consequential development or an independently newsworthy follow-up.",
+          "validation_errors": []
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - cw34.com",
@@ -1186,30 +1467,23 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 24.612
+      "elapsed_seconds": 26.369
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 2,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.391,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 16.391,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1218,117 +1492,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
-      "generated_card_count": 0,
-      "elapsed_seconds": 31.694
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.684,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 26.684,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
-          "category_key": "martin",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "editorial_story_id": "story_027486",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "editorial_story_id": "story_027483",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "editorial_story_id": "story_027483",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
-          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
-          "editorial_story_id": "story_027485",
-          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
-          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
-          "editorial_story_id": "story_026946",
-          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
-          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/martin-county-looks-for-flood-fixes-after-port-st-lucie-pumping-into-savannas-preserve",
-          "editorial_story_id": "story_027179",
-          "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-          "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
+          "category_key": "florida",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "editorial_story_id": "story_027514",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1341,86 +1516,11 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
-          "category_key": "martin",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
-          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
-          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
-          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
-          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
-          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/martin-county-looks-for-flood-fixes-after-port-st-lucie-pumping-into-savannas-preserve",
-          "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-          "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
+          "category_key": "florida",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1432,20 +1532,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "All lanes reopen on Florida’s Turnpike after truck crash in Palm City",
-      "generated_card_count": 1,
-      "elapsed_seconds": 53.646
+      "elapsed_seconds": 14.521
     },
     {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
+      "category_key": "martin",
+      "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 16,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 2,
-      "selected_source_count": 1,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1453,11 +1549,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.077,
+          "elapsed_seconds": 8.2,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.077,
+      "model_elapsed_seconds": 8.2,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1471,7 +1567,248 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 14,
+      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
+          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
+          "editorial_story_id": "story_027486",
+          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
+          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+          "editorial_story_id": "story_027483",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+          "editorial_story_id": "story_027483",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
+          "editorial_story_id": "story_026946",
+          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
+          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "The Stuart Air Show at Witham Field in Stuart",
+            "Both articles were published November 13, 2026, and cover the same air-show weekend",
+            "The incoming article explicitly references the traffic, parking and access report represented by the candidate"
+          ],
+          "novel_facts": [
+            "The show is celebrating its 37th year and runs through November 15",
+            "The performer lineup includes Maj. Taylor Hiester and the Air Force F-16 Viper Demonstration Team",
+            "The event includes student aviation and STEM activities"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show at Witham Field. The incoming report adds performer interviews, lineup details and educational activities, but no consequential development or independently newsworthy follow-up. These are additional event-preview details rather than a material update.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Stuart Air Show at Witham Field in Stuart",
+            "Both articles published Nov. 13, 2026, concerning the same air-show weekend",
+            "Incoming article explicitly references the traffic, parking and access coverage described by the candidate"
+          ],
+          "novel_facts": [
+            "The 37th annual show runs through Sunday, Nov. 15",
+            "The program includes the F-16 Viper Demonstration Team and pilot Maj. Taylor Hiester",
+            "Participating students received aviation and weather-related STEM instruction"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show. The incoming article adds program details, pilot comments and educational activities, but no consequential development or distinct accountability question. These are routine event details and a different presentation angle, not grounds for a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
+          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
+          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
+          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound closed in Palm City after truck crash",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-firefighters-union-raise-staffing-concerns-after-hiring-class-canceled-25-firefighters-shortage-safety-concerns-amendment-3-florida-news-local-news",
+          "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
+          "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Florida’s Turnpike northbound lanes reopen after crash near Palm City",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.417
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 4,
+      "selected_source_count": 2,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 9.776,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.24,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
+        }
+      ],
+      "model_elapsed_seconds": 21.016,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1515,18 +1852,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash closes both directions of I-95 in Indian River County; second incident in St. Lucie - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-closes-both-directions-of-i-95-in-indian-river-county-mile-marker-141-oslo-road-st-lucie-county-entrance-ramp-indiro-road-northbound-entrance-ramp",
-          "editorial_story_id": "story_027414",
-          "canonical_slug": "2026-11-13-indrio-road-entrance-ramp-to-northbound-i-95-closed-in-st-lucie-county",
-          "canonical_headline": "Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Fort Pierce mom demands answers after video shows moments before daughter’s death - cw34.com",
-          "source_url": "https://cw34.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death?teaserSource=trending",
+          "source_url": "https://cw34.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death",
           "editorial_story_id": "story_027387",
           "canonical_slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
           "canonical_headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
@@ -1555,6 +1882,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
+          "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news?teaserSource=trending",
+          "editorial_story_id": "story_027062",
+          "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
+          "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "'Quit is not an option': Fort Pierce woman loses house for a second time to a storm - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-fort-pierce-home-flooded/74405756",
           "editorial_story_id": "story_026928",
@@ -1571,16 +1908,6 @@
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "'It's heartwarming': Fort Pierce community gathers to honor veterans and military families - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-veterans-day/74403606",
-          "editorial_story_id": "story_027151",
-          "canonical_slug": "2026-11-12-fort-pierce-veterans-military-families-honored-at-veterans-day-ceremony",
-          "canonical_headline": "Fort Pierce veterans, military families honored at Veterans Day ceremony",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1602,55 +1929,68 @@
           "canonical_headline": "St. Lucie County residents demand drainage improvements after historic flooding",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
-          "editorial_story_id": "story_026761",
-          "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
-          "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news?teaserSource=trending",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
-          "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
+          "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "story:story_027062",
-            "source:https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news?teaserSource=trending"
+            "story:story_027500",
+            "source:https://cbs12.com/newsletter-daily/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
             "bounded_time_window",
             "shared_locality",
             "shared_event_family",
+            "shared_named_people",
             "shared_precise_location",
-            "shared_subject_phrase",
+            "shared_agency",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['south-25th-street', 'west-midway-road']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['500-low-lying', '500-low-lying-site', 'bring-nearly-500', 'bring-nearly-500-low', 'low-lying-site', 'nearly-500-low', 'nearly-500-low-lying', 'plan-bring-nearly', 'plan-bring-nearly-500', 'reject-plan-bring', 'reject-plan-bring-nearly']",
-            "shared_headline_topic_core=['500', 'bring', 'low', 'lying', 'nearly', 'plan', 'reject', 'site']",
-            "shared_distinctive_token_count=141",
+            "publication_gap_days=0",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['vehicle-chase']",
+            "shared_named_people=['or has information']",
+            "shared_precise_locations=['kentucky-avenue']",
+            "shared_agencies=['st-lucie-county-sheriff']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['burglary', 'suspect']",
+            "shared_distinctive_token_count=46",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County - WPTV",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1659,8 +1999,8 @@
       ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1711,9 +2051,9 @@
           "confidence": 0.99,
           "shared_anchors": [],
           "novel_facts": [
-            "Omari Linzell Williams, 18, died after a Chevrolet sedan struck him on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
-            "The driver was a 30-year-old Vero Beach resident who was uninjured and cooperated with investigators.",
-            "Williams' family raised pedestrian-safety concerns and announced a candlelight vigil at Lakewood Park."
+            "Omari Linzell Williams, 18, died after a Chevrolet sedan struck him while he walked on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
+            "The driver was a 30-year-old Vero Beach resident who cooperated with law enforcement.",
+            "Williams’ family is raising pedestrian-safety concerns, and FHP’s traffic homicide investigation remains ongoing."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1737,10 +2077,10 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash closes both directions of I-95 in Indian River County; second incident in St. Lucie - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-closes-both-directions-of-i-95-in-indian-river-county-mile-marker-141-oslo-road-st-lucie-county-entrance-ramp-indiro-road-northbound-entrance-ramp",
-          "canonical_slug": "2026-11-13-indrio-road-entrance-ramp-to-northbound-i-95-closed-in-st-lucie-county",
-          "canonical_headline": "Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County",
+          "source_headline": "Fort Pierce mom demands answers after video shows moments before daughter’s death - cw34.com",
+          "source_url": "https://cw34.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death",
+          "canonical_slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
+          "canonical_headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
           "canonical_is_custom": false,
           "identity_basis": "same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1749,33 +2089,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce mom demands answers after video shows moments before daughter’s death - cw34.com",
-          "source_url": "https://cw34.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death?teaserSource=trending",
-          "canonical_slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
-          "canonical_headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Fort Pierce mother questioning officers’ response before her 19-year-old daughter’s fatal shooting near a Fort Lauderdale Airbnb",
-            "Mother sharing body-camera footage of the police encounter before the shooting",
-            "Larry Lamar Smith named in connection with the killing",
-            "Same publication date and matching source-story headline and URL path"
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article is a syndicated version of the accountability story already represented by the canonical, not a distinct follow-up. The appended police statement offers condolences, refers concerns to the complaint process, and cites an ongoing investigation; it supplies no substantive finding or other material development. The candidate’s truncated lead and absent body do not establish that any substantive incoming facts are new.",
-          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1806,6 +2119,32 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
+          "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news?teaserSource=trending",
+          "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
+          "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "St. Lucie County commissioners voted 3-2 to reject the land-use change.",
+            "The proposal concerned roughly 34 acres near South 25th Street and West Midway Road.",
+            "The proposed change could allow nearly 500 homes."
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same proposal and rejection vote at the same property. Its drainage details and resident concerns provide context for that decision, not a subsequent material development or independently newsworthy follow-up. The later publication date and different outlet do not establish a new event.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1855,21 +2194,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "'It's heartwarming': Fort Pierce community gathers to honor veterans and military families - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-veterans-day/74403606",
-          "canonical_slug": "2026-11-12-fort-pierce-veterans-military-families-honored-at-veterans-day-ceremony",
-          "canonical_headline": "Fort Pierce veterans, military families honored at Veterans Day ceremony",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - WPEC",
           "source_url": "https://cbs12.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
           "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
@@ -1897,45 +2221,35 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
-          "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
-          "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
-      "generated_card_count": 0,
-      "elapsed_seconds": 32.264
+      "elapsed_seconds": 48.5
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 9,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 13.752,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 13.752,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1944,11 +2258,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "editorial_story_id": "story_027514",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -1971,26 +2305,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Law enforcement investigation shuts down I-95 in Indian River County - WFLX",
           "source_url": "https://www.wflx.com/2026/11/13/law-enforcement-investigation-shuts-down-i-95-indian-river-county?outputType=amp",
           "editorial_story_id": "story_027432",
@@ -1998,25 +2312,105 @@
           "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County - WPTV",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "event-identity-authority:exact_source_url",
+          "identity_keys": [
+            "incident:named-person-death:indiana-miranda",
+            "story:story_027432"
+          ],
+          "match_confidence": 1.0,
+          "evidence_dimensions": [
+            "source_url"
+          ],
+          "decision_trace": [
+            "exact_source_url=True",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Stuart Air Show at Witham Field in Stuart",
+            "Both articles published Nov. 13, 2026, concerning the same air-show weekend",
+            "Incoming article explicitly references the traffic, parking and access coverage described by the candidate"
+          ],
+          "novel_facts": [
+            "The 37th annual show runs through Sunday, Nov. 15",
+            "The program includes the F-16 Viper Demonstration Team and pilot Maj. Taylor Hiester",
+            "Participating students received aviation and weather-related STEM instruction"
+          ],
+          "reason": "Both articles cover the same Stuart Air Show. The incoming article adds program details, pilot comments and educational activities, but no consequential development or distinct accountability question. These are routine event details and a different presentation angle, not grounds for a new URL.",
+          "validation_errors": []
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Crash closes both directions of I-95 in Indian River County; second incident in St. Lucie - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-closes-both-directions-of-i-95-in-indian-river-county-mile-marker-141-oslo-road-st-lucie-county-entrance-ramp-indiro-road-northbound-entrance-ramp",
-          "editorial_story_id": "story_027414",
-          "canonical_slug": "2026-11-13-indrio-road-entrance-ramp-to-northbound-i-95-closed-in-st-lucie-county",
-          "canonical_headline": "Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
+          "source_headline": "Florida releases full list of 20 charged in voter fraud sweep; some arrests spark questions",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-releases-full-list-of-20-charged-in-voter-fraud-sweep-some-arrests-spark-questions",
+          "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
+          "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
@@ -2049,36 +2443,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Law enforcement investigation shuts down I-95 in Indian River County - WFLX",
           "source_url": "https://www.wflx.com/2026/11/13/law-enforcement-investigation-shuts-down-i-95-indian-river-county?outputType=amp",
           "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
@@ -2091,25 +2455,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Crash closes both directions of I-95 in Indian River County; second incident in St. Lucie - cw34.com",
-          "source_url": "https://cw34.com/news/local/crash-closes-both-directions-of-i-95-in-indian-river-county-mile-marker-141-oslo-road-st-lucie-county-entrance-ramp-indiro-road-northbound-entrance-ramp",
-          "canonical_slug": "2026-11-13-indrio-road-entrance-ramp-to-northbound-i-95-closed-in-st-lucie-county",
-          "canonical_headline": "Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.329
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "FHP revises account of fatal I-95 shooting in Indian River County; lanes reopen",
+      "generated_card_count": 0,
+      "elapsed_seconds": 36.912
     }
   ]
 }
