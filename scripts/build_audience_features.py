@@ -655,7 +655,7 @@ def _insert_article_recirculation(text: str, rows: list[dict]) -> str:
     # Rebuild marker-bounded output on every run; no duplicate boxes or stale links.
     text = re.sub(
         r'\s*' + re.escape(RECIRCULATION_START) + r'.*?'
-        + re.escape(RECIRCULATION_END), '', text, flags=re.S,
+        + re.escape(RECIRCULATION_END) + r'\s*', '\n', text, flags=re.S,
     )
     block = _render_article_recirculation(rows)
     if not block:
@@ -671,7 +671,7 @@ def _insert_article_recirculation(text: str, rows: list[dict]) -> str:
     if re.search(r'<div\b', match.group(0).split('>', 1)[1], re.I):
         return text  # Avoid assuming the close of a nested custom HTML body.
     end = match.end()
-    return text[:end] + '\n' + block + text[end:]
+    return text[:end] + '\n' + block + '\n' + text[end:].lstrip('\r\n')
 
 
 def _preferred_source_module(compact: bool = True) -> str:
