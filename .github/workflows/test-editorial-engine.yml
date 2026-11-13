@@ -84,6 +84,9 @@ jobs:
       - name: Validate editorial package
         run: python scripts/validate_package.py
 
+      - name: Reconcile editor-approved images in retained published pages
+        run: python scripts/reconcile_editorial_image_surfaces.py
+
       - name: Run editorial engine tests
         run: |
           python -m pytest tests -v \

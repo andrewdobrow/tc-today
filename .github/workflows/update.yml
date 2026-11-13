@@ -203,6 +203,9 @@ jobs:
       - name: Validate editorial package
         run: python scripts/validate_package.py
 
+      - name: Reconcile editor-approved images in retained published pages
+        run: python scripts/reconcile_editorial_image_surfaces.py
+
       - name: Run editorial engine tests
         run: |
           python -m pytest tests -v \
@@ -564,6 +567,9 @@ jobs:
       - name: Enforce editor-approved crash image after all generation
         run: python scripts/enforce_editorial_crash_image.py
 
+      - name: Reconcile all editor-approved article images after generation
+        run: python scripts/reconcile_editorial_image_surfaces.py
+
       - name: Remove photo credits from all published pages
         run: |
           python scripts/clean_public_image_attributions.py
@@ -645,8 +651,8 @@ jobs:
       - name: Enforce editor-approved crash image for deploy-only runs
         run: python scripts/enforce_editorial_crash_image.py
 
-      - name: Sync editor-approved photos into iOS archive (including deploy-only)
-        run: python scripts/sync_editorial_image_archive.py
+      - name: Reconcile editor-approved images for deploy-only pages and iOS
+        run: python scripts/reconcile_editorial_image_surfaces.py
 
       - name: Remove legacy photo credits for deploy-only
         run: |
