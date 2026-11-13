@@ -800,7 +800,10 @@ def _insert_article_recirculation(
     # Inline only on ordinary, text-led articles with enough substance.
     # Read Next remains available even for shorter/custom articles.
     selected = False
-    if allow_inline:
+    # Never let the mid-article link consume the sole recommendation.
+    # Require enough distinct stories for one inline link AND a complete
+    # three-card Read Next section; otherwise reserve links for the bottom.
+    if allow_inline and len(rows) >= 4:
         inner_start = raw_body.index('>') + 1
         inner_end = raw_body.lower().rfind('</div>')
         if inner_end > inner_start:
