@@ -594,6 +594,7 @@ def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tup
     current_category = str(entry.get("category_key") or "")
     strongly_related = []
     geographic_fallback = []
+    regional_fallback = []
     seen: set[str] = set()
     for candidate in candidates:
         slug = str(candidate.get("canonical_slug") or candidate.get("slug") or "")
@@ -631,15 +632,19 @@ def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tup
                 0 if same_category else 1,
                 -timestamp, slug, candidate,
             ))
-        elif not current_counties and not current_cities and same_category:
-            # Florida-wide / category pages have no single local county.
-            geographic_fallback.append((2, 0, -timestamp, slug, candidate))
+        else:
+            # Last-resort regional discovery when locality metadata is missing
+            # or the recent candidate pool lacks enough same-county stories.
+            # Never label these items as the same developing news event.
+            regional_fallback.append((0 if same_category else 1, -timestamp, slug, candidate))
         seen.add(slug)
 
     strongly_related.sort(key=lambda row: row[:3])
     geographic_fallback.sort(key=lambda row: row[:4])
+    regional_fallback.sort(key=lambda row: row[:3])
     selected = [row[3] for row in strongly_related[:limit]]
     selected.extend(row[4] for row in geographic_fallback[:max(0, limit - len(selected))])
+    selected.extend(row[3] for row in regional_fallback[:max(0, limit - len(selected))])
     if strongly_related and selected:
         first = selected[0]
         story, series, _, _ = _related_strength(entry, first)
@@ -661,8 +666,10 @@ def _render_related_section(title: str, rows: list[dict]) -> str:
         f'<li class="related-item"><a class="related-link" data-tct-recirculation-link="sidebar" href="{html_lib.escape(_entry_url(row), quote=True)}"><span class="related-headline">{html_lib.escape(str(row.get("headline") or ""))}</span><span class="related-date">{html_lib.escape(_entry_date(row))}</span></a></li>'
         for row in rows
     )
+    # An empty panel is a UI defect. Hide it rather than render a border,
+    # heading and lonely filler text when the archive is genuinely empty.
     if not items:
-        items = '<li class="related-item related-empty">More local reporting is on the way.</li>'
+        return ""
     return f'<section class="related-section related-section--smart"><h2 class="related-title">{html_lib.escape(title)}</h2><ul class="related-list">{items}</ul><a class="related-more-link" href="/archive.html">Search all TCT stories →</a></section>'
 
 
