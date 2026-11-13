@@ -647,6 +647,9 @@ jobs:
           python scripts/clean_public_image_attributions.py
           python scripts/clean_public_image_attributions.py --check
 
+      - name: Refresh article donation assurances (including deploy-only)
+        run: python scripts/sync_article_reader_support.py
+
       - name: Validate shared JavaScript syntax
         run: node --check main.js
 
