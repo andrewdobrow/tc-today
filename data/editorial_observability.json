@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-12T23:52:46Z",
+  "generated_at": "2026-11-13T02:54:59Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,24 +49,34 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 174,
+    "candidates_processed": 172,
     "routes": {
-      "generate_new": 22,
-      "skip": 152
+      "generate_new": 25,
+      "skip": 146,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 4,
-      "low_value": 121,
-      "publishable": 49
+      "listing": 5,
+      "low_value": 114,
+      "publishable": 53
     },
     "source_classes": {
-      "aggregator": 125,
-      "local_news": 31,
-      "regional_news": 15,
-      "unknown": 3
+      "aggregator": 119,
+      "local_news": 33,
+      "regional_news": 16,
+      "unknown": 4
     },
-    "rejected_count": 4,
+    "rejected_count": 5,
     "rejected_examples": [
+      {
+        "headline": "Adult Kids Are Warning Parents About Retiring in Florida. Moving Twice Could Cost Them - 24/7 Wall St.",
+        "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNQkdtWEctVklRM3RZMnM0ZGJBeUxCSEVvdklfc2xjY1BTU25RV2hPelI0dXJGczNSYVptX1FMZ05vTk5meC03bzQ5a2RkZ1NmX3dlS1pObGROSTdoYjkwVXlGVTUxaGhzcDk4YVpCWEVaeldLcXprTFdMb2doQU9SbTlUaE5sOHBkdEo1X0pBWm1HYWZUUHdGeE43bUlSX3gxejZjUXNJOUx2MVViSE9CbjVKRTRoX3dPbF9zNU1oNzNDQVI0emR6S2Q3SnJ3QVZWYlE?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline resembles a property listing rather than a news event"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "9755 SE Federal Hwy # T843-202, Hobe Sound, FL 33455 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPS2UwYjk5VVNmSzBlUnZvbm9LcjdsSFpKUTNwbVFpaXZrT2Qza3dVLVdscE9oc3phTVJSeGpFcjdMdUh0VzMtbnNicm9zUE94d25wcTBuZ1JUWDNMVG9DdW1EOHlNV2hOdnF6akxDV3BfZUtCbkI2RkJVa1R4dEIwU1EySE1wcjN5LTBqR3BjOG52bzlNRXhURVBqSzAycDVGWkNN?oc=5",
@@ -107,62 +117,120 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 25,
-      "same_event": 149
+      "new_story": 22,
+      "same_event": 150
     },
     "examples": [
       {
-        "story_id": "story_027333",
-        "title": "After 2 hurricanes decimated this waterfront property, a major transformation is finally underway - WPBF",
-        "event_key": "unknown-event-da5f9e542b",
+        "story_id": "story_027354",
+        "title": "Palm Beach County's new clerk Yvette Drucker outlines office priorities, weighs future of Israel bonds",
+        "event_key": "unknown-event-043689ac42",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027355",
+        "title": "Milagro Center and United Way are making holidays brighter in Delray Beach",
+        "event_key": "unknown-event-1350d1406d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027333",
+        "title": "After 2 hurricanes left this waterfront property in ruins, a major transformation is finally underway - WPBF",
+        "event_key": "unknown-event-fbe6cf71e3",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMiiwFBVV95cUxOOHl6UFVVV1NoNmhUOHBmT0UzTVpXYWlVcjJ0V2NMTlBHM2wxNG5lSGN3ekc4ZG5uRjlEN0JLdFNwdFRPQ2JraG5xTFRuTDRYa0REMVQyMmd0SWJmaWN4cWlVZml2MXRjWXYwQktWNTFwc3RucjU2a0hlMFo1UTZwUEQwMmRjRVhlVUdR",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027334",
         "title": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
         "event_key": "unknown-event-84bb31dcf4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027335",
         "title": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
         "event_key": "unknown-event-aa58533940",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_027335",
+        "title": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
+        "event_key": "unknown-event-896a617530",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027336",
         "title": "Prices hold steady for Thanksgiving dinner this year, report says",
         "event_key": "unknown-event-fa92d8927e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_027221",
-        "title": "Pinellas, Pasco schools name finalists for teacher of the year awards - Tampa Bay Times",
-        "event_key": "unknown-event-4fee48e5df",
+        "story_id": "story_027337",
+        "title": "Okeechobee county students won’t make up flood-related school closures - WPEC",
+        "event_key": "unknown-event-49df6c3b11",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026946",
+        "title": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
+        "event_key": "animal-rescue-stuart-cats",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -185,18 +253,6 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027337",
-        "title": "Okeechobee county students won’t make up flood-related school closures - WPEC",
-        "event_key": "unknown-event-49df6c3b11",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -301,12 +357,14 @@
         "story_id": "story_027338",
         "title": "Florida district recommends closing 10 schools. Here's the list - Wichita Eagle",
         "event_key": "unknown-event-2cb1732126",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -327,48 +385,6 @@
         "story_id": "story_027245",
         "title": "Nearly 500 volunteers give 1,440 hours at United Way’s Day of Caring - Sebastian Daily",
         "event_key": "unknown-event-dd05d33a39",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027194",
-        "title": "Tight Florida congressional race, others deserve attention | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-705e6c6ae5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027246",
-        "title": "Businesses impacted by Military Trail closure after Learjet crash can apply for grants of up to $5,000",
-        "event_key": "traffic-crash-22a1bf3d5e-22a1bf3d5e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027220",
-        "title": "Let's Hear It: Visit WPTV in Martin County on Nov. 16!",
-        "event_key": "unknown-event-c2e9623cf7",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -382,9 +398,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_027333",
-        "title": "After 2 hurricanes decimated this waterfront property, a major transformation is finally underway - WPBF",
-        "event_key": "unknown-event-da5f9e542b",
+        "story_id": "story_027354",
+        "title": "Palm Beach County's new clerk Yvette Drucker outlines office priorities, weighs future of Israel bonds",
+        "event_key": "unknown-event-043689ac42",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -392,51 +408,113 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027355",
+        "title": "Milagro Center and United Way are making holidays brighter in Delray Beach",
+        "event_key": "unknown-event-1350d1406d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027333",
+        "title": "After 2 hurricanes left this waterfront property in ruins, a major transformation is finally underway - WPBF",
+        "event_key": "unknown-event-fbe6cf71e3",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMiiwFBVV95cUxOOHl6UFVVV1NoNmhUOHBmT0UzTVpXYWlVcjJ0V2NMTlBHM2wxNG5lSGN3ekc4ZG5uRjlEN0JLdFNwdFRPQ2JraG5xTFRuTDRYa0REMVQyMmd0SWJmaWN4cWlVZml2MXRjWXYwQktWNTFwc3RucjU2a0hlMFo1UTZwUEQwMmRjRVhlVUdR",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027334",
         "title": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
         "event_key": "unknown-event-84bb31dcf4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027335",
         "title": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
         "event_key": "unknown-event-aa58533940",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_027335",
+        "title": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
+        "event_key": "unknown-event-896a617530",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027336",
         "title": "Prices hold steady for Thanksgiving dinner this year, report says",
         "event_key": "unknown-event-fa92d8927e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_027221",
-        "title": "Pinellas, Pasco schools name finalists for teacher of the year awards - Tampa Bay Times",
-        "event_key": "unknown-event-4fee48e5df",
+        "story_id": "story_027337",
+        "title": "Okeechobee county students won’t make up flood-related school closures - WPEC",
+        "event_key": "unknown-event-49df6c3b11",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_026946",
+        "title": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
+        "event_key": "animal-rescue-stuart-cats",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -461,19 +539,6 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027337",
-        "title": "Okeechobee county students won’t make up flood-related school closures - WPEC",
-        "event_key": "unknown-event-49df6c3b11",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -585,13 +650,15 @@
         "story_id": "story_027338",
         "title": "Florida district recommends closing 10 schools. Here's the list - Wichita Eagle",
         "event_key": "unknown-event-2cb1732126",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -613,51 +680,6 @@
         "story_id": "story_027245",
         "title": "Nearly 500 volunteers give 1,440 hours at United Way’s Day of Caring - Sebastian Daily",
         "event_key": "unknown-event-dd05d33a39",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027194",
-        "title": "Tight Florida congressional race, others deserve attention | Opinion - Treasure Coast News",
-        "event_key": "unknown-event-705e6c6ae5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027246",
-        "title": "Businesses impacted by Military Trail closure after Learjet crash can apply for grants of up to $5,000",
-        "event_key": "traffic-crash-22a1bf3d5e-22a1bf3d5e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027220",
-        "title": "Let's Hear It: Visit WPTV in Martin County on Nov. 16!",
-        "event_key": "unknown-event-c2e9623cf7",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -687,56 +709,20 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 371,
-      "timeline_entries_examined": 1055,
-      "transitions_examined": 654,
+      "stories_with_timelines": 374,
+      "timeline_entries_examined": 1060,
+      "transitions_examined": 655,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 11,
       "high_confidence_candidate_count": 3,
       "activation_eligible_candidate_count": 2,
-      "same_source_evolution_count": 6,
+      "same_source_evolution_count": 5,
       "same_source_evolution_milestones": {
         "arrest": 1,
         "death": 3,
-        "election_result": 1,
         "opening": 1
       },
       "same_source_evolution_examples": [
-        {
-          "story_id": "story_027328",
-          "story_title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
-          "milestones": [
-            "election_result"
-          ],
-          "matched_phrases": {
-            "election_result": [
-              "elected"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-274c6b7c4836a051d596",
-            "event_key": "unknown-event-8e55a5d5c1",
-            "published_at": "2026-11-12T23:42:23.908074+00:00",
-            "title": "Full Results: Mayor of Port St. Lucie - WPBF",
-            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
-            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
-          },
-          "newer_article": {
-            "article_id": "rss-7087c764887f9223ee69",
-            "event_key": "unknown-event-24bdfc0370",
-            "published_at": "2026-11-12T23:42:23.908074+00:00",
-            "title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
-            "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
-            "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
-          }
-        },
         {
           "story_id": "story_026021",
           "story_title": "Father of deceased co-pilot killed in Palm Beach County jet crash speaks as family seeks answers - WPLG Local 10",
@@ -1172,11 +1158,11 @@
         "timeline_identity_unanchored": 7,
         "weak_title_continuity": 1
       },
-      "excluded_entry_count": 32,
+      "excluded_entry_count": 33,
       "exclusion_reasons": {
         "insufficient_title_detail": 7,
         "low_value_title": 2,
-        "social_source": 23
+        "social_source": 24
       },
       "examples": [
         {
@@ -1946,27 +1932,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 660,
-      "treasure_coast_local": 515,
+      "florida": 657,
+      "treasure_coast_local": 513,
       "treasure_coast_region": 151,
-      "unknown": 1197
+      "unknown": 1193
     },
     "average_score": 59.71
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 660,
-      "treasure_coast_local": 515,
+      "florida": 657,
+      "treasure_coast_local": 513,
       "treasure_coast_region": 151,
-      "unknown": 1197
+      "unknown": 1193
     },
-    "average_priority": 2.73
+    "average_priority": 2.77
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1652,
-      "developing": 88,
-      "ongoing": 783
+      "active": 1631,
+      "developing": 87,
+      "ongoing": 796
     }
   },
   "registry_health": {
@@ -2004,19 +1990,19 @@
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-12T23:41:23Z",
-    "quarantined_story_records_retained": 5153,
-    "active_story_count": 2523
+    "quarantined_story_records_retained": 5154,
+    "active_story_count": 2514
   },
   "stories": {
-    "total": 2523,
+    "total": 2514,
     "importance_levels": {
       "breaking": 3,
       "high": 59,
-      "normal": 292,
-      "low": 2169,
+      "normal": 296,
+      "low": 2156,
       "archived": 0
     },
-    "average_importance": 6.78,
+    "average_importance": 6.86,
     "top": [
       {
         "story_id": "story_022411",
@@ -2031,7 +2017,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 20.54
+          "age_hours": 23.6
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2081,9 +2067,70 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 20.54,
+          "hours_since_update": 23.6,
           "event_count": 21,
           "timeline_entries": 21
+        }
+      },
+      {
+        "story_id": "story_027180",
+        "title": "St. Lucie County family seeks answers after teen struck, killed",
+        "score": 75,
+        "editorial_priority": 85,
+        "editorial_score": 85,
+        "score_breakdown": {
+          "score": 85,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.08
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-13T02:46:47.152415+00:00",
+          "hours_since_update": 0.08,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -2099,7 +2146,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 60.02
+          "age_hours": 63.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2143,7 +2190,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 60.02,
+          "hours_since_update": 63.08,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2161,7 +2208,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.1
+          "age_hours": 10.16
         },
         "level": "high",
         "importance_reasons": [
@@ -2204,65 +2251,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 7.1,
+          "hours_since_update": 10.16,
           "event_count": 2,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_027180",
-        "title": "St. Lucie County family seeks answers after teen struck, killed",
-        "score": 65,
-        "editorial_priority": 70,
-        "editorial_score": 70,
-        "score_breakdown": {
-          "score": 70,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 20.02
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-12T03:43:30.467718+00:00",
-          "hours_since_update": 20.02,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -2278,7 +2269,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 120.0
+          "age_hours": 123.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2328,7 +2319,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T23:42:34.970395+00:00",
-          "hours_since_update": 120.0,
+          "hours_since_update": 123.07,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2346,7 +2337,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 28.01
+          "age_hours": 31.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2387,7 +2378,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 28.01,
+          "hours_since_update": 31.08,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2405,7 +2396,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 28.54
+          "age_hours": 31.6
         },
         "level": "high",
         "importance_reasons": [
@@ -2444,59 +2435,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 28.54,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_027303",
-        "title": "Florida teen dead after crash was 'such a sweet, sweet soul' - Treasure Coast News",
-        "score": 65,
-        "editorial_priority": 61,
-        "editorial_score": 61,
-        "score_breakdown": {
-          "score": 61,
-          "importance": 65,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 4.08
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-12T19:42:36.786466+00:00",
-          "hours_since_update": 4.08,
+          "hours_since_update": 31.6,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2514,7 +2453,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 28.54
+          "age_hours": 31.6
         },
         "level": "high",
         "importance_reasons": [
@@ -2553,7 +2492,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 28.54,
+          "hours_since_update": 31.6,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2571,7 +2510,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 72.01
+          "age_hours": 75.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2615,9 +2554,61 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 72.01,
+          "hours_since_update": 75.08,
           "event_count": 2,
           "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_027303",
+        "title": "Florida teen dead after crash was 'such a sweet, sweet soul' - Treasure Coast News",
+        "score": 65,
+        "editorial_priority": 58,
+        "editorial_score": 58,
+        "score_breakdown": {
+          "score": 58,
+          "importance": 65,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 7.15
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-11-12T19:42:36.786466+00:00",
+          "hours_since_update": 7.15,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -2633,7 +2624,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 60.02
+          "age_hours": 63.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2669,7 +2660,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 60.02,
+          "hours_since_update": 63.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2687,7 +2678,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 84.01
+          "age_hours": 87.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2728,7 +2719,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 84.01,
+          "hours_since_update": 87.08,
           "event_count": 33,
           "timeline_entries": 33
         }
@@ -2746,7 +2737,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 148.01
+          "age_hours": 151.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2784,7 +2775,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-06T19:42:02.254300+00:00",
-          "hours_since_update": 148.01,
+          "hours_since_update": 151.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2802,7 +2793,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 84.01
+          "age_hours": 87.08
         },
         "level": "high",
         "importance_reasons": [
@@ -2840,7 +2831,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 84.01,
+          "hours_since_update": 87.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2858,7 +2849,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 162.47
+          "age_hours": 165.54
         },
         "level": "high",
         "importance_reasons": [
@@ -2897,7 +2888,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-06T05:14:27.024725+00:00",
-          "hours_since_update": 162.47,
+          "hours_since_update": 165.54,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2915,7 +2906,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 252.0
+          "age_hours": 255.07
         },
         "level": "high",
         "importance_reasons": [
@@ -2959,7 +2950,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 252.0,
+          "hours_since_update": 255.07,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -2977,7 +2968,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 124.01
+          "age_hours": 127.07
         },
         "level": "high",
         "importance_reasons": [
@@ -3015,7 +3006,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 124.01,
+          "hours_since_update": 127.07,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3033,7 +3024,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 323.01
+          "age_hours": 326.07
         },
         "level": "high",
         "importance_reasons": [
@@ -3071,7 +3062,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-10-30T12:42:19.702247+00:00",
-          "hours_since_update": 323.01,
+          "hours_since_update": 326.07,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3089,7 +3080,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.34
+          "age_hours": 54.41
         },
         "level": "high",
         "importance_reasons": [
@@ -3128,7 +3119,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-10T20:22:17.218591+00:00",
-          "hours_since_update": 51.34,
+          "hours_since_update": 54.41,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3146,7 +3137,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 178.33
+          "age_hours": 181.39
         },
         "level": "high",
         "importance_reasons": [
@@ -3182,7 +3173,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-05T13:23:10.322798+00:00",
-          "hours_since_update": 178.33,
+          "hours_since_update": 181.39,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3192,7 +3183,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-12T23:48:22Z",
+    "generated_at": "2026-11-13T02:52:04Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3209,44 +3200,51 @@
       "statuses": {
         "category_eligibility_archive_recovery": 5,
         "generated_live": 1,
-        "generation_failed_archive_recovery": 1,
-        "quality_gate_archive_recovery": 2
+        "generation_failed_archive_recovery": 2,
+        "quality_gate_archive_recovery": 1
       },
       "failures": {
-        "article_framing_integrity": 1,
+        "article_framing_integrity": 2,
         "no_category_eligible_sources": 5,
-        "publication_quality_rejected": 2
+        "publication_quality_rejected": 1
       },
       "model_attempt_count": 6,
-      "model_elapsed_seconds": 114.65,
+      "model_elapsed_seconds": 157.771,
       "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 3,
+      "article_framing_rejection_count": 4,
       "category_eligibility_rejection_count": 4,
-      "published_story_duplicate_suppression_count": 50,
+      "published_story_duplicate_suppression_count": 51,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 13,
+      "material_update_promotion_evaluation_count": 14,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 13,
+      "material_update_promotion_cache_hit_count": 14,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 10,
-        "selected_source_count": 0,
+        "publishable_source_count": 13,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Local Government category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 15.286,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 15.286,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3255,7 +3253,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -3269,8 +3267,8 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537"
+            "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
+            "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3283,12 +3281,22 @@
             "positive_signals": [],
             "competing_signals": [],
             "local_nexus_signals": [],
-            "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
-            "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
+            "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/12/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/?outputType=amp"
           }
         ],
         "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537",
+            "editorial_story_id": "story_027334",
+            "canonical_slug": "2026-11-12-indian-river-county-beaches-recover-after-erosion-some-access-points-remain-clos",
+            "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
@@ -3361,16 +3369,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "MARTY bus service begins phased return in Martin County after monthlong shutdown - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/11/marty-bus-service-begins-phased-return-martin-county-after-monthlong-shutdown?outputType=amp",
-            "editorial_story_id": "story_026967",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
             "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
             "editorial_story_id": "story_026967",
@@ -3382,11 +3380,26 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_cache_hit_count": 3,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537",
+            "canonical_slug": "2026-11-12-indian-river-county-beaches-recover-after-erosion-some-access-points-remain-clos",
+            "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
@@ -3523,36 +3536,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "MARTY bus service begins phased return in Martin County after monthlong shutdown - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/11/marty-bus-service-begins-phased-return-martin-county-after-monthlong-shutdown?outputType=amp",
-            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.96,
-            "shared_anchors": [
-              "Phased restoration of MARTY public transportation in Martin County",
-              "ADA paratransit prioritized as the first service to return",
-              "Restoration following the interruption of MARTY service"
-            ],
-            "novel_facts": [
-              "United Way reports providing 754 Lyft rides to 108 clients during the disruption",
-              "The temporary Lyft assistance generally could not accommodate fully wheelchair-bound riders",
-              "The incoming article specifies U.S. Highway 1 and Indiantown routes as subsequent restoration priorities"
-            ],
-            "reason": "Both articles cover the same phased MARTY service restoration. The incoming story adds interim assistance figures, rider experiences and restoration details, but does not establish a newly completed restart, a firm service date or another consequential development beyond the existing restoration announcement. These additions do not warrant rewriting the canonical or creating a separate follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
             "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
             "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
@@ -3579,15 +3562,19 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 34.706
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Martin County firefighters union urges county to restore January hiring class",
+        "generated_card_count": 0,
+        "elapsed_seconds": 43.18
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "quality_gate_archive_recovery",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 8,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 10,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3596,7 +3583,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.927,
+            "elapsed_seconds": 19.617,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
             "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Trailside flooding persists after berm breach on Martin County property"
@@ -3604,13 +3591,15 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 16.121,
-            "result": "success"
+            "elapsed_seconds": 19.405,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — High water blocks access to berm breach as flooding persists in Martin County's Trailside"
           }
         ],
-        "model_elapsed_seconds": 35.048,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 39.022,
+        "failure_code": "article_framing_integrity",
+        "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — High water blocks access to berm breach as flooding persists in Martin County's Trailside",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3622,7 +3611,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3646,22 +3635,12 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/martin-county-looks-for-flood-fixes-after-port-st-lucie-pumping-into-savannas-preserve",
-            "editorial_story_id": "story_027179",
-            "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-            "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
+            "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
+            "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
             "editorial_story_id": "story_027062",
             "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
             "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3677,9 +3656,9 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -3714,33 +3693,30 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/martin-county-looks-for-flood-fixes-after-port-st-lucie-pumping-into-savannas-preserve",
-            "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-            "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
+            "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
+            "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
             "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
             "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
+            "cache_hit": true,
             "model_call": false,
-            "action": "preserve_existing_canonical"
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "St. Lucie County commissioners rejected the land-use change by a 3-2 vote.",
+              "The proposal concerned roughly 34 acres near South 25th Street and West Midway Road.",
+              "The proposed designation could allow nearly 500 homes.",
+              "Both source URLs have the same distinctive article path on different outlet domains."
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article repeats the same proposal and commission decision covered by the canonical. Its drainage details and resident concerns provide context for that decision, not a subsequent material development or an independently newsworthy follow-up.",
+            "validation_errors": []
           },
           {
             "category_key": "crime",
@@ -3770,9 +3746,9 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 60.668
+        "elapsed_seconds": 53.024
       },
       {
         "category_key": "business",
@@ -3780,7 +3756,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 15,
-        "publishable_source_count": 9,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3822,7 +3798,7 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "editorial_story_id": "story_026737",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -3832,7 +3808,7 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "editorial_story_id": "story_026737",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -3920,7 +3896,7 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
             "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -3935,7 +3911,7 @@
           },
           {
             "category_key": "business",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
             "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -4099,7 +4075,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 23.86
+        "elapsed_seconds": 16.954
       },
       {
         "category_key": "sports",
@@ -4107,7 +4083,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 3,
+        "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4201,8 +4177,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 5,
-        "elapsed_seconds": 17.536
+        "new_publication_stale_rejected_count": 4,
+        "elapsed_seconds": 11.179
       },
       {
         "category_key": "things_to_do",
@@ -4219,11 +4195,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.683,
+            "elapsed_seconds": 13.075,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 11.683,
+        "model_elapsed_seconds": 13.075,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -4421,7 +4397,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 30.625
+        "elapsed_seconds": 25.687
       },
       {
         "category_key": "florida",
@@ -4429,7 +4405,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 1,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4446,7 +4422,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -4486,7 +4462,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.762
+        "elapsed_seconds": 12.619
       },
       {
         "category_key": "martin",
@@ -4494,8 +4470,8 @@
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 2,
@@ -4503,23 +4479,23 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 28.096,
+            "elapsed_seconds": 47.036,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County moves to revive drainage project as Trailside flooding persists"
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County seeks to revive drainage project as Trailside flooding persists"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 25.003,
+            "elapsed_seconds": 43.351,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County seeks to revive drainage project as Trailside flooding persists"
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County plans drainage project as Trailside flooding persists after berm breach"
           }
         ],
-        "model_elapsed_seconds": 53.099,
+        "model_elapsed_seconds": 90.388,
         "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County seeks to revive drainage project as Trailside flooding persists",
+        "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County plans drainage project as Trailside flooding persists after berm breach",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4528,7 +4504,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 5,
@@ -4575,20 +4551,20 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
-            "editorial_story_id": "story_027015",
-            "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
-            "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
+            "editorial_story_id": "story_026967",
+            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
+            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -4653,31 +4629,42 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
-            "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
-            "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
+            "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
+            "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
+            "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
+            "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
+            "cache_hit": true,
             "model_call": false,
-            "action": "preserve_existing_canonical"
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Martin County's one-year emergency contract with MTM Transit, LLC",
+              "Phased restoration of MARTY public transportation",
+              "ADA paratransit riders prioritized in the service restoration"
+            ],
+            "novel_facts": [],
+            "reason": "Both articles report the same emergency contract and phased MARTY service restoration. The incoming article adds background and routine implementation details, but no distinct subsequent decision or material development; its later publication date does not establish a new event.",
+            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 75.818
+        "elapsed_seconds": 108.37
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 17,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4698,7 +4685,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4744,16 +4731,6 @@
             "category_key": "st_lucie",
             "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
-            "editorial_story_id": "story_022411",
-            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
             "editorial_story_id": "story_022411",
             "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
             "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
@@ -4817,6 +4794,26 @@
             "editorial_story_id": "story_027014",
             "canonical_slug": "2026-11-11-st-lucie-county-residents-demand-drainage-improvements-after-historic-flooding",
             "canonical_headline": "St. Lucie County residents demand drainage improvements after historic flooding",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+            "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+            "editorial_story_id": "story_026857",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "editorial_story_id": "story_026761",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -4913,21 +4910,6 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
-            "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-            "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5037,33 +5019,56 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
+            "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
+            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
+            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Western St. Lucie County residents seek answers after historic flooding - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/western-st-lucie-county-residents-seek-answers-after-historic-flooding",
+            "canonical_slug": "2026-11-10-western-st-lucie-county-flooding-prompts-emergency-meeting-push-for-faster-study",
+            "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.882
+        "elapsed_seconds": 14.69
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 9,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 10,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.82,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.82,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Indian River County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5072,11 +5077,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 10,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537",
+            "editorial_story_id": "story_027334",
+            "canonical_slug": "2026-11-12-indian-river-county-beaches-recover-after-erosion-some-access-points-remain-clos",
+            "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
@@ -5105,6 +5120,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "'Did its job': Indian River County beaches recovering after erosion from nor’easter and King Tides - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-beach-erosion-coastal-king-tides-storm/74415537",
+            "canonical_slug": "2026-11-12-indian-river-county-beaches-recover-after-erosion-some-access-points-remain-clos",
+            "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
@@ -5137,11 +5167,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Indian River County beaches recover after erosion; some access points remain closed",
-        "generated_card_count": 0,
-        "elapsed_seconds": 35.526
+        "elapsed_seconds": 14.821
       }
     ]
   }
