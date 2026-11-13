@@ -6,7 +6,8 @@ Inline Kit forms are kept alongside the sitewide popup.
 from pathlib import Path
 
 from scripts.replace_header_app_store import (
-    KIT_MODAL_EMBED, ensure_kit_modal_embed, replace_header_promo
+    KIT_MODAL_EMBED, ensure_kit_modal_embed, replace_header_promo,
+    CSS_ASSET_VERSION
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +43,7 @@ def test_reconcile_upgrades_absent_or_duplicate_modal_without_touching_inline():
     inline = '<script async data-uid="30e15672d3" src="https://treasure-coast-today.kit.com/30e15672d3/index.js"></script>'
     before = (
         '<html><body><header class="site-masthead"></header>'
-        + inline + '<script src="/main.js?v=1.13.9.125"></script></body></html>'
+        + inline + f'<script src="/main.js?v={CSS_ASSET_VERSION}"></script></body></html>'
     )
     upgraded = ensure_kit_modal_embed(before)
     assert upgraded.count(KIT_MODAL_EMBED) == 1
