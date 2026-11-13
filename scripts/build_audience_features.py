@@ -33,7 +33,7 @@ PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
 COMMUNITY_PARTNER_URL = "https://www.facebook.com/groups/188814797289161"
 COMMUNITY_PARTNER_IMAGE = "/images/tccn-circle.png"
 COMMUNITY_PARTNER_NAME = "Treasure Coast Community News"
-ASSET_VERSION = "1.13.9.125"
+ASSET_VERSION = "1.13.9.126"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -498,68 +498,180 @@ def render_news_tip_page() -> None:
     (ROOT / "news-tip.html").write_text(page, encoding="utf-8")
 
 
+# Ignore general geography and newsroom vocabulary when identifying a *subject*
+# match. County/city proximity is useful for ordering meaningful candidates, but
+# must never create a recommendation by itself.
+RECIRCULATION_TOPIC_NOISE = frozenset({
+    "martin", "lucie", "indian", "river", "stuart", "jensen", "vero", "beach",
+    "port", "palm", "fort", "pierce", "hobe", "sound", "florida", "county",
+    "residents", "resident", "officials", "official", "local", "area",
+    "police", "deputies", "sheriff", "city", "man", "woman", "year", "years",
+    "old", "new", "news", "report", "reports", "updated", "today",
+})
+RECIRCULATION_NORMALIZATION = {
+    "sidewalks": "sidewalk", "streets": "street", "roads": "road",
+    "pedestrians": "pedestrian", "walking": "walk", "walks": "walk",
+    "crashes": "crash", "crashed": "crash", "drivers": "driver",
+    "schools": "school", "students": "student", "flooding": "flood",
+    "flooded": "flood", "closures": "closure", "closed": "closure",
+    "homes": "home", "families": "family", "injuries": "injury",
+    "killed": "death", "deaths": "death", "fatal": "death",
+}
+
+
 def _token_set(entry: dict) -> set[str]:
     text = _clean_text(" ".join([str(entry.get("headline") or ""), str(entry.get("teaser") or "")])).lower()
     return {t for t in re.findall(r"[a-z0-9']+", text) if len(t) >= 4 and t not in STOPWORDS}
 
 
+def _recirculation_subject_tokens(entry: dict) -> set[str]:
+    tokens = entry.get("_tct_tokens") or _token_set(entry)
+    return {
+        RECIRCULATION_NORMALIZATION.get(t, t)
+        for t in tokens if t not in RECIRCULATION_TOPIC_NOISE
+    }
+
+
 def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tuple[str, list[dict]]:
     current_slug = str(entry.get("canonical_slug") or entry.get("slug") or "")
-    current_tokens = entry.get("_tct_tokens") or _token_set(entry)
+    current_subject = _recirculation_subject_tokens(entry)
     current_cities = entry.get("_tct_cities") or {c["slug"] for c in _entry_cities(entry)}
     current_counties = entry.get("_tct_counties") or _entry_county_keys(entry)
     event_key = str(entry.get("editorial_event_key") or "").strip()
     anchor_key = str(entry.get("incident_anchor_key") or "").strip()
     series_key = str(entry.get("custom_series_key") or "").strip()
     scored = []
+    seen: set[str] = set()
     for candidate in candidates:
         slug = str(candidate.get("canonical_slug") or candidate.get("slug") or "")
-        if not slug or slug == current_slug:
+        if not slug or slug == current_slug or slug in seen:
             continue
-        score = 0.0
         candidate_event = str(candidate.get("editorial_event_key") or "").strip()
         candidate_anchor = str(candidate.get("incident_anchor_key") or "").strip()
         candidate_series = str(candidate.get("custom_series_key") or "").strip()
-        exact_identity = False
-        if event_key and candidate_event == event_key:
-            score += 500; exact_identity = True
-        if anchor_key and candidate_anchor == anchor_key:
-            score += 450; exact_identity = True
-        if series_key and candidate_series == series_key:
-            score += 300; exact_identity = True
-        cities = candidate.get("_tct_cities") or set()
-        if current_cities & cities:
-            score += 120
-        if current_counties & (candidate.get("_tct_counties") or set()):
-            score += 60
+        same_story = bool(
+            (event_key and candidate_event == event_key)
+            or (anchor_key and candidate_anchor == anchor_key)
+        )
+        same_series = bool(series_key and candidate_series == series_key)
+        common = current_subject & _recirculation_subject_tokens(candidate)
+        # Two meaningful subject terms, or a genuinely shared story/series
+        # identity, are required. Geography alone will not qualify a story.
+        if not same_story and not same_series and len(common) < 2:
+            continue
+        score = 0.0
+        if same_story:
+            score += 500
+        if same_series:
+            score += 250
+        score += len(common) * 55
+        if current_cities & (candidate.get("_tct_cities") or {c["slug"] for c in _entry_cities(candidate)}):
+            score += 30
+        if current_counties & (candidate.get("_tct_counties") or _entry_county_keys(candidate)):
+            score += 18
         if candidate.get("category_key") == entry.get("category_key"):
-            score += 45
-        tokens = candidate.get("_tct_tokens") or set()
-        if current_tokens and tokens:
-            overlap = len(current_tokens & tokens)
-            union = len(current_tokens | tokens)
-            score += 100 * (overlap / union if union else 0)
-            score += min(30, overlap * 6)
+            score += 12
         current_dt = entry.get("_tct_date_dt")
         candidate_dt = candidate.get("_tct_date_dt")
         if current_dt and candidate_dt:
             age = abs((current_dt - candidate_dt).days)
-            score += max(0, 30 - min(30, age))
-        if score >= 50:
-            scored.append((score, _entry_date(candidate), exact_identity, candidate))
+            score += max(0, 14 - min(14, age))
+        scored.append((score, _entry_date(candidate), same_story, candidate))
+        seen.add(slug)
     scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
     picked = [row[3] for row in scored[:limit]]
-    identity_hit = any(row[2] for row in scored[:limit])
-    return ("More on this story" if identity_hit else "Related Coverage", picked)
+    return ("More on this story" if any(row[2] for row in scored[:limit]) else "Related Coverage", picked)
+
 
 def _render_related_section(title: str, rows: list[dict]) -> str:
     items = "".join(
-        f'<li class="related-item"><a class="related-link" href="{html_lib.escape(_entry_url(row), quote=True)}"><span class="related-headline">{html_lib.escape(str(row.get("headline") or ""))}</span><span class="related-date">{html_lib.escape(_entry_date(row))}</span></a></li>'
+        f'<li class="related-item"><a class="related-link" data-tct-recirculation-link="sidebar" href="{html_lib.escape(_entry_url(row), quote=True)}"><span class="related-headline">{html_lib.escape(str(row.get("headline") or ""))}</span><span class="related-date">{html_lib.escape(_entry_date(row))}</span></a></li>'
         for row in rows
     )
     if not items:
         items = '<li class="related-item related-empty">More local reporting is on the way.</li>'
     return f'<section class="related-section related-section--smart"><h2 class="related-title">{html_lib.escape(title)}</h2><ul class="related-list">{items}</ul><a class="related-more-link" href="/archive.html">Search all TCT stories →</a></section>'
+
+
+RECIRCULATION_START = "<!-- TCT_ARTICLE_RECIRCULATION_START -->"
+RECIRCULATION_END = "<!-- TCT_ARTICLE_RECIRCULATION_END -->"
+
+
+def _recirculation_image(entry: dict) -> str:
+    image = str(entry.get("image_url") or "").strip()
+    if image.startswith(("https://", "http://", "/images/")):
+        return (
+            f'<img src="{html_lib.escape(image, quote=True)}" alt="" '
+            'loading="lazy" decoding="async">'
+        )
+    return ""
+
+
+def _render_article_recirculation(rows: list[dict]) -> str:
+    """Render an editorial recommendation *outside* .article-body.
+
+    Mediavine manages in-content ad insertion within article paragraphs, so we
+    must not split paragraphs, add ad hints, or put a card inside that container.
+    """
+    if not rows:
+        return ""
+    first = rows[0]
+    href = html_lib.escape(_entry_url(first), quote=True)
+    headline = html_lib.escape(str(first.get("headline") or ""))
+    inline = (
+        '<p class="tct-related-inline" data-tct-recirculation="inline">'
+        '<span class="tct-related-inline-label">ALSO READ</span>'
+        f'<a href="{href}" data-tct-recirculation-link="inline">{headline}'
+        '<span aria-hidden="true"> &rarr;</span></a></p>'
+    )
+    next_rows = rows[1:4]
+    if not next_rows:
+        return RECIRCULATION_START + inline + RECIRCULATION_END
+    cards = []
+    for row in next_rows:
+        target = html_lib.escape(_entry_url(row), quote=True)
+        title = html_lib.escape(str(row.get("headline") or ""))
+        category = html_lib.escape(str(row.get("category_label") or "Local News"))
+        image = _recirculation_image(row)
+        media = f'<span class="tct-read-next-image">{image}</span>' if image else ""
+        cards.append(
+            f'<a class="tct-read-next-card" href="{target}" data-tct-recirculation-link="read_next">'
+            f'{media}<span class="tct-read-next-content">'
+            f'<span class="tct-read-next-category">{category}</span>'
+            f'<strong class="tct-read-next-headline">{title}</strong>'
+            '<span class="tct-read-next-action">Read story <span aria-hidden="true">&rarr;</span></span>'
+            '</span></a>'
+        )
+    section = (
+        '<section class="tct-read-next" aria-label="More local stories">'
+        '<div class="tct-read-next-heading"><span class="tct-read-next-eyebrow">KEEP READING</span>'
+        '<h2>Read Next</h2></div><div class="tct-read-next-grid">'
+        + "".join(cards) + '</div></section>'
+    )
+    return RECIRCULATION_START + inline + section + RECIRCULATION_END
+
+
+def _insert_article_recirculation(text: str, rows: list[dict]) -> str:
+    # Rebuild marker-bounded output on every run; no duplicate boxes or stale links.
+    text = re.sub(
+        r'\s*' + re.escape(RECIRCULATION_START) + r'.*?'
+        + re.escape(RECIRCULATION_END), '', text, flags=re.S,
+    )
+    block = _render_article_recirculation(rows)
+    if not block:
+        return text
+    # Require the open, public article body; never split .article-body or touch
+    # Mediavine-managed slots (including legacy paywall leaderboards).
+    match = re.search(
+        r'<div\b(?=[^>]*class=["\']article-body["\'])[^>]*>.*?</div>',
+        text, re.I | re.S,
+    )
+    if not match:
+        return text
+    if re.search(r'<div\b', match.group(0).split('>', 1)[1], re.I):
+        return text  # Avoid assuming the close of a nested custom HTML body.
+    end = match.end()
+    return text[:end] + '\n' + block + text[end:]
 
 
 def _preferred_source_module(compact: bool = True) -> str:
@@ -748,6 +860,7 @@ def enhance_articles(archive: list[dict]) -> dict:
                 text = text[:close.start()] + breadcrumb_json + "\n" + text[close.start():]
         text = _ensure_newsarticle_schema(text, entry)
         title, related = _related_entries(entry, candidates)
+        text = _insert_article_recirculation(text, related)
         side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</aside>'
         text, side_replacements = re.subn(r'<aside\s+class=["\']article-side-rail["\']>.*?</aside>', side, text, count=1, flags=re.I | re.S)
         if side_replacements == 0:
