@@ -78,7 +78,7 @@ def test_same_county_fallback_prevents_empty_modules_without_fake_relatedness():
         _story("other", "Statewide education funding hearing", county="st_lucie"),
     ]
     label, rows = features._related_entries(current, candidates)
-    assert label == "More Local Coverage"
+    assert label == "More from Martin County"
     assert len(rows) == 5
     assert all(row["county_keys"] == ["martin"] for row in rows[:4])
     assert not features._strong_related_match(current, rows[0])
@@ -87,6 +87,38 @@ def test_same_county_fallback_prevents_empty_modules_without_fake_relatedness():
     sidebar = features._render_related_section(label, rows)
     assert sidebar.count('class="related-item"') == 5
     assert 'related-empty' not in sidebar
+
+
+def test_regional_is_last_resort_after_all_same_county_candidates():
+    current = _story("source", "Local transportation funding reviewed", county="martin")
+    candidates = [
+        _story("regional1", "Sports showcase opens in Indian River County", county="indian_river"),
+        _story("martin1", "Library opens new reading room", county="martin"),
+        _story("regional2", "Regional airport renovations approved", county="st_lucie"),
+        _story("martin2", "Animal adoption event announced", county="martin"),
+    ]
+    _, rows = features._related_entries(current, candidates)
+    assert [row["slug"] for row in rows[:2]] == ["martin1", "martin2"]
+    assert {row["slug"] for row in rows[2:]} == {"regional1", "regional2"}
+
+
+def test_empty_archive_never_draws_a_blank_coverage_panel():
+    assert features._render_related_section("Related Coverage", []) == ""
+    assert features._render_article_recirculation([]) == ""
+
+
+def test_same_county_fallback_appears_in_long_articles_with_honest_label():
+    current = _story("source", "Firefighters request January hiring class", county="martin")
+    unrelated = _story("nearby", "Local museum announces new exhibit", county="martin")
+    label, rows = features._related_entries(current, [unrelated])
+    assert label == "More from Martin County"
+    assert not features._strong_related_match(current, rows[0])
+    rendered = features._insert_article_recirculation(
+        _long_body(9), rows, allow_inline=True, inline_label="MORE LOCAL NEWS",
+    )
+    assert rendered.count('data-tct-recirculation-link="inline"') == 1
+    assert 'MORE LOCAL NEWS' in rendered
+    assert rendered.count('data-tct-recirculation-link="read_next"') == 0
 
 
 def test_generic_headline_boilerplate_is_not_a_strong_inline_match():
