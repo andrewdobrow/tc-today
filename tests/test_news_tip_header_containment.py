@@ -26,9 +26,10 @@ def test_real_site_masthead_stays_sticky():
 def test_news_tip_page_uses_fresh_asset_version():
     html = (ROOT / "news-tip.html").read_text(encoding="utf-8")
     builder = (ROOT / "scripts" / "build_audience_features.py").read_text(encoding="utf-8")
-    assert '/style.css?v=1.13.9.125' in html
-    assert '/main.js?v=1.13.9.125' in html
-    assert 'ASSET_VERSION = "1.13.9.125"' in builder
+    from scripts.build_audience_features import ASSET_VERSION
+    assert f'/style.css?v={ASSET_VERSION}' in html
+    assert f'/main.js?v={ASSET_VERSION}' in html
+    assert f'ASSET_VERSION = "{ASSET_VERSION}"' in builder
 
 
 def test_news_tip_generator_keeps_semantic_header_contract():
