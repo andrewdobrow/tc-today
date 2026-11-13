@@ -90,6 +90,28 @@ async function shareArticle(btn) {
   } catch (e) {}
 }
 
+// -- EDITORIAL RECIRCULATION ANALYTICS --
+// One delegated listener covers the in-story link, Read Next and sidebar links.
+// Ordinary links retain their natural navigation and all Mediavine ad slots.
+document.addEventListener("click", (event) => {
+  const target = event.target && typeof event.target.closest === "function"
+    ? event.target.closest("a[data-tct-recirculation-link]")
+    : null;
+  if (!target) return;
+  const placement = target.getAttribute("data-tct-recirculation-link");
+  const href = target.getAttribute("href") || "";
+  if (!href.startsWith("/articles/")) return;
+  if (typeof window.gtag !== "function") return;
+  try {
+    window.gtag("event", "article_recirculation_click", {
+      placement,
+      source_article: window.location.pathname.split("/").pop().replace(/\.html$/i, ""),
+      destination_article: href.split("/").pop().replace(/\.html$/i, ""),
+      transport_type: "beacon"
+    });
+  } catch (_) { /* Never block article navigation for analytics. */ }
+});
+
 // -- CATEGORY FILTER --
 // County-first navigation uses ordinary links so it remains fully functional
 // without JavaScript. On the homepage only, links carrying data-cat switch the
