@@ -546,6 +546,9 @@ def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tup
         slug = str(candidate.get("canonical_slug") or candidate.get("slug") or "")
         if not slug or slug == current_slug or slug in seen:
             continue
+        # Promotional placements should not be presented as editorial recommendations.
+        if candidate.get("sponsored") or candidate.get("is_sponsored"):
+            continue
         candidate_event = str(candidate.get("editorial_event_key") or "").strip()
         candidate_anchor = str(candidate.get("incident_anchor_key") or "").strip()
         candidate_series = str(candidate.get("custom_series_key") or "").strip()
