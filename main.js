@@ -112,6 +112,30 @@ document.addEventListener("click", (event) => {
   } catch (_) { /* Never block article navigation for analytics. */ }
 });
 
+// Count genuine second distinct article views within this tab/session. This
+// complements link clicks, which alone cannot prove the next story loaded.
+// No persistent identifier or personal data is stored.
+(function trackSecondArticleView() {
+  const path = window.location.pathname;
+  if (!/^\/articles\/[^/]+\.html$/i.test(path)) return;
+  try {
+    const key = "tct_article_paths_in_session";
+    const previous = JSON.parse(window.sessionStorage.getItem(key) || "[]");
+    const visited = Array.isArray(previous) ? previous.filter(p =>
+      typeof p === "string" && /^\/articles\/[^/]+\.html$/i.test(p)
+    ).slice(-19) : [];
+    if (visited.includes(path)) return;
+    visited.push(path);
+    window.sessionStorage.setItem(key, JSON.stringify(visited));
+    if (visited.length === 2 && typeof window.gtag === "function") {
+      window.gtag("event", "article_second_view", {
+        article_path: path,
+        transport_type: "beacon"
+      });
+    }
+  } catch (_) { /* Analytics must never interfere with reading. */ }
+})();
+
 // -- CATEGORY FILTER --
 // County-first navigation uses ordinary links so it remains fully functional
 // without JavaScript. On the homepage only, links carrying data-cat switch the
