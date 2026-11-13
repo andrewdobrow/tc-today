@@ -87,6 +87,15 @@ def test_main_production_workflow_reconciles_after_generation_and_before_deploy(
     )
 
 
+def test_deploy_only_rebuilds_article_support_assurances():
+    workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/update.yml").read_text()
+    deploy = workflow.split("\n  deploy:", 1)[1]
+    assert "python scripts/sync_article_reader_support.py" in deploy
+    assert deploy.index("python scripts/sync_article_reader_support.py") < deploy.index(
+        "- name: Upload artifact"
+    )
+
+
 def test_current_article_styles_contain_responsive_module():
     css = (Path(__file__).resolve().parents[1] / "style.css").read_text()
     assert ".tct-article-reader-support" in css
