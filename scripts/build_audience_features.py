@@ -759,7 +759,7 @@ def _mid_article_anchor(body: str) -> int | None:
         if len(plain) >= 70:
             substantive.append(match)
     # Avoid cluttering brief reports and one-paragraph updates.
-    if len(substantive) < 7:
+    if len(substantive) < 6:
         return None
     # Approximately 40-45% through the substantial paragraphs; normally after
     # paragraph 3 or 4, slightly later for exceptionally long articles.
