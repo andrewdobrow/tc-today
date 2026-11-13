@@ -30,7 +30,8 @@ def test_inserts_clear_one_time_support_appeal_before_newsletter():
     assert START in after and END in after
     assert "Local news needs local support." in after
     assert "Support TCT Today" in after
-    assert "Give any amount. No subscription required." in after
+    assert "Give any amount. Processed securely using Stripe." in after
+    assert "No subscription required." not in after
     assert after.index(START) < after.index('newsletter-inline-slot--article')
     assert after.index('newsletter-inline-slot--article') < after.index('article-share')
     assert after.count(NEWSLETTER) == 1
