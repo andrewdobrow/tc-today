@@ -33,7 +33,7 @@ PREFERRED_SOURCE_SCRIPT = "https://news.google.com/swg/js/v1/publisher.js"
 COMMUNITY_PARTNER_URL = "https://www.facebook.com/groups/188814797289161"
 COMMUNITY_PARTNER_IMAGE = "/images/tccn-circle.png"
 COMMUNITY_PARTNER_NAME = "Treasure Coast Community News"
-ASSET_VERSION = "1.13.9.126"
+ASSET_VERSION = "1.13.9.127"
 
 MEDIAVINE_SCRIPT_SRC = "//scripts.mediavine.com/tags/31bba1e2-0cf0-4381-8d83-ea54f9aa3bbf.js"
 MEDIAVINE_SCRIPT_TAG = (
@@ -613,28 +613,35 @@ def _recirculation_image(entry: dict) -> str:
     return ""
 
 
-def _render_article_recirculation(rows: list[dict]) -> str:
-    """Render an editorial recommendation *outside* .article-body.
+RECIRCULATION_INLINE_START = "<!-- TCT_ARTICLE_INLINE_RECOMMENDATION_START -->"
+RECIRCULATION_INLINE_END = "<!-- TCT_ARTICLE_INLINE_RECOMMENDATION_END -->"
 
-    Mediavine manages in-content ad insertion within article paragraphs, so we
-    must not split paragraphs, add ad hints, or put a card inside that container.
+
+def _render_inline_recirculation(row: dict) -> str:
+    """One clearly editorial text link; no ad controls, images or paragraph splitting."""
+    href = html_lib.escape(_entry_url(row), quote=True)
+    headline = html_lib.escape(str(row.get("headline") or ""))
+    return (
+        RECIRCULATION_INLINE_START
+        + '<aside class="tct-related-inline" data-tct-recirculation="inline" '
+          'aria-label="Related local reporting">'
+          '<span class="tct-related-inline-label">ALSO READ</span>'
+        + f'<a href="{href}" data-tct-recirculation-link="inline">{headline}'
+          '<span aria-hidden="true"> &rarr;</span></a></aside>'
+        + RECIRCULATION_INLINE_END
+    )
+
+
+def _render_article_recirculation(rows: list[dict]) -> str:
+    """Render at most three Read Next cards after the article body.
+
+    The mid-story link, when eligible, is handled separately. No link appears
+    twice across the mid-story and post-story modules.
     """
     if not rows:
         return ""
-    first = rows[0]
-    href = html_lib.escape(_entry_url(first), quote=True)
-    headline = html_lib.escape(str(first.get("headline") or ""))
-    inline = (
-        '<p class="tct-related-inline" data-tct-recirculation="inline">'
-        '<span class="tct-related-inline-label">ALSO READ</span>'
-        f'<a href="{href}" data-tct-recirculation-link="inline">{headline}'
-        '<span aria-hidden="true"> &rarr;</span></a></p>'
-    )
-    next_rows = rows[1:4]
-    if not next_rows:
-        return RECIRCULATION_START + inline + RECIRCULATION_END
     cards = []
-    for row in next_rows:
+    for row in rows[:3]:
         target = html_lib.escape(_entry_url(row), quote=True)
         title = html_lib.escape(str(row.get("headline") or ""))
         category = html_lib.escape(str(row.get("category_label") or "Local News"))
@@ -654,30 +661,92 @@ def _render_article_recirculation(rows: list[dict]) -> str:
         '<h2>Read Next</h2></div><div class="tct-read-next-grid">'
         + "".join(cards) + '</div></section>'
     )
-    return RECIRCULATION_START + inline + section + RECIRCULATION_END
+    return RECIRCULATION_START + section + RECIRCULATION_END
 
 
-def _insert_article_recirculation(text: str, rows: list[dict]) -> str:
-    # Rebuild marker-bounded output on every run; no duplicate boxes or stale links.
-    text = re.sub(
-        r'\s*' + re.escape(RECIRCULATION_START) + r'.*?'
-        + re.escape(RECIRCULATION_END) + r'\s*', '\n', text, flags=re.S,
-    )
-    block = _render_article_recirculation(rows)
-    if not block:
+def _mid_article_anchor(body: str) -> int | None:
+    """Return the byte-safe insertion offset after a natural paragraph break.
+
+    Guard against custom/nested HTML and embedded ads. We never change existing
+    paragraphs or Mediavine markup; for uncertain layouts the in-story link is
+    simply omitted. Dynamic Mediavine ads remain entirely provider-managed.
+    """
+    # A conservative approach: don't alter complex editor-authored bodies or
+    # existing explicit ad components. The Read Next module still appears below.
+    if re.search(
+        r'<(?:div|aside|figure|table|iframe|ins|script|section|blockquote)\b',
+        body, re.I,
+    ):
+        return None
+    paragraphs = list(re.finditer(r'<p(?:\s[^>]*)?>.*?</p\s*>', body, re.I | re.S))
+    substantive = []
+    for match in paragraphs:
+        plain = _clean_text(re.sub(r'<[^>]*>', ' ', match.group(0)))
+        if len(plain) >= 70:
+            substantive.append(match)
+    # Avoid cluttering brief reports and one-paragraph updates.
+    if len(substantive) < 7:
+        return None
+    # Approximately 40-45% through the substantial paragraphs; normally after
+    # paragraph 3 or 4, slightly later for exceptionally long articles.
+    position = max(3, min(7, round(len(substantive) * 0.43)))
+    anchor = substantive[position - 1]
+    # Require a normal paragraph on both sides. No injection into a paragraph.
+    return anchor.end()
+
+
+def _insert_article_recirculation(
+    text: str, rows: list[dict], *, allow_inline: bool = True,
+) -> str:
+    """Reconcile both modules without altering articles or moving ad slots."""
+    # Remove our *own* earlier modules, including the older post-story inline
+    # placement. Remove their surrounding spacing so reruns are fixed-point.
+    for start, end in (
+        (RECIRCULATION_INLINE_START, RECIRCULATION_INLINE_END),
+        (RECIRCULATION_START, RECIRCULATION_END),
+    ):
+        text = re.sub(
+            r'\s*' + re.escape(start) + r'.*?' + re.escape(end) + r'\s*',
+            '', text, flags=re.S,
+        )
+    if not rows:
         return text
-    # Require the open, public article body; never split .article-body or touch
-    # Mediavine-managed slots (including legacy paywall leaderboards).
     match = re.search(
         r'<div\b(?=[^>]*class=["\']article-body["\'])[^>]*>.*?</div>',
         text, re.I | re.S,
     )
     if not match:
         return text
-    if re.search(r'<div\b', match.group(0).split('>', 1)[1], re.I):
-        return text  # Avoid assuming the close of a nested custom HTML body.
+    # The simple regex deliberately refuses nested div layouts rather than
+    # risking truncating the article body or shifting an in-content ad.
+    raw_body = match.group(0)
+    if re.search(r'<div\b', raw_body.split('>', 1)[1], re.I):
+        return text
+    # Inline only on ordinary, text-led articles with enough substance.
+    # Read Next remains available even for shorter/custom articles.
+    selected = False
+    if allow_inline:
+        inner_start = raw_body.index('>') + 1
+        inner_end = raw_body.lower().rfind('</div>')
+        if inner_end > inner_start:
+            inner = raw_body[inner_start:inner_end]
+            anchor = _mid_article_anchor(inner)
+            if anchor is not None:
+                offset = match.start() + inner_start + anchor
+                inline = _render_inline_recirculation(rows[0])
+                text = text[:offset] + '\n' + inline + '\n' + text[offset:]
+                selected = True
+    # Locate the entire (simple) body again after the optional inline insertion.
+    match = re.search(
+        r'<div\b(?=[^>]*class=["\']article-body["\'])[^>]*>.*?</div>',
+        text, re.I | re.S,
+    )
+    remainder = rows[1:] if selected else rows
+    block = _render_article_recirculation(remainder)
+    if not block:
+        return text
     end = match.end()
-    return text[:end] + '\n' + block + '\n' + text[end:].lstrip('\r\n')
+    return text[:end] + '\n' + block + '\n' + text[end:].lstrip()
 
 
 def _preferred_source_module(compact: bool = True) -> str:
@@ -866,7 +935,7 @@ def enhance_articles(archive: list[dict]) -> dict:
                 text = text[:close.start()] + breadcrumb_json + "\n" + text[close.start():]
         text = _ensure_newsarticle_schema(text, entry)
         title, related = _related_entries(entry, candidates)
-        text = _insert_article_recirculation(text, related)
+        text = _insert_article_recirculation(text, related, allow_inline=not bool(entry.get("sponsored") or entry.get("is_sponsored")))
         side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</aside>'
         text, side_replacements = re.subn(r'<aside\s+class=["\']article-side-rail["\']>.*?</aside>', side, text, count=1, flags=re.I | re.S)
         if side_replacements == 0:
