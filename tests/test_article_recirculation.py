@@ -237,13 +237,25 @@ def test_long_article_has_one_midstory_link_and_distinct_end_cards():
 def test_brief_and_low_substance_articles_never_receive_midstory_link():
     stories = [_story("a", "Relevant local story"), _story("b", "Another local story")]
     for body in (
-        _long_body(6),
+        _long_body(5),
         '<div class="article-body">' + '<p>Brief update.</p>' * 10 + '</div>',
     ):
         output = features._insert_article_recirculation(body, stories)
         assert body in output
         assert features.RECIRCULATION_INLINE_START not in output
         assert output.count('data-tct-recirculation-link="read_next"') == 2
+
+
+def test_six_substantial_paragraphs_enable_one_midstory_link_without_losing_bottom_cards():
+    body = _long_body(6)
+    stories = [_story(f"local-{i}", f"Local story number {i}") for i in range(4)]
+    output = features._insert_article_recirculation(body, stories)
+    assert output.count('data-tct-recirculation-link="inline"') == 1
+    assert output.count('data-tct-recirculation-link="read_next"') == 3
+    assert output.index("Paragraph 3.") < output.index(features.RECIRCULATION_INLINE_START)
+    assert output.index(features.RECIRCULATION_INLINE_END) < output.index("Paragraph 4.")
+    assert output.count("<p>Paragraph ") == 6
+    assert features._insert_article_recirculation(output, stories) == output
 
 
 def test_sponsored_articles_do_not_get_intrusive_midstory_recommendations():
