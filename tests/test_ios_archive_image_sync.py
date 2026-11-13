@@ -69,8 +69,13 @@ def test_burglary_override_exists_and_deploy_only_updates_ios_archive():
     assert ledger["overrides"][BURGLARY_SLUG]["image_url"] == APPROVED
 
     workflow = (ROOT / ".github/workflows/update.yml").read_text(encoding="utf-8")
-    assert workflow.count("python scripts/sync_editorial_image_archive.py") == 2
-    assert workflow.index("Sync editor-approved photos into iOS archive (including deploy-only)") > workflow.index("  deploy:")
+    # Archive-only repair still runs before commit; the new unified repair
+    # also corrects retained article HTML, social metadata, city cards and RSS.
+    assert workflow.count("python scripts/sync_editorial_image_archive.py") == 1
+    assert workflow.count("python scripts/reconcile_editorial_image_surfaces.py") == 3
+    assert workflow.index("Reconcile editor-approved images for deploy-only pages and iOS") > workflow.index("  deploy:")
+    repair = (ROOT / "scripts/reconcile_editorial_image_surfaces.py").read_text(encoding="utf-8")
+    assert "sync_archive(root)" in repair
 
 
 def test_real_published_archive_sync_changes_native_app_image(tmp_path):
