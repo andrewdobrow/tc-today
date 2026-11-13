@@ -116,9 +116,9 @@ def test_same_county_fallback_appears_in_long_articles_with_honest_label():
     rendered = features._insert_article_recirculation(
         _long_body(9), rows, allow_inline=True, inline_label="MORE LOCAL NEWS",
     )
-    assert rendered.count('data-tct-recirculation-link="inline"') == 1
-    assert 'MORE LOCAL NEWS' in rendered
-    assert rendered.count('data-tct-recirculation-link="read_next"') == 0
+    # One available local story belongs at the bottom, not exclusively inline.
+    assert rendered.count('data-tct-recirculation-link="inline"') == 0
+    assert rendered.count('data-tct-recirculation-link="read_next"') == 1
 
 
 def test_generic_headline_boilerplate_is_not_a_strong_inline_match():
@@ -267,7 +267,32 @@ def test_existing_midstory_link_reconciles_and_is_not_duplicated():
     )
     migrated = features._insert_article_recirculation(original + old, stories)
     assert "OLD" not in migrated
-    assert migrated.count(features.RECIRCULATION_INLINE_START) == 1
+    assert migrated.count(features.RECIRCULATION_INLINE_START) == 0
+    assert migrated.count('data-tct-recirculation-link="read_next"') == 2
+
+
+def test_midstory_never_consumes_only_available_bottom_recommendation():
+    body = _long_body(9)
+    for count in (1, 2, 3):
+        stories = [_story(f"local-{i}", f"Local government update {i}") for i in range(count)]
+        output = features._insert_article_recirculation(body, stories)
+        assert 'data-tct-recirculation-link="inline"' not in output
+        assert output.count('data-tct-recirculation-link="read_next"') == count
+        assert output.count(features.RECIRCULATION_START) == 1
+        assert features._insert_article_recirculation(output, stories) == output
+
+
+def test_four_suggestions_ensure_inline_plus_three_distinct_read_next_cards():
+    body = _long_body(9)
+    stories = [_story(f"local-{i}", f"Local government update {i}") for i in range(4)]
+    output = features._insert_article_recirculation(
+        body, stories, allow_inline=True, inline_label="MORE LOCAL NEWS",
+    )
+    assert output.count('data-tct-recirculation-link="inline"') == 1
+    assert output.count('data-tct-recirculation-link="read_next"') == 3
+    assert output.count('href="/articles/local-0.html"') == 1
+    assert output.count('href="/articles/local-1.html"') == 1
+    assert "MORE LOCAL NEWS" in output
 
 
 def test_malformed_nested_body_is_left_untouched_to_protect_ads():
