@@ -36,6 +36,14 @@ def test_subject_matching_outranks_geography_and_avoids_random_crime():
     assert [row["slug"] for row in matches] == ["walking"]
 
 
+def test_sponsored_stories_are_not_presented_as_editorial_read_next():
+    current = _story("safety", "Family seeks road safety improvements after teen killed")
+    sponsored = _story("ad", "Family seeks new road safety improvements after teen killed")
+    sponsored["sponsored"] = True
+    _, matches = features._related_entries(current, [sponsored])
+    assert not matches
+
+
 def test_explicit_story_identity_allows_followups_without_keyword_overlap():
     current = _story("first", "City examines roadway improvements", event_key="case123")
     update = _story("second", "Commission approves transportation funding", event_key="case123")
