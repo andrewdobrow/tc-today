@@ -33,7 +33,8 @@ def test_subject_matching_outranks_geography_and_avoids_random_crime():
         current, [nearby_but_unrelated, relevant]
     )
     assert title == "Related Coverage"
-    assert [row["slug"] for row in matches] == ["walking"]
+    assert matches[0]["slug"] == "walking"
+    assert "crime" in [row["slug"] for row in matches[1:]]
 
 
 def test_sponsored_stories_are_not_presented_as_editorial_read_next():
@@ -61,7 +62,71 @@ def test_cross_county_subject_matches_but_geographic_nearby_does_not():
         "restaurant", "New restaurant opening announced by local officials"
     )
     _, matches = features._related_entries(current, [same_county_unrelated, other_county])
-    assert [row["slug"] for row in matches] == ["water"]
+    assert matches[0]["slug"] == "water"
+    assert "restaurant" in [row["slug"] for row in matches[1:]]
+
+
+def test_same_county_fallback_prevents_empty_modules_without_fake_relatedness():
+    current = _story("new", "Firefighters request January hiring class", county="martin")
+    # Distinct subjects (no two meaningful keywords shared) should still be
+    # presented as local *discovery*, never mislabelled as a story follow-up.
+    candidates = [
+        _story("old1", "County officials review library renovation", county="martin"),
+        _story("old2", "Residents welcome weekend arts festival", county="martin"),
+        _story("old3", "Animal shelter expands adoption program", county="martin"),
+        _story("old4", "City council discusses downtown parking", county="martin"),
+        _story("other", "Statewide education funding hearing", county="st_lucie"),
+    ]
+    label, rows = features._related_entries(current, candidates)
+    assert label == "More Local Coverage"
+    assert len(rows) == 5
+    assert all(row["county_keys"] == ["martin"] for row in rows[:4])
+    assert not features._strong_related_match(current, rows[0])
+    html = features._render_article_recirculation(rows)
+    assert html.count('data-tct-recirculation-link="read_next"') == 3
+    sidebar = features._render_related_section(label, rows)
+    assert sidebar.count('class="related-item"') == 5
+    assert 'related-empty' not in sidebar
+
+
+def test_generic_headline_boilerplate_is_not_a_strong_inline_match():
+    road_safety = _story("s", "Family seeks road safety after pedestrian death")
+    unrelated = _story("u", "Family seeks animal cruelty charges after dog's death")
+    assert not features._strong_related_match(road_safety, unrelated)
+    related = _story("r", "Road safety improves after pedestrian collision")
+    assert features._strong_related_match(road_safety, related)
+
+
+def test_real_recent_visitor_stories_get_suggestions_from_site_index():
+    # This exported index contains the same real story titles that the site
+    # currently serves. Guard against recommending nothing for a newsworthy
+    # report that simply has no two-word headline overlap.
+    import json
+    index = json.loads(
+        (ROOT / "data" / "story-index.json").read_text(encoding="utf-8")
+    )["stories"]
+    rows = []
+    for slug, item in index.items():
+        keys = [
+            key for key, display in (
+                ("martin", "Martin County"),
+                ("st_lucie", "St. Lucie County"),
+                ("indian_river", "Indian River County"),
+            )
+            if display in item.get("counties", [])
+        ]
+        rows.append({
+            "slug": slug, "headline": item.get("headline", ""),
+            "date": item.get("date", ""), "category_key": item.get("category", ""),
+            "county_keys": keys,
+        })
+    recent = sorted(rows, key=lambda row: row["date"], reverse=True)[:300]
+    sample = recent[:15]
+    assert len(recent) >= 30 and len(sample) == 15
+    for article in sample:
+        title, suggestions = features._related_entries(article, recent)
+        assert len(suggestions) >= 3, (article["headline"], title)
+        assert all(row["slug"] != article["slug"] for row in suggestions)
 
 
 def test_read_next_is_semantic_mobile_ready_and_links_are_measurable():
