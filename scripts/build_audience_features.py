@@ -507,6 +507,7 @@ RECIRCULATION_TOPIC_NOISE = frozenset({
     "residents", "resident", "officials", "official", "local", "area",
     "police", "deputies", "sheriff", "city", "man", "woman", "year", "years",
     "old", "new", "news", "report", "reports", "updated", "today",
+    "details", "latest", "update", "updates", "announces", "announced",
 })
 RECIRCULATION_NORMALIZATION = {
     "sidewalks": "sidewalk", "streets": "street", "roads": "road",
@@ -525,7 +526,9 @@ def _token_set(entry: dict) -> set[str]:
 
 
 def _recirculation_subject_tokens(entry: dict) -> set[str]:
-    tokens = entry.get("_tct_tokens") or _token_set(entry)
+    # Headlines are the reliable topical signal; teasers often repeat generic
+    # phrases across entirely unrelated local stories.
+    tokens = _token_set({"headline": entry.get("headline"), "teaser": ""})
     return {
         RECIRCULATION_NORMALIZATION.get(t, t)
         for t in tokens if t not in RECIRCULATION_TOPIC_NOISE
