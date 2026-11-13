@@ -609,6 +609,9 @@ jobs:
           PY
           fi
 
+      - name: Keep iOS archive photos aligned with editor selections
+        run: python scripts/sync_editorial_image_archive.py
+
       - name: Commit and push
         id: push
         run: |
@@ -641,6 +644,9 @@ jobs:
 
       - name: Enforce editor-approved crash image for deploy-only runs
         run: python scripts/enforce_editorial_crash_image.py
+
+      - name: Sync editor-approved photos into iOS archive (including deploy-only)
+        run: python scripts/sync_editorial_image_archive.py
 
       - name: Remove legacy photo credits for deploy-only
         run: |
