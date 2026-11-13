@@ -310,6 +310,54 @@ def test_empty_matches_never_create_placeholder_read_next():
     assert features._insert_article_recirculation(source, []) == source
 
 
+def test_full_article_generation_restores_all_three_modules(tmp_path, monkeypatch):
+    """Integration guard: the actual postprocessor must populate the final HTML."""
+    source = _story("source", "Local residents ask about county service changes", county="martin")
+    candidates = [
+        _story(f"nearby-{i}", f"Martin County community report number {i}", county="martin")
+        for i in range(1, 9)
+    ]
+    paragraphs = "".join(
+        f"<p>Long article paragraph {i}: County residents describe their "
+        "experiences and the ways local decisions could affect neighborhood "
+        "access, travel and community services this year.</p>"
+        for i in range(1, 10)
+    )
+    donation = "<!-- TCT_ARTICLE_READER_SUPPORT_START -->"
+    html = (
+        '<!doctype html><html><head><title>Local news</title></head><body>'
+        '<main><div class="article-wrap"><div class="article-meta">Meta</div>'
+        '<h1 class="article-headline">Local residents ask about county service changes</h1>'
+        '<div class="article-editorial-grid"><div class="article-main-column">'
+        '<div class="article-body">' + paragraphs + '</div>'
+        + donation + '</div><aside class="article-side-rail">'
+        '<section class="related-section related-section--smart">'
+        '<h2>Related Coverage</h2><ul><li>More local reporting is on the way.</li></ul>'
+        '</section></aside></div></div></main></body></html>'
+    )
+    articles_dir = tmp_path / "articles"
+    articles_dir.mkdir()
+    path = articles_dir / "source.html"
+    path.write_text(html, encoding="utf-8")
+    monkeypatch.setattr(features, "ROOT", tmp_path)
+    first = features.enhance_articles([source] + candidates)
+    rendered = path.read_text(encoding="utf-8")
+    assert first["scanned"] == 1
+    assert rendered.count('data-tct-recirculation-link="inline"') == 1
+    assert rendered.count('data-tct-recirculation-link="read_next"') == 3
+    assert rendered.count('data-tct-recirculation-link="sidebar"') == 5
+    assert "More from Martin County" in rendered
+    assert "MORE LOCAL NEWS" in rendered
+    assert "More local reporting is on the way." not in rendered
+    assert rendered.count("<p>Long article paragraph ") == 9
+    assert donation in rendered
+    assert rendered.index(features.RECIRCULATION_INLINE_START) < rendered.index(features.RECIRCULATION_START)
+    assert rendered.index(features.RECIRCULATION_END) < rendered.index(donation)
+    second = features.enhance_articles([source] + candidates)
+    assert second["updated"] == 0
+    assert path.read_text(encoding="utf-8") == rendered
+
+
 def test_read_next_css_and_tracking_are_built_into_shared_assets():
     css = (ROOT / "style.css").read_text(encoding="utf-8")
     js = (ROOT / "main.js").read_text(encoding="utf-8")
