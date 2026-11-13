@@ -115,7 +115,8 @@ def test_homepage_support_card_no_longer_sells_subscriptions():
     assert "Local news needs local support." in after
     assert "From local government decisions and public safety updates" in after
     assert "Support TCT Today" in after
-    assert "Give any amount. No subscription required." in after
+    assert "Give any amount. Processed securely using Stripe." in after
+    assert "No subscription required." not in after
     assert "If TCT is part of your day" in after
     assert "A NOTE TO OUR READERS" in after
     assert "Read for free" not in after
@@ -412,7 +413,8 @@ def test_homepage_current_donation_card_has_one_primary_action():
     card = cards[0]
     assert 'href="https://donate.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"' in card
     assert "Support TCT Today" in card
-    assert "No subscription required." in card
+    assert "Give any amount. Processed securely using Stripe." in card
+    assert "No subscription required." not in card
     assert "Read for free" not in card
     assert "Stay informed" not in card
     assert "tct-membership-options" not in card
