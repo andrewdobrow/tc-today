@@ -582,18 +582,18 @@ def _strong_related_match(entry: dict, candidate: dict) -> bool:
 
 
 def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tuple[str, list[dict]]:
-    """Rank substantive matches first, then reliably fill with local headlines.
+    """Genuine story connections first; otherwise choose the same city/county.
 
-    Without the fallback, most real headlines have no two-token overlap and both
-    Related Coverage and Read Next silently disappear. A reliable navigation
-    module is better than an empty panel, but fallback links are *not* claimed
-    to be continuations of a story.
+    In particular, *never* leave the sidebar and Read Next empty merely because
+    no headline shares two words. Fall back to geographic relevance rather than
+    arbitrary same-category stories from other parts of Florida.
     """
     current_slug = str(entry.get("canonical_slug") or entry.get("slug") or "")
     current_cities = entry.get("_tct_cities") or {c["slug"] for c in _entry_cities(entry)}
     current_counties = entry.get("_tct_counties") or _entry_county_keys(entry)
     current_category = str(entry.get("category_key") or "")
-    scored = []
+    strongly_related = []
+    geographic_fallback = []
     seen: set[str] = set()
     for candidate in candidates:
         slug = str(candidate.get("canonical_slug") or candidate.get("slug") or "")
@@ -601,39 +601,14 @@ def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tup
             continue
         if candidate.get("sponsored") or candidate.get("is_sponsored"):
             continue
-        # Any candidate must be a normal, local news article with an actual
-        # headline and valid date, rather than an obsolete/empty registry row.
         if not str(candidate.get("headline") or "").strip() or not _entry_date(candidate):
             continue
-        same_story, same_series, overlap, topic = _related_strength(entry, candidate)
         candidate_cities = candidate.get("_tct_cities") or {c["slug"] for c in _entry_cities(candidate)}
         candidate_counties = candidate.get("_tct_counties") or _entry_county_keys(candidate)
         same_city = bool(current_cities & candidate_cities)
         same_county = bool(current_counties & candidate_counties)
         same_category = bool(current_category and current_category == candidate.get("category_key"))
-        # Tiered ordering guarantees no irrelevant same-county story can push
-        # down a genuine follow-up, while preventing the recirculation collapse
-        # when none exists. Below tier 4 these are discovery, not related, links.
-        if same_story:
-            tier = 0
-        elif same_series:
-            tier = 1
-        elif overlap >= 2:
-            tier = 2
-        elif overlap and topic:
-            tier = 3
-        elif topic and same_county:
-            tier = 4
-        elif overlap and same_county:
-            tier = 5
-        elif same_county and same_category:
-            tier = 6
-        elif same_county:
-            tier = 7
-        elif same_category:
-            tier = 8
-        else:
-            tier = 9
+        same_story, same_series, overlap, topic = _related_strength(entry, candidate)
         dt = candidate.get("_tct_date_dt")
         if dt is None:
             try:
@@ -641,21 +616,43 @@ def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tup
             except (ValueError, TypeError):
                 dt = None
         timestamp = dt.toordinal() if dt else 0
-        score = (overlap * 10) + (8 if same_city else 0) + (4 if same_county else 0) + (2 if same_category else 0)
-        scored.append((tier, -score, -timestamp, slug, candidate))
+        if same_story or same_series or overlap >= 2 or (topic and overlap >= 1):
+            # A real follow-up always outranks merely geographic suggestions.
+            strength = (1000 if same_story else 0) + (500 if same_series else 0)
+            strength += overlap * 80 + (20 if topic else 0)
+            strength += (12 if same_city else 0) + (6 if same_county else 0)
+            strongly_related.append((-strength, -timestamp, slug, candidate))
+        elif same_city or same_county:
+            # Pure location fallback: city first, then county; recent before
+            # older headlines. Category is only a tie-breaker, not permission
+            # to recommend stories from unrelated counties.
+            geographic_fallback.append((
+                0 if same_city else 1,
+                0 if same_category else 1,
+                -timestamp, slug, candidate,
+            ))
+        elif not current_counties and not current_cities and same_category:
+            # Florida-wide / category pages have no single local county.
+            geographic_fallback.append((2, 0, -timestamp, slug, candidate))
         seen.add(slug)
-    scored.sort(key=lambda row: row[:4])
-    picked = [row[4] for row in scored[:limit]]
-    if not picked:
-        return "More Local News", []
-    first = scored[0]
-    if first[0] <= 3:
-        title = "More on this story" if first[0] <= 1 else "Related Coverage"
-    elif current_counties and first[0] in (4, 5, 6, 7):
-        title = "More Local Coverage"
+
+    strongly_related.sort(key=lambda row: row[:3])
+    geographic_fallback.sort(key=lambda row: row[:4])
+    selected = [row[3] for row in strongly_related[:limit]]
+    selected.extend(row[4] for row in geographic_fallback[:max(0, limit - len(selected))])
+    if strongly_related and selected:
+        first = selected[0]
+        story, series, _, _ = _related_strength(entry, first)
+        title = "More on this story" if story or series else "Related Coverage"
+    elif len(current_counties) == 1:
+        county = next(iter(current_counties))
+        title = f"More from {COUNTY_KEY_LABEL[county]}"
+    elif len(current_cities) == 1:
+        city = next(iter(current_cities))
+        title = f"More from {CITY_BY_SLUG[city]['name']}"
     else:
         title = "More Local News"
-    return title, picked
+    return title, selected
 
 
 
@@ -687,7 +684,7 @@ RECIRCULATION_INLINE_START = "<!-- TCT_ARTICLE_INLINE_RECOMMENDATION_START -->"
 RECIRCULATION_INLINE_END = "<!-- TCT_ARTICLE_INLINE_RECOMMENDATION_END -->"
 
 
-def _render_inline_recirculation(row: dict) -> str:
+def _render_inline_recirculation(row: dict, label: str = "ALSO READ") -> str:
     """One clearly editorial text link; no ad controls, images or paragraph splitting."""
     href = html_lib.escape(_entry_url(row), quote=True)
     headline = html_lib.escape(str(row.get("headline") or ""))
@@ -695,7 +692,7 @@ def _render_inline_recirculation(row: dict) -> str:
         RECIRCULATION_INLINE_START
         + '<aside class="tct-related-inline" data-tct-recirculation="inline" '
           'aria-label="Related local reporting">'
-          '<span class="tct-related-inline-label">ALSO READ</span>'
+          f'<span class="tct-related-inline-label">{html_lib.escape(label)}</span>'
         + f'<a href="{href}" data-tct-recirculation-link="inline">{headline}'
           '<span aria-hidden="true"> &rarr;</span></a></aside>'
         + RECIRCULATION_INLINE_END
@@ -767,6 +764,7 @@ def _mid_article_anchor(body: str) -> int | None:
 
 def _insert_article_recirculation(
     text: str, rows: list[dict], *, allow_inline: bool = True,
+    inline_label: str = "ALSO READ",
 ) -> str:
     """Reconcile both modules without altering articles or moving ad slots."""
     # Remove our *own* earlier modules, including the older post-story inline
@@ -803,7 +801,7 @@ def _insert_article_recirculation(
             anchor = _mid_article_anchor(inner)
             if anchor is not None:
                 offset = match.start() + inner_start + anchor
-                inline = _render_inline_recirculation(rows[0])
+                inline = _render_inline_recirculation(rows[0], inline_label)
                 text = text[:offset] + '\n' + inline + '\n' + text[offset:]
                 selected = True
     # Locate the entire (simple) body again after the optional inline insertion.
@@ -1005,13 +1003,11 @@ def enhance_articles(archive: list[dict]) -> dict:
                 text = text[:close.start()] + breadcrumb_json + "\n" + text[close.start():]
         text = _ensure_newsarticle_schema(text, entry)
         title, related = _related_entries(entry, candidates)
+        has_strong_match = bool(related and _strong_related_match(entry, related[0]))
         text = _insert_article_recirculation(
             text, related,
-            allow_inline=bool(
-                related
-                and _strong_related_match(entry, related[0])
-                and not (entry.get("sponsored") or entry.get("is_sponsored"))
-            ),
+            allow_inline=bool(related and not (entry.get("sponsored") or entry.get("is_sponsored"))),
+            inline_label="ALSO READ" if has_strong_match else "MORE LOCAL NEWS",
         )
         side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</aside>'
         text, side_replacements = re.subn(r'<aside\s+class=["\']article-side-rail["\']>.*?</aside>', side, text, count=1, flags=re.I | re.S)
