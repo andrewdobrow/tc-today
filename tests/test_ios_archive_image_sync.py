@@ -71,3 +71,20 @@ def test_burglary_override_exists_and_deploy_only_updates_ios_archive():
     workflow = (ROOT / ".github/workflows/update.yml").read_text(encoding="utf-8")
     assert workflow.count("python scripts/sync_editorial_image_archive.py") == 2
     assert workflow.index("Sync editor-approved photos into iOS archive (including deploy-only)") > workflow.index("  deploy:")
+
+
+def test_real_published_archive_sync_changes_native_app_image(tmp_path):
+    """Integration: exercise the exact live article record in a local archive copy."""
+    from shutil import copyfile
+
+    (tmp_path / "data").mkdir()
+    copyfile(ROOT / "data" / "article-image-overrides.json",
+             tmp_path / "data" / "article-image-overrides.json")
+    copyfile(ROOT / "archive.json", tmp_path / "archive.json")
+    sync_archive(tmp_path)
+    rows = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    matches = [row for row in rows if row.get("slug") == BURGLARY_SLUG]
+    assert len(matches) == 1
+    assert matches[0]["image_url"] == APPROVED
+    assert matches[0]["rss_social_image_url"] == APPROVED
+    assert matches[0]["article_image_override"] is True
