@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T16:46:45Z",
+  "generated_at": "2026-11-13T18:04:51Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 33,
-    "rejected_count": 10,
+    "assessed_count": 52,
+    "rejected_count": 16,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,39 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 5,
-      "rejected_count": 5,
+      "assessed_count": 8,
+      "rejected_count": 8,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:homicide"
+          ],
+          "local_nexus_signals": [],
+          "headline": "18-year-old dies after being struck by car in St. Lucie County; family raises concerns - WPEC",
+          "source_url": "https://cbs12.com/news/local/18-year-old-dies-after-being-struck-by-car-in-st-lucie-county-family-raises-concerns"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -50,6 +80,20 @@
           "local_nexus_signals": [],
           "headline": "Florida flooding survivors praise heroes who came to their aid",
           "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/flooding-survivors-praise-heroes-who-came-to-their-aid"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
+          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -116,18 +160,50 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 0,
-      "rejections": []
+      "assessed_count": 8,
+      "rejected_count": 1,
+      "rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
+          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind"
+        }
+      ]
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 4,
-      "rejected_count": 4,
+      "assessed_count": 8,
+      "rejected_count": 6,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:palm city"
+          ],
+          "headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -144,6 +220,23 @@
           ],
           "headline": "Florida flooding survivors praise heroes who came to their aid",
           "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/flooding-survivors-praise-heroes-who-came-to-their-aid"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:stuart"
+          ],
+          "headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
+          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -250,7 +343,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 7,
       "rejected_count": 0,
       "rejections": []
     },
@@ -259,7 +352,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     },
