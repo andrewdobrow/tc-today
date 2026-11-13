@@ -508,6 +508,9 @@ RECIRCULATION_TOPIC_NOISE = frozenset({
     "police", "deputies", "sheriff", "city", "man", "woman", "year", "years",
     "old", "new", "news", "report", "reports", "updated", "today",
     "details", "latest", "update", "updates", "announces", "announced",
+    "family", "families", "seeks", "seeking", "seek", "questions", "question",
+    "calls", "call", "urges", "urge", "says", "said", "concerns", "concern",
+    "following", "prompts", "push", "pushes", "demands", "demand",
 })
 RECIRCULATION_NORMALIZATION = {
     "sidewalks": "sidewalk", "streets": "street", "roads": "road",
@@ -518,6 +521,21 @@ RECIRCULATION_NORMALIZATION = {
     "homes": "home", "families": "family", "injuries": "injury",
     "killed": "death", "deaths": "death", "fatal": "death",
 }
+# These are *secondary* signals: a shared topic helps connect stories that
+# describe the same issue using different headlines. County/category recency
+# provides the safety net when no truly related story is available.
+RECIRCULATION_TOPICS = {
+    "flood": {"flood", "drainage", "stormwater", "runoff", "waterlogged", "storm"},
+    "roads": {"road", "sidewalk", "pedestrian", "walk", "traffic", "crosswalk",
+              "street", "intersection", "speeding", "lighting", "crossing"},
+    "housing": {"housing", "zoning", "landuse", "development", "developer",
+                "subdivision", "residential", "affordable", "apartment"},
+    "school": {"school", "student", "teacher", "classroom", "district", "education"},
+    "weather": {"hurricane", "tornado", "storm", "erosion", "beach", "coastal"},
+    "government": {"commission", "council", "ordinance", "budget", "tax", "vote"},
+    "health": {"hospital", "health", "medical", "patient", "clinic"},
+    "fire": {"firefighter", "firefighters", "fire", "rescue", "department"},
+}
 
 
 def _token_set(entry: dict) -> set[str]:
@@ -526,67 +544,119 @@ def _token_set(entry: dict) -> set[str]:
 
 
 def _recirculation_subject_tokens(entry: dict) -> set[str]:
-    # Headlines are the reliable topical signal; teasers often repeat generic
-    # phrases across entirely unrelated local stories.
+    # Headlines, not boilerplate teasers, drive relatedness. Normalize before
+    # filtering so "families" is also recognized as generic "family".
     tokens = _token_set({"headline": entry.get("headline"), "teaser": ""})
     return {
-        RECIRCULATION_NORMALIZATION.get(t, t)
-        for t in tokens if t not in RECIRCULATION_TOPIC_NOISE
+        normalized
+        for token in tokens
+        if (normalized := RECIRCULATION_NORMALIZATION.get(token, token))
+        not in RECIRCULATION_TOPIC_NOISE
     }
 
 
+def _recirculation_topics(entry: dict) -> set[str]:
+    tokens = _recirculation_subject_tokens(entry)
+    return {topic for topic, keywords in RECIRCULATION_TOPICS.items() if tokens & keywords}
+
+
+def _related_strength(entry: dict, candidate: dict) -> tuple[bool, bool, int, bool]:
+    """Identity, series, number of shared meaningful terms, shared topic."""
+    event = str(entry.get("editorial_event_key") or "").strip()
+    anchor = str(entry.get("incident_anchor_key") or "").strip()
+    series = str(entry.get("custom_series_key") or "").strip()
+    same_story = bool(
+        (event and event == str(candidate.get("editorial_event_key") or "").strip())
+        or (anchor and anchor == str(candidate.get("incident_anchor_key") or "").strip())
+    )
+    same_series = bool(series and series == str(candidate.get("custom_series_key") or "").strip())
+    overlap = len(_recirculation_subject_tokens(entry) & _recirculation_subject_tokens(candidate))
+    same_topic = bool(_recirculation_topics(entry) & _recirculation_topics(candidate))
+    return same_story, same_series, overlap, same_topic
+
+
+def _strong_related_match(entry: dict, candidate: dict) -> bool:
+    """A mid-story link needs an actual topical connection, not mere geography."""
+    story, series, overlap, topic = _related_strength(entry, candidate)
+    return story or series or overlap >= 2 or (topic and overlap >= 1)
+
+
 def _related_entries(entry: dict, candidates: list[dict], limit: int = 5) -> tuple[str, list[dict]]:
+    """Rank substantive matches first, then reliably fill with local headlines.
+
+    Without the fallback, most real headlines have no two-token overlap and both
+    Related Coverage and Read Next silently disappear. A reliable navigation
+    module is better than an empty panel, but fallback links are *not* claimed
+    to be continuations of a story.
+    """
     current_slug = str(entry.get("canonical_slug") or entry.get("slug") or "")
-    current_subject = _recirculation_subject_tokens(entry)
     current_cities = entry.get("_tct_cities") or {c["slug"] for c in _entry_cities(entry)}
     current_counties = entry.get("_tct_counties") or _entry_county_keys(entry)
-    event_key = str(entry.get("editorial_event_key") or "").strip()
-    anchor_key = str(entry.get("incident_anchor_key") or "").strip()
-    series_key = str(entry.get("custom_series_key") or "").strip()
+    current_category = str(entry.get("category_key") or "")
     scored = []
     seen: set[str] = set()
     for candidate in candidates:
         slug = str(candidate.get("canonical_slug") or candidate.get("slug") or "")
         if not slug or slug == current_slug or slug in seen:
             continue
-        # Promotional placements should not be presented as editorial recommendations.
         if candidate.get("sponsored") or candidate.get("is_sponsored"):
             continue
-        candidate_event = str(candidate.get("editorial_event_key") or "").strip()
-        candidate_anchor = str(candidate.get("incident_anchor_key") or "").strip()
-        candidate_series = str(candidate.get("custom_series_key") or "").strip()
-        same_story = bool(
-            (event_key and candidate_event == event_key)
-            or (anchor_key and candidate_anchor == anchor_key)
-        )
-        same_series = bool(series_key and candidate_series == series_key)
-        common = current_subject & _recirculation_subject_tokens(candidate)
-        # Two meaningful subject terms, or a genuinely shared story/series
-        # identity, are required. Geography alone will not qualify a story.
-        if not same_story and not same_series and len(common) < 2:
+        # Any candidate must be a normal, local news article with an actual
+        # headline and valid date, rather than an obsolete/empty registry row.
+        if not str(candidate.get("headline") or "").strip() or not _entry_date(candidate):
             continue
-        score = 0.0
+        same_story, same_series, overlap, topic = _related_strength(entry, candidate)
+        candidate_cities = candidate.get("_tct_cities") or {c["slug"] for c in _entry_cities(candidate)}
+        candidate_counties = candidate.get("_tct_counties") or _entry_county_keys(candidate)
+        same_city = bool(current_cities & candidate_cities)
+        same_county = bool(current_counties & candidate_counties)
+        same_category = bool(current_category and current_category == candidate.get("category_key"))
+        # Tiered ordering guarantees no irrelevant same-county story can push
+        # down a genuine follow-up, while preventing the recirculation collapse
+        # when none exists. Below tier 4 these are discovery, not related, links.
         if same_story:
-            score += 500
-        if same_series:
-            score += 250
-        score += len(common) * 55
-        if current_cities & (candidate.get("_tct_cities") or {c["slug"] for c in _entry_cities(candidate)}):
-            score += 30
-        if current_counties & (candidate.get("_tct_counties") or _entry_county_keys(candidate)):
-            score += 18
-        if candidate.get("category_key") == entry.get("category_key"):
-            score += 12
-        current_dt = entry.get("_tct_date_dt")
-        candidate_dt = candidate.get("_tct_date_dt")
-        if current_dt and candidate_dt:
-            age = abs((current_dt - candidate_dt).days)
-            score += max(0, 14 - min(14, age))
-        scored.append((score, _entry_date(candidate), same_story, candidate))
+            tier = 0
+        elif same_series:
+            tier = 1
+        elif overlap >= 2:
+            tier = 2
+        elif overlap and topic:
+            tier = 3
+        elif topic and same_county:
+            tier = 4
+        elif overlap and same_county:
+            tier = 5
+        elif same_county and same_category:
+            tier = 6
+        elif same_county:
+            tier = 7
+        elif same_category:
+            tier = 8
+        else:
+            tier = 9
+        dt = candidate.get("_tct_date_dt")
+        if dt is None:
+            try:
+                dt = datetime.strptime(_entry_date(candidate), "%Y-%m-%d")
+            except (ValueError, TypeError):
+                dt = None
+        timestamp = dt.toordinal() if dt else 0
+        score = (overlap * 10) + (8 if same_city else 0) + (4 if same_county else 0) + (2 if same_category else 0)
+        scored.append((tier, -score, -timestamp, slug, candidate))
         seen.add(slug)
-    scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
-    picked = [row[3] for row in scored[:limit]]
-    return ("More on this story" if any(row[2] for row in scored[:limit]) else "Related Coverage", picked)
+    scored.sort(key=lambda row: row[:4])
+    picked = [row[4] for row in scored[:limit]]
+    if not picked:
+        return "More Local News", []
+    first = scored[0]
+    if first[0] <= 3:
+        title = "More on this story" if first[0] <= 1 else "Related Coverage"
+    elif current_counties and first[0] in (4, 5, 6, 7):
+        title = "More Local Coverage"
+    else:
+        title = "More Local News"
+    return title, picked
+
 
 
 def _render_related_section(title: str, rows: list[dict]) -> str:
@@ -935,7 +1005,14 @@ def enhance_articles(archive: list[dict]) -> dict:
                 text = text[:close.start()] + breadcrumb_json + "\n" + text[close.start():]
         text = _ensure_newsarticle_schema(text, entry)
         title, related = _related_entries(entry, candidates)
-        text = _insert_article_recirculation(text, related, allow_inline=not bool(entry.get("sponsored") or entry.get("is_sponsored")))
+        text = _insert_article_recirculation(
+            text, related,
+            allow_inline=bool(
+                related
+                and _strong_related_match(entry, related[0])
+                and not (entry.get("sponsored") or entry.get("is_sponsored"))
+            ),
+        )
         side = '<aside class="article-side-rail">' + _render_related_section(title, related) + _most_read_module(True) + _preferred_source_module(True) + _community_partner_module() + '</aside>'
         text, side_replacements = re.subn(r'<aside\s+class=["\']article-side-rail["\']>.*?</aside>', side, text, count=1, flags=re.I | re.S)
         if side_replacements == 0:
