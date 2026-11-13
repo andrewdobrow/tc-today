@@ -76,3 +76,41 @@ def test_current_surfaces_use_selected_image():
         if f"/articles/{SLUG}.html" in item
     ]
     assert all(IMAGE in item for item in targets)
+
+
+BURGLARY_SLUG = "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary"
+BURGLARY_IMAGE = "https://treasurecoast.today/images/fort-pierce-mlk.jpg"
+
+
+def test_fort_pierce_burglary_image_override_survives_regeneration():
+    payload = json.loads((ROOT / "data" / "article-image-overrides.json").read_text())
+    assert payload["overrides"][BURGLARY_SLUG]["image_url"] == BURGLARY_IMAGE
+    generate = _load_generate()
+    item = {"slug": BURGLARY_SLUG, "image_url": "https://example.com/old.jpg"}
+    assert generate._apply_article_image_override(item) is True
+    assert item["image_url"] == BURGLARY_IMAGE
+    assert item["source_image_url"] == BURGLARY_IMAGE
+    assert item["rss_social_image_url"] == BURGLARY_IMAGE
+
+
+def test_fort_pierce_burglary_live_article_and_social_surfaces_use_approved_image():
+    article = (ROOT / "articles" / f"{BURGLARY_SLUG}.html").read_text()
+    assert f'<meta property="og:image" content="{BURGLARY_IMAGE}">' in article
+    assert f'<meta name="twitter:image" content="{BURGLARY_IMAGE}">' in article
+    assert f'<figure class="article-hero-image"><img src="{BURGLARY_IMAGE}"' in article
+
+    homepage = (ROOT / "index.html").read_text()
+    items = re.findall(
+        r'<a\b[^>]*href="[^"]*'
+        + re.escape(f"/articles/{BURGLARY_SLUG}.html")
+        + r'"[^>]*>.*?</a>',
+        homepage,
+        re.DOTALL,
+    )
+    assert all(BURGLARY_IMAGE in item for item in items if "<img " in item)
+    city = (ROOT / "fort-pierce" / "index.html").read_text()
+    assert BURGLARY_IMAGE in city
+    feed = (ROOT / "feed.xml").read_text()
+    entries = re.findall(r"<item>.*?</item>", feed, re.DOTALL)
+    assert all(BURGLARY_IMAGE in item for item in entries if BURGLARY_SLUG in item)
+
