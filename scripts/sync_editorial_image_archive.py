@@ -26,6 +26,7 @@ def sync_archive(root: Path = ROOT) -> tuple[int, int]:
         raise ValueError("archive.json must be an array of news articles")
     changed = 0
     found = 0
+    dirty = False
     for row in rows:
         if not isinstance(row, dict):
             continue
@@ -43,13 +44,18 @@ def sync_archive(root: Path = ROOT) -> tuple[int, int]:
         if row.get("image_url") != url:
             row["image_url"] = url
             changed += 1
+            dirty = True
         if row.get("rss_social_image_url") != url:
             row["rss_social_image_url"] = url
-        row["article_image_override"] = True
+            dirty = True
+        if row.get("article_image_override") is not True:
+            row["article_image_override"] = True
+            dirty = True
         if row.get("rss_social_image_source") != "manual_article_image_override":
             row["rss_social_image_source"] = "manual_article_image_override"
+            dirty = True
 
-    if changed:
+    if dirty:
         # Do not rewrite the multi-megabyte archive unnecessarily on every
         # deploy. JSON output is deterministic and preserves article order.
         archive_path.write_text(
