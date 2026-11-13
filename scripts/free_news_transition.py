@@ -203,7 +203,7 @@ def _rewrite_home_support(text: str) -> str:
           <p class="tct-membership-copy">From local government decisions and public safety updates to the events bringing our communities together, Treasure Coast Today helps you stay connected to the place you call home.</p>
           <p class="tct-membership-copy tct-membership-copy--ask">Every story is free to read. If TCT is part of your day, your contribution helps keep it that way.</p>
           <span class="tct-membership-cta">{DONATE_HEART_SVG} Support TCT Today <span class="tct-membership-cta-arrow" aria-hidden="true">&rarr;</span></span>
-          <span class="tct-membership-assurance">Give any amount. No subscription required.</span>
+          <span class="tct-membership-assurance">Give any amount. Processed securely using Stripe.</span>
         </div>
       </a>"""
     return pattern.sub(replacement, text, count=1)
