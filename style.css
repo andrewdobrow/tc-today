@@ -7289,3 +7289,151 @@ body.tct-member-authenticated .membership-header-welcome { display: inline-flex;
 @media (max-width: 900px) {
   .site-masthead .masthead-app-store { display: none !important; }
 }
+
+
+/* TCT editorial recirculation — restrained, ad-safe article navigation */
+/* These live OUTSIDE .article-body so Mediavine retains the full article flow. */
+.tct-related-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 13px;
+  margin: 24px 0 20px;
+  padding: 15px 0;
+  border-top: 1px solid var(--border, #e4e4df);
+  border-bottom: 1px solid var(--border, #e4e4df);
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.tct-related-inline-label {
+  flex: 0 0 auto;
+  color: var(--accent, #0a7075);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.tct-related-inline a {
+  min-width: 0;
+  color: var(--text, #090f0f);
+  font-weight: 650;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  transition: color .15s ease;
+}
+.tct-related-inline a:hover,
+.tct-related-inline a:focus-visible {
+  color: var(--accent, #0a7075);
+  text-decoration: underline;
+}
+.tct-related-inline a span { color: var(--accent, #0a7075); }
+.tct-read-next {
+  margin: 28px 0 32px;
+  padding: 23px 24px 25px;
+  border: 1px solid var(--border, #e4e4df);
+  border-top: 3px solid var(--accent, #0a7075);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  font-family: "DM Sans", sans-serif;
+}
+.tct-read-next-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 14px;
+  margin: 0 0 17px;
+}
+.tct-read-next-eyebrow {
+  color: var(--accent, #0a7075);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.tct-read-next-heading h2 {
+  margin: 0;
+  color: var(--text, #090f0f);
+  font: 600 24px/1.2 "Fraunces", Georgia, serif;
+}
+.tct-read-next-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.tct-read-next-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border, #e4e4df);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+  color: var(--text, #090f0f);
+  text-decoration: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.tct-read-next-card:hover,
+.tct-read-next-card:focus-visible {
+  border-color: var(--accent, #0a7075);
+  box-shadow: 0 3px 12px rgb(10 112 117 / 9%);
+}
+.tct-read-next-card:focus-visible { outline: 2px solid var(--accent, #0a7075); outline-offset: 2px; }
+.tct-read-next-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--bg-secondary, #f0f0ed);
+}
+.tct-read-next-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .2s ease;
+}
+.tct-read-next-card:hover .tct-read-next-image img { transform: scale(1.025); }
+.tct-read-next-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 7px;
+  padding: 12px;
+  min-width: 0;
+}
+.tct-read-next-category {
+  color: var(--accent, #0a7075);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.tct-read-next-headline {
+  color: var(--text, #090f0f);
+  font: 600 16px/1.36 "Fraunces", Georgia, serif;
+  overflow-wrap: anywhere;
+}
+.tct-read-next-action {
+  margin-top: auto;
+  padding-top: 5px;
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--accent, #0a7075);
+}
+@media (max-width: 740px) {
+  .tct-related-inline { margin: 19px 0 15px; padding: 13px 0; }
+  .tct-read-next { margin: 20px 0 25px; padding: 17px 15px 18px; }
+  .tct-read-next-heading h2 { font-size: 22px; }
+  .tct-read-next-grid { grid-template-columns: 1fr; gap: 10px; }
+  .tct-read-next-card { flex-direction: row; align-items: stretch; }
+  .tct-read-next-image { width: 105px; min-width: 105px; aspect-ratio: auto; }
+  .tct-read-next-content { padding: 11px 12px; gap: 5px; }
+  .tct-read-next-headline { font-size: 15px; }
+  .tct-read-next-action { margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tct-read-next-card,
+  .tct-read-next-image img,
+  .tct-related-inline a { transition: none; }
+}
