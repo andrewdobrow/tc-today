@@ -117,20 +117,15 @@ def test_current_weekend_guide_is_available_through_sunday_evening(monkeypatch, 
     assert any(x.get("custom_id") == CURRENT_ID for x in published)
 
 
-def test_november_13_15_roundup_is_only_active_custom_story_and_uses_air_show_image():
-    """Only this week's submitted guide may be in the current editorial queue."""
-    entries = _items()
-    assert len(entries) == 1
-    guide = entries[0]
-    assert guide["custom_id"] == "treasure-coast-top-five-weekend-2026-11-13-15"
-    assert guide["category"] == "things_to_do"
-    assert guide["publish_on"] == "2026-11-11"
-    assert guide["expires"] == "2026-11-16"
-    assert guide["image_url"] == "https://treasurecoast.today/images/stuart-air-show.webp"
-    assert guide["sponsored"] is False
-    assert guide["force_hero"] is False
-    assert guide["body"].count("\n## ") == 5
-    assert guide["headline"].endswith("Nov. 13–15")
+NOV_WEEKEND_ARTICLE = ROOT / "articles" / "2026-11-12-treasure-coast-weekend-events-nov-13-15.html"
+
+
+def test_november_13_15_roundup_remains_published_after_queue_turnover():
+    """Historical published guides stay readable when a new custom story is queued."""
+    page = NOV_WEEKEND_ARTICLE.read_text(encoding="utf-8")
+    assert "Nov. 13–15" in page
+    assert "article-hero-image" in page
+    assert "Stuart Air Show" in page
     for title in (
         "Stuart Air Show",
         "Mr Motwn",
@@ -138,7 +133,27 @@ def test_november_13_15_roundup_is_only_active_custom_story_and_uses_air_show_im
         "Pick, Paddle & Play Beach Jam",
         "Hispanic Heritage Festival",
     ):
-        assert title in guide["body"]
+        assert title in page
+    assert page.count('<h2 class="article-section">') >= 5
+
+
+def test_current_custom_queue_contains_only_new_traffic_article_and_fdot_image():
+    """The one-item queue holds the newly requested story, never an old guide."""
+    entries = _items()
+    assert len(entries) == 1
+    article = entries[0]
+    assert article["custom_id"] == "treasure-coast-traffic-report-2026-11-13-20"
+    assert article["slug"].endswith("nov-13-20")
+    assert article["custom_series_key"] == "treasure-coast-traffic-report"
+    assert article["custom_edition_key"] == "nov-13-20"
+    assert article["image_url"] == "https://treasurecoast.today/images/florida-traffic.png"
+    assert article["category"] == "local_gov"
+    assert article["publish_on"] == "2026-11-13"
+    assert article["expires"] == "2026-11-21"
+    assert "Martin County" in article["body"]
+    assert "St. Lucie County" in article["body"]
+    assert "Indian River County" in article["body"]
+    assert article["sponsored"] is False
 
 
 def test_november_13_15_roundup_matches_live_events_calendar():
@@ -148,7 +163,7 @@ def test_november_13_15_roundup_matches_live_events_calendar():
     The weekend guide is checked against the available calendar while it is live.
     """
     events = json.loads((ROOT / "data/events.json").read_text(encoding="utf-8"))["events"]
-    guide = _items()[0]
+    guide = NOV_WEEKEND_ARTICLE.read_text(encoding="utf-8")
     now = datetime.now(ZoneInfo("America/New_York"))
     # (event title fragment, local date, confirmed end time, organizer link)
     source_events = (
@@ -164,7 +179,7 @@ def test_november_13_15_roundup_matches_live_events_calendar():
          "https://www.stuartfl.gov/m/calendar/event/detail/6883"),
     )
     for title, day, end_iso, organizer_url in source_events:
-        assert organizer_url in guide["body"], f"Weekend guide lost its organizer link: {organizer_url}"
+        assert organizer_url in guide, f"Archived weekend guide lost its organizer link: {organizer_url}"
         matches = [
             event for event in events
             if title.lower() in str(event.get("title") or "").lower()
@@ -176,7 +191,18 @@ def test_november_13_15_roundup_matches_live_events_calendar():
 
 def test_november_13_15_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
     """An 8 p.m. Eastern reader on Nov. 15 can still see the current guide."""
-    (tmp_path / "custom_articles.json").write_text(json.dumps(_items()), encoding="utf-8")
+    # Recreate the dated guide in an isolated test queue; production now queues
+    # a different custom article, while the published guide remains archived.
+    old_guide = {
+        "custom_id": "treasure-coast-top-five-weekend-2026-11-13-15",
+        "headline": "Looking for something to do this weekend? Here are the Top 5 local events for Nov. 13–15",
+        "teaser": "Weekend events across the Treasure Coast.",
+        "body": "Stuart Air Show, PalmCon and more local weekend events.",
+        "category": "things_to_do",
+        "publish_on": "2026-11-11",
+        "expires": "2026-11-16",
+    }
+    (tmp_path / "custom_articles.json").write_text(json.dumps([old_guide]), encoding="utf-8")
     engine = _engine()
     monkeypatch.setattr(engine, "OUTPUT_DIR", tmp_path)
     _as_of(monkeypatch, engine, datetime(2026, 11, 16, 1, 0, tzinfo=timezone.utc))
