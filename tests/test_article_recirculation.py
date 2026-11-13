@@ -74,7 +74,7 @@ def test_read_next_is_semantic_mobile_ready_and_links_are_measurable():
     ]
     output = features._render_article_recirculation(stories)
     assert output.count(features.RECIRCULATION_START) == 1
-    assert output.count('data-tct-recirculation-link="inline"') == 1
+    assert output.count('data-tct-recirculation-link="inline"') == 0
     assert output.count('data-tct-recirculation-link="read_next"') == 3
     assert "Read Next" in output
     assert "Extra story" not in output
@@ -95,7 +95,82 @@ def test_ad_safe_recommendations_are_outside_body_and_do_not_move_ad_slots():
     assert result.index("</div>") < result.index(features.RECIRCULATION_START)
     assert result.index(features.RECIRCULATION_END) < result.index(ad)
     assert result.index(ad) < result.index(donation)
+    assert 'data-tct-recirculation-link="inline"' not in result
     assert features._insert_article_recirculation(result, stories) == result
+
+
+def _long_body(n=9):
+    return '<div class="article-body">' + ''.join(
+        f'<p>Paragraph {i}. Local residents have raised detailed concerns '
+        'about pedestrian safety, road improvements and neighborhood access '
+        'following several community meetings.</p>'
+        for i in range(1, n + 1)
+    ) + '</div>'
+
+
+def test_long_article_has_one_midstory_link_and_distinct_end_cards():
+    body = _long_body(9)
+    ad = '<div class="mv-leader" data-ad-slot="existing"></div>'
+    donation = '<!-- TCT_ARTICLE_READER_SUPPORT_START -->'
+    page = body + '\n' + ad + '\n' + donation
+    stories = [_story(f"story-{i}", f"Road safety update number {i}") for i in range(5)]
+    output = features._insert_article_recirculation(page, stories)
+    assert output.count(features.RECIRCULATION_INLINE_START) == 1
+    assert output.count(features.RECIRCULATION_INLINE_END) == 1
+    assert output.count('data-tct-recirculation-link="inline"') == 1
+    assert output.count('data-tct-recirculation-link="read_next"') == 3
+    assert output.index('Paragraph 4.') < output.index(features.RECIRCULATION_INLINE_START)
+    assert output.index(features.RECIRCULATION_INLINE_END) < output.index('Paragraph 5.')
+    assert output.index(features.RECIRCULATION_END) < output.index(ad)
+    assert output.index(ad) < output.index(donation)
+    assert output.count('href="/articles/story-0.html"') == 1
+    assert output.count('href="/articles/story-1.html"') == 1
+    assert output.count("<p>Paragraph ") == 9
+    # Removing just our injected note leaves every original paragraph intact.
+    import re
+    restored = re.sub(
+        r'\n?' + re.escape(features.RECIRCULATION_INLINE_START)
+        + r'.*?' + re.escape(features.RECIRCULATION_INLINE_END) + r'\n?',
+        '', output, flags=re.S,
+    )
+    assert body in restored
+    assert features._insert_article_recirculation(output, stories) == output
+
+
+def test_brief_and_low_substance_articles_never_receive_midstory_link():
+    stories = [_story("a", "Relevant local story"), _story("b", "Another local story")]
+    for body in (
+        _long_body(6),
+        '<div class="article-body">' + '<p>Brief update.</p>' * 10 + '</div>',
+    ):
+        output = features._insert_article_recirculation(body, stories)
+        assert body in output
+        assert features.RECIRCULATION_INLINE_START not in output
+        assert output.count('data-tct-recirculation-link="read_next"') == 2
+
+
+def test_sponsored_articles_do_not_get_intrusive_midstory_recommendations():
+    output = features._insert_article_recirculation(
+        _long_body(9), [_story("a", "Relevant local story")], allow_inline=False,
+    )
+    assert features.RECIRCULATION_INLINE_START not in output
+    assert 'data-tct-recirculation-link="read_next"' in output
+
+
+def test_existing_midstory_link_reconciles_and_is_not_duplicated():
+    stories = [_story("a", "Road safety update"), _story("b", "More road safety news")]
+    original = _long_body(9)
+    once = features._insert_article_recirculation(original, stories)
+    assert features._insert_article_recirculation(once, stories) == once
+    # An earlier post-body ALSO READ link is removed when the module is rebuilt.
+    old = (
+        features.RECIRCULATION_START
+        + '<p class="tct-related-inline" data-tct-recirculation="inline">OLD</p>'
+        + features.RECIRCULATION_END
+    )
+    migrated = features._insert_article_recirculation(original + old, stories)
+    assert "OLD" not in migrated
+    assert migrated.count(features.RECIRCULATION_INLINE_START) == 1
 
 
 def test_malformed_nested_body_is_left_untouched_to_protect_ads():
@@ -124,6 +199,6 @@ def test_read_next_css_and_tracking_are_built_into_shared_assets():
     assert 'article_second_view' in js
     assert 'tct_article_paths_in_session' in js
     assert 'transport_type: "beacon"' in js
-    assert 'ASSET_VERSION = "1.13.9.126"' in (
+    assert 'ASSET_VERSION = "1.13.9.127"' in (
         ROOT / "scripts" / "build_audience_features.py"
     ).read_text(encoding="utf-8")
