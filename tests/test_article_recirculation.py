@@ -121,6 +121,8 @@ def test_read_next_css_and_tracking_are_built_into_shared_assets():
     assert "@media (max-width: 740px)" in css
     assert 'data-tct-recirculation-link' in js
     assert 'article_recirculation_click' in js
+    assert 'article_second_view' in js
+    assert 'tct_article_paths_in_session' in js
     assert 'transport_type: "beacon"' in js
     assert 'ASSET_VERSION = "1.13.9.126"' in (
         ROOT / "scripts" / "build_audience_features.py"
