@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-13T05:43:14Z",
+  "generated_at": "2026-11-13T11:47:47Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,27 +15,29 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 6,
-      "generated_live": 1,
-      "quality_gate_archive_recovery": 2
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 2,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 6,
-      "publication_quality_rejected": 2
+      "article_framing_integrity": 2,
+      "no_category_eligible_sources": 4,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 67.462,
-    "archive_recovery_requested_count": 8,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 115.193,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
+    "article_framing_rejection_count": 3,
     "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 52,
+    "published_story_duplicate_suppression_count": 45,
     "story_aware_update_context_count": 0,
     "material_update_promotion_evaluation_count": 12,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 12,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_cache_hit_count": 11,
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
@@ -44,7 +46,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 14,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -89,8 +91,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
-          "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
+          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/13/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/?outputType=amp"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -103,8 +105,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/12/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/?outputType=amp"
+          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
+          "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
         }
       ],
       "published_story_duplicate_suppression_count": 9,
@@ -202,10 +204,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
@@ -215,12 +217,24 @@
           "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Identical WPBF source URL and source headline",
+            "Indian River County beach erosion from a nor’easter and king tides",
+            "Shoreline recovery at Tracking Station Beach",
+            "Some beach access points remain closed"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same WPBF report already represented by the canonical, with an exact source match and matching location, erosion event, recovery status, and access closures. Its additional detail does not establish a material development or independently newsworthy follow-up.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -373,13 +387,13 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 31.242
+      "elapsed_seconds": 40.983
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 26,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
       "publishable_source_count": 12,
       "selected_source_count": 1,
@@ -390,7 +404,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.914,
+          "elapsed_seconds": 9.093,
           "result": "invalid_json",
           "error_type": "ValueError",
           "error_summary": "Assignment editor returned no valid hero source"
@@ -398,13 +412,15 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.203,
-          "result": "success"
+          "elapsed_seconds": 16.359,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Trailside flooding persists after berm breach on Martin County property"
         }
       ],
-      "model_elapsed_seconds": 27.117,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 25.452,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Trailside flooding persists after berm breach on Martin County property",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -416,7 +432,7 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -437,33 +453,13 @@
           "canonical_headline": "Tampa father remains jailed after voting charges as attorney challenges state's case",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
-          "editorial_story_id": "story_027062",
-          "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
-          "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
-          "editorial_story_id": "story_026967",
-          "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-          "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -495,65 +491,12 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "St. Lucie County rejects plan that could bring nearly 500 homes to low-lying site - cw34.com",
-          "source_url": "https://cw34.com/news/local/st-lucie-county-rejects-plan-bring-500-homes-low-lying-site-3-2-vote-concerns-over-flooding-drainage-creekside-white-city-residents-express-concerns-florida-news",
-          "canonical_slug": "2026-11-11-st-lucie-county-rejects-land-use-change-that-could-allow-nearly-500-homes",
-          "canonical_headline": "St. Lucie County rejects land-use change that could allow nearly 500 homes",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "St. Lucie County commissioners rejected the land-use change by a 3-2 vote.",
-            "The proposal concerned roughly 34 acres near South 25th Street and West Midway Road.",
-            "The proposed designation could allow nearly 500 homes.",
-            "Both source URLs have the same distinctive article path on different outlet domains."
-          ],
-          "novel_facts": [],
-          "reason": "The incoming article repeats the same proposal and commission decision covered by the canonical. Its drainage details and resident concerns provide context for that decision, not a subsequent material development or an independently newsworthy follow-up.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "One-year emergency contract sets phased MARTY transit return in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/one-year-emergency-contract-sets-phased-marty-transit-return-in-martin-county-florida-news-local-news-florida-transit-services?teaserSource=trending",
-          "canonical_slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
-          "canonical_headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Martin County's one-year emergency contract with MTM Transit, LLC",
-            "Phased restoration of MARTY public transportation",
-            "ADA paratransit riders prioritized in the service restoration"
-          ],
-          "novel_facts": [],
-          "reason": "Both articles report the same emergency contract and phased MARTY service restoration. The incoming article adds background and routine implementation details, but no distinct subsequent decision or material development; its later publication date does not establish a new event.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 57.023
+      "elapsed_seconds": 45.82
     },
     {
       "category_key": "business",
@@ -896,7 +839,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 26.343
+      "elapsed_seconds": 24.579
     },
     {
       "category_key": "sports",
@@ -998,8 +941,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 15.756
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 20.295
     },
     {
       "category_key": "things_to_do",
@@ -1016,11 +959,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.259,
+          "elapsed_seconds": 12.65,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.259,
+      "model_elapsed_seconds": 12.65,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -1218,7 +1161,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 32.152
+      "elapsed_seconds": 28.909
     },
     {
       "category_key": "florida",
@@ -1283,30 +1226,40 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.858
+      "elapsed_seconds": 16.331
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 25,
       "publishable_source_count": 2,
       "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.086,
-          "result": "success"
+          "elapsed_seconds": 28.871,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County plans to revive drainage project as Trailside remains flooded"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 26.55,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County plans to revive unbuilt drainage project as Trailside remains flooded"
         }
       ],
-      "model_elapsed_seconds": 26.086,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 55.421,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County plans to revive unbuilt drainage project as Trailside remains flooded",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1430,27 +1383,32 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County seeks to revive drainage project as Trailside flooding persists",
-      "generated_card_count": 1,
-      "elapsed_seconds": 43.961
+      "elapsed_seconds": 78.868
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 15,
-      "publishable_source_count": 1,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed St. Lucie County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.953,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.953,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1459,34 +1417,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 15,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQaEdjQnRqLWh2R0dsckdpM2xmMHRkTFNCTmZwbk12M2VUNGxydEJoYnJQcFVrdnVFUHhhbDVGREctQWtvdG5RT3B3b0VtVU5USDVOaFgwZm4tQ2dVWjF4LXhYYXE5MjZzdlpWUVprYVBBUlE2TkpoRHBkMWdfZC1mbzljQ3N0ZmltcG54ODQzczRPRVp6TFg1XzhwZ3E2ZWg0ZWM5X28zLXRaQ2tyaVdXV25jQWtPVGJPRVZHSl9veE4yTEJJZVN0TzBXSzlKVGRDcnc",
-          "editorial_story_id": "story_027179",
-          "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-          "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Fort Pierce mom demands answers after video shows moments before daughter’s death - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death",
+          "editorial_story_id": "story_027387",
+          "canonical_slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
+          "canonical_headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County family seeks answers after teen struck, killed - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOa25oeDZmbHJHaXNFLXZvSDVTREtnZWRKbmQ3cEY5R1dJYnloWno3M2FNYUk3eGdpUEo1MGZ1bm5iMDBiMUJkTDRBQ3ZXZEZmY0F5OG4zM1dzVC1wRzFyY2hEZHRuZDBpSFRERkNMeUpSX3lUODFvUUM5LVdXWldLOUNCUm5vd1NjTWxGdU5SWEQ4Mk5TSGZoZjM3VUFsWXBGUnc",
-          "editorial_story_id": "story_027180",
-          "canonical_slug": "2026-11-11-family-seeks-north-boulevard-safety-improvements-after-18-year-old-killed",
-          "canonical_headline": "Family seeks North Boulevard safety improvements after 18-year-old killed",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
           "editorial_story_id": "story_026737",
           "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -1496,7 +1444,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
           "editorial_story_id": "story_026737",
           "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -1526,7 +1474,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
+          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
           "editorial_story_id": "story_022411",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
@@ -1536,17 +1484,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
-          "editorial_story_id": "story_022411",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
+          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
           "editorial_story_id": "story_022411",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
@@ -1566,7 +1504,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
           "editorial_story_id": "story_026857",
           "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
@@ -1603,16 +1541,6 @@
           "canonical_headline": "St. Lucie County residents demand drainage improvements after historic flooding",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
-          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
-          "editorial_story_id": "story_026857",
-          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
-          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1624,13 +1552,13 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQaEdjQnRqLWh2R0dsckdpM2xmMHRkTFNCTmZwbk12M2VUNGxydEJoYnJQcFVrdnVFUHhhbDVGREctQWtvdG5RT3B3b0VtVU5USDVOaFgwZm4tQ2dVWjF4LXhYYXE5MjZzdlpWUVprYVBBUlE2TkpoRHBkMWdfZC1mbzljQ3N0ZmltcG54ODQzczRPRVp6TFg1XzhwZ3E2ZWg0ZWM5X28zLXRaQ2tyaVdXV25jQWtPVGJPRVZHSl9veE4yTEJJZVN0TzBXSzlKVGRDcnc",
-          "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-          "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
+          "source_headline": "Fort Pierce mom demands answers after video shows moments before daughter’s death - WPEC",
+          "source_url": "https://cbs12.com/news/local/fort-pierce-mom-demands-answers-after-video-shows-moments-before-daughters-death",
+          "canonical_slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
+          "canonical_headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1639,22 +1567,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County family seeks answers after teen struck, killed - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOa25oeDZmbHJHaXNFLXZvSDVTREtnZWRKbmQ3cEY5R1dJYnloWno3M2FNYUk3eGdpUEo1MGZ1bm5iMDBiMUJkTDRBQ3ZXZEZmY0F5OG4zM1dzVC1wRzFyY2hEZHRuZDBpSFRERkNMeUpSX3lUODFvUUM5LVdXWldLOUNCUm5vd1NjTWxGdU5SWEQ4Mk5TSGZoZjM3VUFsWXBGUnc",
-          "canonical_slug": "2026-11-11-family-seeks-north-boulevard-safety-improvements-after-18-year-old-killed",
-          "canonical_headline": "Family seeks North Boulevard safety improvements after 18-year-old killed",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
           "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
           "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -1669,7 +1582,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
           "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
           "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -1730,7 +1643,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
+          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
@@ -1745,22 +1658,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/12/st-lucie-county-shelter-waives-adoption-fees-after-taking-114-cats-alleged-hoarding-case?outputType=amp",
-          "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
-          "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case",
+          "source_headline": "St. Lucie County shelter waives adoption fees after taking in 114 cats from alleged hoarding case - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/st-lucie-county-shelter-waives-cat-adoption-fees-after-taking-in-114-cats-from-alleged-hoarding-situation",
           "canonical_slug": "2026-10-19-more-than-100-cats-rescued-from-port-st-lucie-hoarding-house",
           "canonical_headline": "St. Lucie County shelter to waive cat adoption fees after taking in 114 cats",
@@ -1790,7 +1688,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service",
+          "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-veterans-day-ceremony-honors-generations-of-veterans-and-their-service",
           "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
           "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
@@ -1806,15 +1704,16 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.95,
           "shared_anchors": [
-            "Port St. Lucie Veterans Day ceremony on November 11, 2026",
-            "Veterans Memorial Park, identified in the candidate's location metadata"
+            "Port St. Lucie Veterans Day ceremony on Wednesday, Nov. 11, 2026",
+            "Veterans Memorial Park in Port St. Lucie",
+            "The Port St. Lucie ceremony is among the events covered by the canonical preview"
           ],
           "novel_facts": [
-            "Veterans Michael Greene, Wayne Thomas and Robert Vogel attended and discussed their service.",
-            "Retired Air Force Master Sgt. Vincent Lavelle Jr. delivered the keynote.",
-            "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover."
+            "Veterans Michael Greene, Wayne Thomas and Robert Vogel shared reflections on their service",
+            "Retired Air Force Master Sgt. Vincent Lavelle Jr. delivered the keynote",
+            "The ceremony included Junior ROTC participation, service-branch songs and a sheriff's helicopter flyover"
           ],
-          "reason": "The incoming article reports the Port St. Lucie ceremony already included in the candidate's Veterans Day preview. Its additional interviews and ceremony details are routine event coverage and color, not a material development or an independently newsworthy follow-up.",
+          "reason": "The incoming article reports from the same Port St. Lucie ceremony included in the canonical preview. Its additions are participant reactions and routine ceremony details, not a consequential development or an independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -1861,41 +1760,37 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Veterans Day 2026: Events planned across the Treasure Coast and Palm Beaches - WPEC",
-          "source_url": "https://cbs12.com/news/local/veterans-day-2026-events-planned-across-the-treasure-coast-and-palm-beaches",
-          "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
-          "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.308
+      "new_publication_stale_rejected_count": 1,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Indrio Road entrance ramp to northbound I-95 closed in St. Lucie County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 31.909
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 12,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 9,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 9.717,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 9.717,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1904,10 +1799,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1918,33 +1813,13 @@
           "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
-          "editorial_story_id": "story_026737",
-          "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-          "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Tampa father jailed in Florida voter sweep as attorney questions state's evidence against him",
-          "source_url": "https://www.wptv.com/wptv-investigates/tampa-father-jailed-in-florida-voter-sweep-as-attorney-questions-states-evidence-against-him",
-          "editorial_story_id": "story_027240",
-          "canonical_slug": "2026-11-12-tampa-father-remains-jailed-after-voting-charges-as-attorney-challenges-states-c",
-          "canonical_headline": "Tampa father remains jailed after voting charges as attorney challenges state's case",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -1955,46 +1830,32 @@
           "canonical_headline": "Indian River County beaches recover after erosion; some access points remain closed",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
-          "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
-          "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Tampa father jailed in Florida voter sweep as attorney questions state's evidence against him",
-          "source_url": "https://www.wptv.com/wptv-investigates/tampa-father-jailed-in-florida-voter-sweep-as-attorney-questions-states-evidence-against-him",
-          "canonical_slug": "2026-11-12-tampa-father-remains-jailed-after-voting-charges-as-attorney-challenges-states-c",
-          "canonical_headline": "Tampa father remains jailed after voting charges as attorney challenges state's case",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Identical WPBF source URL and source headline",
+            "Indian River County beach erosion from a nor’easter and king tides",
+            "Shoreline recovery at Tracking Station Beach",
+            "Some beach access points remain closed"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same WPBF report already represented by the canonical, with an exact source match and matching location, erosion event, recovery status, and access closures. Its additional detail does not establish a material development or independently newsworthy follow-up.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.305
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Crash closes both directions of I-95 in Indian River County; ramps closed",
+      "generated_card_count": 0,
+      "elapsed_seconds": 31.724
     }
   ]
 }
