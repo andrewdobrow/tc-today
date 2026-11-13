@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T13:47:43Z",
+  "generated_at": "2026-11-13T16:46:45Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 30,
-    "rejected_count": 7,
+    "assessed_count": 33,
+    "rejected_count": 10,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,8 +34,8 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 4,
-      "rejected_count": 4,
+      "assessed_count": 5,
+      "rejected_count": 5,
       "rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -48,7 +48,23 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Law enforcement investigation shuts down I-95 in Indian River County",
+          "headline": "Florida flooding survivors praise heroes who came to their aid",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/flooding-survivors-praise-heroes-who-came-to-their-aid"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "local_nexus_signals": [],
+          "headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
           "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county"
         },
         {
@@ -76,8 +92,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/13/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/?outputType=amp"
+          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
+          "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -90,8 +106,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns",
-          "source_url": "https://www.wptv.com/wptv-investigates/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-of-drainage-concerns"
+          "headline": "'It feels like Lake Okeechobee': Martin County community underwater after years of drainage concerns - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/12/it-feels-like-lake-okeechobee-martin-county-community-underwater-after-years-drainage-concerns/?outputType=amp"
         }
       ]
     },
@@ -100,7 +116,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 3,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -109,9 +125,47 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 3,
-      "rejected_count": 2,
+      "assessed_count": 4,
+      "rejected_count": 4,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Florida flooding survivors praise heroes who came to their aid",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/flooding-survivors-praise-heroes-who-came-to-their-aid"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [
+            "business_opening_closure_expansion:shuts down"
+          ],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:indian river county"
+          ],
+          "headline": "FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -196,7 +250,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -205,7 +259,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -214,7 +268,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 10,
+      "assessed_count": 9,
       "rejected_count": 0,
       "rejections": []
     }
