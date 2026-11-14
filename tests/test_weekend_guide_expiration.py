@@ -145,7 +145,7 @@ def test_current_custom_queue_contains_only_new_iphone_app_announcement():
     assert article["custom_id"] == "treasure-coast-today-iphone-app-announcement-2026-11-13"
     assert article["slug"] == "2026-11-13-treasure-coast-today-iphone-app-now-available"
     assert article["publish_on"] == "2026-11-13"
-    assert article["image_url"] == "https://treasurecoast.today/og-image.png"
+    assert article["image_url"] == "https://treasurecoast.today/images/Treasure-Coast-Today-App.png"
     assert "Martin" in article["body"]
     assert "St. Lucie" in article["body"]
     assert "Indian River" in article["body"]
