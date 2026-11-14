@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-14T02:50:25Z",
+  "generated_at": "2026-11-14T03:45:15Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 1,
     "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 2,
+    "placements_before": 2,
+    "placements_after": 1,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -105,20 +105,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 179,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 36,
-      "skip": 143
+      "generate_new": 10,
+      "skip": 166
     },
     "eligibility": {
       "listing": 3,
-      "low_value": 122,
-      "publishable": 54
+      "low_value": 121,
+      "publishable": 52
     },
     "source_classes": {
-      "aggregator": 125,
+      "aggregator": 124,
       "local_news": 28,
-      "regional_news": 22,
+      "regional_news": 20,
       "unknown": 4
     },
     "rejected_count": 3,
@@ -154,10 +154,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 36,
-      "same_event": 143
+      "new_story": 10,
+      "same_event": 166
     },
     "examples": [
+      {
+        "story_id": "story_027613",
+        "title": "2026 Science & Leadership Lecture Speaker: Dr. Stuart Borrett ’97 - North Texas e-News",
+        "event_key": "unknown-event-3b4a1cca49",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "",
         "title": "6475 5th St, Vero Beach, FL 32968 - Realtor.com",
@@ -171,36 +183,42 @@
         "story_id": "story_027574",
         "title": "Delays, cancellations mount at President Donald J. Trump International Airport amid nationwide ground stop",
         "event_key": "unknown-event-a06d8db384",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027575",
         "title": "Will lawsuit arise over cop’s actions at crash scene? - Vero News",
         "event_key": "traffic-crash-91e6c18609-91e6c18609",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027576",
         "title": "Harry's Banana Farm owner Harry Seifert Jr. dies at 76, leaving legacy in Lake Worth Beach",
         "event_key": "named-person-death:since-harry-s",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -214,19 +232,6 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027474",
-        "title": "FDLE investigates trooper-involved shooting that closed I-95 in both directions in IRC - cw34.com",
-        "event_key": "unknown-event-60eb4a4625",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -250,10 +255,11 @@
         "event_key": "unknown-event-cd7e2c0712",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -283,6 +289,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_027614",
+        "title": "DeSantis accuses Delray Beach of 'malicious compliance' over parade cancellation - cw34.com",
+        "event_key": "unknown-event-bb2afcd7bc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -401,20 +419,6 @@
         "story_id": "story_027483",
         "title": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
         "event_key": "traffic-crash-palm-city-301bf41285",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027459",
-        "title": "Florida flooding survivors praise heroes who came to their aid",
-        "event_key": "unknown-event-ffdb4018e5",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -428,9 +432,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_027574",
-        "title": "Delays, cancellations mount at President Donald J. Trump International Airport amid nationwide ground stop",
-        "event_key": "unknown-event-a06d8db384",
+        "story_id": "story_027613",
+        "title": "2026 Science & Leadership Lecture Speaker: Dr. Stuart Borrett ’97 - North Texas e-News",
+        "event_key": "unknown-event-3b4a1cca49",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -438,32 +442,51 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_027574",
+        "title": "Delays, cancellations mount at President Donald J. Trump International Airport amid nationwide ground stop",
+        "event_key": "unknown-event-a06d8db384",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027575",
         "title": "Will lawsuit arise over cop’s actions at crash scene? - Vero News",
         "event_key": "traffic-crash-91e6c18609-91e6c18609",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_027576",
         "title": "Harry's Banana Farm owner Harry Seifert Jr. dies at 76, leaving legacy in Lake Worth Beach",
         "event_key": "named-person-death:since-harry-s",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -478,20 +501,6 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027474",
-        "title": "FDLE investigates trooper-involved shooting that closed I-95 in both directions in IRC - cw34.com",
-        "event_key": "unknown-event-60eb4a4625",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -517,10 +526,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -552,6 +562,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_027614",
+        "title": "DeSantis accuses Delray Beach of 'malicious compliance' over parade cancellation - cw34.com",
+        "event_key": "unknown-event-bb2afcd7bc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -693,21 +716,6 @@
         "story_id": "story_027459",
         "title": "Florida flooding survivors praise heroes who came to their aid",
         "event_key": "unknown-event-ffdb4018e5",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_027485",
-        "title": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
-        "event_key": "unknown-event-a552d5a09a",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -724,66 +732,22 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "opening": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "Estampa Gaucha Steakhouse Opens in Port St. Lucie, FL - Hoodline",
-        "event_key": "unknown-event-c2062fa512",
-        "current_story_id": "story_027601",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_026555",
-        "candidate_confidence": 0.642857,
-        "candidate_milestones": [
-          "opening"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_026555",
-          "Novel milestones: opening",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.43",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.64"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 10,
     "retrospective_high_confidence_candidate_count": 3,
     "retrospective_activation_eligible_candidate_count": 2,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 378,
-      "timeline_entries_examined": 1066,
-      "transitions_examined": 656,
+      "stories_with_timelines": 379,
+      "timeline_entries_examined": 1071,
+      "transitions_examined": 660,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 10,
       "high_confidence_candidate_count": 3,
@@ -868,7 +832,7 @@
           }
         },
         {
-          "story_id": "story_027569",
+          "story_id": "story_027608",
           "story_title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
           "milestones": [
             "election_result"
@@ -888,7 +852,7 @@
           "prior_article": {
             "article_id": "rss-274c6b7c4836a051d596",
             "event_key": "unknown-event-8e55a5d5c1",
-            "published_at": "2026-11-14T02:42:12.290733+00:00",
+            "published_at": "2026-11-14T03:36:25.172690+00:00",
             "title": "Full Results: Mayor of Port St. Lucie - WPBF",
             "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
             "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
@@ -896,10 +860,45 @@
           "newer_article": {
             "article_id": "rss-7087c764887f9223ee69",
             "event_key": "unknown-event-24bdfc0370",
-            "published_at": "2026-11-14T02:42:12.290733+00:00",
+            "published_at": "2026-11-14T03:36:25.172690+00:00",
             "title": "Steven Giordano elected as Port St. Lucie mayor - WPBF",
             "source": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779",
             "url": "https://www.wpbf.com/article/florida-port-st-lucie-mayor-election-results-2026/74272779"
+          }
+        },
+        {
+          "story_id": "story_027357",
+          "story_title": "16-year-old last seen in New Smyrna Beach found safe after Amber Alert, FDLE says",
+          "milestones": [
+            "recovery"
+          ],
+          "matched_phrases": {
+            "recovery": [
+              "found safe"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-3ec404cfba39a0765f69",
+            "event_key": "missing-person-fca86e4681-fca86e4681",
+            "published_at": "2026-11-13T02:46:47.152415+00:00",
+            "title": "Amber Alert issued for missing 16-year-old last seen in New Smyrna Beach: FDLE",
+            "source": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle",
+            "url": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle"
+          },
+          "newer_article": {
+            "article_id": "rss-3b22e0ac6f929a886b34",
+            "event_key": "unknown-event-caf550cd81",
+            "published_at": "2026-11-13T04:57:29.906724+00:00",
+            "title": "16-year-old last seen in New Smyrna Beach found safe: FDLE",
+            "source": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle",
+            "url": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle"
           }
         },
         {
@@ -936,41 +935,6 @@
             "title": "Father of co-pilot killed in Palm Beach County Learjet crash speaks as family seeks answers - WPLG Local 10",
             "source": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONGZfNGlfblRLN2czNjBBM0dGeTBYRjZDcjRmT1NuZ2dUR2EwTHkwZ1FxcW14RlJxcW5ZQnRDYzBxMzQxS2xIajVjSkRwalBzTmJJVVlGMGhVcEdYMlc2MG53LVlpbnRpX21JWWFFclM5Y0xqMkIyOWZJZDJoR1M4ZHBsaEpSSXVWdklBNlRtR0lYaHFhbTVMMmtURi1UaHJvSUYwX2dzdEVuaXlCNXVNSnFUY3dHWktrOXRv?oc=5",
             "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxONGZfNGlfblRLN2czNjBBM0dGeTBYRjZDcjRmT1NuZ2dUR2EwTHkwZ1FxcW14RlJxcW5ZQnRDYzBxMzQxS2xIajVjSkRwalBzTmJJVVlGMGhVcEdYMlc2MG53LVlpbnRpX21JWWFFclM5Y0xqMkIyOWZJZDJoR1M4ZHBsaEpSSXVWdklBNlRtR0lYaHFhbTVMMmtURi1UaHJvSUYwX2dzdEVuaXlCNXVNSnFUY3dHWktrOXRv?oc=5"
-          }
-        },
-        {
-          "story_id": "story_027357",
-          "story_title": "16-year-old last seen in New Smyrna Beach found safe after Amber Alert, FDLE says",
-          "milestones": [
-            "recovery"
-          ],
-          "matched_phrases": {
-            "recovery": [
-              "found safe"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-3ec404cfba39a0765f69",
-            "event_key": "missing-person-fca86e4681-fca86e4681",
-            "published_at": "2026-11-13T02:46:47.152415+00:00",
-            "title": "Amber Alert issued for missing 16-year-old last seen in New Smyrna Beach: FDLE",
-            "source": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle",
-            "url": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle"
-          },
-          "newer_article": {
-            "article_id": "rss-3b22e0ac6f929a886b34",
-            "event_key": "unknown-event-caf550cd81",
-            "published_at": "2026-11-13T04:57:29.906724+00:00",
-            "title": "16-year-old last seen in New Smyrna Beach found safe: FDLE",
-            "source": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle",
-            "url": "https://www.wptv.com/news/state/amber-alert-issued-for-missing-16-year-old-last-seen-in-new-smyrna-beach-fdle"
           }
         },
         {
@@ -1615,7 +1579,7 @@
             "identity_anchor_qualified"
           ],
           "shared_title_tokens": [
-            "crash",
+            "martin",
             "turnpike"
           ],
           "blocking_conflicts": [
@@ -1631,12 +1595,12 @@
           "prior_title_overlap": 0.25,
           "canonical_title_overlap": 0.25,
           "prior_article": {
-            "article_id": "rss-cffbd21501ec735b80d5",
-            "event_key": "traffic-crash-palm-city-301bf41285",
+            "article_id": "rss-e3b4a47d53cb4d1cadd1",
+            "event_key": "traffic-crash-stuart-44d26ee4bf",
             "published_at": "2026-11-13T17:58:52.126316+00:00",
-            "title": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
-            "source": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-            "url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash"
+            "title": "Florida’s Turnpike closed in both directions in Martin County; truck jackknifed - WPEC",
+            "source": "https://cbs12.com/traffic/traffic-tracker-12/floridas-turnpike-closed-in-both-directions-in-martin-county-truck-jackknifed",
+            "url": "https://cbs12.com/traffic/traffic-tracker-12/floridas-turnpike-closed-in-both-directions-in-martin-county-truck-jackknifed"
           },
           "newer_article": {
             "article_id": "rss-ea45127b8c7170d07f70",
@@ -2006,27 +1970,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 660,
-      "treasure_coast_local": 522,
+      "florida": 662,
+      "treasure_coast_local": 523,
       "treasure_coast_region": 159,
-      "unknown": 1206
+      "unknown": 1209
     },
-    "average_score": 59.84
+    "average_score": 59.83
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 660,
-      "treasure_coast_local": 522,
+      "florida": 662,
+      "treasure_coast_local": 523,
       "treasure_coast_region": 159,
-      "unknown": 1206
+      "unknown": 1209
     },
-    "average_priority": 3.02
+    "average_priority": 3.0
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1667,
-      "developing": 83,
-      "ongoing": 795,
+      "active": 1691,
+      "developing": 80,
+      "ongoing": 780,
       "resolved": 2
     }
   },
@@ -2034,8 +1998,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2513,
-    "active_stories_after": 2513,
+    "active_stories_before": 2545,
+    "active_stories_after": 2545,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2060,24 +2024,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 31,
+    "incident_anchor_to_story_count": 32,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-14T02:41:14Z",
-    "quarantined_story_records_retained": 5190,
-    "active_story_count": 2547
+    "generated_at": "2026-11-14T03:35:18Z",
+    "quarantined_story_records_retained": 5196,
+    "active_story_count": 2553
   },
   "stories": {
-    "total": 2547,
+    "total": 2553,
     "importance_levels": {
       "breaking": 3,
       "high": 67,
-      "normal": 309,
-      "low": 2168,
+      "normal": 308,
+      "low": 2175,
       "archived": 0
     },
-    "average_importance": 7.12,
+    "average_importance": 7.1,
     "top": [
       {
         "story_id": "story_027432",
@@ -2092,7 +2056,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 3.43
+          "age_hours": 4.33
         },
         "level": "high",
         "importance_reasons": [
@@ -2134,7 +2098,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-13T23:20:42.940997+00:00",
-          "hours_since_update": 3.43,
+          "hours_since_update": 4.33,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2152,7 +2116,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 47.5
+          "age_hours": 48.41
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2202,70 +2166,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 47.5,
+          "hours_since_update": 48.41,
           "event_count": 21,
           "timeline_entries": 21
-        }
-      },
-      {
-        "story_id": "story_027180",
-        "title": "St. Lucie County family seeks answers after teen struck, killed",
-        "score": 75,
-        "editorial_priority": 81,
-        "editorial_score": 81,
-        "score_breakdown": {
-          "score": 81,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 23.93
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 23.93,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -2281,7 +2184,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 10.06
+          "age_hours": 10.96
         },
         "level": "high",
         "importance_reasons": [
@@ -2324,7 +2227,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 10.06,
+          "hours_since_update": 10.96,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2342,7 +2245,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 8.74
+          "age_hours": 9.64
         },
         "level": "high",
         "importance_reasons": [
@@ -2385,9 +2288,70 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 8.74,
+          "hours_since_update": 9.64,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_027180",
+        "title": "St. Lucie County family seeks answers after teen struck, killed",
+        "score": 75,
+        "editorial_priority": 72,
+        "editorial_score": 72,
+        "score_breakdown": {
+          "score": 72,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 24.84
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-13T02:46:47.152415+00:00",
+          "hours_since_update": 24.84,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -2403,7 +2367,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 8.78
+          "age_hours": 9.69
         },
         "level": "high",
         "importance_reasons": [
@@ -2441,7 +2405,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 8.78,
+          "hours_since_update": 9.69,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2459,7 +2423,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 8.78
+          "age_hours": 9.69
         },
         "level": "high",
         "importance_reasons": [
@@ -2498,7 +2462,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 8.78,
+          "hours_since_update": 9.69,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2516,7 +2480,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 146.99
+          "age_hours": 147.9
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2566,7 +2530,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T23:42:34.970395+00:00",
-          "hours_since_update": 146.99,
+          "hours_since_update": 147.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2584,7 +2548,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.01
+          "age_hours": 34.92
         },
         "level": "high",
         "importance_reasons": [
@@ -2627,7 +2591,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 34.01,
+          "hours_since_update": 34.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2645,7 +2609,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 55.01
+          "age_hours": 55.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2686,7 +2650,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 55.01,
+          "hours_since_update": 55.91,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2704,7 +2668,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 55.53
+          "age_hours": 56.44
         },
         "level": "high",
         "importance_reasons": [
@@ -2743,7 +2707,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 55.53,
+          "hours_since_update": 56.44,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2761,7 +2725,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 10.01
+          "age_hours": 10.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2799,7 +2763,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 10.01,
+          "hours_since_update": 10.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2817,7 +2781,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 55.53
+          "age_hours": 56.44
         },
         "level": "high",
         "importance_reasons": [
@@ -2856,7 +2820,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 55.53,
+          "hours_since_update": 56.44,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2874,7 +2838,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 99.01
+          "age_hours": 99.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2918,7 +2882,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 99.01,
+          "hours_since_update": 99.91,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2936,7 +2900,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 87.01
+          "age_hours": 87.92
         },
         "level": "high",
         "importance_reasons": [
@@ -2980,7 +2944,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 87.01,
+          "hours_since_update": 87.92,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2998,7 +2962,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 111.01
+          "age_hours": 111.91
         },
         "level": "high",
         "importance_reasons": [
@@ -3039,7 +3003,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 111.01,
+          "hours_since_update": 111.91,
           "event_count": 33,
           "timeline_entries": 33
         }
@@ -3057,7 +3021,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 31.0
+          "age_hours": 31.9
         },
         "level": "high",
         "importance_reasons": [
@@ -3091,7 +3055,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-12T19:42:36.786466+00:00",
-          "hours_since_update": 31.0,
+          "hours_since_update": 31.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3109,7 +3073,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 111.0
+          "age_hours": 111.91
         },
         "level": "high",
         "importance_reasons": [
@@ -3147,7 +3111,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 111.0,
+          "hours_since_update": 111.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3165,7 +3129,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 278.99
+          "age_hours": 279.9
         },
         "level": "high",
         "importance_reasons": [
@@ -3209,7 +3173,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-02T11:42:40.914448+00:00",
-          "hours_since_update": 278.99,
+          "hours_since_update": 279.9,
           "event_count": 8,
           "timeline_entries": 6
         }
@@ -3227,7 +3191,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 151.0
+          "age_hours": 151.91
         },
         "level": "high",
         "importance_reasons": [
@@ -3265,7 +3229,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-07T19:42:27.694709+00:00",
-          "hours_since_update": 151.0,
+          "hours_since_update": 151.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3275,7 +3239,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-14T02:46:55Z",
+    "generated_at": "2026-11-14T03:40:40Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3290,26 +3254,24 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 4,
+        "category_eligibility_archive_recovery": 6,
         "generated_live": 1,
-        "generation_failed_archive_recovery": 2,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 1
       },
       "failures": {
-        "contextless_update_lead": 2,
-        "no_category_eligible_sources": 4,
+        "no_category_eligible_sources": 6,
         "publication_quality_rejected": 1
       },
-      "model_attempt_count": 6,
-      "model_elapsed_seconds": 75.064,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 23.192,
       "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 4,
+      "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 8,
-      "published_story_duplicate_suppression_count": 52,
-      "story_aware_update_context_count": 2,
+      "published_story_duplicate_suppression_count": 55,
+      "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 15,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 13,
@@ -3320,8 +3282,8 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3387,6 +3349,16 @@
         ],
         "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPNFJjamtmSXhCaTNGR1lLMXFMMnprc0FFVDkyc3E5akxadnJTN25XWFl4MUxmb20zUno0YmhLR0cwYk8tcXZxS3lEV3psdkVabm9kbzhiZXU4YXY5VTVsSm5kLWFvbGZjQlE5SXNROHFSUHZpYThNVDA3eTFya3BmZUJ6U1AzejJ3WkwyNkpkaFFwS0NqbXVHSS1DdzgxWGJYbVJCMjJ4UGowc1lEblh6UFBR",
+            "editorial_story_id": "story_022712",
+            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+            "canonical_headline": "Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
@@ -3466,25 +3438,30 @@
             "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/11/port-st-lucie-veterans-day-ceremony-honors-generations-veterans-their-service?outputType=amp",
-            "editorial_story_id": "story_026857",
-            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
-            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_cache_hit_count": 3,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Port St. Lucie Election includes Mayors race and trash pick-up - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPNFJjamtmSXhCaTNGR1lLMXFMMnprc0FFVDkyc3E5akxadnJTN25XWFl4MUxmb20zUno0YmhLR0cwYk8tcXZxS3lEV3psdkVabm9kbzhiZXU4YXY5VTVsSm5kLWFvbGZjQlE5SXNROHFSUHZpYThNVDA3eTFya3BmZUJ6U1AzejJ3WkwyNkpkaFFwS0NqbXVHSS1DdzgxWGJYbVJCMjJ4UGowc1lEblh6UFBR",
+            "canonical_slug": "2026-10-22-port-st-lucie-mayors-race-and-trash-pickup-question-head-to-voters",
+            "canonical_headline": "Giordano unseats Martin as Port St. Lucie mayor; voters reject extra trash pickup",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
@@ -3644,71 +3621,26 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Port St. Lucie Veterans Day ceremony honors generations of veterans and their service - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/11/port-st-lucie-veterans-day-ceremony-honors-generations-veterans-their-service?outputType=amp",
-            "canonical_slug": "2026-11-10-stuart-parade-port-st-lucie-and-fort-pierce-ceremonies-set-for-veterans-day",
-            "canonical_headline": "Stuart parade, Port St. Lucie and Fort Pierce ceremonies set for Veterans Day",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.94,
-            "shared_anchors": [
-              "Port St. Lucie Veterans Day ceremony on Wednesday, Nov. 11, 2026",
-              "Veterans Memorial Park in Port St. Lucie"
-            ],
-            "novel_facts": [
-              "Attending veterans Michael Greene, Wayne Thomas and Robert Vogel shared reflections on their service and recognition.",
-              "The ceremony included Junior ROTC participants, service-branch songs from the community band and a St. Lucie County Sheriff's Office helicopter flyover."
-            ],
-            "reason": "The incoming article recaps the same Port St. Lucie ceremony included in the canonical event preview. Its additions are attendee remarks and routine ceremony details, not a material development or an independently newsworthy follow-up.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 23.31
+        "elapsed_seconds": 28.372
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 8,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 7,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.944,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.141,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
-          }
-        ],
-        "model_elapsed_seconds": 22.085,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Crime & Safety category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3717,7 +3649,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -3735,8 +3667,18 @@
             "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
+            "editorial_story_id": "story_027500",
+            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
+            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
@@ -3754,16 +3696,6 @@
             "editorial_story_id": "story_027514",
             "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
             "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Suspect seen fleeing on foot after Fort Pierce burglary - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-burglary-suspect-help/74424064",
-            "editorial_story_id": "story_027500",
-            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
-            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3796,57 +3728,56 @@
             "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+          },
           {
-            "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
-            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_027549",
-              "source:https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['st-lucie', 'st-lucie-county']",
-              "shared_event_families=['vehicle-chase']",
-              "shared_named_people=['or has information']",
-              "shared_precise_locations=['kentucky-avenue']",
-              "shared_agencies=['st-lucie-county-sheriff']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['burglary', 'suspect']",
-              "shared_distinctive_token_count=46",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "category_key": "crime",
+            "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+            "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+            "editorial_story_id": "story_027432",
+            "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+            "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
+            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
+            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Burglary at MLK Food Corner Store",
+              "Approximately $3,200 in stolen cash and merchandise",
+              "Suspect fled on foot eastbound on Kentucky Avenue",
+              "St. Lucie County Sheriff's Office seeking help identifying the suspect"
+            ],
+            "novel_facts": [
+              "Incoming specifies the store address as 1107 S. 33rd Street",
+              "Incoming gives the burglary time as approximately 3:45 a.m. on the 11th",
+              "Incoming specifies $278 taken from the register and smoking-related merchandise stolen"
+            ],
+            "reason": "The named store, matching loss total, escape route and investigating agency establish the same burglary. The additional timing, address and stolen-item details are routine incident specifics, not a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "crime",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
@@ -3894,21 +3825,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Suspect seen fleeing on foot after Fort Pierce burglary - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-burglary-suspect-help/74424064",
-            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
-            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
             "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
             "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
@@ -3951,12 +3867,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+            "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+            "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+            "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 39.465
+        "elapsed_seconds": 23.411
       },
       {
         "category_key": "business",
@@ -4211,7 +4140,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.848
+        "elapsed_seconds": 22.876
       },
       {
         "category_key": "sports",
@@ -4248,8 +4177,8 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 6,
-        "elapsed_seconds": 14.476
+        "new_publication_stale_rejected_count": 5,
+        "elapsed_seconds": 17.311
       },
       {
         "category_key": "things_to_do",
@@ -4266,11 +4195,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.195,
+            "elapsed_seconds": 9.655,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 9.195,
+        "model_elapsed_seconds": 9.655,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -4468,7 +4397,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 22.106
+        "elapsed_seconds": 27.502
       },
       {
         "category_key": "florida",
@@ -4533,16 +4462,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.439
+        "elapsed_seconds": 10.957
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4550,11 +4479,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 23.092,
+            "elapsed_seconds": 13.537,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 23.092,
+        "model_elapsed_seconds": 13.537,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4565,15 +4494,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
             "source_headline": "Florida’s Turnpike shut down in Martin County after tractor-trailer and pickup crash near Palm City - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-turnpike-crash-martin-county/74424664",
+            "editorial_story_id": "story_027483",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Florida’s Turnpike closed in both directions in Martin County; truck jackknifed - WPEC",
+            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/floridas-turnpike-closed-in-both-directions-in-martin-county-truck-jackknifed",
             "editorial_story_id": "story_027483",
             "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
             "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
@@ -4622,6 +4561,16 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "Florida’s Turnpike closed in both directions in Martin County; truck jackknifed - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPMldlMG15NXlXazNvekZYQkVCUnp3MllYSmVqaXFCcjdvcGs5Q2o1MllOU2VSQ3JrclpUNFB3V0tLeFU1aWlLWU9WNkVIZzJrT1JOZXkxdFVXOVpVNThETUc5NGVtcTUxaHc5YTktRDE5UFd3dkFOMDR3TWxQUlZiUmU1YXJ0ZWlUMTJleW9kRUVYejhiUlFPU3pTR3dXc1c3bzFXak5BU3ZCQU5QNHhjZkxSOA",
+            "editorial_story_id": "story_027483",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
             "editorial_story_id": "story_027485",
@@ -4638,16 +4587,6 @@
             "canonical_slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
             "canonical_headline": "Martin County firefighters union urges county to restore January hiring class",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQaEdjQnRqLWh2R0dsckdpM2xmMHRkTFNCTmZwbk12M2VUNGxydEJoYnJQcFVrdnVFUHhhbDVGREctQWtvdG5RT3B3b0VtVU5USDVOaFgwZm4tQ2dVWjF4LXhYYXE5MjZzdlpWUVprYVBBUlE2TkpoRHBkMWdfZC1mbzljQ3N0ZmltcG54ODQzczRPRVp6TFg1XzhwZ3E2ZWg0ZWM5X28zLXRaQ2tyaVdXV25jQWtPVGJPRVZHSl9veE4yTEJJZVN0TzBXSzlKVGRDcnc",
-            "editorial_story_id": "story_027179",
-            "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-            "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4667,6 +4606,21 @@
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Florida’s Turnpike closed in both directions in Martin County; truck jackknifed - WPEC",
+            "source_url": "https://cbs12.com/traffic/traffic-tracker-12/floridas-turnpike-closed-in-both-directions-in-martin-county-truck-jackknifed",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4750,6 +4704,21 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "Florida’s Turnpike closed in both directions in Martin County; truck jackknifed - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPMldlMG15NXlXazNvekZYQkVCUnp3MllYSmVqaXFCcjdvcGs5Q2o1MllOU2VSQ3JrclpUNFB3V0tLeFU1aWlLWU9WNkVIZzJrT1JOZXkxdFVXOVpVNThETUc5NGVtcTUxaHc5YTktRDE5UFd3dkFOMDR3TWxQUlZiUmU1YXJ0ZWlUMTJleW9kRUVYejhiUlFPU3pTR3dXc1c3bzFXak5BU3ZCQU5QNHhjZkxSOA",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
             "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
@@ -4777,62 +4746,30 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County looks for flood fixes after Port St. Lucie pumping into Savannas Preserve - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQaEdjQnRqLWh2R0dsckdpM2xmMHRkTFNCTmZwbk12M2VUNGxydEJoYnJQcFVrdnVFUHhhbDVGREctQWtvdG5RT3B3b0VtVU5USDVOaFgwZm4tQ2dVWjF4LXhYYXE5MjZzdlpWUVprYVBBUlE2TkpoRHBkMWdfZC1mbzljQ3N0ZmltcG54ODQzczRPRVp6TFg1XzhwZ3E2ZWg0ZWM5X28zLXRaQ2tyaVdXV25jQWtPVGJPRVZHSl9veE4yTEJJZVN0TzBXSzlKVGRDcnc",
-            "canonical_slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
-            "canonical_headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
         "live_hero_headline": "Martin County postpones 25-firefighter hiring class despite 17 vacancies",
-        "generated_card_count": 1,
-        "elapsed_seconds": 41.752
+        "generated_card_count": 0,
+        "elapsed_seconds": 42.731
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generation_failed_archive_recovery",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 18,
-        "publishable_source_count": 2,
-        "selected_source_count": 1,
+        "publishable_source_count": 1,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 10.8,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.891,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC"
-          }
-        ],
-        "model_elapsed_seconds": 20.692,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: original_event_context_missing — St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed St. Lucie County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4841,7 +4778,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 12,
@@ -4898,7 +4835,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "editorial_story_id": "story_026737",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -4908,7 +4845,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "editorial_story_id": "story_026737",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
@@ -4967,54 +4904,12 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "St. Lucie County deputies search for suspect in 3:45 a.m. corner store burglary - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-13-sheriff-seeks-help-identifying-suspect-in-fort-pierce-store-burglary",
-            "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_027500",
-              "source:https://cbs12.com/news/local/st-lucie-county-deputies-search-for-suspect-in-345-am-corner-store-burglary-florida-news-local-news-florida-crime-local-crime"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['st-lucie', 'st-lucie-county']",
-              "shared_event_families=['vehicle-chase']",
-              "shared_named_people=['or has information']",
-              "shared_precise_locations=['kentucky-avenue']",
-              "shared_agencies=['st-lucie-county-sheriff']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['burglary', 'suspect']",
-              "shared_distinctive_token_count=46",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 2,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
@@ -5027,8 +4922,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -5062,9 +4957,9 @@
             "confidence": 0.99,
             "shared_anchors": [],
             "novel_facts": [
-              "Omari Linzell Williams, 18, died after being struck by a westbound Chevrolet sedan on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
-              "The driver was a 30-year-old Vero Beach resident who was uninjured and cooperated with law enforcement.",
-              "Williams' family raised pedestrian-safety concerns and announced a candlelight vigil at Lakewood Park."
+              "Omari Linzell Williams, 18, was fatally struck while walking on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
+              "A westbound Chevrolet sedan driven by a 30-year-old Vero Beach resident struck Williams.",
+              "Florida Highway Patrol's traffic homicide investigation is ongoing."
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5118,7 +5013,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
             "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -5133,7 +5028,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December",
+            "source_headline": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-to-break-ground-on-new-6-000-seat-soccer-stadium-in-december",
             "canonical_slug": "2026-11-09-port-st-lucie-approves-site-plan-for-6000-seat-soccer-stadium-at-walton-one",
             "canonical_headline": "Port St. Lucie soccer stadium at Walton & One set for Dec. 12 groundbreaking",
@@ -5250,16 +5145,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 42.954
+        "elapsed_seconds": 21.75
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5280,7 +5173,7 @@
         "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -5299,6 +5192,16 @@
             "editorial_story_id": "story_027514",
             "canonical_slug": "2026-11-13-florida-releases-all-20-names-in-voter-fraud-sweep-as-cases-raise-legal-question",
             "canonical_headline": "Florida releases all 20 names in voter fraud sweep as cases raise legal questions",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+            "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+            "editorial_story_id": "story_027483",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5387,6 +5290,21 @@
           },
           {
             "category_key": "indian_river",
+            "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash",
+            "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
+            "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+            "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
             "source_headline": "Law enforcement investigation shuts down I-95 in Indian River County - WFLX",
             "source_url": "https://www.wflx.com/2026/11/13/law-enforcement-investigation-shuts-down-i-95-indian-river-county?outputType=amp",
             "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
@@ -5444,7 +5362,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.676
+        "elapsed_seconds": 22.013
       }
     ]
   }
