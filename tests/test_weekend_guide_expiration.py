@@ -137,22 +137,19 @@ def test_november_13_15_roundup_remains_published_after_queue_turnover():
     assert page.count('<h2 class="article-section">') >= 5
 
 
-def test_current_custom_queue_contains_only_new_traffic_article_and_fdot_image():
-    """The one-item queue holds the newly requested story, never an old guide."""
+def test_current_custom_queue_contains_only_new_iphone_app_announcement():
+    """Only the newly requested custom article is queued; earlier reports remain published."""
     entries = _items()
     assert len(entries) == 1
     article = entries[0]
-    assert article["custom_id"] == "treasure-coast-traffic-report-2026-11-13-20"
-    assert article["slug"].endswith("nov-13-20")
-    assert article["custom_series_key"] == "treasure-coast-traffic-report"
-    assert article["custom_edition_key"] == "nov-13-20"
-    assert article["image_url"] == "https://treasurecoast.today/images/florida-traffic.png"
-    assert article["category"] == "local_gov"
+    assert article["custom_id"] == "treasure-coast-today-iphone-app-announcement-2026-11-13"
+    assert article["slug"] == "2026-11-13-treasure-coast-today-iphone-app-now-available"
     assert article["publish_on"] == "2026-11-13"
-    assert article["expires"] == "2026-11-21"
-    assert "Martin County" in article["body"]
-    assert "St. Lucie County" in article["body"]
-    assert "Indian River County" in article["body"]
+    assert article["image_url"] == "https://treasurecoast.today/og-image.png"
+    assert "Martin" in article["body"]
+    assert "St. Lucie" in article["body"]
+    assert "Indian River" in article["body"]
+    assert "https://apps.apple.com/us/app/treasure-coast-today/id6821545564" in article["body"]
     assert article["sponsored"] is False
 
 
