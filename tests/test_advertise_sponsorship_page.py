@@ -48,8 +48,17 @@ def _assert_contract(page):
 def test_static_advertise_page_and_retained_template_agree_on_sponsorship_contract():
     page = PAGE.read_text(encoding='utf-8')
     template = (ROOT / 'content' / 'advertise-page.html').read_text(encoding='utf-8')
-    assert page == template
-    _assert_contract(page)
+    # The newsroom's navigation normalizer may adjust the active menu state.
+    # Preserve the advertising copy and inquiry form, not byte-for-byte chrome.
+    for html in (page, template):
+        _assert_contract(html)
+    current = BeautifulSoup(page, 'html.parser')
+    retained = BeautifulSoup(template, 'html.parser')
+    for selector in ('.adv-offers', '.adv-offers-note', '.adv-disclosure', '#advForm'):
+        current_section = current.select_one(selector)
+        retained_section = retained.select_one(selector)
+        assert current_section is not None and retained_section is not None
+        assert str(current_section) == str(retained_section), selector
 
 
 def test_full_update_restores_advertise_page_after_generator():
