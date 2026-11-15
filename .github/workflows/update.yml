@@ -280,6 +280,11 @@ jobs:
             --report data/semantic-publication-gate.json \
             --report data/model-usage-report.json
 
+      # The generator still has an older Advertise renderer. Restore the
+      # editor-approved card lineup after generation, before sitewide SEO work.
+      - name: Preserve current Advertise offerings
+        run: cp content/advertise-page.html advertise.html
+
       - name: Refresh Treasure Coast events
         continue-on-error: true
         run: python -u scripts/update_events.py

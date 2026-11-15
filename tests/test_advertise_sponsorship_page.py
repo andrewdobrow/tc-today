@@ -1,27 +1,10 @@
-"""Sponsored feature / Morning Brief advertising-page publication contract."""
+"""Advertising-page publication contract for all current partnership types."""
 from pathlib import Path
 from bs4 import BeautifulSoup
-import ast
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / 'advertise.html'
-GENERATOR = ROOT / 'scripts' / 'generate.py'
 PACKARD_PATH = '/articles/2026-10-04-three-generations-later-packard-roofing-remains-rooted-on-the-treasure-coast.html'
-
-
-def _generated_preview():
-    """Execute only page renderer from generator to avoid starting the newsroom pipeline."""
-    source = GENERATOR.read_text(encoding='utf-8')
-    tree = ast.parse(source)
-    fn = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == 'render_advertise_page')
-    module = ast.fix_missing_locations(ast.Module(body=[fn], type_ignores=[]))
-    env = {
-        '_page_head': lambda *args: '<title>Advertising preview</title>',
-        '_page_header': lambda **kwargs: '<header></header>',
-        '_page_footer': lambda: '<footer></footer>',
-    }
-    exec(compile(module, str(GENERATOR), 'exec'), env)
-    return env['render_advertise_page']()
 
 
 def _assert_contract(page):
@@ -38,8 +21,16 @@ def _assert_contract(page):
     assert '706K+' not in page
     assert 'Top 5</span><span class="adv-stat-label">' not in page
     assert PACKARD_PATH in page
-    assert 'Sponsored content is labeled' in page
-    assert 'Sponsorship does not influence editorial coverage' in page
+    assert 'Sponsored content is labeled' not in page
+    assert 'clearly labeled' not in page
+    assert 'clearly identified' not in page
+    assert 'Sponsorship does not influence editorial coverage' not in page
+    assert "We'll work with you to choose the right opportunities" in page
+    for heading in ('Website advertising', 'Podcast sponsorships'):
+        assert heading in page
+    for option in ('Website advertising', 'Podcast sponsorship', 'Multiple placements'):
+        assert any(x.get_text(strip=True) == option for x in doc.select('select#interest option'))
+    assert doc.select_one('a[href="/podcast/"]') is not None
     assert 'advertise-banner.png' not in page
     assert doc.select_one('form#advForm')['action'] == 'https://formspree.io/f/mqejrpdv'
     assert doc.select_one('form#advForm')['method'].upper() == 'POST'
@@ -54,16 +45,23 @@ def _assert_contract(page):
     assert 'grid-template-columns: 1fr;' in page
 
 
-def test_static_advertise_page_and_generator_agree_on_sponsorship_contract():
-    for page in (PAGE.read_text(encoding='utf-8'), _generated_preview()):
-        _assert_contract(page)
+def test_static_advertise_page_and_retained_template_agree_on_sponsorship_contract():
+    page = PAGE.read_text(encoding='utf-8')
+    template = (ROOT / 'content' / 'advertise-page.html').read_text(encoding='utf-8')
+    assert page == template
+    _assert_contract(page)
 
 
-def test_regenerating_advertising_does_not_revert_to_display_ads():
-    generated = _generated_preview()
+def test_full_update_restores_advertise_page_after_generator():
+    workflow = (ROOT / '.github' / 'workflows' / 'update.yml').read_text(encoding='utf-8')
+    assert 'cp content/advertise-page.html advertise.html' in workflow
+    assert workflow.index('python -u scripts/run_generator_fail_fast.py') < workflow.index('cp content/advertise-page.html advertise.html') < workflow.index('python -u scripts/build_audience_features.py')
+
+
+def test_retained_advertise_page_includes_current_offerings():
     actual = PAGE.read_text(encoding='utf-8')
-    for literal in ('Your business has a story.', 'Ways to work together', 'Morning Brief sponsorships', 'What are you interested in?', 'formspree.io/f/mqejrpdv'):
-        assert literal in generated and literal in actual
+    for literal in ('Your business has a story.', 'Ways to work together', 'Morning Brief sponsorships', 'Website advertising', 'Podcast sponsorships', 'What are you interested in?', 'formspree.io/f/mqejrpdv'):
+        assert literal in actual
 
 
 def test_sponsored_example_target_is_real_local_page():
