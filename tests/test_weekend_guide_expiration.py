@@ -163,9 +163,9 @@ def test_november_13_15_roundup_matches_live_events_calendar():
     guide = NOV_WEEKEND_ARTICLE.read_text(encoding="utf-8")
     now = datetime.now(ZoneInfo("America/New_York"))
     # (event title fragment, calendar listing date, confirmed end time, organizer link)
-    # The Stuart Air Show calendar lists Nov. 14–15; Friday is its kickoff party.
+    # Stuart Air Show runs Nov. 14–15; its rolling feed may retain Sunday only.
     source_events = (
-        ("Stuart Air Show", "2026-11-14", "2026-11-15T17:00:00-05:00",
+        ("Stuart Air Show", ("2026-11-14", "2026-11-15"), "2026-11-15T17:00:00-05:00",
          "https://www.stuartairshow.com/"),
         ("Mr Motwn", "2026-11-13", "2026-11-13T20:30:00-05:00",
          "https://www.riversidetheatre.com/loop-music-calendar"),
@@ -178,13 +178,16 @@ def test_november_13_15_roundup_matches_live_events_calendar():
     )
     for title, day, end_iso, organizer_url in source_events:
         assert organizer_url in guide, f"Archived weekend guide lost its organizer link: {organizer_url}"
+        # Multi-day events may shed prior-day sessions from the rolling calendar
+        # while their next session remains listed (e.g. Stuart Air Show on Sunday).
+        valid_days = (day,) if isinstance(day, str) else day
         matches = [
             event for event in events
             if title.lower() in str(event.get("title") or "").lower()
-            and str(event.get("starts_at") or "").startswith(day)
+            and any(str(event.get("starts_at") or "").startswith(d) for d in valid_days)
         ]
         if now < datetime.fromisoformat(end_iso):
-            assert matches, f"Upcoming weekend event missing from calendar: {title} ({day})"
+            assert matches, f"Upcoming weekend event missing from calendar: {title} ({valid_days})"
 
 
 def test_november_13_15_guide_expires_after_sunday_in_eastern_time(monkeypatch, tmp_path):
