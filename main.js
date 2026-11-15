@@ -432,63 +432,6 @@ document.addEventListener("keydown", (event) => {
 
 // Sitewide Kit popup disabled during the SEO experiment; inline signups remain.
 
-// -- FIRST-PARTY MOST READ (privacy-preserving aggregate counts) --
-(() => {
-  const endpointMeta = document.querySelector('meta[name="tct-story-analytics-endpoint"]');
-  const endpoint = endpointMeta ? String(endpointMeta.content || '').trim() : '';
-  const modules = Array.from(document.querySelectorAll('[data-tct-most-read]'));
-  if (!endpoint) return;
-
-  const post = (payload, options = {}) => fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    cache: 'no-store',
-    credentials: 'omit',
-    ...options
-  });
-
-  async function renderMostRead() {
-    if (!modules.length) return;
-    try {
-      const [topResponse, indexResponse] = await Promise.all([
-        post({ action: 'top', hours: 24, limit: 5 }),
-        fetch('/data/story-index.json', { cache: 'no-store', credentials: 'same-origin' })
-      ]);
-      if (!topResponse.ok || !indexResponse.ok) return;
-      const topPayload = await topResponse.json();
-      const indexPayload = await indexResponse.json();
-      if (!topPayload || topPayload.schema_ready !== true || !Array.isArray(topPayload.stories)) return;
-      const index = indexPayload && indexPayload.stories ? indexPayload.stories : {};
-      const rows = topPayload.stories.map(item => ({ ...item, meta: index[item.slug] })).filter(item => item.meta && item.meta.headline && item.meta.url);
-      if (!rows.length) return;
-      modules.forEach(module => {
-        const list = module.querySelector('[data-tct-most-read-list]');
-        if (!list) return;
-        list.innerHTML = rows.map(item => `<li><a href="${String(item.meta.url).replace(/"/g, '&quot;')}"><span><span class="most-read-title">${String(item.meta.headline).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</span><span class="most-read-meta">${String(item.meta.category || 'Local News').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</span></span></a></li>`).join('');
-        module.hidden = false;
-      });
-    } catch (_) {}
-  }
-
-  function recordArticleView() {
-    const body = document.body;
-    const slug = body && body.dataset ? String(body.dataset.articleSlug || '').trim() : '';
-    if (!slug || !/^[a-z0-9][a-z0-9-]{5,180}$/.test(slug)) return;
-    const key = `tct-story-viewed:${slug}`;
-    try { if (sessionStorage.getItem(key) === '1') return; sessionStorage.setItem(key, '1'); } catch (_) {}
-    window.setTimeout(() => {
-      post({ action: 'record', slug }, { keepalive: true }).catch(() => {});
-    }, 2500);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { renderMostRead(); recordArticleView(); }, { once: true });
-  } else {
-    renderMostRead(); recordArticleView();
-  }
-})();
-
 // -- SITEWIDE ARTICLE SEARCH --
 // Lazy-load the compact story index only after the reader opens/searches. The
 // same index powers the masthead overlay and the dedicated /search.html page.

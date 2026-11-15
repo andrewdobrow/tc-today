@@ -244,7 +244,7 @@ def test_article_enhancement_handles_legacy_shell_and_adds_schema(tmp_path, monk
     page=article.read_text(encoding="utf-8")
     assert 'TCT_BREADCRUMB_START' in page
     assert '<main class="article-page-main">' in page
-    assert 'data-tct-most-read' in page
+    assert 'data-tct-most-read' not in page
     assert 'google-add-preferred-source-btn' in page
     assert 'https://news.google.com/swg/js/v1/publisher.js' in page
     assert 'Visit Our Partner' in page
@@ -372,20 +372,14 @@ def test_paywall_avoids_duplicate_newsletter_fallback_and_keeps_value_copy():
     assert "tct-paywall-card" not in html
 
 
-def test_most_read_implementation_is_aggregate_and_privacy_preserving():
-    root=Path(__file__).resolve().parents[1]
-    migration=(root/"supabase/migrations/202609080001_story_analytics.sql").read_text(encoding="utf-8")
-    function=(root/"supabase/functions/story-analytics/index.ts").read_text(encoding="utf-8")
-    main=(root/"main.js").read_text(encoding="utf-8")
-    assert "story_pageviews_hourly" in migration
-    assert "ip_address" not in migration.lower()
-    assert "user_id" not in migration.lower()
-    assert "device_id" not in migration.lower()
-    assert "increment_story_pageview" in function
-    assert "sessionStorage" in main
-    assert "data-tct-most-read" in main
-    assert "data-tct-search-overlay" in main
-    assert "story-index.json" in main
+def test_retired_most_read_is_inert():
+    root = Path(__file__).resolve().parents[1]
+    main = (root / "main.js").read_text(encoding="utf-8")
+    workflow = (root / ".github/workflows/update.yml").read_text(encoding="utf-8")
+    assert "story-analytics" not in main
+    assert "supabase functions deploy story-analytics" not in workflow
+    assert "Probe Most Read analytics capability" not in workflow
+    assert features._most_read_module() == ""
 
 
 def test_workflow_runs_features_before_paywall_and_validates_after_paywall():
@@ -395,7 +389,7 @@ def test_workflow_runs_features_before_paywall_and_validates_after_paywall():
     paywall=workflow.index("python scripts/prepare_membership_paywall.py")
     validate=workflow.index("python scripts/validate_seo_contracts.py")
     assert build < paywall < validate
-    assert "supabase functions deploy story-analytics" in workflow
+    assert "supabase functions deploy story-analytics" not in workflow
 
 
 

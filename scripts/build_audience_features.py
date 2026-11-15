@@ -850,8 +850,8 @@ def _community_partner_module() -> str:
 
 
 def _most_read_module(compact: bool = True) -> str:
-    cls = "most-read-module most-read-module--compact" if compact else "most-read-module"
-    return f'<section class="{cls}" data-tct-most-read hidden><div class="most-read-head"><span>Trending</span><h2>Most Read</h2></div><ol data-tct-most-read-list></ol><p class="most-read-window">Most-read TCT stories over the past 24 hours.</p></section>'
+    # Retired: keep existing enhancement call sites inert.
+    return ""
 
 
 def _ensure_preferred_script(text: str) -> str:
@@ -1859,7 +1859,7 @@ def enhance_homepage() -> dict:
         "Vero Beach · Sebastian · Fellsmere": '<a href="/vero-beach/">Vero Beach</a> · <a href="/sebastian/">Sebastian</a> · <a href="/fellsmere/">Fellsmere</a>',
     }
     for old,new in replacements.items(): text = text.replace(old,new)
-    module = MOST_READ_HOME_START + _most_read_module(False) + MOST_READ_HOME_END
+    module = MOST_READ_HOME_START + MOST_READ_HOME_END
     text = _replace_marker(text, MOST_READ_HOME_START, MOST_READ_HOME_END, module)
     if MOST_READ_HOME_START not in text:
         county = re.search(r'<div\s+class="county-panels-grid">', text, re.I)
@@ -1896,7 +1896,6 @@ def _upsert_meta(text: str, name: str, content: str) -> str:
 
 def normalize_assets_and_analytics() -> dict:
     supabase_url = os.getenv("TCT_SUPABASE_URL", "").strip().rstrip("/")
-    endpoint = f"{supabase_url}/functions/v1/story-analytics" if supabase_url else ""
     updated = scanned = 0
     for path in ROOT.rglob("*.html"):
         text = path.read_text(encoding="utf-8", errors="ignore")
@@ -1912,8 +1911,6 @@ def normalize_assets_and_analytics() -> dict:
             text,
             flags=re.I,
         )
-        if endpoint:
-            text = _upsert_meta(text, "tct-story-analytics-endpoint", endpoint)
         if text != original:
             path.write_text(text, encoding="utf-8"); updated += 1
     # New pages and postprocessed pages must keep the Mediavine loader contract.
@@ -2158,7 +2155,6 @@ def validate_features(archive: list[dict]) -> dict:
         if BREADCRUMB_MARKER_START not in text or "data-tct-breadcrumb-jsonld" not in text: failures.append(f"breadcrumb {p.name}")
         if PREFERRED_SOURCE_SCRIPT not in text or "google-add-preferred-source-btn" not in text: failures.append(f"preferred source {p.name}")
         if "community-partner-card" not in text or COMMUNITY_PARTNER_URL not in text or COMMUNITY_PARTNER_IMAGE not in text: failures.append(f"community partner {p.name}")
-        if "data-tct-most-read" not in text: failures.append(f"most read slot {p.name}")
     if failures:
         raise RuntimeError("Audience/SEO feature contract FAILED: " + "; ".join(failures[:20]))
     return {"checked_articles":min(160,len(current_articles)),"failures":0}
