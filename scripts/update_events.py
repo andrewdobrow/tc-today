@@ -2051,6 +2051,15 @@ def _render_page(events: list[dict[str, Any]], status: dict[str, Any]) -> None:
     payload = json.dumps(_jsonld_payload(display_events), ensure_ascii=False, separators=(",", ":"))
     jsonld = f'{JSONLD_START}\n<script type="application/ld+json" data-tct-events-jsonld>{payload}</script>\n{JSONLD_END}'
     text = _replace_between(text, JSONLD_START, JSONLD_END, jsonld)
+    # The news generator can recreate events.html with the retired Morning Brief
+    # masthead. Restore the approved App Store promo before validate_outputs()
+    # checks the page; the workflow's later sitewide cleanup is too late.
+    try:
+        from scripts.replace_header_app_store import replace_header_promo
+    except ModuleNotFoundError:
+        # python scripts/update_events.py puts scripts/ at sys.path[0].
+        from replace_header_app_store import replace_header_promo
+    text = replace_header_promo(text)
     _atomic_text(EVENTS_HTML_PATH, text)
 
 

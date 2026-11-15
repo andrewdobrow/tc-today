@@ -829,6 +829,33 @@ def test_sitewide_primary_nav_normalizer_converges_old_headers_and_is_idempotent
     assert again == {"scanned": 1, "updated": 0}
 
 
+def test_events_render_restores_app_store_badge_before_validation(tmp_path, monkeypatch):
+    """A generated legacy masthead must not fail the events-refresh contract."""
+    from scripts.replace_header_app_store import APP_BADGE, MOBILE_LINK
+
+    html = (ROOT / "events.html").read_text(encoding="utf-8")
+    # Reproduce the old header emitted by a news-generation pass.
+    html = html.replace(
+        APP_BADGE,
+        '<a class="masthead-newsletter" href="/newsletter.html">Morning Brief</a>',
+        1,
+    ).replace(MOBILE_LINK, "", 1)
+    assert 'class="masthead-app-store"' not in html
+    page = tmp_path / "events.html"
+    page.write_text(html, encoding="utf-8")
+    monkeypatch.setattr(events, "EVENTS_HTML_PATH", page)
+
+    events._render_page([], {"generated_at": "2026-11-14T20:00:00-05:00"})
+
+    fixed = page.read_text(encoding="utf-8")
+    soup = BeautifulSoup(fixed, "html.parser")
+    badge = soup.select_one('a.masthead-app-store')
+    assert badge is not None
+    assert badge.get("href") == "https://apps.apple.com/us/app/treasure-coast-today/id6821545564"
+    assert badge.select_one('img[src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"]') is not None
+    assert soup.select_one("nav#tct-mobile-nav a[data-tct-app-store-link]") is not None
+
+
 def test_homepage_uses_balanced_publication_masthead_without_legacy_strip():
     page = (ROOT / "index.html").read_text(encoding="utf-8")
     soup = BeautifulSoup(page, "html.parser")
