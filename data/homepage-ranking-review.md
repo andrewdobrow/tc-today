@@ -12,16 +12,17 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Treasure Coast Today launches free iPhone app for local news and events | Indian River County deputies seek owner of domestic boar found on 69th Street | 39 | importance 0; freshness 63.31; urgency 2/10 |
-| 2 | Indian River County deputies seek owner of domestic boar found on 69th Street | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | 38 | importance 0; freshness 59.96; urgency 2/10 |
-| 3 | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | Treasure Coast Today launches free iPhone app for local news and events | 35 | importance 0; freshness 33.14; urgency 5/10 |
-| 4 | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | 36 | importance 0; freshness 26.09; urgency 2/10; validated material update; -6 category saturation |
+| 1 | Treasure Coast Today launches free iPhone app for local news and events | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | 42 | importance 0; freshness 22.83; urgency 5/10; validated material update |
+| 2 | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | Indian River County deputies seek owner of domestic boar found on 69th Street | 38 | importance 0; freshness 60.05; urgency 2/10 |
+| 3 | Indian River County deputies seek owner of domestic boar found on 69th Street | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | 37 | importance 0; freshness 56.7; urgency 2/10 |
+| 4 | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | Treasure Coast Today launches free iPhone app for local news and events | 34 | importance 0; freshness 29.88; urgency 5/10 |
 
 ## Recommended moves
 
-- **Treasure Coast Today launches free iPhone app for local news and events**: 1 → 3 — importance 0; freshness 33.14; urgency 5/10
-- **Indian River County deputies seek owner of domestic boar found on 69th Street**: 2 → 1 — importance 0; freshness 63.31; urgency 2/10
-- **Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen**: 3 → 2 — importance 0; freshness 59.96; urgency 2/10
+- **Treasure Coast Today launches free iPhone app for local news and events**: 1 → 4 — importance 0; freshness 29.88; urgency 5/10
+- **Florida's Turnpike northbound lanes reopen after truck crash near Palm City**: 2 → 1 — importance 0; freshness 22.83; urgency 5/10; validated material update
+- **Indian River County deputies seek owner of domestic boar found on 69th Street**: 3 → 2 — importance 0; freshness 60.05; urgency 2/10
+- **Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen**: 4 → 3 — importance 0; freshness 56.7; urgency 2/10
 
 ## Guardrails
 
