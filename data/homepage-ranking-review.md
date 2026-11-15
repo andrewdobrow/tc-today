@@ -4,32 +4,26 @@
 
 ## Hero
 
-- Current: **Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen**
-- Recommended: **I-95 closed in both directions in Indian River County after fatal trooper-involved shooting**
-- Recommendation: CHANGE (not enforced)
+- Current: **Teen airlifted after e-bike and vehicle crash on U.S. Highway 1 in Jensen Beach**
+- Recommended: **Teen airlifted after e-bike and vehicle crash on U.S. Highway 1 in Jensen Beach**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | I-95 closed in both directions in Indian River County after fatal trooper-involved shooting | I-95 closed in both directions in Indian River County after fatal trooper-involved shooting | 51 | importance 0; freshness 68.3; urgency 4/10; validated material update |
-| 2 | Treasure Coast Today launches free iPhone app for local news and events | Indian River County deputies seek owner of domestic boar found on 69th Street | 42 | importance 0; freshness 76.64; urgency 2/10 |
-| 3 | Indian River County deputies seek owner of domestic boar found on 69th Street | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | 39 | importance 0; freshness 39.43; urgency 2/10; validated material update |
-| 4 | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | Treasure Coast Today launches free iPhone app for local news and events | 38 | importance 0; freshness 46.48; urgency 5/10 |
-| 5 | Florida releases all 20 names in voter fraud sweep as cases raise legal questions | Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County | 35 | importance 0; freshness 23.35; urgency 2/10; validated material update |
-| 6 | Treasure Coast traffic report: I-95 ramp closures, road work planned Nov. 13–20 | Florida releases all 20 names in voter fraud sweep as cases raise legal questions | 28 | importance 0; freshness 33.32; urgency 2/10 |
-| 7 | Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce | Treasure Coast traffic report: I-95 ramp closures, road work planned Nov. 13–20 | 28 | importance 0; freshness 30.49; urgency 2/10 |
-| 8 | Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County | Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce | 31 | importance 0; freshness 30.5; urgency 2/10; -6 category saturation |
+| 1 | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | 63 | importance 0; freshness 99.97; urgency 9/10 |
+| 2 | Treasure Coast Today launches free iPhone app for local news and events | Indian River County deputies seek owner of domestic boar found on 69th Street | 39 | importance 0; freshness 63.97; urgency 2/10 |
+| 3 | Indian River County deputies seek owner of domestic boar found on 69th Street | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | 38 | importance 0; freshness 60.62; urgency 2/10 |
+| 4 | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | Treasure Coast Today launches free iPhone app for local news and events | 35 | importance 0; freshness 33.8; urgency 5/10 |
+| 5 | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | Florida's Turnpike northbound lanes reopen after truck crash near Palm City | 36 | importance 0; freshness 26.76; urgency 2/10; validated material update; -6 category saturation |
+| 6 | Florida releases all 20 names in voter fraud sweep as cases raise legal questions | Florida releases all 20 names in voter fraud sweep as cases raise legal questions | 25 | importance 0; freshness 20.64; urgency 2/10 |
 
 ## Recommended moves
 
-- **Indrio Road ramp to northbound I-95 closed as drivers diverted in St. Lucie County**: 8 → 5 — importance 0; freshness 23.35; urgency 2/10; validated material update
-- **Treasure Coast Today launches free iPhone app for local news and events**: 2 → 4 — importance 0; freshness 46.48; urgency 5/10
-- **Indian River County deputies seek owner of domestic boar found on 69th Street**: 3 → 2 — importance 0; freshness 76.64; urgency 2/10
-- **Florida's Turnpike northbound lanes reopen after truck crash near Palm City**: 4 → 3 — importance 0; freshness 39.43; urgency 2/10; validated material update
-- **Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce**: 7 → 8 — importance 0; freshness 30.5; urgency 2/10; -6 category saturation
-- **Florida releases all 20 names in voter fraud sweep as cases raise legal questions**: 5 → 6 — importance 0; freshness 33.32; urgency 2/10
-- **Treasure Coast traffic report: I-95 ramp closures, road work planned Nov. 13–20**: 6 → 7 — importance 0; freshness 30.49; urgency 2/10
+- **Treasure Coast Today launches free iPhone app for local news and events**: 2 → 4 — importance 0; freshness 33.8; urgency 5/10
+- **Indian River County deputies seek owner of domestic boar found on 69th Street**: 3 → 2 — importance 0; freshness 63.97; urgency 2/10
+- **Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen**: 4 → 3 — importance 0; freshness 60.62; urgency 2/10
 
 ## Guardrails
 

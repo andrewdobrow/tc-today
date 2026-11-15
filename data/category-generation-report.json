@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-15T11:45:51Z",
+  "generated_at": "2026-11-15T19:23:34Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,27 +15,29 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
       "category_eligibility_archive_recovery": 4,
-      "no_publishable_sources": 3,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 1,
+      "no_publishable_sources": 1,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
+      "contextless_update_lead": 1,
       "no_category_eligible_sources": 4,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 1,
-    "model_elapsed_seconds": 11.835,
-    "archive_recovery_requested_count": 8,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 66.514,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 2,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 4,
+    "category_eligibility_rejection_count": 5,
     "published_story_duplicate_suppression_count": 34,
-    "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 15,
+    "story_aware_update_context_count": 3,
+    "material_update_promotion_evaluation_count": 18,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 13,
+    "material_update_promotion_cache_hit_count": 16,
     "material_update_promotion_model_call_count": 2
   },
   "categories": [
@@ -45,7 +47,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -62,24 +64,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "South Florida families turn to resale shopping to save money as holiday season approaches",
-          "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
-        }
-      ],
+      "category_eligibility_assessed_count": 0,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
@@ -153,16 +140,16 @@
           "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 32.944
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 14.205
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -179,9 +166,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com",
+          "source_url": "https://cw34.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach?teaserSource=trending"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - cw34.com",
+          "source_url": "https://cw34.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind?teaserSource=trending"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -197,18 +212,8 @@
           "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - WPEC",
-          "source_url": "https://cbs12.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach",
-          "editorial_story_id": "story_027706",
-          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
-          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - cw34.com",
@@ -228,50 +233,98 @@
           "canonical_headline": "Sheriff seeks help identifying suspect in Fort Pierce store burglary",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "editorial_story_id": "story_027486",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-man-sentenced-to-life-in-prison-in-2020-stabbing-death-of-calvin-bates-collin-ohara-knife-in-neck-witnesses",
-          "editorial_story_id": "story_027487",
-          "canonical_slug": "2026-11-13-collin-ohara-sentenced-to-life-for-2020-killing-of-calvin-bates-in-fort-pierce",
-          "canonical_headline": "Collin O’Hara sentenced to life for 2020 killing of Calvin Bates in Fort Pierce",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com",
+          "source_url": "https://cw34.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
+          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_027706",
+            "source:https://cw34.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach?teaserSource=trending"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['the owner of']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['indian-river-county-sheriff']",
+            "shared_subject_phrases=['250-pound-boar', '250-pound-boar-hog', 'boar-hog-found', 'little-piggy-went', 'little-piggy-went-rogue', 'not-little-piggy', 'not-little-piggy-went', 'piggy-went-rogue', 'piggy-went-rogue-250', 'pound-boar-hog', 'pound-boar-hog-found', 'rogue-250-pound', 'rogue-250-pound-boar', 'went-rogue-250', 'went-rogue-250-pound']",
+            "shared_headline_topic_core=['250', 'boar', 'found', 'hog', 'little', 'not', 'piggy', 'pound', 'rogue', 'went']",
+            "shared_distinctive_token_count=78",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - cw34.com",
+          "source_url": "https://cw34.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
+          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
+          "basis": "event-identity-authority:exact_known_event_key",
+          "identity_keys": [
+            "story:story_027486",
+            "source:https://cw34.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind?teaserSource=trending"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['martin-county', 'palm-city', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=[]",
+            "shared_named_people=[]",
+            "shared_precise_locations=['side-of-the-road']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=['911-call-palm', '911-call-palm-chas', 'call-palm-chas', 'call-palm-chas-her', 'chas-her-guns', 'chas-her-guns-releas', 'guns-releas-show', 'her-guns-releas', 'her-guns-releas-show', 'palm-chas-her', 'palm-chas-her-guns']",
+            "shared_headline_topic_core=['911', 'call', 'chas', 'guns', 'her', 'palm', 'releas', 'show']",
+            "shared_distinctive_token_count=150",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "crime",
-          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - WPEC",
-          "source_url": "https://cbs12.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach",
-          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
-          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "crime",
           "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - cw34.com",
@@ -328,48 +381,18 @@
           ],
           "reason": "The named store, matching loss total, escape route and investigating agency establish the same burglary. The additional timing, address and stolen-item details are routine incident specifics, not a material development or independently newsworthy follow-up.",
           "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - WPEC",
-          "source_url": "https://cbs12.com/news/local/fort-pierce-man-sentenced-to-life-in-prison-in-2020-stabbing-death-of-calvin-bates-collin-ohara-knife-in-neck-witnesses",
-          "canonical_slug": "2026-11-13-collin-ohara-sentenced-to-life-for-2020-killing-of-calvin-bates-in-fort-pierce",
-          "canonical_headline": "Collin O’Hara sentenced to life for 2020 killing of Calvin Bates in Fort Pierce",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.562
+      "elapsed_seconds": 11.719
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 8,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -406,7 +429,7 @@
           "source_url": "https://www.wptv.com/money/consumer/south-florida-families-turn-to-resale-shopping-to-save-money-as-holiday-season-approaches"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -436,6 +459,26 @@
           "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
           "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
+          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
+          "editorial_story_id": "story_027485",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "editorial_story_id": "story_027432",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -505,26 +548,56 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Stuart Air Show: What to know about traffic, parking and getting to Witham Field",
+          "source_url": "https://www.wptv.com/traffic/stuart-air-show-traffic-guide-best-routes-free-parking-and-what-drivers-need-to-know",
+          "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+          "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
+          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
+          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.922
+      "new_publication_stale_rejected_count": 3,
+      "elapsed_seconds": 12.886
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "no_publishable_sources",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 0,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Sports category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -545,8 +618,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 9,
-      "elapsed_seconds": 14.11
+      "new_publication_stale_rejected_count": 11,
+      "elapsed_seconds": 9.364
     },
     {
       "category_key": "things_to_do",
@@ -563,11 +636,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.835,
+          "elapsed_seconds": 12.01,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.835,
+      "model_elapsed_seconds": 12.01,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -740,7 +813,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 31.011
+      "elapsed_seconds": 23.145
     },
     {
       "category_key": "florida",
@@ -778,21 +851,28 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.937
+      "elapsed_seconds": 13.09
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 30,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
-      "cache_hit": true,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 22.143,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 22.143,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -803,10 +883,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -830,6 +910,16 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - cw34.com",
+          "source_url": "https://cw34.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
+          "editorial_story_id": "story_027486",
+          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
+          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
           "editorial_story_id": "story_027485",
@@ -837,33 +927,13 @@
           "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "editorial_story_id": "story_027486",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "editorial_story_id": "story_027669",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
@@ -913,6 +983,33 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - cw34.com",
+          "source_url": "https://cw34.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
+          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
+          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "September Palm City standoff involving Darrel Abbey",
+            "Newly released 911 account alleging Abbey chased a woman with guns and fired them",
+            "Newly released Martin County Sheriff's Office video showing deputies and a tactical vehicle at the property",
+            "Both articles published November 13, 2026"
+          ],
+          "novel_facts": [],
+          "reason": "The candidate already covers the same newly released 911 account and video concerning Abbey's September standoff. The incoming article adds supporting call details and prior arrest-report background, not a new arrest, finding, or other material development. The candidate's unrelated event-key metadata does not outweigh the explicit matching incident details.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
           "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
@@ -940,55 +1037,35 @@
           ],
           "reason": "Both articles cover the same Stuart Air Show at Witham Field. The incoming report adds performer interviews, lineup details and educational activities, but no consequential development or independently newsworthy follow-up. These are additional event-preview details rather than a material update.",
           "validation_errors": []
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "911 caller said Palm City man was chasing her with guns, newly released video shows - WPEC",
-          "source_url": "https://cbs12.com/news/local/911-caller-said-palm-city-man-was-chasing-her-with-guns-newly-released-video-shows-swat-standoff-september-ex-girlfriend-guns-state-of-mind",
-          "canonical_slug": "2026-11-13-newly-released-911-account-details-gun-allegations-in-september-palm-city-stando",
-          "canonical_headline": "Newly released 911 account details gun allegations in September Palm City standoff",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida's Turnpike northbound closed in Palm City after tractor-trailer, pickup truck crash - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/floridas-turnpike-northbound-closed-in-palm-city-after-tractor-trailer-pickup-truck-crash",
-          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
-          "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Martin County postpones 25-firefighter hiring class despite 17 vacancies",
-      "elapsed_seconds": 20.962
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Teen airlifted after e-bike and vehicle crash on U.S. Highway 1 in Jensen Beach",
+      "generated_card_count": 1,
+      "elapsed_seconds": 36.615
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 16,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.547,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.547,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -999,7 +1076,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 14,
@@ -1026,12 +1103,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Driver clocked at 101 mph killed after fleeing troopers, crashing on I-95 in Fort Pierce - cw34.com",
-          "source_url": "https://cw34.com/news/local/driver-clocked-at-101-mph-dies-after-fleeing-fhp-crashing-on-i-95-in-fort-pierce",
+          "source_headline": "Driver clocked at 101 mph killed after fleeing troopers, crashing on I-95 in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/driver-clocked-at-101-mph-dies-after-fleeing-fhp-crashing-on-i-95-in-fort-pierce",
           "editorial_story_id": "story_027686",
           "canonical_slug": "2026-11-14-driver-killed-in-fort-pierce-i-95-crash-after-fleeing-trooper-southbound-lanes-r",
           "canonical_headline": "Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen",
-          "basis": "same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1062,6 +1139,16 @@
           "canonical_slug": "2026-11-13-woman-75-killed-by-pickup-while-crossing-seaway-drive-in-fort-pierce",
           "canonical_headline": "Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - cw34.com",
+          "source_url": "https://cw34.com/news/local/fort-pierce-man-sentenced-to-life-in-prison-in-2020-stabbing-death-of-calvin-bates-collin-ohara-knife-in-neck-witnesses?teaserSource=trending",
+          "editorial_story_id": "story_027487",
+          "canonical_slug": "2026-11-13-collin-ohara-sentenced-to-life-for-2020-killing-of-calvin-bates-in-fort-pierce",
+          "canonical_headline": "Collin O’Hara sentenced to life for 2020 killing of Calvin Bates in Fort Pierce",
+          "basis": "same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1133,23 +1220,13 @@
           "canonical_headline": "Western St. Lucie County flooding prompts emergency meeting, push for faster study",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Brightline train strikes, kills pedestrian in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-brightline-train-strikes-kills-st-lucie-person/74369452",
-          "editorial_story_id": "story_026452",
-          "canonical_slug": "2026-11-08-brightline-train-strikes-kills-pedestrian-north-of-walton-road-in-st-lucie-count",
-          "canonical_headline": "Brightline train strikes, kills pedestrian north of Walton Road in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 7,
+      "material_update_promotion_evaluation_count": 8,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 5,
+      "material_update_promotion_cache_hit_count": 6,
       "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
@@ -1211,12 +1288,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Driver clocked at 101 mph killed after fleeing troopers, crashing on I-95 in Fort Pierce - cw34.com",
-          "source_url": "https://cw34.com/news/local/driver-clocked-at-101-mph-dies-after-fleeing-fhp-crashing-on-i-95-in-fort-pierce",
+          "source_headline": "Driver clocked at 101 mph killed after fleeing troopers, crashing on I-95 in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/local/driver-clocked-at-101-mph-dies-after-fleeing-fhp-crashing-on-i-95-in-fort-pierce",
           "canonical_slug": "2026-11-14-driver-killed-in-fort-pierce-i-95-crash-after-fleeing-trooper-southbound-lanes-r",
           "canonical_headline": "Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1297,6 +1374,32 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Fort Pierce man sentenced to life in prison in 2020 stabbing death of Calvin Bates - cw34.com",
+          "source_url": "https://cw34.com/news/local/fort-pierce-man-sentenced-to-life-in-prison-in-2020-stabbing-death-of-calvin-bates-collin-ohara-knife-in-neck-witnesses?teaserSource=trending",
+          "canonical_slug": "2026-11-13-collin-ohara-sentenced-to-life-for-2020-killing-of-calvin-bates-in-fort-pierce",
+          "canonical_headline": "Collin O’Hara sentenced to life for 2020 killing of Calvin Bates in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Collin O’Hara sentenced to life for the 2020 killing of Calvin Bates in Fort Pierce",
+            "Judge denied the defense’s request for a reduced sentence",
+            "O’Hara receives credit for 3,341 days already served"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the sentencing already covered by the canonical, including the denied sentence reduction and identical time-served credit. Its account of the stabbing and arrest supplies background, not a new development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "18-year-old dies after being struck by car in St. Lucie County; family raises concerns - cw34.com",
           "source_url": "https://cw34.com/news/local/18-year-old-dies-after-being-struck-by-car-in-st-lucie-county-family-raises-concerns?teaserSource=trending",
           "canonical_slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
@@ -1314,9 +1417,9 @@
           "confidence": 0.99,
           "shared_anchors": [],
           "novel_facts": [
-            "Omari Linzell Williams, 18, was fatally struck by a Chevrolet sedan while walking on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
-            "The sedan's 30-year-old driver was from Vero Beach and cooperated with investigators.",
-            "Williams' family raised pedestrian-safety concerns, and FHP's traffic homicide investigation remains ongoing."
+            "Omari Linzell Williams, 18, was fatally struck by a westbound Chevrolet sedan on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
+            "The driver was a 30-year-old Vero Beach resident who was uninjured and cooperated with investigators.",
+            "Williams' family is seeking information and raising pedestrian-safety concerns."
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1441,41 +1544,47 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Brightline train strikes, kills pedestrian in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-brightline-train-strikes-kills-st-lucie-person/74369452",
-          "canonical_slug": "2026-11-08-brightline-train-strikes-kills-pedestrian-north-of-walton-road-in-st-lucie-count",
-          "canonical_headline": "Brightline train strikes, kills pedestrian north of Walton Road in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 27.888
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Crash blocks southbound lane on Florida's Turnpike in St. Lucie County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 32.706
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 25,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 3,
-      "selected_source_count": 0,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.791,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 14.022,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com"
+        }
+      ],
+      "model_elapsed_seconds": 20.814,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1487,44 +1596,149 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Law enforcement investigation shuts down I-95 in Indian River County - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/13/law-enforcement-investigation-shuts-down-i-95-indian-river-county?outputType=amp",
-          "editorial_story_id": "story_027432",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "basis": "same_event_and_persistent_story_skip",
+          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - WPEC",
+          "source_url": "https://cbs12.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach",
+          "editorial_story_id": "story_027706",
+          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
+          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida’s Turnpike shut down in Martin County after tractor-trailer and pickup crash near Palm City - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-turnpike-crash-martin-county/74424664",
+          "editorial_story_id": "story_027669",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Woman, 75, struck and killed while crossing road in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-woman-75-killed-crossing-street-fort-pierce/74425422",
+          "editorial_story_id": "story_027499",
+          "canonical_slug": "2026-11-13-woman-75-killed-by-pickup-while-crossing-seaway-drive-in-fort-pierce",
+          "canonical_headline": "Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - cw34.com",
+          "source_url": "https://cw34.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
+          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_027706",
+            "source:https://cw34.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+            "shared_event_families=['animal-case']",
+            "shared_named_people=['the owner of']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['indian-river-county-sheriff']",
+            "shared_subject_phrases=['250-pound-boar', '250-pound-boar-hog', 'boar-hog-found', 'little-piggy-went', 'little-piggy-went-rogue', 'not-little-piggy', 'not-little-piggy-went', 'piggy-went-rogue', 'piggy-went-rogue-250', 'pound-boar-hog', 'pound-boar-hog-found', 'rogue-250-pound', 'rogue-250-pound-boar', 'went-rogue-250', 'went-rogue-250-pound']",
+            "shared_headline_topic_core=['250', 'boar', 'found', 'hog', 'little', 'not', 'piggy', 'pound', 'rogue', 'went']",
+            "shared_distinctive_token_count=78",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Law enforcement investigation shuts down I-95 in Indian River County - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/13/law-enforcement-investigation-shuts-down-i-95-indian-river-county?outputType=amp",
-          "canonical_slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "canonical_headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
+          "source_headline": "This not-so-little piggy went rogue! 250-pound boar hog found in Vero Beach - WPEC",
+          "source_url": "https://cbs12.com/news/local/this-not-so-little-piggy-went-rogue-250-pound-boar-hog-found-in-vero-beach",
+          "canonical_slug": "2026-11-14-indian-river-county-deputies-seek-owner-of-domestic-boar-found-on-69th-street",
+          "canonical_headline": "Indian River County deputies seek owner of domestic boar found on 69th Street",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida’s Turnpike shut down in Martin County after tractor-trailer and pickup crash near Palm City - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-turnpike-crash-martin-county/74424664",
+          "canonical_slug": "2026-11-13-floridas-turnpike-northbound-closed-in-palm-city-after-truck-crash",
+          "canonical_headline": "Florida's Turnpike northbound lanes reopen after truck crash near Palm City",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Woman, 75, struck and killed while crossing road in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-woman-75-killed-crossing-street-fort-pierce/74425422",
+          "canonical_slug": "2026-11-13-woman-75-killed-by-pickup-while-crossing-seaway-drive-in-fort-pierce",
+          "canonical_headline": "Woman, 75, killed by pickup while crossing Seaway Drive in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Identical WPBF source URL and persistent story identity",
+            "75-year-old woman fatally struck by a pickup while crossing Seaway Drive in Fort Pierce with her husband",
+            "Fort Pierce police reported the death Friday and said the crash remained under investigation"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the same fatal crash covered by the canonical article. Additional vehicle and scene details do not establish a material development or an independently newsworthy follow-up.",
+          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.955
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 29.737
     }
   ]
 }
