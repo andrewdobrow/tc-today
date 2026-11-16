@@ -114,3 +114,32 @@ def test_fort_pierce_burglary_live_article_and_social_surfaces_use_approved_imag
     entries = re.findall(r"<item>.*?</item>", feed, re.DOTALL)
     assert all(BURGLARY_IMAGE in item for item in entries if BURGLARY_SLUG in item)
 
+
+
+FAMILY_SLUG = "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom"
+FAMILY_IMAGE = "https://images.treasurecoast.today/articles/f9/f93c5c9afd15b72f0dc2cac4c3154fbd9f32ef756ac9e507591079dfa0a3ee46.png"
+MEETING_IMAGE = "https://images.treasurecoast.today/articles/1f/1fd977487ba88060baa1b414d6dccd9b0c7fa0471ad8ba49e8036fe830b1c6de.jpg"
+
+
+def test_jensen_beach_family_photo_override_rejects_public_meeting_image():
+    payload = json.loads((ROOT / "data" / "article-image-overrides.json").read_text(encoding="utf-8"))
+    assert payload["overrides"][FAMILY_SLUG]["image_url"] == FAMILY_IMAGE
+    generate = _load_generate()
+    story = {
+        "slug": FAMILY_SLUG,
+        "image_url": MEETING_IMAGE,
+        "source_image_url": MEETING_IMAGE,
+        "rss_social_image_url": MEETING_IMAGE,
+    }
+    assert generate._apply_article_image_override(story) is True
+    assert story["image_url"] == FAMILY_IMAGE
+    assert story["source_image_url"] == FAMILY_IMAGE
+    assert story["rss_social_image_url"] == FAMILY_IMAGE
+    assert story["social_image_is_source"] is True
+
+
+def test_original_jensen_beach_family_page_uses_approved_hero_and_social_image():
+    page = (ROOT / "articles" / (FAMILY_SLUG + ".html")).read_text(encoding="utf-8")
+    assert f'<meta property="og:image" content="{FAMILY_IMAGE}">' in page
+    assert f'<meta name="twitter:image" content="{FAMILY_IMAGE}">' in page
+    assert f'<figure class="article-hero-image"><img src="{FAMILY_IMAGE}"' in page
