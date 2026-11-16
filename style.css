@@ -7445,3 +7445,113 @@ body.tct-member-authenticated .membership-header-welcome { display: inline-flex;
     text-wrap: normal !important;
   }
 }
+
+
+/* ==========================================================
+   Mobile masthead — screen zoom and enlarged-text containment
+   Keep the donation action usable without displacing the TCT logo
+   inside narrow Android / Messenger in-app viewports.
+   ========================================================== */
+@media (max-width: 460px) {
+  header.site-masthead .masthead-top-row {
+    grid-template-columns: max-content minmax(0, 1fr) max-content !important;
+    column-gap: 6px !important;
+  }
+  .site-masthead .masthead-promo-slot {
+    min-width: 0;
+    gap: 4px !important;
+  }
+  .site-masthead .header-top {
+    min-width: 0 !important;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .site-masthead .wordmark {
+    max-width: 100%;
+    justify-content: center;
+  }
+  .site-masthead .header-actions {
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+  .site-masthead .tct-donate-header {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    gap: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .site-masthead .tct-donate-header .tct-donate-heart {
+    flex: 0 0 13px;
+    width: 13px;
+    height: 13px;
+  }
+}
+
+/* At phone zoom widths, use a shorter label rather than squeeze the logo. */
+@media (max-width: 440px) {
+  .site-masthead .tct-donate-header.membership-subscribe-btn {
+    width: 74px !important;
+    min-width: 74px !important;
+    max-width: 74px !important;
+    min-height: 40px !important;
+    padding: 6px 5px !important;
+  }
+  .site-masthead .tct-donate-header .membership-subscribe-label {
+    display: none !important;
+  }
+  .site-masthead .tct-donate-header::after {
+    content: "Support";
+    font: 700 10px/1.1 "DM Sans", sans-serif;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .site-masthead .wordmark-tct {
+    font-size: clamp(27px, 8.5vw, 33px) !important;
+  }
+  .site-masthead .wordmark-divider {
+    height: 26px !important;
+  }
+  .site-masthead .wordmark-full {
+    font-size: 5.5px !important;
+  }
+  .site-masthead .wordmark {
+    gap: 5px !important;
+  }
+}
+
+/* Extreme Display/Screen Zoom: heart-only CTA remains a 44px tap target. */
+@media (max-width: 315px) {
+  .site-masthead .tct-donate-header.membership-subscribe-btn {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    min-height: 44px !important;
+    padding: 5px !important;
+  }
+  .site-masthead .tct-donate-header::after {
+    content: none;
+  }
+  .site-masthead .masthead-promo-slot {
+    gap: 3px !important;
+  }
+  .site-masthead .mobile-nav-toggle-button {
+    width: 36px;
+    height: 40px;
+  }
+  .site-masthead .tct-search-toggle--mobile {
+    width: 36px;
+    height: 40px;
+    flex-basis: 36px;
+  }
+}
+
+/* An exceptionally narrow CSS viewport still gets the recognizable TCT mark. */
+@media (max-width: 265px) {
+  .site-masthead .wordmark-divider,
+  .site-masthead .wordmark-full {
+    display: none !important;
+  }
+}
