@@ -113,3 +113,33 @@ def test_material_update_composition_rejects_school_permalink_overwrite():
     )
     assert outcome["status"] == "invalid_composition"
     assert "distinct_weather_impact_not_same_canonical_event" in outcome["validation_errors"]
+
+
+def test_family_displacement_profile_is_not_taken_over_by_flood_town_meeting():
+    original = {
+        "slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
+        "headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
+    }
+    meeting = {"headline": "Town meeting planned on Jensen Beach flood recovery after families displaced"}
+    assert _is_cross_impact_weather_takeover(meeting, original)
+    vote = {
+        "selected_candidate_slug": original["slug"],
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.97,
+        "recommended_action": ACTION_UPDATE,
+        "novel_facts": ["County and federal officials plan a public meeting"],
+        "shared_anchors": ["Same Jensen Beach flooding"],
+    }
+    outcome = validate_model_decision(
+        vote, [{"slug": original["slug"], "article": original}], incoming=meeting
+    )
+    assert outcome["action"] == ACTION_NEW
+    assert outcome["selected_candidate_slug"] == ""
+
+
+def test_actual_family_housing_followup_remains_eligible_for_update():
+    original = {"headline": "Jensen Beach family seeks housing and repair funding after flooding"}
+    update = {"headline": "Jensen Beach family secures temporary housing after flooding"}
+    assert not _is_cross_impact_weather_takeover(update, original)

@@ -811,6 +811,27 @@ def _is_cross_impact_weather_takeover(
     right = str(candidate.get("headline") or candidate.get("title") or "")
     if not (_WEATHER_EVENT_TERMS.search(left) or _WEATHER_EVENT_TERMS.search(right)):
         return False
+    # A displaced family's housing appeal is not the same news event as a
+    # public recovery meeting. Similar flood, housing and aid terms are
+    # insufficient grounds to repurpose a personal story into a service alert.
+    def is_family_profile(title: str) -> bool:
+        return bool(
+            re.search(r"\b(?:family|household|couple)\b", title, re.I)
+            and re.search(r"\b(?:seeks?|pleads?|struggl(?:e|es|ing)|housing|rebuild|repair)\b", title, re.I)
+        )
+
+    def is_public_meeting(title: str) -> bool:
+        return bool(re.search(
+            r"\b(?:town\s+(?:hall|meeting)|public\s+meeting|community\s+meeting|"
+            r"recovery\s+meeting|meeting\s+planned)\b", title, re.I
+        ))
+
+    if (
+        is_public_meeting(left) and is_family_profile(right) and not is_public_meeting(right)
+    ) or (
+        is_public_meeting(right) and is_family_profile(left) and not is_public_meeting(left)
+    ):
+        return True
     left_impacts = _weather_impact_families(left)
     right_impacts = _weather_impact_families(right)
     return bool(left_impacts and right_impacts and left_impacts.isdisjoint(right_impacts))
@@ -946,7 +967,7 @@ def _prompt(
 
 Compare the fully written INCOMING article with the RECENT CANONICAL CANDIDATES. Decide whether the incoming article covers the exact same real-world incident, case, meeting, game, government action, business event, or continuing proceeding as one candidate.
 
-Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
+Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A family's displacement and housing appeal and a later public flood-recovery town meeting are separate news events even when the same residents or storm are mentioned. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
 
 Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, witness color, cleanup detail, anniversary/color framing, or background explanation is NOT by itself a reason for a new URL.
 
