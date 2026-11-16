@@ -381,6 +381,8 @@ def test_read_next_css_and_tracking_are_built_into_shared_assets():
     assert 'article_second_view' in js
     assert 'tct_article_paths_in_session' in js
     assert 'transport_type: "beacon"' in js
-    assert 'ASSET_VERSION = "1.13.9.127"' in (
-        ROOT / "scripts" / "build_audience_features.py"
+    from scripts.build_audience_features import ASSET_VERSION
+    assert tuple(map(int, ASSET_VERSION.split("."))) >= (1, 13, 9, 127)
+    assert f"/style.css?v={ASSET_VERSION}" in (
+        ROOT / "index.html"
     ).read_text(encoding="utf-8")

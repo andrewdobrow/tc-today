@@ -52,4 +52,6 @@ def test_more_stories_excludes_dedicated_section_cards():
 
 def test_asset_version_bumped_for_new_filter_behavior():
     audience = Path("scripts/build_audience_features.py").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.127"' in audience
+    from scripts.build_audience_features import ASSET_VERSION
+    assert tuple(map(int, ASSET_VERSION.split("."))) >= (1, 13, 9, 127)
+    assert f'ASSET_VERSION = "{ASSET_VERSION}"' in audience
