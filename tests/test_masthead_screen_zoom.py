@@ -10,8 +10,9 @@ def test_mobile_zoom_masthead_has_shrinkable_center_and_compact_support_fallback
     assert "grid-template-columns: max-content minmax(0, 1fr) max-content !important;" in section
     assert ".site-masthead .header-top" in section
     assert "overflow: hidden;" in section
-    assert "@media (max-width: 440px)" in section
-    assert 'content: "Support";' in section
+    assert "@media (max-width: 370px)" in section
+    assert "@media (max-width: 440px)" not in section
+    assert 'content: "SUPPORT";' in section
     assert ".site-masthead .tct-donate-header .membership-subscribe-label" in section
     assert "display: none !important;" in section
     assert "@media (max-width: 315px)" in section
@@ -30,7 +31,7 @@ def test_podcast_header_retains_accessible_full_support_label_and_correct_link()
 
 def test_page_and_shared_asset_versions_refresh_zoom_styles():
     builder = (ROOT / "scripts/build_audience_features.py").read_text(encoding="utf-8")
-    assert 'ASSET_VERSION = "1.13.9.128"' in builder
+    assert 'ASSET_VERSION = "1.13.9.129"' in builder
     for path in ("index.html", "events.html", "news-tip.html", "podcast/index.html"):
         html = (ROOT / path).read_text(encoding="utf-8")
-        assert '/style.css?v=1.13.9.128' in html
+        assert '/style.css?v=1.13.9.129' in html
