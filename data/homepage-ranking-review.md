@@ -4,23 +4,27 @@
 
 ## Hero
 
-- Current: **Jensen Beach flood recovery meeting planned as residents continue cleanup**
-- Recommended: **Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County**
-- Recommendation: CHANGE (not enforced)
+- Current: **St. Lucie Public Schools to dismiss two hours early Tuesday ahead of potential severe weather**
+- Recommended: **St. Lucie Public Schools to dismiss two hours early Tuesday ahead of potential severe weather**
+- Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | 61 | importance 0; freshness 99.95; urgency 8/10 |
-| 2 | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | 44 | importance 0; freshness 64.27; urgency 4/10 |
-| 3 | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | 43 | importance 0; freshness 96.1; urgency 2/10 |
-| 4 | Indian River County deputies seek owner of domestic boar found on 69th Street | Indian River County deputies seek owner of domestic boar found on 69th Street | 30 | importance 0; freshness 28.27; urgency 2/10 |
-| 5 | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen | 30 | importance 0; freshness 24.91; urgency 2/10 |
+| 1 | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | 57 | importance 0; freshness 99.97; urgency 6/10 |
+| 2 | Jensen Beach flood recovery meeting planned as residents continue cleanup | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | 51 | importance 0; freshness 95.03; urgency 4/10 |
+| 3 | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | Jensen Beach flood recovery meeting planned as residents continue cleanup | 47 | importance 0; freshness 73.34; urgency 6/10 |
+| 4 | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | 42 | importance 0; freshness 91.18; urgency 2/10 |
+| 5 | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | 42 | importance 0; freshness 59.35; urgency 4/10 |
+| 6 | Indian River County deputies seek owner of domestic boar found on 69th Street | Indian River County deputies seek owner of domestic boar found on 69th Street | 29 | importance 0; freshness 23.34; urgency 2/10 |
 
 ## Recommended moves
 
-No top-deck moves recommended.
+- **Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County**: 3 → 2 — importance 0; freshness 95.03; urgency 4/10
+- **Jensen Beach flood recovery meeting planned as residents continue cleanup**: 2 → 3 — importance 0; freshness 73.34; urgency 6/10
+- **Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway**: 5 → 4 — importance 0; freshness 91.18; urgency 2/10
+- **Crash blocks southbound lane on Florida's Turnpike in St. Lucie County**: 4 → 5 — importance 0; freshness 59.35; urgency 4/10
 
 ## Guardrails
 
