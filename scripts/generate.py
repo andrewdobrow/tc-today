@@ -40,6 +40,10 @@ from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write
 from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
 from tct_engine.critical_source_facts import named_suspect_facts, missing_named_suspects, facts_instruction, as_named_suspect_facts, reconcile_same_article_extraction
 from tct_engine.article_image_mirror import get_article_image_mirror, finalize_article_image_mirror
+from tct_engine.local_sports_editorial import (
+    SPORTS_EDITORIAL_VERSION, SPORTS_ASSIGNMENT_RULE, SPORTS_WRITER_RULE,
+    SPORTS_PER_RUN_MAX, sports_weekly_budget, filter_sports_sources,
+)
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -656,6 +660,16 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=st+lucie+mets+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=vero+beach+indian+river+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
+            # A broader, all-sports local discovery beat. These are Google News
+            # searches, not automatic box-score/fixture scraping. Each publisher
+            # article must still pass the full editorial-source gates.
+            "https://news.google.com/rss/search?q=%22Indian+River+State+College%22+athletics+when:4d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=%22Jensen+Beach%22+OR+%22South+Fork%22+OR+%22Martin+County%22+high+school+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=%22Treasure+Coast+High%22+OR+%22Fort+Pierce+Central%22+OR+%22Westwood%22+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=%22Vero+Beach%22+OR+%22Sebastian+River%22+high+school+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=Treasure+Coast+Florida+volleyball+swimming+wrestling+soccer+track+golf+softball+when:4d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=Treasure+Coast+Florida+athlete+championship+regional+state+junior+when:5d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=FHSAA+%22Treasure+Coast%22+when:5d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "things_to_do": {
@@ -718,6 +732,9 @@ CATEGORIES = {
 }
 HEADLINES_PER_CATEGORY = 12
 CARDS_PER_CATEGORY     = 6
+# Editorial ceilings, never a publishing quota. Reset from the canonical
+# Sports archive before every run; unit tests can call generation in isolation.
+SPORTS_WEEKLY_AVAILABLE = SPORTS_PER_RUN_MAX
 
 COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
 
@@ -1534,6 +1551,12 @@ def _category_generation_cache_key(category_key, headlines):
         ),
         "county_membership_authority_version": (
             COUNTY_MEMBERSHIP_AUTHORITY_VERSION if category_key in COUNTY_KEYS else ""
+        ),
+        "sports_editorial_contract_version": (
+            SPORTS_EDITORIAL_VERSION if category_key == "sports" else ""
+        ),
+        "sports_weekly_available": (
+            SPORTS_WEEKLY_AVAILABLE if category_key == "sports" else None
         ),
         "sources": sources,
     })
@@ -9120,6 +9143,11 @@ Return ONLY valid JSON:
                 baseline_response=response,
             )
 
+    if category_key == "sports":
+        # Apply the same two-per-run ceiling to the legacy mixed-editor rollback
+        # and to live separated writer results. Never generate a quota's worth
+        # of extra sports article placements just to fill cards.
+        data["cards"] = list(data.get("cards") or [])[:max(0, SPORTS_WEEKLY_AVAILABLE - 1)]
     data["category_key"]   = category_key
     data["category_label"] = category_label
 
@@ -12161,6 +12189,8 @@ def _assignment_editor_category_rule(category_key):
     }
     if category_key in county_rules:
         return county_rules[category_key]
+    if category_key == "sports":
+        return SPORTS_ASSIGNMENT_RULE
     return (
         "Use ordinary newsroom editorial judgment for this topic section. "
         "Judge the story's central subject rather than incidental words or upstream routing labels."
@@ -12210,6 +12240,8 @@ def _run_assignment_editor(packet, *, model=None, timeout_seconds=None):
         raise ValueError("No source inputs were queued for assignment editor")
     max_cards = min(CARDS_PER_CATEGORY, max(0, len(sources) - 1))
     category_key = str(packet.get("category_key") or "")
+    if category_key == "sports":
+        max_cards = min(max_cards, max(0, SPORTS_WEEKLY_AVAILABLE - 1))
     category_label = str(packet.get("category_label") or category_key)
     require_category_fit = _assignment_editor_requires_category_fit(category_key)
     listing = _assignment_editor_source_listing(packet)
@@ -12276,9 +12308,20 @@ A source can be local, important, and publishable while still being wrong for th
   ]
 }"""
 
+    _sports_note = (
+        "For Sports ONLY: no minimum publication quota. Select no hero and no cards "
+        "(hero:null, cards:[]) if there is no genuinely newsworthy, verified local "
+        "sports story. A generic score listing, a bare final score, or every routine "
+        "game on a schedule is not a story assignment. A well-reported local game "
+        "recap can qualify when it has meaningful stakes and at least two distinct "
+        "source-supported details beyond the final score. Do not restrict coverage "
+        "to any two sports; choose the strongest local results across seasons."
+        if category_key == "sports" else ""
+    )
     prompt = f"""You are the assignment editor for Treasure Coast Today, a hyperlocal newsroom serving Martin, St. Lucie, and Indian River counties.
 
 SECTION: {category_label}
+{_sports_note}
 SECTION CONTRACT: {_assignment_editor_category_rule(category_key)}
 
 Your job is ONLY editorial assignment. Do not write an article, teaser, headline, or prose for publication.
@@ -12339,6 +12382,9 @@ Return ONLY valid JSON in exactly this shape:
             f"{diagnostics.get('category_fit_selected_rejections')}"
         )
     if not diagnostics.get("valid_hero"):
+        if category_key == "sports" and parsed.get("hero") is None and not parsed.get("cards"):
+            # Intentional editorial pass is not an error or permission to fabricate.
+            return {"hero": None, "cards": []}, diagnostics, str(getattr(response, "model", None) or editor_model), duration
         raise ValueError("Assignment editor returned no valid hero source")
     if not diagnostics.get("source_mapping_valid"):
         raise ValueError(
@@ -12647,6 +12693,8 @@ def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
             "cannot support that length, write shorter rather than padding, repeating, or "
             "inventing material."
         )
+    if category_key == "sports":
+        full_article_rule = SPORTS_WRITER_RULE
     if role == "hero":
         output_contract = (
             'Return ONLY one JSON object: {"headline":"...","body":"full standalone article",'
@@ -42404,6 +42452,7 @@ def _repair_tow_yard_permalink_regression(output_root=None):
     return {"status": "repaired", "repaired": 1, **report}
 
 def main():
+    global SPORTS_WEEKLY_AVAILABLE
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
     global CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS
@@ -42491,6 +42540,13 @@ def main():
     # Current published identities are needed before model generation so a registry
     # ``skip`` decision can suppress an already-published story at the source boundary.
     _pre_generation_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _sports_budget = sports_weekly_budget(_pre_generation_archive)
+    SPORTS_WEEKLY_AVAILABLE = _sports_budget["available_this_run"]
+    print(
+        f"  Curated Sports: {_sports_budget['published']} published this ET week; "
+        f"up to {SPORTS_WEEKLY_AVAILABLE} new, editorially selected story/stories "
+        f"this run (weekly ceiling {_sports_budget['weekly_max']}, never a quota)"
+    )
     _pre_generation_publication_ledger = _build_canonical_publication_ledger(
         _pre_generation_archive
     )
@@ -42587,6 +42643,17 @@ def main():
         }
         category_generation_records.append(_category_record)
         print(f"Processing: {cat_config['label']}...")
+        if cat_key == "sports":
+            _category_record["sports_weekly_budget"] = dict(_sports_budget)
+            if SPORTS_WEEKLY_AVAILABLE <= 0:
+                print("  Curated Sports: six-story weekly ceiling reached; archive recovery only")
+                _finalize_category_generation_record(
+                    _category_record,
+                    "sports_weekly_ceiling_archive_recovery",
+                    _category_started,
+                    archive_recovery_requested=True,
+                )
+                continue
         # Pull a wider candidate pool because broad WPTV feeds can contain several
         # sections' worth of local stories. Then rank/filter down to this category.
         headlines = fetch_headlines(cat_config["feeds"], limit=24, feed_cache=feed_cache)
@@ -42767,6 +42834,14 @@ def main():
 
         _pre_contract_headlines = list(headlines)
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
+        headlines, _sports_source_rejections = filter_sports_sources(cat_key, headlines)
+        if cat_key == "sports":
+            _category_record["sports_editorial_source_rejections"] = _sports_source_rejections
+            if _sports_source_rejections:
+                print(
+                    f"  Curated Sports source gate: declined {len(_sports_source_rejections)} "
+                    "scoreboard/fixture-only source(s) before editorial selection"
+                )
         _contract_rows = [
             h.get("_category_eligibility_contract")
             for h in _pre_contract_headlines
