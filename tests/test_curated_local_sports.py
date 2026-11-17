@@ -21,9 +21,7 @@ def test_sports_has_broad_competitive_scope_and_no_mandatory_quota():
     assert SPORTS_WEEKLY_TARGET_LOW == 4
     assert SPORTS_WEEKLY_MAX == 6
     assert SPORTS_PER_RUN_MAX == 2
-    for sport in ("basketball", "golf"):
-        # Neither of these sports is an exclusive requirement.
-        assert sport not in SPORTS_ASSIGNMENT_RULE.lower()
+    assert "not just basketball or golf" in SPORTS_ASSIGNMENT_RULE
     assert "ALL genuinely local competitive sports" in SPORTS_ASSIGNMENT_RULE
     assert "Publishing fewer stories" in SPORTS_ASSIGNMENT_RULE
     assert "final score alone" in SPORTS_WRITER_RULE
