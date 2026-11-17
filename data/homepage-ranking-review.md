@@ -4,29 +4,32 @@
 
 ## Hero
 
-- Current: **Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities**
-- Recommended: **Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities**
+- Current: **Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast**
+- Recommended: **Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Jensen Beach flood recovery meeting planned as residents continue cleanup | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | 49 | importance 0; freshness 88.18; urgency 4/10 |
-| 2 | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | 48 | importance 0; freshness 83.24; urgency 4/10 |
-| 3 | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina | 46 | importance 0; freshness 91.52; urgency 2/10 |
-| 4 | Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina | Indian River County schools modify Tuesday schedule ahead of heavy rain threat | 46 | importance 0; freshness 91.52; urgency 2/10 |
-| 5 | Indian River County schools modify Tuesday schedule ahead of heavy rain threat | Jensen Beach flood recovery meeting planned as residents continue cleanup | 44 | importance 0; freshness 61.55; urgency 6/10 |
-| 6 | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | 40 | importance 0; freshness 47.55; urgency 4/10 |
-| 7 | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | 39 | importance 0; freshness 79.39; urgency 2/10 |
+| 1 | Family Night set for Nov. 17 at Jensen Beach’s Festival of Giving | Family Night set for Nov. 17 at Jensen Beach’s Festival of Giving | 61 | importance 0; freshness 99.96; urgency 8/10 |
+| 2 | Martin County sheriff warns of e-bike seizures, possible charges against parents | Martin County sheriff warns of e-bike seizures, possible charges against parents | 61 | importance 0; freshness 99.96; urgency 8/10 |
+| 3 | Indian River County schools modify Tuesday schedule ahead of heavy rain threat | Indian River County schools modify Tuesday schedule ahead of heavy rain threat | 58 | importance 0; freshness 76.54; urgency 9/10 |
+| 4 | Jensen Beach flood recovery meeting planned as residents continue cleanup | Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities | 50 | importance 0; freshness 84.96; urgency 2/10; validated material update |
+| 5 | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie | 46 | importance 0; freshness 73.2; urgency 4/10 |
+| 6 | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County | 44 | importance 0; freshness 68.26; urgency 4/10; -4 county saturation |
+| 7 | Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | 36 | importance 0; freshness 64.42; urgency 2/10 |
+| 8 | Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | 36 | importance 0; freshness 32.58; urgency 4/10 |
+| 9 | Crash blocks southbound lane on Florida's Turnpike in St. Lucie County | Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina | 42 | importance 0; freshness 76.55; urgency 2/10; -12 county saturation |
+| 10 | Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway | Jensen Beach flood recovery meeting planned as residents continue cleanup | 40 | importance 0; freshness 46.58; urgency 6/10; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Jensen Beach flood recovery meeting planned as residents continue cleanup**: 1 → 5 — importance 0; freshness 61.55; urgency 6/10
-- **Delays expected after crash at SW Gatlin Boulevard and SW Feather Terrace in Port St. Lucie**: 2 → 1 — importance 0; freshness 88.18; urgency 4/10
-- **Crash blocked two southbound I-95 lanes near Hobe Sound in Martin County**: 3 → 2 — importance 0; freshness 83.24; urgency 4/10
-- **Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina**: 4 → 3 — importance 0; freshness 91.52; urgency 2/10
-- **Indian River County schools modify Tuesday schedule ahead of heavy rain threat**: 5 → 4 — importance 0; freshness 91.52; urgency 2/10
+- **Jensen Beach flood recovery meeting planned as residents continue cleanup**: 4 → 10 — importance 0; freshness 46.58; urgency 6/10; -6 category saturation; -12 county saturation
+- **Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities**: 7 → 4 — importance 0; freshness 84.96; urgency 2/10; validated material update
+- **Sebastian River Middle School town hall to weigh Wabasso School move, arts pathway**: 10 → 7 — importance 0; freshness 64.42; urgency 2/10
+- **Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina**: 8 → 9 — importance 0; freshness 76.55; urgency 2/10; -12 county saturation
+- **Crash blocks southbound lane on Florida's Turnpike in St. Lucie County**: 9 → 8 — importance 0; freshness 32.58; urgency 4/10
 
 ## Guardrails
 
