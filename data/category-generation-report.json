@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-18T11:47:55Z",
+  "generated_at": "2026-11-18T14:19:42Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,29 +15,30 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 3,
-      "generation_failed_archive_recovery": 1,
+      "category_eligibility_archive_recovery": 5,
+      "generation_failed_archive_recovery": 2,
+      "no_publishable_sources": 1,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
+      "article_framing_integrity": 1,
       "copydesk_integrity": 1,
-      "no_category_eligible_sources": 4,
+      "no_category_eligible_sources": 5,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 171.717,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 185.789,
+    "archive_recovery_requested_count": 9,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 57,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 2,
+    "published_story_duplicate_suppression_count": 65,
     "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 17,
+    "material_update_promotion_evaluation_count": 22,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 14,
-    "material_update_promotion_model_call_count": 3
+    "material_update_promotion_cache_hit_count": 17,
+    "material_update_promotion_model_call_count": 5
   },
   "categories": [
     {
@@ -45,8 +46,8 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -63,8 +64,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -79,45 +80,27 @@
           "local_nexus_signals": [],
           "headline": "St. Lucie County schools closed as families prepare for more heavy rain - WPEC",
           "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-closed-as-families-prepare-for-more-heavy-rain"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
-          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "St. Lucie Public Schools closed Wednesday due to flooding concerns",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-closed-wednesday-due-to-flooding-concerns"
         }
       ],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 14,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "editorial_story_id": "story_028020",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
           "editorial_story_id": "story_028329",
           "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
-          "canonical_headline": "St. Lucie County schools close Wednesday as superintendent pledges flood review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -139,16 +122,6 @@
           "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
           "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
-          "editorial_story_id": "story_028140",
-          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -179,6 +152,36 @@
           "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
           "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
+          "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
+          "editorial_story_id": "story_028168",
+          "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
+          "canonical_headline": "Indian River County remains under partial emergency activation as more rain threatens flooding",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
+          "editorial_story_id": "story_028140",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -220,41 +223,53 @@
           "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County public schools to follow modified schedule Tuesday due to heavy rain threat - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/16/indian-river-county-public-schools-follow-modified-schedule-tuesday-due-heavy-rain-threat?outputType=amp",
-          "editorial_story_id": "story_028020",
-          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
-          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools to dismiss 2 hours early Tuesday ahead of potential severe weather - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-to-dismiss-2-hours-early-tuesday-ahead-of-potential-severe-weather",
-          "editorial_story_id": "story_027982",
-          "canonical_slug": "2026-11-16-st-lucie-public-schools-to-dismiss-two-hours-early-tuesday-ahead-of-potential-se",
-          "canonical_headline": "Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Both report regular Wednesday operations for Indian River County schools.",
+            "Both cite district checks finding no standing water affecting safe routes to bus stops."
+          ],
+          "novel_facts": [
+            "St. Lucie County Public Schools will close Wednesday for students and employees, with after-school activities canceled.",
+            "John Carroll High School in Fort Pierce will close Wednesday and cancel school-sponsored activities.",
+            "Martin County schools and Extended Day will operate Wednesday, but other after-school activities and athletic events are canceled.",
+            "St. Lucie County Boys & Girls Clubs will close Wednesday, while Martin County clubs will reopen."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
         {
           "category_key": "local_gov",
           "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
           "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
-          "canonical_headline": "St. Lucie County schools close Wednesday as superintendent pledges flood review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -312,21 +327,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
-          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
@@ -363,6 +363,63 @@
           "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
+          "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
+          "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
+          "canonical_headline": "Indian River County remains under partial emergency activation as more rain threatens flooding",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Identical WPEC source URL and source headline",
+            "Same publication date, November 17, 2026",
+            "Indian River County Emergency Operations Center remains at Level 2 partial activation amid ongoing flooding and additional heavy rain",
+            "Retrieval evidence confirms an exact-source and persistent-story identity match"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the source story already represented by the canonical, including the same continuing emergency activation and rain threat. Its broader regional preparedness details do not establish a new development or independently newsworthy follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -429,63 +486,26 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County public schools to follow modified schedule Tuesday due to heavy rain threat - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/16/indian-river-county-public-schools-follow-modified-schedule-tuesday-due-heavy-rain-threat?outputType=amp",
-          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
-          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools to dismiss 2 hours early Tuesday ahead of potential severe weather - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-to-dismiss-2-hours-early-tuesday-ahead-of-potential-severe-weather",
-          "canonical_slug": "2026-11-16-st-lucie-public-schools-to-dismiss-two-hours-early-tuesday-ahead-of-potential-se",
-          "canonical_headline": "Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 26.4
+      "elapsed_seconds": 33.785
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 8,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 20.386,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 20.386,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Crime & Safety category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -494,23 +514,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain"
-        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -526,12 +532,22 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-public-schools-closed-wednesday-due-to-flooding-concerns"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
           "source_headline": "Port St. Lucie e-scooter rider critically injured in hit-and-run; 18-year-old arrested - cw34.com",
           "source_url": "https://cw34.com/news/local/port-st-lucie-e-scooter-rider-critically-injured-in-hit-and-run-18-year-old-arrested",
+          "editorial_story_id": "story_027961",
+          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
+          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/18/18-year-old-charged-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter?outputType=amp",
           "editorial_story_id": "story_027961",
           "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
           "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
@@ -570,6 +586,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Teen arrested in hit-and-run crash that critically injured 24-year-old woman in Port St. Lucie - WFLX",
           "source_url": "https://www.wflx.com/2026/11/17/teen-arrested-hit-and-run-crash-that-critically-injured-24-year-old-woman-port-st-lucie?outputType=amp",
           "editorial_story_id": "story_027961",
@@ -591,10 +617,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
@@ -625,6 +651,37 @@
             "A witness recorded the vehicle's license plate; two passengers have not been charged."
           ],
           "reason": "The canonical already reports this specific crash, critical injury and arrest. The incoming adds identification, investigative details and reaction, but establishes no new charge, death, documented deterioration or other consequential development. It does not warrant rewriting the canonical or creating a separate follow-up.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/18/18-year-old-charged-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter?outputType=amp",
+          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
+          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Monday morning crash at Southwest Gatlin Boulevard and Southwest Feather Terrace in Port St. Lucie",
+            "24-year-old woman riding an electric scooter critically injured",
+            "18-year-old driver arrested for leaving the scene",
+            "Port St. Lucie Police Department investigation"
+          ],
+          "novel_facts": [
+            "Incoming names the driver as Tristan Sanchez-Chasmer",
+            "Incoming describes a ding-dong-ditch prank preceding the crash",
+            "Incoming reports a $5,000 bond and pending toxicology results"
+          ],
+          "reason": "The canonical headline and lead already report the arrest and the scooter rider's critical injuries in this exact crash. The incoming adds identifying and investigative details but no new charge, outcome, or other material development beyond that existing coverage, and it presents no independently newsworthy follow-up.",
           "validation_errors": []
         },
         {
@@ -706,6 +763,21 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Teen arrested in hit-and-run crash that critically injured 24-year-old woman in Port St. Lucie - WFLX",
           "source_url": "https://www.wflx.com/2026/11/17/teen-arrested-hit-and-run-crash-that-critically-injured-24-year-old-woman-port-st-lucie?outputType=amp",
           "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
@@ -736,19 +808,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
-      "generated_card_count": 0,
-      "elapsed_seconds": 49.384
+      "elapsed_seconds": 23.643
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -765,29 +833,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 1,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:martin county",
-            "source_locality:jensen beach"
-          ],
-          "headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain"
-        }
-      ],
-      "published_story_duplicate_suppression_count": 6,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -806,6 +855,16 @@
           "editorial_story_id": "story_028281",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
           "canonical_headline": "St. Lucie County estimates $60 million shortfall as crews prepare for flooding threat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -905,6 +964,21 @@
         },
         {
           "category_key": "business",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Teen arrested in hit-and-run crash that critically injured 24-year-old woman in Port St. Lucie",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/teen-arrested-in-hit-and-run-crash-that-critically-injured-24-year-old-woman-in-port-st-lucie",
           "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
@@ -965,7 +1039,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.499
+      "elapsed_seconds": 14.984
     },
     {
       "category_key": "sports",
@@ -973,7 +1047,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -990,19 +1064,19 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
-          "source_headline": "Joe Namath's Lucky Shuck coming to Jensen Beach as waterfront village breaks ground - cw34.com",
-          "source_url": "https://cw34.com/news/local/joe-namaths-lucky-shuck-coming-to-jensen-beach-as-waterfront-village-breaks-ground",
+          "source_headline": "Joe Namath's Lucky Shuck coming to Jensen Beach as waterfront village breaks ground - WPEC",
+          "source_url": "https://cbs12.com/news/local/joe-namaths-lucky-shuck-coming-to-jensen-beach-as-waterfront-village-breaks-ground",
           "editorial_story_id": "story_027992",
           "canonical_slug": "2026-11-16-rio-marine-village-breaks-ground-in-jensen-beach-with-342-apartments-and-marina",
           "canonical_headline": "Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina",
-          "basis": "same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -1015,12 +1089,12 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "sports",
-          "source_headline": "Joe Namath's Lucky Shuck coming to Jensen Beach as waterfront village breaks ground - cw34.com",
-          "source_url": "https://cw34.com/news/local/joe-namaths-lucky-shuck-coming-to-jensen-beach-as-waterfront-village-breaks-ground",
+          "source_headline": "Joe Namath's Lucky Shuck coming to Jensen Beach as waterfront village breaks ground - WPEC",
+          "source_url": "https://cbs12.com/news/local/joe-namaths-lucky-shuck-coming-to-jensen-beach-as-waterfront-village-breaks-ground",
           "canonical_slug": "2026-11-16-rio-marine-village-breaks-ground-in-jensen-beach-with-342-apartments-and-marina",
           "canonical_headline": "Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1039,15 +1113,15 @@
       },
       "new_publication_stale_rejected_count": 0,
       "sports_editorial_source_rejections": [],
-      "elapsed_seconds": 12.707
+      "elapsed_seconds": 9.689
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 7,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1056,11 +1130,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.485,
+          "elapsed_seconds": 25.089,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.485,
+      "model_elapsed_seconds": 25.089,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -1071,14 +1145,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
           "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
           "editorial_story_id": "story_028117",
           "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
@@ -1088,7 +1162,7 @@
         },
         {
           "category_key": "things_to_do",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
           "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
           "editorial_story_id": "story_028117",
           "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
@@ -1109,29 +1183,41 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
           "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
           "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
           "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Identical WPTV source URL and publication date of Nov. 17, 2026",
+            "Third annual Festival of Giving at the Children's Museum of the Treasure Coast in Jensen Beach",
+            "Family Night on Tuesday evening, Nov. 17, and an adult holiday pajama party Friday",
+            "Museum location at 1707 NE Indian River Drive"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article is the same source report already represented by the canonical. Its nonprofit participation details and quotes do not establish a new development or independently newsworthy follow-up.",
+          "validation_errors": []
         },
         {
           "category_key": "things_to_do",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
           "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
           "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
           "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
@@ -1177,23 +1263,23 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 25.322
+      "elapsed_seconds": 42.271
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "category_eligibility_archive_recovery",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Florida category eligibility contract",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1202,7 +1288,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -1215,30 +1301,40 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.391
+      "elapsed_seconds": 10.686
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 5,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 54.846,
-          "result": "success"
+          "elapsed_seconds": 28.011,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Richard Acosta named Martin County Teacher of the Year, advances to state competition"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 25.714,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Pinewood’s Richard Acosta named Martin County’s 2026-27 Teacher of the Year"
         }
       ],
-      "model_elapsed_seconds": 54.846,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 53.725,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — Pinewood’s Richard Acosta named Martin County’s 2026-27 Teacher of the Year",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1247,18 +1343,48 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
-          "editorial_story_id": "story_027015",
-          "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
-          "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
+          "source_headline": "Martin County commissioners approve emergency funding for flood victims - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-commissioners-emergency-funding-flood-victims/74457692",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
+          "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
+          "editorial_story_id": "story_028117",
+          "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
+          "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1274,12 +1400,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/17/jensen-beach-festival-giving-brings-together-more-than-50-local-nonprofits",
-          "editorial_story_id": "story_028117",
-          "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
-          "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Martin County residents demand emergency shelter as flooding threatens the Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-residents-demand-emergency-shelter-as-flooding-threatens-the-treasure-coast",
+          "editorial_story_id": "story_028258",
+          "canonical_slug": "2026-11-18-martin-county-residents-press-commissioners-for-emergency-shelter-before-more-ra",
+          "canonical_headline": "Martin County residents press commissioners for emergency shelter before more rain",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1317,36 +1443,80 @@
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "'Today we are homeless': Jensen Beach family displaced by historic flooding pleads for help rebuilding home - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/today-we-are-homeless-jensen-beach-family-displaced-by-historic-flooding-pleads-for-help-rebuilding-home",
-          "canonical_slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
-          "canonical_headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
+          "source_headline": "Martin County commissioners approve emergency funding for flood victims - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-commissioners-emergency-funding-flood-victims/74457692",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WPTV",
+          "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
+          "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
+          "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 1.0,
           "shared_anchors": [
-            "Identical WPTV source URL and source headline",
-            "Lisa and Jeremy French and their two young boys displaced from their Jensen Beach home",
-            "Same plea for housing and repair assistance before the Martin County Commission",
-            "Same destroyed appliances, cabinets, furniture and floorboards",
-            "Same assistance visit to the Hoke Library and dispute over water entering the Savannah Preserves"
+            "Identical WPTV source URL and publication date of Nov. 17, 2026",
+            "Third annual Festival of Giving at the Children's Museum of the Treasure Coast in Jensen Beach",
+            "Family Night on Tuesday evening, Nov. 17, and an adult holiday pajama party Friday",
+            "Museum location at 1707 NE Indian River Drive"
           ],
           "novel_facts": [],
-          "reason": "The incoming article repeats the canonical's family displacement, assistance appeal, damage descriptions and water-management concerns. The later publication date does not establish a new development, and no material update or independently newsworthy follow-up is present.",
+          "reason": "The incoming article is the same source report already represented by the canonical. Its nonprofit participation details and quotes do not establish a new development or independently newsworthy follow-up.",
           "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "martin",
@@ -1377,12 +1547,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits - WFLX",
-          "source_url": "https://www.wflx.com/2026/11/17/jensen-beach-festival-giving-brings-together-more-than-50-local-nonprofits",
-          "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
-          "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
+          "source_headline": "Martin County residents demand emergency shelter as flooding threatens the Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-residents-demand-emergency-shelter-as-flooding-threatens-the-treasure-coast",
+          "canonical_slug": "2026-11-18-martin-county-residents-press-commissioners-for-emergency-shelter-before-more-ra",
+          "canonical_headline": "Martin County residents press commissioners for emergency shelter before more rain",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1452,20 +1622,18 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
-      "generated_card_count": 2,
-      "elapsed_seconds": 85.312
+      "elapsed_seconds": 66.522
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 13,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 14,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -1473,7 +1641,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 35.835,
+          "elapsed_seconds": 51.474,
           "result": "copydesk_integrity",
           "error_type": "CopyDeskIntegrityError",
           "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
@@ -1481,13 +1649,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.194,
+          "elapsed_seconds": 55.501,
           "result": "copydesk_integrity",
           "error_type": "CopyDeskIntegrityError",
           "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
         }
       ],
-      "model_elapsed_seconds": 70.029,
+      "model_elapsed_seconds": 106.975,
       "failure_code": "copydesk_integrity",
       "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
       "sports_expired_event_preview_count": 0,
@@ -1498,10 +1666,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 17,
+      "published_story_duplicate_suppression_count": 16,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1515,22 +1683,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
-          "editorial_story_id": "story_028329",
-          "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
-          "canonical_headline": "St. Lucie County schools close Wednesday as superintendent pledges flood review",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "editorial_story_id": "story_028020",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/18-year-old-charged-in-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter",
-          "editorial_story_id": "story_027961",
-          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
-          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
+          "editorial_story_id": "story_028329",
+          "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1545,17 +1713,17 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
-          "editorial_story_id": "story_028140",
-          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/18-year-old-charged-in-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter",
+          "editorial_story_id": "story_027961",
+          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
+          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts",
+          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "editorial_story_id": "story_028281",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
@@ -1565,7 +1733,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts - WPTV",
+          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "editorial_story_id": "story_028281",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
@@ -1605,12 +1773,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Teen arrested in hit-and-run crash that critically injured 24-year-old woman in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/teen-arrested-in-hit-and-run-crash-that-critically-injured-24-year-old-woman-in-port-st-lucie",
-          "editorial_story_id": "story_027961",
-          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
-          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
+          "editorial_story_id": "story_028140",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1662,24 +1830,14 @@
           "canonical_headline": "Crash blocks southbound lane on Florida's Turnpike in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "18-year-old dies after being struck by car in St. Lucie County; family raises concerns - WPEC",
-          "source_url": "https://cbs12.com/news/local/18-year-old-dies-after-being-struck-by-car-in-st-lucie-county-family-raises-concerns",
-          "editorial_story_id": "story_022917",
-          "canonical_slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
-          "canonical_headline": "86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 5,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1692,8 +1850,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -1711,10 +1869,40 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Both report normal Wednesday operations for Indian River County schools and district checks finding no standing water affecting safe routes to bus stops."
+          ],
+          "novel_facts": [
+            "St. Lucie County Public Schools announced Wednesday closures for students and employees and canceled school activities.",
+            "John Carroll High School in Fort Pierce announced a Wednesday closure following Tuesday's early dismissal.",
+            "Martin County schools will remain open Wednesday, but most after-school activities are canceled."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
           "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
-          "canonical_headline": "St. Lucie County schools close Wednesday as superintendent pledges flood review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1723,37 +1911,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/18-year-old-charged-in-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter",
-          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
-          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.94,
-          "shared_anchors": [
-            "Monday morning crash at Southwest Gatlin Boulevard and Southwest Feather Terrace in Port St. Lucie",
-            "24-year-old woman critically injured while riding an electric scooter",
-            "18-year-old driver arrested and charged after leaving the scene",
-            "Port St. Lucie Police Department investigation"
-          ],
-          "novel_facts": [
-            "Incoming article names the driver as Tristan Sanchez-Chasmer.",
-            "Police describe a ding-dong-ditch prank involving the driver and two passengers before the crash.",
-            "Incoming article adds witness assistance, vehicle details and pending toxicology results."
-          ],
-          "reason": "The candidate already reports the same crash, critical injury and driver's arrest and charge. The incoming article adds identification and narrative details but establishes no subsequent arrest, changed charge, changed victim outcome or other material development. Its additional reporting does not introduce an independently newsworthy follow-up.",
-          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1788,22 +1945,38 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
-          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/18-year-old-charged-in-port-st-lucie-hit-and-run-that-critically-injured-woman-riding-e-scooter",
+          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
+          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.94,
+          "shared_anchors": [
+            "Monday morning crash at Southwest Gatlin Boulevard and Southwest Feather Terrace in Port St. Lucie",
+            "24-year-old woman critically injured while riding an electric scooter",
+            "18-year-old driver arrested and charged after leaving the scene",
+            "Port St. Lucie Police Department investigation"
+          ],
+          "novel_facts": [
+            "Incoming article names the driver as Tristan Sanchez-Chasmer.",
+            "Police describe a ding-dong-ditch prank involving the driver and two passengers before the crash.",
+            "Incoming article adds witness assistance, vehicle details and pending toxicology results."
+          ],
+          "reason": "The candidate already reports the same crash, critical injury and driver's arrest and charge. The incoming article adds identification and narrative details but establishes no subsequent arrest, changed charge, changed victim outcome or other material development. Its additional reporting does not introduce an independently newsworthy follow-up.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts",
+          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
           "canonical_headline": "St. Lucie County estimates $60 million shortfall as crews prepare for flooding threat",
@@ -1818,7 +1991,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts - WPTV",
+          "source_headline": "Another flooding threat tests St. Lucie County as leaders brace for Amendment 3 budget cuts",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
           "canonical_headline": "St. Lucie County estimates $60 million shortfall as crews prepare for flooding threat",
@@ -1890,12 +2063,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Teen arrested in hit-and-run crash that critically injured 24-year-old woman in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/teen-arrested-in-hit-and-run-crash-that-critically-injured-24-year-old-woman-in-port-st-lucie",
-          "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
-          "canonical_headline": "18-year-old arrested in Port St. Lucie hit-and-run that critically injured scooter rider",
+          "source_headline": "St. Lucie County clears drains, prepares for more rain after historic flooding - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-prepares-for-more-rain-after-historic-flooding",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1992,63 +2165,28 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "18-year-old dies after being struck by car in St. Lucie County; family raises concerns - WPEC",
-          "source_url": "https://cbs12.com/news/local/18-year-old-dies-after-being-struck-by-car-in-st-lucie-county-family-raises-concerns",
-          "canonical_slug": "2026-10-23-86-year-old-found-dead-after-car-plunges-into-indian-river-lagoon-in-vero-beach",
-          "canonical_headline": "86-Year-Old Found Dead After Car Plunges Into Indian River Lagoon in Vero Beach",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.99,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Omari Linzell Williams, 18, was fatally struck by a Chevrolet sedan while walking on North Boulevard near Lee Boulevard in unincorporated St. Lucie County.",
-            "The driver was a 30-year-old Vero Beach resident who was uninjured and cooperated with investigators.",
-            "Williams' family is raising pedestrian-safety concerns, and a candlelight vigil is scheduled at Lakewood Park."
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 91.818
+      "elapsed_seconds": 133.198
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 5,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.971,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 12.971,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Indian River County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -2057,11 +2195,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "editorial_story_id": "story_028020",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
@@ -2079,6 +2227,16 @@
           "editorial_story_id": "story_028281",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
           "canonical_headline": "St. Lucie County estimates $60 million shortfall as crews prepare for flooding threat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -2115,11 +2273,43 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Some Treasure Coast schools close Wednesday due to heavy rainfall concerns; Indian River, Martin open - WPBF",
+          "source_url": "https://www.wpbf.com/article/some-treasure-coast-schools-close-wednesday-due-to-heavy-rainfall-concerns/74457649",
+          "canonical_slug": "2026-11-16-indian-river-county-schools-modify-tuesday-schedule-ahead-of-heavy-rain-threat",
+          "canonical_headline": "Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.97,
+          "shared_anchors": [
+            "Both report normal Wednesday operations for Indian River County schools.",
+            "Both cite district checks finding no standing water affecting safe routes to bus stops."
+          ],
+          "novel_facts": [
+            "St. Lucie County Public Schools will close Wednesday for students and employees and cancel associated activities.",
+            "John Carroll High School in Fort Pierce will close Wednesday and cancel school-sponsored activities.",
+            "Martin County schools and Extended Day will remain open Wednesday, while other after-school activities and athletic events are canceled.",
+            "St. Lucie County Boys & Girls Clubs will close Wednesday."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
         {
           "category_key": "indian_river",
           "source_headline": "18-year-old charged in Port St. Lucie hit-and-run that critically injured woman riding e-scooter",
@@ -2157,6 +2347,21 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/another-flooding-threat-tests-st-lucie-county-as-leaders-brace-for-amendment-3-budget-cuts",
           "canonical_slug": "2026-11-18-st-lucie-county-estimates-60-million-shortfall-as-crews-prepare-for-flooding-thr",
           "canonical_headline": "St. Lucie County estimates $60 million shortfall as crews prepare for flooding threat",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -2225,11 +2430,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County schools to stay open Wednesday despite heavy-rain concerns",
-      "generated_card_count": 0,
-      "elapsed_seconds": 28.436
+      "elapsed_seconds": 22.438
     }
   ]
 }
