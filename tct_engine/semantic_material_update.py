@@ -17,9 +17,12 @@ import math
 import re
 from typing import Any, Mapping
 
-from .semantic_publication_gate import _is_cross_impact_weather_takeover
+from .semantic_publication_gate import (
+    _is_cross_impact_weather_takeover,
+    _is_distinct_school_day_decision,
+)
 
-SEMANTIC_MATERIAL_UPDATE_VERSION = "1.4"
+SEMANTIC_MATERIAL_UPDATE_VERSION = "1.5"
 
 _STOP_WORDS = {
     "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
@@ -226,6 +229,8 @@ def validate_material_update(
     # a school-closure/polling-place permalink as a residential flood report.
     if _is_cross_impact_weather_takeover(incoming, canonical):
         errors.append("distinct_weather_impact_not_same_canonical_event")
+    if _is_distinct_school_day_decision(incoming, canonical):
+        errors.append("different_school_operating_day_not_same_canonical_event")
 
     words = re.findall(r"\b\w+\b", _plain(body))
     if not headline or len(headline.split()) < 5:
@@ -351,8 +356,8 @@ def _prompt(
 Write one complete replacement article for the EXISTING CANONICAL PAGE. Use ONLY facts present in the supplied canonical article and incoming update. Do not infer, speculate, add generic context, or use outside knowledge.
 
 Editorial requirements:
-- Preserve the canonical story's original context while foregrounding the material development.
-- The FIRST paragraph must explicitly explain BOTH what originally happened and what is new now. It must make sense to a reader who never saw the earlier article.
+- Lead with the newest verified action and what readers need to know now. Preserve necessary prior context, but put yesterday\'s chronology in a later sentence or paragraph unless it is essential to understand the news.
+- The FIRST paragraph must identify the new development and supply enough original incident context for someone who missed the earlier article. Do NOT open by recapping yesterday and then tacking today\'s action onto the end of the sentence.
 - Write 3 to 6 full paragraphs and roughly 220 to 500 words.
 - Use direct, neutral local-news language. No markdown, section headings, datelines, bullet lists, or commentary.
 - Do not use direct quotes unless the exact quote appears in the supplied text.

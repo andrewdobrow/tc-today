@@ -23,9 +23,9 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.9"
-SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.2"
-SEMANTIC_PUBLICATION_RESOLUTION_PROMPT_VERSION = "1.0"
+SEMANTIC_PUBLICATION_GATE_VERSION = "2.0"
+SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.3"
+SEMANTIC_PUBLICATION_RESOLUTION_PROMPT_VERSION = "1.1"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
 DEFAULT_MIN_CONFIDENCE = 0.82
@@ -795,6 +795,76 @@ def _weather_impact_families(headline: object) -> set[str]:
     }
 
 
+# Different school-day operating decisions are independently useful public-service
+# notices. The affected school day, rather than the common storm or district,
+# identifies the announcement. Only use clear, explicit day evidence; ambiguous
+# copy is left to the normal evidence-based semantic gate.
+_SCHOOL_DAY_RE = re.compile(
+    r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)(?:'s)?\b", re.I
+)
+_SCHOOL_OPERATIONS_SUBJECT_RE = re.compile(
+    r"\b(?:schools?|school\s+district|district\s+schools|classes|campuses)\b", re.I
+)
+_SCHOOL_OPERATIONS_ACTION_RE = re.compile(
+    r"\b(?:schedul(?:e|es|ed|ing)|dismiss(?:al|als|ed|es|ing)?|"
+    r"clos(?:e|es|ed|ing|ure|ures)|reopen(?:s|ed|ing)?|"
+    r"open(?:s|ed|ing)?|normal|regular|"
+    r"operat(?:e|es|ing|ion|ions)|cancel(?:s|ed|led|lation|lations)?|"
+    r"return(?:s|ed|ing)?|releas(?:e|es|ed|ing)|chang(?:e|es|ed|ing)|"
+    r"modify|modified|adjust(?:s|ed)?)\b", re.I
+)
+
+
+def _primary_school_operating_day(article: Mapping[str, Any] | None) -> str:
+    """Find a school operating day explicitly foregrounded in a report.
+
+    Prefer the headline's news clause. Days in an "after Tuesday..."
+    background clause must not override a Wednesday reopening/closure lead.
+    If the headline has no day, use an unambiguous day in its short lead.
+    """
+    if not article:
+        return ""
+    headline = str(article.get("headline") or article.get("title") or "").strip()
+    if not (
+        _SCHOOL_OPERATIONS_SUBJECT_RE.search(headline)
+        and _SCHOOL_OPERATIONS_ACTION_RE.search(headline)
+    ):
+        return ""
+
+    headline_main = re.sub(r"^after\b[^,]{0,100},\s*", "", headline, flags=re.I)
+    headline_main = re.split(
+        r"\b(?:after|following|previously|despite)\b", headline_main,
+        maxsplit=1, flags=re.I,
+    )[0]
+    days = {day.lower() for day in _SCHOOL_DAY_RE.findall(headline_main)}
+    if len(days) == 1:
+        return next(iter(days))
+    if days:
+        return ""  # Multiple foregrounded dates: do not guess.
+
+    # Some breaking headlines omit the day, e.g. "schools dismiss early".
+    # Check only the opening text, not background paragraphs about next week.
+    lead = str(article.get("lead") or article.get("teaser") or article.get("body") or "")
+    lead = re.sub(r"<[^>]+>", " ", lead)
+    lead = re.sub(r"\s+", " ", lead)[:280]
+    lead_days = {day.lower() for day in _SCHOOL_DAY_RE.findall(lead)}
+    return next(iter(lead_days)) if len(lead_days) == 1 else ""
+
+
+def _is_distinct_school_day_decision(
+    incoming: Mapping[str, Any] | None,
+    canonical: Mapping[str, Any] | None,
+) -> bool:
+    """Keep Tuesday's schedule change separate from Wednesday's decision.
+
+    Merely repeating or clarifying a school's status for the SAME school day
+    still goes through ordinary duplicate/material-update adjudication.
+    """
+    new_day = _primary_school_operating_day(incoming)
+    old_day = _primary_school_operating_day(canonical)
+    return bool(new_day and old_day and new_day != old_day)
+
+
 def _is_cross_impact_weather_takeover(
     incoming: Mapping[str, Any] | None,
     candidate: Mapping[str, Any] | None,
@@ -868,7 +938,14 @@ def validate_model_decision(
             None,
         )
         canonical = (selected_row.get("article") or selected_row) if selected_row else None
-        if _is_cross_impact_weather_takeover(incoming, canonical):
+        if _is_distinct_school_day_decision(incoming, canonical):
+            same_event = False
+            material_update = False
+            independent_followup = False
+            selected = ""
+            requested_action = ACTION_NEW
+            consistency_repairs.append("different_school_operating_day_requires_independent_story")
+        elif _is_cross_impact_weather_takeover(incoming, canonical):
             same_event = False
             material_update = False
             independent_followup = False
@@ -967,7 +1044,7 @@ def _prompt(
 
 Compare the fully written INCOMING article with the RECENT CANONICAL CANDIDATES. Decide whether the incoming article covers the exact same real-world incident, case, meeting, game, government action, business event, or continuing proceeding as one candidate.
 
-Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A family's displacement and housing appeal and a later public flood-recovery town meeting are separate news events even when the same residents or storm are mentioned. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
+Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. A family's displacement and housing appeal and a later public flood-recovery town meeting are separate news events even when the same residents or storm are mentioned. A new district decision for a DIFFERENT SCHOOL DAY (for example, Tuesday early dismissal followed by Wednesday closure, or Tuesday altered hours followed by confirmed normal Wednesday operations) is a separate reportable public-service event. Use new_story rather than rewriting the old day's canonical article. Repeated notices or clarifications about the SAME school day's status can still be duplicates or material updates. A single storm, flood, hurricane, or disaster is a shared cause, NOT a single news event: school closings, polling-place changes, homes taking on water, impassable roads, evacuations, shelters, and infrastructure failures are separate reportable consequences. Keep their own canonical articles even if they occur in the same county on the same day. Never repurpose a school-closure permalink for residential flooding or other consequences. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
 
 Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, witness color, cleanup detail, anniversary/color framing, or background explanation is NOT by itself a reason for a new URL.
 
@@ -1103,7 +1180,7 @@ def _resolution_prompt(
 
 The first pass returned HOLD. That HOLD is not evidence that the incoming story matches any candidate. Re-read the FULL incoming article and only the strongest bounded canonical shortlist below. Resolve the identity now whenever the facts support it.
 
-Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough. Shared weather or disaster circumstances are also insufficient: distinguish independent consequences such as school closures, election logistics, residential inundation, road closures, and shelter operations rather than merging them into one permalink.
+Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough. School opening, closure, and dismissal decisions for distinct operating days are separate public-service events, even when a district and storm are the same. Do not overwrite Tuesday's decision with Wednesday's. Notices about the same operating day may be duplicates or updates. Shared weather or disaster circumstances are also insufficient: distinguish independent consequences such as school closures, election logistics, residential inundation, road closures, and shelter operations rather than merging them into one permalink.
 
 Decision rules:
 - If NO candidate is the same concrete real-world event, choose new_story. Do not hold merely because candidates are topically similar.
