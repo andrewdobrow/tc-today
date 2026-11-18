@@ -810,7 +810,8 @@ _SCHOOL_OPERATIONS_ACTION_RE = re.compile(
     r"clos(?:e|es|ed|ing|ure|ures)|reopen(?:s|ed|ing)?|"
     r"open(?:s|ed|ing)?|normal|regular|"
     r"operat(?:e|es|ing|ion|ions)|cancel(?:s|ed|led|lation|lations)?|"
-    r"return(?:s|ed|ing)?|modify|modified|adjust(?:s|ed)?)\b", re.I
+    r"return(?:s|ed|ing)?|releas(?:e|es|ed|ing)|chang(?:e|es|ed|ing)|"
+    r"modify|modified|adjust(?:s|ed)?)\b", re.I
 )
 
 
