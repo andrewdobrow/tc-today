@@ -21,6 +21,7 @@ def test_nov18_article_leads_with_review_not_repeated_closure():
     assert NEW in page
     assert OLD not in page
     assert OLD_LEAD not in page
+    assert "St. Lucie school superintendent Jon Prince pledges to review district decisions" in page
     assert 'class="article-body"><p>St. Lucie Public Schools Superintendent' in page
     assert "review its policies and decisions" in page
     assert "St. Lucie County schools to close Wednesday after early dismissal" in closure
