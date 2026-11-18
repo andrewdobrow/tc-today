@@ -4,40 +4,38 @@
 
 ## Hero
 
-- Current: **Scooter rider dies after Port St. Lucie hit-and-run; driver could face added charges**
-- Recommended: **Scooter rider dies after Port St. Lucie hit-and-run; driver could face added charges**
+- Current: **Boil water notice remains in Tradition and western Port St. Lucie as service returns**
+- Recommended: **Boil water notice remains in Tradition and western Port St. Lucie as service returns**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue | Dump truck rollover closes Warfield Boulevard in Martin County, forces detours | 46 | importance 0; freshness 91.75; urgency 2/10 |
-| 2 | Dump truck rollover closes Warfield Boulevard in Martin County, forces detours | Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes | 46 | importance 0; freshness 68.44; urgency 2/10; validated material update |
-| 3 | Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach | St. Lucie County schools to close Wednesday after early dismissal amid flood threat | 45 | importance 0; freshness 63.34; urgency 2/10; validated material update |
-| 4 | Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes | Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue | 42 | importance 0; freshness 91.75; urgency 2/10 |
-| 5 | St. Lucie schools superintendent pledges review after bus flooding incident | St. Lucie schools superintendent pledges review after bus flooding incident | 41 | importance 0; freshness 72.63; urgency 2/10 |
-| 6 | St. Lucie County schools to close Wednesday after early dismissal amid flood threat | Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach | 44 | importance 0; freshness 83.35; urgency 2/10; -4 county saturation |
-| 7 | St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding | Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities | 37 | importance 0; freshness 28.39; urgency 2/10; validated material update |
-| 8 | Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday | Indian River County remains under partial emergency activation as more rain threatens flooding | 36 | importance 0; freshness 51.69; urgency 2/10 |
-| 9 | Indian River County remains under partial emergency activation as more rain threatens flooding | Martin County sheriff warns of e-bike seizures, possible charges against parents | 34 | importance 0; freshness 43.38; urgency 2/10 |
-| 10 | Martin County sheriff warns of e-bike seizures, possible charges against parents | Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday | 41 | importance 0; freshness 46.66; urgency 2/10; validated material update; -12 county saturation |
-| 11 | Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast | St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding | 38 | importance 0; freshness 56.67; urgency 2/10; -6 category saturation; -12 county saturation |
-| 12 | Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities | Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast | 34 | importance 0; freshness 43.38; urgency 2/10; -12 category saturation; -12 county saturation |
+| 1 | Indian River County extends flood emergency through Nov. 23 as more rain threatens | Indian River County extends flood emergency through Nov. 23 as more rain threatens | 69 | importance 0; freshness 99.94; urgency 9/10; validated material update |
+| 2 | St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding | Scooter rider dies after Port St. Lucie hit-and-run; driver could face added charges | 52 | importance 0; freshness 93.23; urgency 2/10; validated material update |
+| 3 | Scooter rider dies after Port St. Lucie hit-and-run; driver could face added charges | Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes | 46 | importance 0; freshness 64.96; urgency 2/10; validated material update |
+| 4 | Dump truck rollover closes Warfield Boulevard in Martin County, forces detours | Dump truck rollover closes Warfield Boulevard in Martin County, forces detours | 45 | importance 0; freshness 88.28; urgency 2/10 |
+| 5 | Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue | St. Lucie County schools to close Wednesday after early dismissal amid flood threat | 44 | importance 0; freshness 59.86; urgency 2/10; validated material update |
+| 6 | Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach | Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue | 41 | importance 0; freshness 88.27; urgency 2/10 |
+| 7 | Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes | St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding | 46 | importance 0; freshness 53.19; urgency 6/10; -8 county saturation |
+| 8 | St. Lucie schools superintendent pledges review after bus flooding incident | Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities | 36 | importance 0; freshness 24.91; urgency 2/10; validated material update |
+| 9 | St. Lucie County schools to close Wednesday after early dismissal amid flood threat | Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach | 43 | importance 0; freshness 79.87; urgency 2/10; -12 county saturation |
+| 10 | Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday | Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday | 40 | importance 0; freshness 43.18; urgency 2/10; validated material update; -12 county saturation |
+| 11 | Martin County sheriff warns of e-bike seizures, possible charges against parents | Martin County sheriff warns of e-bike seizures, possible charges against parents | 33 | importance 0; freshness 39.9; urgency 2/10; -6 category saturation |
+| 12 | Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast | St. Lucie schools superintendent pledges review after bus flooding incident | 40 | importance 0; freshness 69.15; urgency 2/10; -6 category saturation; -12 county saturation |
 
 ## Recommended moves
 
-- **Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities**: 12 → 7 — importance 0; freshness 28.39; urgency 2/10; validated material update
-- **St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding**: 7 → 11 — importance 0; freshness 56.67; urgency 2/10; -6 category saturation; -12 county saturation
-- **St. Lucie County schools to close Wednesday after early dismissal amid flood threat**: 6 → 3 — importance 0; freshness 63.34; urgency 2/10; validated material update
-- **Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach**: 3 → 6 — importance 0; freshness 83.35; urgency 2/10; -4 county saturation
-- **Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue**: 1 → 4 — importance 0; freshness 91.75; urgency 2/10
-- **Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes**: 4 → 2 — importance 0; freshness 68.44; urgency 2/10; validated material update
-- **Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday**: 8 → 10 — importance 0; freshness 46.66; urgency 2/10; validated material update; -12 county saturation
-- **Dump truck rollover closes Warfield Boulevard in Martin County, forces detours**: 2 → 1 — importance 0; freshness 91.75; urgency 2/10
-- **Indian River County remains under partial emergency activation as more rain threatens flooding**: 9 → 8 — importance 0; freshness 51.69; urgency 2/10
-- **Martin County sheriff warns of e-bike seizures, possible charges against parents**: 10 → 9 — importance 0; freshness 43.38; urgency 2/10
-- **Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast**: 11 → 12 — importance 0; freshness 43.38; urgency 2/10; -12 category saturation; -12 county saturation
+- **Indian River joins St. Lucie early school dismissal; Martin cancels after-school activities**: 49 → 8 — importance 0; freshness 24.91; urgency 2/10; validated material update
+- **St. Lucie County, Fort Pierce offer self-service sand ahead of potential flooding**: 2 → 7 — importance 0; freshness 53.19; urgency 6/10; -8 county saturation
+- **Indian River County schools confirm normal Wednesday schedules after Tuesday rain changes**: 7 → 3 — importance 0; freshness 64.96; urgency 2/10; validated material update
+- **St. Lucie County schools to close Wednesday after early dismissal amid flood threat**: 9 → 5 — importance 0; freshness 59.86; urgency 2/10; validated material update
+- **St. Lucie schools superintendent pledges review after bus flooding incident**: 8 → 12 — importance 0; freshness 69.15; urgency 2/10; -6 category saturation; -12 county saturation
+- **Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach**: 6 → 9 — importance 0; freshness 79.87; urgency 2/10; -12 county saturation
+- **Scooter rider dies after Port St. Lucie hit-and-run; driver could face added charges**: 3 → 2 — importance 0; freshness 93.23; urgency 2/10; validated material update
+- **Florida animal cruelty hotline draws more than 30 calls, leads to Bay County dog rescue**: 5 → 6 — importance 0; freshness 88.27; urgency 2/10
+- **Port St. Lucie faces renewed flood threat with 4 to 6 inches of rain forecast**: 12 → 13 — importance 0; freshness 39.9; urgency 2/10
 
 ## Guardrails
 
