@@ -799,7 +799,7 @@ def test_material_update_prompt_keeps_headlines_concise_without_hard_truncation(
     assert 'do not normalize "Florida\'s Turnpike" to "Florida Turnpike"' in prompt
     assert "mile markers, exit numbers, block numbers" in prompt
     assert "Never mechanically truncate" in prompt
-    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.4"
+    assert material_update.SEMANTIC_MATERIAL_UPDATE_VERSION == "1.5"
 
 
 
