@@ -21277,6 +21277,23 @@ def validate_rss_social_image_contract(output_root=None):
                         absolute_image_url=_absolute_image_url,
                         is_tct_image=_is_tct_mirrored_image_url,
                     )
+                if not mirror_ok and isinstance(row, dict):
+                    # A manually approved first-party CDN image can legitimately
+                    # be its own source AND hosted delivery URL. Only trust an
+                    # exact editor-maintained slug->URL ledger entry together
+                    # with matching durable archive fields. This is distinct
+                    # from an ordinary publisher mirror, which must retain its
+                    # separate external source URL.
+                    approved_image = _load_article_image_overrides().get(slug)
+                    mirror_ok = bool(
+                        row.get("article_image_override") is True
+                        and row.get("image_source") == "manual_article_image_override"
+                        and approved_image == actual
+                        and all(
+                            _absolute_image_url(row.get(field)) == actual
+                            for field in ("image_url", "source_image_url", "hosted_image_url")
+                        )
+                    )
                 if not mirror_ok:
                     issues.append({
                         "slug": slug,
