@@ -96,6 +96,32 @@ def _fix_feed(path: Path, slug: str, approved: str) -> bool:
     return _write_if_changed(path, before, after)
 
 
+
+def _fix_rss_social_image_authority(path: Path, slug: str, approved: str) -> bool:
+    """Keep the generated RSS image-authority ledger aligned with editor overrides.
+
+    The RSS generator can refresh this bounded report from the original source
+    image while a previously published story remains in the feed. This
+    post-generation reconciliation updates only the exact article's image URL.
+    """
+    if not path.is_file():
+        return False
+    before = path.read_text(encoding="utf-8")
+    payload = json.loads(before)
+    items = payload.get("items")
+    if not isinstance(items, list):
+        raise ValueError("RSS social image authority must contain an items list")
+
+    changed = False
+    for row in items:
+        if isinstance(row, dict) and row.get("slug") == slug and row.get("image_url") != approved:
+            row["image_url"] = approved
+            changed = True
+    if not changed:
+        return False
+    return _write_if_changed(path, before, json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+
+
 def reconcile(root: Path = ROOT) -> list[str]:
     root = Path(root)
     payload = json.loads((root / LEDGER).read_text(encoding="utf-8"))
@@ -118,6 +144,10 @@ def reconcile(root: Path = ROOT) -> list[str]:
                 touched.add(str(page.relative_to(root)))
         if _fix_feed(root / "feed.xml", slug, approved):
             touched.add("feed.xml")
+        if _fix_rss_social_image_authority(
+            root / "data/rss-social-image-authority.json", slug, approved
+        ):
+            touched.add("data/rss-social-image-authority.json")
 
     # iOS reads archive.json, not the website HTML. Keep its native thumbnail
     # pinned to the same editorial selection, even on deploy-only runs.
