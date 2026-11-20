@@ -31,15 +31,15 @@ def test_article_main_open_graph_twitter_and_structured_images():
 def test_homepage_feed_and_social_image_authority():
     home = (ROOT / "index.html").read_text(encoding="utf-8")
     links = re.findall(
-        r'<a\\b[^>]*href="[^"]*/articles/' + re.escape(SLUG)
-        + r'\\.html"[^>]*>.*?</a>', home, re.I | re.S,
+        r'<a\b[^>]*href="[^"]*/articles/' + re.escape(SLUG)
+        + r'\.html"[^>]*>.*?</a>', home, re.I | re.S,
     )
     assert links
     assert all(IMAGE in link for link in links if "<img " in link)
     feed = (ROOT / "feed.xml").read_text(encoding="utf-8")
     items = [
         item.group(0)
-        for item in re.finditer(r"<item\\b[^>]*>.*?</item>", feed, re.I | re.S)
+        for item in re.finditer(r"<item\b[^>]*>.*?</item>", feed, re.I | re.S)
         if f"/articles/{SLUG}.html" in item.group(0)
     ]
     assert items and all(f'<media:content url="{IMAGE}"' in item for item in items)
