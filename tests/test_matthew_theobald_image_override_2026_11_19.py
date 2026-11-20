@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from scripts.sync_editorial_image_archive import sync_archive
+from scripts.reconcile_editorial_image_surfaces import _fix_rss_social_image_authority
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "2026-11-19-martin-county-school-board-reinstates-matthew-theobald-awards-back-pay"
@@ -79,3 +80,30 @@ def test_homepage_json_and_app_archive_sync(tmp_path):
     assert updated[0]["image_url"] == IMAGE
     assert updated[0]["rss_social_image_url"] == IMAGE
     assert updated[1]["image_url"] == OLD
+
+
+def test_generated_rss_authority_is_reconciled_without_touching_other_articles(tmp_path):
+    authority_path = tmp_path / "rss-social-image-authority.json"
+    unrelated = {
+        "slug": "different-story",
+        "image_url": OLD,
+        "image_kind": "source",
+        "origin": "verified_live_article_source",
+    }
+    authority = {
+        "schema_version": 1,
+        "items": [
+            {"slug": SLUG, "image_url": OLD, "image_kind": "source",
+             "origin": "verified_live_article_source"},
+            dict(unrelated),
+        ],
+    }
+    authority_path.write_text(json.dumps(authority, indent=2) + "\n", encoding="utf-8")
+
+    assert _fix_rss_social_image_authority(authority_path, SLUG, IMAGE) is True
+    updated = json.loads(authority_path.read_text(encoding="utf-8"))
+    assert updated["items"][0]["image_url"] == IMAGE
+    assert updated["items"][0]["slug"] == SLUG
+    assert updated["items"][1] == unrelated
+    assert _fix_rss_social_image_authority(authority_path, SLUG, IMAGE) is False
+    assert _fix_rss_social_image_authority(authority_path, "rotated-out-story", IMAGE) is False
