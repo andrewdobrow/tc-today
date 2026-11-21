@@ -206,6 +206,9 @@ jobs:
       - name: Reconcile editor-approved images in retained published pages
         run: python scripts/reconcile_editorial_image_surfaces.py
 
+      - name: Preserve editor-corrected Preston Lane location in archive
+        run: python scripts/reconcile_preston_lane_location.py
+
       - name: Run editorial engine tests
         run: |
           python -m pytest tests -v \
