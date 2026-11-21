@@ -22102,9 +22102,8 @@ def _normalize_custom_edition_key(value):
         "nov": "nov", "november": "nov",
         "dec": "dec", "december": "dec",
     }
-    if parts and parts[0] in month_aliases:
-        parts[0] = month_aliases[parts[0]]
-    return "-".join(parts)
+    # Cross-month editions normalize both month names, not only the first.
+    return "-".join(month_aliases.get(part, part) for part in parts)
 
 
 def _custom_series_key(item):
@@ -22144,7 +22143,7 @@ def _custom_series_key(item):
 
 
 def _custom_edition_marker(item):
-    """Extract a normalized human-visible edition marker such as ``jul-26-31``."""
+    """Extract a normalized edition marker, including cross-month date ranges."""
     if not isinstance(item, dict):
         return ""
     explicit = str(item.get("edition_key") or item.get("custom_edition_key") or "").strip()
@@ -22152,19 +22151,22 @@ def _custom_edition_marker(item):
         return _normalize_custom_edition_key(explicit)
     headline = str(item.get("headline") or "").lower()
     match = re.search(
-        rf"\b({_CUSTOM_MONTH_PATTERN})\.?\s+(\d{{1,2}})(?:\s*(?:-|–|—|to|through)\s*(\d{{1,2}}))?\b",
+        rf"\b({_CUSTOM_MONTH_PATTERN})\.?\s+(\d{{1,2}})"
+        rf"(?:\s*(?:-|–|—|to|through)\s*"
+        rf"(?:(?:({_CUSTOM_MONTH_PATTERN})\.?\s+)?(\d{{1,2}})))?\b",
         headline,
         re.I,
     )
     if match:
         pieces = [match.group(1).lower(), str(int(match.group(2)))]
-        if match.group(3):
-            pieces.append(str(int(match.group(3))))
+        if match.group(4):
+            if match.group(3):
+                pieces.append(match.group(3).lower())
+            pieces.append(str(int(match.group(4))))
         return _normalize_custom_edition_key("-".join(pieces))
     published = str(item.get("published_raw") or item.get("published") or "")
     parsed = _parse_any_datetime(published)
     return parsed.date().isoformat() if parsed else ""
-
 
 def _custom_publication_key(item):
     """Return a durable editor identity that is independent of display headline."""
@@ -22303,15 +22305,21 @@ def _custom_series_slug_mismatch(item, slug):
     # corrections remain explicit payload repairs of the existing custom page.
     if not marker:
         return False
+    # Match the full date range, including a second month such as nov-20-dec-4.
+    # Partial first-month matches could falsely reject a correct editor permalink.
     slug_marker_match = re.search(
-        rf"(?:^|-)((?:{_CUSTOM_MONTH_PATTERN}))-(\d{{1,2}})(?:-(\d{{1,2}}))?(?:-|$)",
+        rf"(?:^|-)((?:{_CUSTOM_MONTH_PATTERN}))-(\d{{1,2}})"
+        rf"(?:-((?:{_CUSTOM_MONTH_PATTERN}))-(\d{{1,2}})|-(\d{{1,2}}))?"
+        rf"(?:-|$)",
         slug,
         re.I,
     )
     if slug_marker_match:
         slug_marker_parts = [slug_marker_match.group(1), slug_marker_match.group(2)]
         if slug_marker_match.group(3):
-            slug_marker_parts.append(slug_marker_match.group(3))
+            slug_marker_parts.extend([slug_marker_match.group(3), slug_marker_match.group(4)])
+        elif slug_marker_match.group(5):
+            slug_marker_parts.append(slug_marker_match.group(5))
         slug_marker = _normalize_custom_edition_key("-".join(slug_marker_parts))
         if slug_marker != _normalize_custom_edition_key(marker):
             return True
