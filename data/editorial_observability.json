@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-21T11:52:14Z",
+  "generated_at": "2026-11-21T13:48:59Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 1,
-    "placements_after": 1,
-    "publication_behavior_changed": false,
+    "placements_before": 4,
+    "placements_after": 3,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/local/national-weather-service-canceled-flood-watch-indian-river-county-road-closures-schools-closed-indian-river-county-emergency-services-florida-news",
+        "headline": "Indian River County roads remain closed after flood watch is canceled",
+        "source_title_key": "indian river county roads remain closed after flood watch is canceled",
+        "incoming_article_id": "",
+        "target_article_id": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
+        "story_id": "story-canceled-closed-continued-county-s-damage-a6bded36",
+        "canonical_is_custom": false,
+        "canonical_title": "Indian River County flood watch canceled; flooded roads and schools remain closed",
+        "canonical_source": "",
+        "canonical_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
+        "reason": "Same story and safe normalized stage 'incident-active' at 98% confidence.",
+        "category": "indian_river",
+        "placement": "card"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/local/national-weather-service-canceled-flood-watch-indian-river-county-road-closures-schools-closed-indian-river-county-emergency-services-florida-news",
+        "headline": "Indian River County roads remain closed after flood watch is canceled",
+        "source_title_key": "indian river county roads remain closed after flood watch is canceled",
+        "incoming_article_id": "",
+        "target_article_id": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
+        "story_id": "story-canceled-closed-continued-county-s-damage-a6bded36",
+        "canonical_is_custom": false,
+        "canonical_title": "Indian River County flood watch canceled; flooded roads and schools remain closed",
+        "canonical_source": "",
+        "canonical_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
+        "reason": "Same story and safe normalized stage 'incident-active' at 98% confidence.",
+        "category": "indian_river",
+        "placement": "card",
+        "slug": "",
+        "source_title": "Indian River County roads remain closed after flood watch is canceled",
+        "date": "Yesterday, 11:18 AM ET",
+        "category_key": "indian_river",
+        "is_custom": false,
+        "story_stage": "incident-active",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
+        "matched_prior_headline": "Indian River County flood watch canceled; flooded roads and schools remain closed",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,25 +105,34 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 188,
+    "candidates_processed": 186,
     "routes": {
-      "generate_new": 43,
-      "skip": 141,
-      "update_existing": 4
+      "generate_new": 10,
+      "skip": 175,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 131,
-      "publishable": 56
+      "listing": 2,
+      "low_value": 132,
+      "publishable": 52
     },
     "source_classes": {
-      "aggregator": 132,
+      "aggregator": 134,
       "local_news": 25,
-      "regional_news": 27,
+      "regional_news": 23,
       "unknown": 4
     },
-    "rejected_count": 1,
+    "rejected_count": 2,
     "rejected_examples": [
+      {
+        "headline": "157 SE Lakehurst Dr, Port Saint Lucie, FL 34983 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxORjE4SlZYNzBjTm1FUkJURUwzVTBtTkJkVGFQa3Z5aWstdlpzV2d5YzZhNG4xS0tUMnVad0dLQWV2NTQtbWEydzZ1dXFkaDd2X3hJdUY2MTBFTHdJVVNlTjJ4MVNvWTh1UXY5U042OGEwa3pYTmJtNEVxOTgwOVFzOVpEWXBXVlFEai0taEt2aXpEUlotOUZiT0pmRQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "468 NW Raymond Ln, Port Saint Lucie, FL 34983 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOY2lySmNZU2M3LUhYMEVlZWJ0eVUzNWFBWjdQb0xwdnNSZklwMUlxQlJqeDlYUDdYVnY3d1pGNTVlWTdHV2hYU0QxZmlvUm4tTTZxcC0tUVlMSHV5bjItWGUzb2JMZWhkU1FzQTNVSTREVS1UTmJKazlwbWRSbExOWDRJaXh0QXZld3V0MWp1TE0xYmNEbk5pTGVRWEY?oc=5",
@@ -81,21 +146,22 @@
   },
   "relationships": {
     "counts": {
-      "follow_up": 1,
-      "new_story": 37,
-      "same_event": 150
+      "new_story": 12,
+      "same_event": 174
     },
     "examples": [
       {
         "story_id": "story_028937",
         "title": "Florida restaurants with the best eggs Benedict in town? 9 to try - Treasure Coast News",
         "event_key": "unknown-event-615e0d8b27",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -370,13 +436,15 @@
         "story_id": "story_028937",
         "title": "Florida restaurants with the best eggs Benedict in town? 9 to try - Treasure Coast News",
         "event_key": "unknown-event-615e0d8b27",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -669,186 +737,31 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 4,
-    "high_confidence_candidate_count": 4,
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "follow_up": 1,
-      "same_event": 3
-    },
-    "milestones": {
-      "arrest": 4
-    },
-    "reason_codes": {
-      "agency_match": 2,
-      "enforced_follow_up": 1,
-      "entity_match": 4,
-      "event_type_match": 1,
-      "exact_event_key": 4,
-      "fact_continuity": 1,
-      "identity_anchor_qualified": 4,
-      "location_match": 3,
-      "novel_milestone": 3,
-      "title_continuity": 4
-    },
-    "examples": [
-      {
-        "headline": "Flood watch canceled for Indian River County as road closures and school closure remain - WPEC",
-        "event_key": "unknown-event-011ad2de7f",
-        "current_story_id": "story_028820",
-        "current_relationship": "same_event",
-        "candidate_story_id": "story_028820",
-        "candidate_confidence": 0.98,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "exact_event_key",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_028820",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: True",
-          "Facts overlap: 0.00",
-          "Title overlap: 1.00",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.98"
-        ]
-      },
-      {
-        "headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
-        "event_key": "missing-person-3b60abb2ab-3b60abb2ab",
-        "current_story_id": "story_028701",
-        "current_relationship": "follow_up",
-        "candidate_story_id": "story_028701",
-        "candidate_confidence": 1.0,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up",
-          "exact_event_key",
-          "agency_match",
-          "event_type_match",
-          "entity_match",
-          "title_continuity",
-          "fact_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Distinctive facts overlap: 1.00",
-          "Identity anchor qualified: True",
-          "Location match: False",
-          "Agency match: True",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: arrest",
-          "Novel fact ratio: 0.33",
-          "Confidence: 1.00",
-          "Threshold: 0.68"
-        ]
-      },
-      {
-        "headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
-        "event_key": "unknown-event-49de21e4a1",
-        "current_story_id": "story_028552",
-        "current_relationship": "same_event",
-        "candidate_story_id": "story_028552",
-        "candidate_confidence": 1.0,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "exact_event_key",
-          "location_match",
-          "agency_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_028552",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: True",
-          "Facts overlap: 0.00",
-          "Title overlap: 1.00",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 1.00"
-        ]
-      },
-      {
-        "headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
-        "event_key": "unknown-event-e10d323293",
-        "current_story_id": "story_028717",
-        "current_relationship": "same_event",
-        "candidate_story_id": "story_028717",
-        "candidate_confidence": 0.98,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "exact_event_key",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_028717",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: True",
-          "Facts overlap: 0.00",
-          "Title overlap: 1.00",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.98"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 10,
     "retrospective_high_confidence_candidate_count": 3,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 343,
-      "timeline_entries_examined": 1011,
-      "transitions_examined": 630,
+      "stories_with_timelines": 337,
+      "timeline_entries_examined": 993,
+      "transitions_examined": 619,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 10,
       "high_confidence_candidate_count": 3,
       "activation_eligible_candidate_count": 3,
-      "same_source_evolution_count": 7,
+      "same_source_evolution_count": 6,
       "same_source_evolution_milestones": {
         "approval": 1,
         "death": 2,
-        "opening": 2,
+        "opening": 1,
         "recovery": 2
       },
       "same_source_evolution_examples": [
@@ -1061,41 +974,6 @@
             "title": "Florida city approves 450 townhouses east of I-95 - Treasure Coast News",
             "source": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQbW5fNVoyWlRWMnJ0eFFJS0lJWFBtcWpwR0dJcHJNMkl3Q21ESmc2QVgxdW15eVdtSS0yTjktRnVMem8wSGJmNTdjdFZOV01XTWc2Tk9yNEMtaWF1TW1VZmtZZGM5RjFFWmdSakR5WkZWektNMDY3VGs1eW9nUFNzYllkNWVuSFNCYzlmT0FsRXJodlFSWVZ3TTZCYTkzU0VpNzBlNEhCYWY3eEtYejlKUzFoOHF5akJtQ09MWFRuU2xXYWFlc3paQm1RSm9QMWp4bE5hd3d5ZEZsQQ?oc=5",
             "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQbW5fNVoyWlRWMnJ0eFFJS0lJWFBtcWpwR0dJcHJNMkl3Q21ESmc2QVgxdW15eVdtSS0yTjktRnVMem8wSGJmNTdjdFZOV01XTWc2Tk9yNEMtaWF1TW1VZmtZZGM5RjFFWmdSakR5WkZWektNMDY3VGs1eW9nUFNzYllkNWVuSFNCYzlmT0FsRXJodlFSWVZ3TTZCYTkzU0VpNzBlNEhCYWY3eEtYejlKUzFoOHF5akJtQ09MWFRuU2xXYWFlc3paQm1RSm9QMWp4bE5hd3d5ZEZsQQ?oc=5"
-          }
-        },
-        {
-          "story_id": "story_026122",
-          "story_title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
-          "milestones": [
-            "opening"
-          ],
-          "matched_phrases": {
-            "opening": [
-              "open"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "strong_pair_title_continuity",
-            "shared_discriminative_title_tokens",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-e98eb4bb45e65b99ea30",
-            "event_key": "unknown-event-44890e1cca",
-            "published_at": "2026-11-07T03:16:58.232077+00:00",
-            "title": "Orangewood xxxxx Horizon, DeLand rally and will face off for state volleyball championship - Orlando Sentinel",
-            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
-          },
-          "newer_article": {
-            "article_id": "rss-57ed94d072136fc024ae",
-            "event_key": "unknown-event-743d1d6bdf",
-            "published_at": "2026-11-07T11:42:11.437708+00:00",
-            "title": "FHSAA Volleyball Finals: Horizon vs. DeLand, and No. 1 Orangewood seeks Open title - Orlando Sentinel",
-            "source": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbVZTM3VGU1RJTU9VdUtZb29NSVpEQjdCOTQzYjdHNmo1UFVPTWpoM1lVR2V6MFpDM3phaWRQSVJCeWdvd3VvZFZfYXFHNW1pcUJqMFY1SUZaQ1Zod3ZMTHEtMXIxdHNOUHNtRkRxa1lSV3ZTSW9UQWNZbWFXbXNxbE85dWFEeV9FM2txV3lWaHQ2MDlLOGV4a2FRM3p5QjRyeGJLSXNHWWhNWXFjcEVsdUlDTnhxUjd3?oc=5"
           }
         }
       ],
@@ -1324,10 +1202,10 @@
         "same_timestamp_order_uncertain": 3,
         "timeline_identity_unanchored": 6
       },
-      "excluded_entry_count": 38,
+      "excluded_entry_count": 37,
       "exclusion_reasons": {
         "insufficient_title_detail": 4,
-        "social_source": 34
+        "social_source": 33
       },
       "examples": [
         {
@@ -2048,27 +1926,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 619,
-      "treasure_coast_local": 467,
-      "treasure_coast_region": 147,
-      "unknown": 1214
+      "florida": 615,
+      "treasure_coast_local": 464,
+      "treasure_coast_region": 144,
+      "unknown": 1201
     },
-    "average_score": 58.6
+    "average_score": 58.62
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 619,
-      "treasure_coast_local": 467,
-      "treasure_coast_region": 147,
-      "unknown": 1214
+      "florida": 615,
+      "treasure_coast_local": 464,
+      "treasure_coast_region": 144,
+      "unknown": 1201
     },
     "average_priority": 2.54
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1544,
-      "developing": 86,
-      "ongoing": 815,
+      "active": 1521,
+      "developing": 83,
+      "ongoing": 818,
       "resolved": 2
     }
   },
@@ -2076,8 +1954,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2399,
-    "active_stories_after": 2399,
+    "active_stories_before": 2413,
+    "active_stories_after": 2413,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2102,24 +1980,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 28,
+    "incident_anchor_to_story_count": 29,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-21T03:40:04Z",
+    "generated_at": "2026-11-21T13:41:12Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2447
+    "active_story_count": 2424
   },
   "stories": {
-    "total": 2447,
+    "total": 2424,
     "importance_levels": {
       "breaking": 2,
       "high": 40,
-      "normal": 257,
-      "low": 2148,
+      "normal": 254,
+      "low": 2128,
       "archived": 0
     },
-    "average_importance": 5.84,
+    "average_importance": 5.83,
     "top": [
       {
         "story_id": "story_027686",
@@ -2134,7 +2012,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 19.08
+          "age_hours": 21.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2177,7 +2055,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 19.08,
+          "hours_since_update": 21.04,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2195,7 +2073,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 36.01
+          "age_hours": 38.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2239,7 +2117,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 36.01,
+          "hours_since_update": 38.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2257,7 +2135,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 59.99
+          "age_hours": 61.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2303,7 +2181,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 59.99,
+          "hours_since_update": 61.99,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2321,7 +2199,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 163.0
+          "age_hours": 165.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2363,7 +2241,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 163.0,
+          "hours_since_update": 165.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2381,7 +2259,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 163.0
+          "age_hours": 165.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2425,7 +2303,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 163.0,
+          "hours_since_update": 165.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2443,7 +2321,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 224.49
+          "age_hours": 226.49
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2493,7 +2371,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 224.49,
+          "hours_since_update": 226.49,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2511,7 +2389,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 323.99
+          "age_hours": 325.99
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2561,7 +2439,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-07T23:42:34.970395+00:00",
-          "hours_since_update": 323.99,
+          "hours_since_update": 325.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2579,7 +2457,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 163.0
+          "age_hours": 165.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2623,7 +2501,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 163.0,
+          "hours_since_update": 165.0,
           "event_count": 35,
           "timeline_entries": 35
         }
@@ -2641,7 +2519,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 8.99
+          "age_hours": 10.99
         },
         "level": "normal",
         "importance_reasons": [
@@ -2679,7 +2557,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-21T02:42:22.808106+00:00",
-          "hours_since_update": 8.99,
+          "hours_since_update": 10.99,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2697,7 +2575,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 200.92
+          "age_hours": 202.92
         },
         "level": "high",
         "importance_reasons": [
@@ -2740,7 +2618,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 200.92,
+          "hours_since_update": 202.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2758,7 +2636,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 276.0
+          "age_hours": 278.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2802,7 +2680,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 276.0,
+          "hours_since_update": 278.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2820,7 +2698,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 264.0
+          "age_hours": 266.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2864,7 +2742,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 264.0,
+          "hours_since_update": 266.0,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2882,7 +2760,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 187.0
+          "age_hours": 189.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2925,7 +2803,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 187.0,
+          "hours_since_update": 189.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2943,7 +2821,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 185.72
+          "age_hours": 187.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2986,7 +2864,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 185.72,
+          "hours_since_update": 187.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3004,7 +2882,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 117.29
+          "age_hours": 119.29
         },
         "level": "high",
         "importance_reasons": [
@@ -3042,7 +2920,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-16T14:24:33.437384+00:00",
-          "hours_since_update": 117.29,
+          "hours_since_update": 119.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3060,7 +2938,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 211.0
+          "age_hours": 213.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3103,7 +2981,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 211.0,
+          "hours_since_update": 213.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3121,7 +2999,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 232.0
+          "age_hours": 234.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3162,7 +3040,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 232.0,
+          "hours_since_update": 234.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3180,7 +3058,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 232.52
+          "age_hours": 234.52
         },
         "level": "high",
         "importance_reasons": [
@@ -3219,7 +3097,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 232.52,
+          "hours_since_update": 234.52,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3237,7 +3115,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 288.0
+          "age_hours": 290.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3275,7 +3153,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 288.0,
+          "hours_since_update": 290.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3293,7 +3171,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 185.72
+          "age_hours": 187.72
         },
         "level": "high",
         "importance_reasons": [
@@ -3331,7 +3209,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 185.72,
+          "hours_since_update": 187.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3341,7 +3219,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-21T11:49:17Z",
+    "generated_at": "2026-11-21T13:45:41Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3357,29 +3235,28 @@
       "category_count": 9,
       "statuses": {
         "category_eligibility_archive_recovery": 3,
-        "generation_failed_archive_recovery": 5,
-        "no_publishable_sources": 1
+        "generated_live": 2,
+        "generation_failed_archive_recovery": 2,
+        "no_publishable_sources": 2
       },
       "failures": {
-        "contextless_update_lead": 1,
-        "copydesk_integrity": 1,
-        "invalid_json": 2,
+        "invalid_json": 1,
         "missing_or_null_hero": 1,
         "no_category_eligible_sources": 3
       },
-      "model_attempt_count": 10,
-      "model_elapsed_seconds": 254.61,
-      "archive_recovery_requested_count": 9,
+      "model_attempt_count": 7,
+      "model_elapsed_seconds": 69.232,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 1,
-      "contextual_update_lead_rejection_count": 3,
+      "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 45,
-      "story_aware_update_context_count": 7,
-      "material_update_promotion_evaluation_count": 12,
+      "category_eligibility_rejection_count": 8,
+      "published_story_duplicate_suppression_count": 49,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 14,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 12,
-      "material_update_promotion_model_call_count": 0
+      "material_update_promotion_model_call_count": 2
     },
     "categories": [
       {
@@ -3680,16 +3557,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 24.17
+        "elapsed_seconds": 16.401
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 11,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 8,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 2,
@@ -3697,23 +3574,23 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.187,
+            "elapsed_seconds": 3.626,
             "result": "invalid_json",
             "error_type": "ValueError",
-            "error_summary": "SOURCE FACT GUARD: refusing generated article missing explicitly named suspect(s) from the same source: Gerardo Perez Rivera"
+            "error_summary": "Assignment editor returned no valid hero source"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.322,
+            "elapsed_seconds": 3.467,
             "result": "invalid_json",
             "error_type": "ValueError",
-            "error_summary": "SOURCE FACT GUARD: refusing generated article missing explicitly named suspect(s) from the same source: Gerardo Perez Rivera"
+            "error_summary": "Assignment editor returned no valid hero source"
           }
         ],
-        "model_elapsed_seconds": 42.509,
+        "model_elapsed_seconds": 7.092,
         "failure_code": "invalid_json",
-        "failure_summary": "SOURCE FACT GUARD: refusing generated article missing explicitly named suspect(s) from the same source: Gerardo Perez Rivera",
+        "failure_summary": "Assignment editor returned no valid hero source",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3722,8 +3599,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 5,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-primary-crime-safety-focus",
@@ -3738,23 +3615,9 @@
             "local_nexus_signals": [],
             "headline": "Martin County investigation alleges inappropriate conduct involving child at Stuart hospital - WPBF",
             "source_url": "https://www.wpbf.com/article/stuart-hospital-inappropriate-conduct-investigation/74488107"
-          },
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates?teaserSource=trending"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3788,6 +3651,16 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates?teaserSource=trending",
+            "editorial_story_id": "story_028804",
+            "canonical_slug": "2026-11-20-glades-cut-off-road-in-port-st-lucie-set-for-indefinite-closure-after-culvert-fa",
+            "canonical_headline": "Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Flooded roads snarl travel across Port St. Lucie - WPEC",
             "source_url": "https://cbs12.com/news/local/flooded-roads-snarl-travel-across-port-st-lucie-barricades-public-worksstreets-detours-avoid-areas-lanes-closed",
             "editorial_story_id": "story_028551",
@@ -3808,6 +3681,16 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
+            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
+            "editorial_story_id": "story_028701",
+            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
+            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Flooded roads reported in Vero Lake Estates as Indian River County schools close - WPEC",
             "source_url": "https://cbs12.com/newsletter-daily/flooded-roads-reported-in-vero-lake-estates-as-indian-river-county-schools-close-road-closures-lane-closures-saturated-ground-rain-flooding-",
             "editorial_story_id": "story_028624",
@@ -3815,57 +3698,20 @@
             "canonical_headline": "Indian River County flood watch canceled; flooded roads and schools remain closed",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 2,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
-            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
-            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028701",
-              "source:https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028701,source:https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
           },
           {
+            "category_key": "crime",
             "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-            "publisher": "cbs12.com",
+            "editorial_story_id": "story_028552",
             "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
             "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028552",
-              "source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028552,source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
@@ -3933,6 +3779,21 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates?teaserSource=trending",
+            "canonical_slug": "2026-11-20-glades-cut-off-road-in-port-st-lucie-set-for-indefinite-closure-after-culvert-fa",
+            "canonical_headline": "Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Flooded roads snarl travel across Port St. Lucie - WPEC",
             "source_url": "https://cbs12.com/news/local/flooded-roads-snarl-travel-across-port-st-lucie-barricades-public-worksstreets-detours-avoid-areas-lanes-closed",
             "canonical_slug": "2026-11-19-flooding-leaves-port-st-lucie-lanes-impassable-as-crews-deploy-barricades",
@@ -3974,6 +3835,21 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
+            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
+            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
+            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Flooded roads reported in Vero Lake Estates as Indian River County schools close - WPEC",
             "source_url": "https://cbs12.com/newsletter-daily/flooded-roads-reported-in-vero-lake-estates-as-indian-river-county-schools-close-road-closures-lane-closures-saturated-ground-rain-flooding-",
             "canonical_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
@@ -3986,12 +3862,27 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
+            "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
+            "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 63.511
+        "elapsed_seconds": 26.078
       },
       {
         "category_key": "business",
@@ -4207,16 +4098,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.4
+        "elapsed_seconds": 17.16
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 29,
-        "publishable_source_count": 6,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 27,
+        "publishable_source_count": 4,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 2,
@@ -4224,19 +4115,19 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.343,
+            "elapsed_seconds": 2.326,
             "result": "missing_or_null_hero",
             "error_summary": "Model response did not contain a usable hero after normalization"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 4.194,
+            "elapsed_seconds": 2.451,
             "result": "missing_or_null_hero",
             "error_summary": "Model response did not contain a usable hero after normalization"
           }
         ],
-        "model_elapsed_seconds": 9.537,
+        "model_elapsed_seconds": 4.777,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "Model response did not contain a usable hero after normalization",
         "sports_expired_event_preview_count": 1,
@@ -4258,11 +4149,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "existing_athletic_guard_retained",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "sports",
+            "source_headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
+            "source_url": "https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
+            "editorial_story_id": "story_028717",
+            "canonical_slug": "2026-11-19-woods-scores-twice-in-vero-beachs-playoff-win-over-fort-pierce-central",
+            "canonical_headline": "Woods scores twice in Vero Beach's playoff win over Fort Pierce Central",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "sports",
             "source_headline": "Flooded roads reported in Vero Lake Estates as Indian River County schools close - WPEC",
@@ -4272,57 +4173,20 @@
             "canonical_headline": "Indian River County flood watch canceled; flooded roads and schools remain closed",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 2,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
-            "source_url": "https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-19-woods-scores-twice-in-vero-beachs-playoff-win-over-fort-pierce-central",
-            "canonical_headline": "Woods scores twice in Vero Beach's playoff win over Fort Pierce Central",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028717",
-              "source:https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028717,source:https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
           },
           {
+            "category_key": "sports",
             "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-            "publisher": "cbs12.com",
+            "editorial_story_id": "story_028552",
             "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
             "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028552",
-              "source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028552,source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -4330,10 +4194,40 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "sports",
+            "source_headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
+            "source_url": "https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
+            "canonical_slug": "2026-11-19-woods-scores-twice-in-vero-beachs-playoff-win-over-fort-pierce-central",
+            "canonical_headline": "Woods scores twice in Vero Beach's playoff win over Fort Pierce Central",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "sports",
             "source_headline": "Flooded roads reported in Vero Lake Estates as Indian River County schools close - WPEC",
             "source_url": "https://cbs12.com/news/local/flooded-roads-reported-in-vero-lake-estates-as-indian-river-county-schools-close-road-closures-lane-closures-saturated-ground-rain-flooding-",
             "canonical_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
             "canonical_headline": "Indian River County flood watch canceled; flooded roads and schools remain closed",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "sports",
+            "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
+            "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
+            "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4356,7 +4250,7 @@
         "sports_editorial_source_rejections": [],
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 35.256
+        "elapsed_seconds": 20.323
       },
       {
         "category_key": "things_to_do",
@@ -4463,7 +4357,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.405
+        "elapsed_seconds": 11.336
       },
       {
         "category_key": "florida",
@@ -4501,24 +4395,24 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.58
+        "elapsed_seconds": 9.084
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 25,
+        "status": "generated_live",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 5,
-        "selected_source_count": 4,
+        "selected_source_count": 3,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 49.947,
+            "elapsed_seconds": 21.235,
             "result": "copydesk_integrity",
             "error_type": "CopyDeskIntegrityError",
             "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
@@ -4526,15 +4420,13 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 49.81,
-            "result": "copydesk_integrity",
-            "error_type": "CopyDeskIntegrityError",
-            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+            "elapsed_seconds": 17.015,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 99.757,
-        "failure_code": "copydesk_integrity",
-        "failure_summary": "Copy-desk repair still violates TCT house style: chained_and",
+        "model_elapsed_seconds": 38.25,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4546,28 +4438,8 @@
         "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-            "editorial_story_id": "story_028909",
-            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
-            "editorial_story_id": "story_028894",
-            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
-            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "martin",
             "source_headline": "'We need answers': Martin County officials address outrage over proposed data center",
@@ -4590,16 +4462,16 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'It rips your heart': Volunteers help Jensen Beach neighborhood recover from flood damage - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-jensen-beach-flooding-damage-recovery/74481443",
-            "editorial_story_id": "story_028730",
-            "canonical_slug": "2026-11-19-volunteers-remove-flood-damaged-drywall-from-jensen-beachs-skyline-drive-homes",
-            "canonical_headline": "Volunteers remove flood-damaged drywall from Jensen Beach's Skyline Drive homes",
+            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
+            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
+            "editorial_story_id": "story_028701",
+            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
+            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
             "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - cw34.com",
@@ -4642,29 +4514,6 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
-            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
-            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028701",
-              "source:https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028701,source:https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
         "material_update_promotion_evaluation_count": 1,
@@ -4672,36 +4521,6 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
-            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
-            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "martin",
             "source_headline": "'We need answers': Martin County officials address outrage over proposed data center",
@@ -4747,10 +4566,10 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "'It rips your heart': Volunteers help Jensen Beach neighborhood recover from flood damage - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-jensen-beach-flooding-damage-recovery/74481443",
-            "canonical_slug": "2026-11-19-volunteers-remove-flood-damaged-drywall-from-jensen-beachs-skyline-drive-homes",
-            "canonical_headline": "Volunteers remove flood-damaged drywall from Jensen Beach's Skyline Drive homes",
+            "source_headline": "Martin County deputies ask public to help find missing 15-year-old teen - WPEC",
+            "source_url": "https://cbs12.com/news/local/missing-15-year-old-stephen-levi-cotela-last-seen-near-tequesta-thursday-afternoon-florida-news-local-news-florida-missing-child",
+            "canonical_slug": "2026-11-19-deputies-seek-missing-15-year-old-last-seen-running-toward-jonathan-dickinson-st",
+            "canonical_headline": "Deputies seek missing 15-year-old last seen running toward Jonathan Dickinson State Park",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4762,42 +4581,27 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 115.716
+        "live_hero_headline": "Martin County flood disaster request remains pending, state emergency director confirms",
+        "generated_card_count": 0,
+        "elapsed_seconds": 48.975
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generation_failed_archive_recovery",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 17,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 21.02,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_details_missing,new_development_missing — PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.705,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_details_missing,new_development_missing — PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC"
-          }
-        ],
-        "model_elapsed_seconds": 41.725,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: original_event_details_missing,new_development_missing — PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4806,18 +4610,18 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-            "editorial_story_id": "story_028909",
-            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
+            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
+            "editorial_story_id": "story_028894",
+            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
+            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4833,17 +4637,17 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
-            "editorial_story_id": "story_028894",
-            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
-            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+            "editorial_story_id": "story_028909",
+            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
+            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
+            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
             "editorial_story_id": "story_028464",
             "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
@@ -4853,7 +4657,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
+            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
             "editorial_story_id": "story_028464",
             "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
@@ -4913,6 +4717,16 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
+            "editorial_story_id": "story_028552",
+            "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
+            "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
             "editorial_story_id": "story_028612",
@@ -4930,63 +4744,40 @@
             "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
-            "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
-            "editorial_story_id": "story_028168",
-            "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
-            "canonical_headline": "Indian River County extends flood emergency through Nov. 23 as more rain threatens",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
-            "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_028552",
-              "source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_028552,source:https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 5,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 6,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 5,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
+            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
+            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
+            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Identical WPBF source URL and source headline",
+              "Partial collapse of a Port St. Lucie road and adjoining property during historic flooding",
+              "Neighbor reports that the resulting hole continues to grow daily"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article repeats the same WPBF report already represented by the canonical. Resident concerns, the culvert explanation, and repair planning without a timeline do not establish a new consequential development or independently newsworthy follow-up.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5005,10 +4796,10 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Flooding leads to partial road collapse in Port St. Lucie - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-flooding-road-collapse/74494258",
-            "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
-            "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
+            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5017,36 +4808,6 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-            "canonical_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.93,
-            "shared_anchors": [
-              "Precautionary boil water notice affecting approximately 21,000 customers in Tradition and western Port St. Lucie",
-              "Contractor-damaged water main near Glades Cut Off Road",
-              "Affected area extending south to Becker Road",
-              "Notice extended while water-quality testing continues"
-            ],
-            "novel_facts": [
-              "Incoming article specifies a 36-inch main repaired within hours and warns residents not to interfere with flushing equipment.",
-              "Incoming article says the city is investigating and expects to seek recovery of repair costs."
-            ],
-            "reason": "Both articles concern the same main break and resulting boil water notice, and the canonical already reports an extension for the same 21,000 customers. The incoming article does not clearly establish a separate subsequent extension or announce test results, a lifting of the notice, or an investigative finding. Its additional operational details and anticipated cost-recovery efforts do not establish a material new development.",
-            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -5076,6 +4837,36 @@
               "Incoming article says the city is investigating and expects to seek recovery of costs."
             ],
             "reason": "The candidate already covers the same main break and extension of the same boil water notice. The later publication date does not establish an additional extension or changed water-safety status. Operational details and a stated intention to investigate and recover costs do not establish a material new finding or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
+            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+            "canonical_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.93,
+            "shared_anchors": [
+              "Precautionary boil water notice affecting approximately 21,000 customers in Tradition and western Port St. Lucie",
+              "Contractor-damaged water main near Glades Cut Off Road",
+              "Affected area extending south to Becker Road",
+              "Notice extended while water-quality testing continues"
+            ],
+            "novel_facts": [
+              "Incoming article specifies a 36-inch main repaired within hours and warns residents not to interfere with flushing equipment.",
+              "Incoming article says the city is investigating and expects to seek recovery of repair costs."
+            ],
+            "reason": "Both articles concern the same main break and resulting boil water notice, and the canonical already reports an extension for the same 21,000 customers. The incoming article does not clearly establish a separate subsequent extension or announce test results, a lifting of the notice, or an investigative finding. Its additional operational details and anticipated cost-recovery efforts do not establish a material new development.",
             "validation_errors": []
           },
           {
@@ -5179,6 +4970,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "PSL police have a GTA VI release-day warning: Port St. Lucie is not Vice City - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-port-st-lucie-police-have-a-gta-vi-release-day-warning-port-st-lucie-is-not-vice-city-vice-city-november-19-leonida-rockstar-games-",
+            "canonical_slug": "2026-11-19-port-st-lucie-police-use-gta-vi-launch-to-warn-against-reckless-driving",
+            "canonical_headline": "Port St. Lucie police use GTA VI launch to warn against reckless driving",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
             "canonical_slug": "2026-11-19-advocate-says-warnings-preceded-st-lucie-countys-historic-flooding",
@@ -5220,60 +5026,33 @@
             ],
             "reason": "Although the candidate's slug references Tuesday's early dismissal, its current headline and lead already report the same Wednesday closure and pending Thursday decision. The incoming article adds routine closure details and resident preparation, not a new school-day decision or a material, independently newsworthy development.",
             "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
-            "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
-            "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
-            "canonical_headline": "Indian River County extends flood emergency through Nov. 23 as more rain threatens",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 58.948
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 16.256
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 12,
-        "selected_source_count": 6,
+        "status": "generated_live",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 11,
+        "selected_source_count": 5,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 43.985,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — Flood watch canceled for Indian River County as road closures and school closure remain - WPEC"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 17.097,
-            "result": "invalid_json",
-            "error_type": "ValueError",
-            "error_summary": "SOURCE FACT GUARD: refusing generated article missing explicitly named suspect(s) from the same source: Gerardo Perez Rivera"
+            "elapsed_seconds": 19.113,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 61.082,
-        "failure_code": "invalid_json",
-        "failure_summary": "SOURCE FACT GUARD: refusing generated article missing explicitly named suspect(s) from the same source: Gerardo Perez Rivera",
+        "model_elapsed_seconds": 19.113,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5282,11 +5061,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 12,
+        "category_eligibility_assessed_count": 11,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "West Palm Beach and Vero Beach set new rainfall records after heavy South Florida rain - WPBF",
+            "source_url": "https://www.wpbf.com/article/south-florida-treasure-coast-rain-records/74488105",
+            "editorial_story_id": "story_028805",
+            "canonical_slug": "2026-11-20-vero-beach-sets-daily-rainfall-record-at-225-inches-drier-weather-expected-sunda",
+            "canonical_headline": "Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
@@ -5329,11 +5118,11 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "West Palm Beach and Vero Beach set new rainfall records after heavy South Florida rain - WPBF",
-            "source_url": "https://www.wpbf.com/article/south-florida-treasure-coast-rain-records/74488105",
-            "editorial_story_id": "story_028805",
-            "canonical_slug": "2026-11-20-vero-beach-sets-daily-rainfall-record-at-225-inches-drier-weather-expected-sunda",
-            "canonical_headline": "Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday",
+            "source_headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
+            "source_url": "https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
+            "editorial_story_id": "story_028717",
+            "canonical_slug": "2026-11-19-woods-scores-twice-in-vero-beachs-playoff-win-over-fort-pierce-central",
+            "canonical_headline": "Woods scores twice in Vero Beach's playoff win over Fort Pierce Central",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5350,11 +5139,37 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "West Palm Beach and Vero Beach set new rainfall records after heavy South Florida rain - WPBF",
+            "source_url": "https://www.wpbf.com/article/south-florida-treasure-coast-rain-records/74488105",
+            "canonical_slug": "2026-11-20-vero-beach-sets-daily-rainfall-record-at-225-inches-drier-weather-expected-sunda",
+            "canonical_headline": "Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Identical WPBF source URL and source headline",
+              "Thursday rainfall in Vero Beach totaled 2.25 inches, breaking the previous daily record of 1.73 inches set in 1987",
+              "Lingering weekend showers followed by drier weather beginning Sunday"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article repeats the same record-rainfall report from the identical source story. Additional West Palm Beach totals and routine forecast detail do not establish a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
@@ -5432,10 +5247,10 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "West Palm Beach and Vero Beach set new rainfall records after heavy South Florida rain - WPBF",
-            "source_url": "https://www.wpbf.com/article/south-florida-treasure-coast-rain-records/74488105",
-            "canonical_slug": "2026-11-20-vero-beach-sets-daily-rainfall-record-at-225-inches-drier-weather-expected-sunda",
-            "canonical_headline": "Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday",
+            "source_headline": "CBS12 News Athlete of the Week: Vero Beach's Latravious Woods Chases State Championship - WPEC",
+            "source_url": "https://cbs12.com/sports/content/cbs12-news-athlete-of-the-week-vero-beachs-latravious-woods-chases-state-championship-florida-news-local-news-florida-sports-local-sports-high-school-sports",
+            "canonical_slug": "2026-11-19-woods-scores-twice-in-vero-beachs-playoff-win-over-fort-pierce-central",
+            "canonical_headline": "Woods scores twice in Vero Beach's playoff win over Fort Pierce Central",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5462,9 +5277,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 78.073
+        "live_hero_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+        "generated_card_count": 1,
+        "elapsed_seconds": 38.402
       }
     ]
   }
