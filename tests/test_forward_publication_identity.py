@@ -415,11 +415,43 @@ def test_recurring_edition_with_year_suffix_not_in_slug_is_detected():
     g = _load_generate()
     entry = {
         "headline": "Treasure Coast traffic report: roadwork planned Nov. 20-Dec. 4",
-        "slug": "2026-11-20-traffic-report-nov-20-dec-4",
+        "slug": "2026-11-20-treasure-coast-traffic-report-nov-20-dec-4",
         "custom_series_key": "treasure-coast-traffic-report",
         "custom_edition_key": "nov-20-dec-4-2026",
         "is_custom": True,
     }
     assert g._custom_series_slug_mismatch(entry, entry["slug"]) is True
     entry["custom_edition_key"] = "nov-20-dec-4"
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is False
+
+
+def test_cross_month_custom_edition_inferred_from_headline():
+    """Nov. 20-Dec. 4 is a full edition, not a partial Nov. 20 marker."""
+    g = _load_generate()
+    entry = {
+        "headline": "Treasure Coast traffic report: roadwork planned Nov. 20–Dec. 4",
+        "slug": "2026-11-20-treasure-coast-traffic-report-nov-20-dec-4",
+        "custom_series_key": "treasure-coast-traffic-report",
+        "is_custom": True,
+    }
+    assert g._custom_edition_marker(entry) == "nov-20-dec-4"
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is False
+    assert g._archive_headline_slug_alignment(entry)["aligned"] is True
+
+    # This is a different edition. Do not weaken the mismatch guard.
+    entry["headline"] = "Treasure Coast traffic report: roadwork planned Nov. 20–Dec. 5"
+    assert g._custom_edition_marker(entry) == "nov-20-dec-5"
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is True
+
+
+def test_cross_month_explicit_month_aliases_are_normalized():
+    g = _load_generate()
+    entry = {
+        "headline": "Treasure Coast traffic report: Nov. 20–Dec. 4",
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "november-20-december-4",
+        "slug": "2026-11-20-treasure-coast-traffic-report-nov-20-dec-4",
+        "is_custom": True,
+    }
+    assert g._custom_edition_marker(entry) == "nov-20-dec-4"
     assert g._custom_series_slug_mismatch(entry, entry["slug"]) is False
