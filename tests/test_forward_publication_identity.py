@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import importlib.util
+import json
 import sys
 import types
 from pathlib import Path
@@ -382,3 +383,43 @@ def test_generated_weekend_custom_slug_keeps_edition_marker_after_headline_clipp
     assert slug == "2026-09-14-treasure-coast-weekend-events-sep-19-20"
     assert g._custom_series_slug_mismatch(hero, slug) is False
     assert g._archive_headline_slug_alignment({**hero, "slug": slug})["aligned"] is True
+
+
+def test_active_recurring_custom_queue_respects_edition_permalinks():
+    """Fail before expensive news generation if an editor's edition slug drifts.
+
+    The queue is replaced with each new custom request, so test whatever is
+    currently queued rather than requiring any historical edition to remain.
+    """
+    g = _load_generate()
+    queue = json.loads((Path(__file__).parents[1] / "custom_articles.json").read_text(encoding="utf-8"))
+    assert isinstance(queue, list)
+    for item in queue:
+        if not item.get("custom_series_key"):
+            continue
+        slug = item.get("slug")
+        edition = item.get("custom_edition_key")
+        assert slug and edition, f"Recurring custom article needs slug and edition: {item.get('headline')}"
+        entry = {**item, "is_custom": True, "authoritative_custom": True}
+        assert g._custom_series_slug_mismatch(entry, slug) is False, (
+            f"Recurring edition {edition!r} does not match {slug!r}"
+        )
+        alignment = g._archive_headline_slug_alignment(entry)
+        assert alignment["aligned"] is True, (
+            f"Queued recurring article would fail final live identity contract: {alignment}"
+        )
+
+
+def test_recurring_edition_with_year_suffix_not_in_slug_is_detected():
+    """Regression for Nov. 20 failure: do not allow a mismatched edition key."""
+    g = _load_generate()
+    entry = {
+        "headline": "Treasure Coast traffic report: roadwork planned Nov. 20-Dec. 4",
+        "slug": "2026-11-20-traffic-report-nov-20-dec-4",
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "nov-20-dec-4-2026",
+        "is_custom": True,
+    }
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is True
+    entry["custom_edition_key"] = "nov-20-dec-4"
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is False
