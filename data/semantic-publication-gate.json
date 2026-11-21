@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "2.0",
-  "generated_at": "2026-11-21T21:46:42.634471+00:00",
+  "generated_at": "2026-11-21T23:50:27.673521+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,24 +62,24 @@
     }
   },
   "summary": {
-    "evaluations": 52,
-    "candidate_pairs": 0,
+    "evaluations": 54,
+    "candidate_pairs": 2,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 2,
     "cache_hits": 0,
     "no_candidate_passes": 52,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
+    "canonical_updates_selected": 2,
     "new_stories_allowed": 1,
     "retroactive_rows_retained": 51,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
-    "material_updates_applied": 0,
+    "registry_story_records_merged": 2,
+    "registry_aliases_written": 2,
+    "material_update_composer_calls": 3,
+    "material_updates_applied": 2,
     "material_update_redirects": 0,
-    "material_update_holds": 0,
+    "material_update_holds": 1,
     "material_update_replays_suppressed": 0,
     "pre_generation_materiality_evaluations": 12,
     "pre_generation_materiality_promotions": 0,
@@ -89,17 +89,17 @@
     "pre_generation_materiality_cache_hits": 12,
     "terminal_permalink_evaluations": 1,
     "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 0,
-    "terminal_permalink_cache_hits": 1,
+    "terminal_permalink_model_calls": 1,
+    "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
-    "terminal_permalink_duplicates_blocked": 1,
+    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
-    "late_published_skip_materiality_evaluations": 0,
+    "late_published_skip_materiality_evaluations": 1,
     "late_published_skip_materiality_promotions": 0
   },
   "pre_generation_materiality_decisions": [
@@ -1461,7 +1461,94 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Florida emergency director confirms Martin County disaster aid request remains pending",
+      "incoming_headline": "Port St. Lucie lifts boil water notice for about 21,000 customers west of I-95",
+      "incoming_source_url": "https://cbs12.com/news/local/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+      "incoming_story_id": "story_029046",
+      "candidates": [
+        {
+          "slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+          "headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+          "retrieval_score": 0.9803,
+          "headline_similarity": 0.7114,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "000",
+            "21",
+            "boil",
+            "customers",
+            "lucie",
+            "notice",
+            "port",
+            "st",
+            "water"
+          ],
+          "shared_topic_tokens": [
+            "000",
+            "21",
+            "boil",
+            "customers",
+            "notice",
+            "water"
+          ],
+          "content_similarity": {
+            "score": 0.4952,
+            "overlap": 0.6316,
+            "jaccard": 0.1446,
+            "shared_token_count": 12,
+            "shared_tokens": [
+              "000",
+              "21",
+              "boil",
+              "contractor",
+              "customers",
+              "hours",
+              "notice",
+              "precautionary",
+              "quality",
+              "testing",
+              "water",
+              "western"
+            ]
+          },
+          "strong_content_event_continuity": false,
+          "day_gap": 3,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "shared_incident_anchor",
+            "publication_gap_3_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.99,
+        "shared_anchors": [
+          "Precautionary boil water notice affecting approximately 21,000 customers in western Port St. Lucie, including Tradition",
+          "Affected area associated with Glades Cut Off Road and Becker Road",
+          "Contractor-related water main disruption followed by water-quality testing"
+        ],
+        "novel_facts": [
+          "The city lifted the notice at 3:15 p.m. Saturday after testing confirmed the water was safe to drink",
+          "Affected customers no longer need to boil their water"
+        ],
+        "reason": "The incoming article resolves the same boil water notice that the canonical reported as extended. Confirmed water safety and removal of the boiling requirement materially change public guidance, but belong in the existing incident article rather than a separate follow-up.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Federal disaster request for Martin County flooding remains pending",
       "incoming_source_url": "https://www.wflx.com/2026/11/21/florida-emergency-management-director-responds-fema-delays-jensen-beach-flood-victims-wait-help",
       "incoming_story_id": "story_028910",
       "candidates": [],
@@ -1484,7 +1571,7 @@
       "gate_version": "1.2",
       "resolution_version": "1.0",
       "model": "gpt-6.1-sol",
-      "incoming_headline": "Florida emergency director confirms Martin County disaster aid request remains pending",
+      "incoming_headline": "Federal disaster request for Martin County flooding remains pending",
       "incoming_source_url": "https://www.wflx.com/2026/11/21/florida-emergency-management-director-responds-fema-delays-jensen-beach-flood-victims-wait-help",
       "incoming_story_id": "story_028910",
       "candidates": [
@@ -1492,8 +1579,8 @@
           "slug": "2026-11-06-floodwater-still-fills-hyline-drive-homes-in-jensen-beach-five-days-after-histor",
           "headline": "Jensen Beach flood cleanup begins; recovery center opens at Hoke Library",
           "terminal_recall_tier": 5,
-          "terminal_recall_score": 0.6305,
-          "retrieval_score": 0.4805,
+          "terminal_recall_score": 0.6652,
+          "retrieval_score": 0.5152,
           "reasons": [
             "shared_incident_anchor",
             "publication_gap_15_days",
@@ -1501,174 +1588,742 @@
           ]
         },
         {
-          "slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
-          "headline": "Martin County flood victim approved for $25,000 grant as federal request remains pending",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7165,
-          "retrieval_score": 0.6795,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
           "slug": "2026-11-10-flood-displaced-residents-press-martin-county-for-action-warning-review-planned",
           "headline": "Flood-displaced residents press Martin County for action; warning review planned",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5415,
-          "retrieval_score": 0.5345,
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.798,
+          "retrieval_score": 0.691,
           "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
             "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-11-19-volunteers-remove-flood-damaged-drywall-from-jensen-beachs-skyline-drive-homes",
-          "headline": "Volunteers remove flood-damaged drywall from Jensen Beach's Skyline Drive homes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4976,
-          "retrieval_score": 0.4636,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-08-cape-coral-man-arrested-over-alleged-threats-against-martin-county-student-schoo",
-          "headline": "Man in Martin County TikTok threat case also arrested for resisting arrest",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.49,
-          "retrieval_score": 0.486,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-11-19-martin-county-sheriff-readies-high-water-vehicles-in-stuart-and-indiantown",
-          "headline": "Martin County sheriff readies high-water vehicles in Stuart and Indiantown",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4793,
-          "retrieval_score": 0.4453,
-          "reasons": [
-            "publication_gap_2_days"
           ]
         },
         {
           "slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
           "headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4711,
-          "retrieval_score": 0.4401,
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.7642,
+          "retrieval_score": 0.5832,
           "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-11-18-martin-county-residents-press-commissioners-for-emergency-shelter-before-more-ra",
-          "headline": "Martin County residents press commissioners for emergency shelter before more rain",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4615,
-          "retrieval_score": 0.4305,
-          "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_3_days"
           ]
         },
         {
           "slug": "2026-11-11-jensen-beach-family-seeks-housing-and-repair-funding-after-flooding-destroys-hom",
           "headline": "Jensen Beach family seeks housing and repair funding after flooding destroys home interior",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4594,
-          "retrieval_score": 0.4374,
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.7004,
+          "retrieval_score": 0.5284,
           "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_10_days"
           ]
         },
         {
           "slug": "2026-11-11-martin-county-weighs-unified-savannas-management-after-jensen-beach-flooding",
           "headline": "Martin County weighs unified Savannas management after Jensen Beach flooding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4571,
-          "retrieval_score": 0.4471,
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6924,
+          "retrieval_score": 0.5324,
           "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_10_days"
           ]
         },
         {
-          "slug": "2026-11-13-i-95-closed-in-both-directions-in-indian-river-county-after-fatal-trooper-involv",
-          "headline": "I-95 closed in both directions in Indian River County after fatal trooper-involved shooting",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4476,
-          "retrieval_score": 0.4286,
+          "slug": "2026-11-10-martin-county-commissioners-to-review-safety-requirements-for-train-quiet-zones",
+          "headline": "Martin County commissioners to review quiet-zone safety and crossing improvements Tuesday",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6828,
+          "retrieval_score": 0.5258,
           "reasons": [
-            "publication_gap_8_days"
+            "shared_locality_and_event_family",
+            "publication_gap_11_days"
           ]
         },
         {
-          "slug": "2026-11-05-martin-county-delays-drainage-repairs-as-trailside-flooding-threatens-cattle-acc",
-          "headline": "Martin County seeks to revive drainage project as Trailside flooding threatens cattle",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.446,
-          "retrieval_score": 0.43,
+          "slug": "2026-11-16-rio-marine-village-breaks-ground-in-jensen-beach-with-342-apartments-and-marina",
+          "headline": "Rio Marine Village breaks ground in Jensen Beach with 342 apartments and marina",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6294,
+          "retrieval_score": 0.4544,
           "reasons": [
-            "publication_gap_16_days",
-            "outside_recent_window"
+            "shared_locality_and_event_family",
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-11-18-martin-county-residents-press-commissioners-for-emergency-shelter-before-more-ra",
+          "headline": "Martin County residents press commissioners for emergency shelter before more rain",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6257,
+          "retrieval_score": 0.4947,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-11-20-martin-county-cancels-kanner-highway-data-center-meeting-promises-public-forums",
+          "headline": "Martin County cancels Kanner Highway data center meeting, promises public forums",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6068,
+          "retrieval_score": 0.4698,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-11-19-martin-county-school-board-reinstates-matthew-theobald-awards-back-pay",
+          "headline": "Martin County School Board reinstates Matthew Theobald, awards back pay",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5848,
+          "retrieval_score": 0.4508,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-11-10-martin-county-reaches-one-year-emergency-contract-for-phased-marty-transit-retur",
+          "headline": "Martin County reaches one-year emergency contract for phased MARTY transit return",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.568,
+          "retrieval_score": 0.461,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-11-12-martin-county-firefighters-union-urges-county-to-restore-january-hiring-class",
+          "headline": "Martin County firefighters union urges county to restore January hiring class",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5466,
+          "retrieval_score": 0.4336,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_9_days"
           ]
         }
       ],
       "initial_decision": {
         "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
-        "same_real_world_event": true,
-        "material_new_update": false,
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
         "independently_newsworthy_followup": false,
-        "confidence": 0.91,
+        "confidence": 0.94,
         "shared_anchors": [
-          "Florida's pending federal disaster declaration request for Martin County flooding",
-          "A Jensen Beach homeowner approved for a $25,000 state housing grant",
-          "Martin County distributing approximately $1 million in housing assistance"
+          "Martin County and Jensen Beach flooding",
+          "Flood-damaged homes along Hyline Drive",
+          "County discussions about assistance for displaced residents"
         ],
         "novel_facts": [
-          "Emergency Management Director Jared Perdue confirms the request remains pending and says the state continues submitting damage information.",
-          "Perdue describes nonprofit and National Guard cleanup assistance.",
-          "The incoming article explains SHIP loan restrictions and possible county budget exposure if federal reimbursement is denied."
+          "Jared Perdue confirms Florida submitted an expedited federal disaster declaration request Nov. 9 that remains pending.",
+          "Linda Weisbecker has been approved for a $25,000 SHIP grant.",
+          "Martin County is distributing approximately $1 million in SHIP assistance, subject to eligibility requirements.",
+          "County officials warn that denied federal reimbursement could require redirecting local budget funds."
         ],
-        "reason": "The selected canonical already covers the same pending disaster-aid proceeding, grant approval and county assistance allocation. Perdue's confirmation does not change the request's status, and the additional cleanup and funding explanations do not establish a new decision, award, denial or independently newsworthy development.",
+        "reason": "The incoming article centers on a specific federal disaster-aid request and its funding consequences. No candidate covers that request or proceeding. The candidates address residential flooding, separate commission appeals, shelter needs, drainage policy or an investigation vote; sharing the underlying flood does not make them the same event.",
         "validation_errors": [],
         "consistency_repairs": []
       },
       "resolution_decision": {},
       "decision": {
         "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-10-martin-county-counts-66-flood-damaged-homes-25-destroyed-as-florida-seeks-federa",
-        "same_real_world_event": true,
-        "material_new_update": false,
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": true,
         "independently_newsworthy_followup": false,
-        "confidence": 0.91,
+        "confidence": 0.94,
         "shared_anchors": [
-          "Florida's pending federal disaster declaration request for Martin County flooding",
-          "A Jensen Beach homeowner approved for a $25,000 state housing grant",
-          "Martin County distributing approximately $1 million in housing assistance"
+          "Martin County and Jensen Beach flooding",
+          "Flood-damaged homes along Hyline Drive",
+          "County discussions about assistance for displaced residents"
         ],
         "novel_facts": [
-          "Emergency Management Director Jared Perdue confirms the request remains pending and says the state continues submitting damage information.",
-          "Perdue describes nonprofit and National Guard cleanup assistance.",
-          "The incoming article explains SHIP loan restrictions and possible county budget exposure if federal reimbursement is denied."
+          "Jared Perdue confirms Florida submitted an expedited federal disaster declaration request Nov. 9 that remains pending.",
+          "Linda Weisbecker has been approved for a $25,000 SHIP grant.",
+          "Martin County is distributing approximately $1 million in SHIP assistance, subject to eligibility requirements.",
+          "County officials warn that denied federal reimbursement could require redirecting local budget funds."
         ],
-        "reason": "The selected canonical already covers the same pending disaster-aid proceeding, grant approval and county assistance allocation. Perdue's confirmation does not change the request's status, and the additional cleanup and funding explanations do not establish a new decision, award, denial or independently newsworthy development.",
+        "reason": "The incoming article centers on a specific federal disaster-aid request and its funding consequences. No candidate covers that request or proceeding. The candidates address residential flooding, separate commission appeals, shelter needs, drainage policy or an investigation vote; sharing the underlying flood does not make them the same event.",
+        "validation_errors": [],
+        "consistency_repairs": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Indian River County unveils permanent memorial honoring two fallen deputies",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
+      "incoming_story_id": "story_029014",
+      "candidates": [
+        {
+          "slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+          "headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+          "retrieval_score": 0.7781,
+          "headline_similarity": 0.4995,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "county",
+            "deputies",
+            "indian",
+            "river",
+            "two"
+          ],
+          "shared_topic_tokens": [
+            "deputies",
+            "two"
+          ],
+          "content_similarity": {
+            "score": 0.5844,
+            "overlap": 0.76,
+            "jaccard": 0.1329,
+            "shared_token_count": 19,
+            "shared_tokens": [
+              "ceremony",
+              "cpl",
+              "death",
+              "deputies",
+              "duty",
+              "fallen",
+              "honor",
+              "honoring",
+              "line",
+              "mashkow",
+              "raczkoski",
+              "richard",
+              "sgt",
+              "sheriff",
+              "sweeting",
+              "terri",
+              "two",
+              "unveiled",
+              "unveiling"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 0,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_0_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.99,
+        "shared_anchors": [
+          "Same Saturday memorial-unveiling ceremony at the Indian River County Sheriff’s Office",
+          "Memorial honors Sgt. Terri Sweeting-Mashkow and Cpl. Richard Raczkoski",
+          "Both articles published November 21, 2026"
+        ],
+        "novel_facts": [
+          "The scheduled unveiling has taken place, establishing the permanent memorial outside the sheriff’s office’s new administration building."
+        ],
+        "reason": "The incoming article confirms completion of the exact ceremony previewed by the candidate. That event-status development warrants updating the existing canonical, not a separate URL; attendance, quotations and ceremonial details do not establish an independently newsworthy follow-up.",
         "validation_errors": [],
         "consistency_repairs": []
       }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
-  "material_updates": [],
+  "material_update_compositions": [
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 227,
+      "paragraph_count": 5,
+      "baseline_lead_hits": [
+        "000",
+        "boil",
+        "customers",
+        "lucie",
+        "notice",
+        "port",
+        "water"
+      ],
+      "novelty_lead_hits": [
+        "affected",
+        "approximately",
+        "areas",
+        "break",
+        "confirmed",
+        "cut",
+        "drink",
+        "followed",
+        "glades",
+        "interstate",
+        "lifted",
+        "longer",
+        "main",
+        "need",
+        "off",
+        "other",
+        "road",
+        "safe",
+        "saturday",
+        "tests",
+        "their",
+        "tradition",
+        "tuesday",
+        "west"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 0.8182,
+        "date_gap_days": 3,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+        "incoming_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+        "candidate_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+        "prospective_lastmod": "2026-11-21",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 63,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "21000",
+          "boil",
+          "customers",
+          "lucie",
+          "notice",
+          "port",
+          "water"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "break",
+          "lifted",
+          "main"
+        ],
+        "semantic_novel_fact_hits": [
+          "15",
+          "affected",
+          "confirmed",
+          "drink",
+          "lifted",
+          "longer",
+          "need",
+          "safe",
+          "saturday"
+        ],
+        "semantic_novel_fact_token_count": 9,
+        "missing": [],
+        "source_title": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
+        "headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted"
+      },
+      "headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted"
+    },
+    {
+      "phase": "late_published_skip_write_barrier",
+      "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+      "incoming_slug": "",
+      "status": "invalid_composition",
+      "validation_errors": [
+        "headline_missing_material_development"
+      ],
+      "word_count": 259,
+      "paragraph_count": 5,
+      "baseline_lead_hits": [
+        "deputies",
+        "duty",
+        "indian",
+        "killed",
+        "line",
+        "river",
+        "two"
+      ],
+      "novelty_lead_hits": [
+        "administration",
+        "agency",
+        "ago",
+        "also",
+        "building",
+        "eviction",
+        "honors",
+        "memorial",
+        "new",
+        "notice",
+        "outside",
+        "serving",
+        "shot",
+        "unveiled",
+        "while",
+        "who",
+        "year",
+        "years"
+      ],
+      "reason": "composition_not_validated"
+    },
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 246,
+      "paragraph_count": 5,
+      "baseline_lead_hits": [
+        "deputies",
+        "duty",
+        "indian",
+        "killed",
+        "line",
+        "river",
+        "two",
+        "unveiling"
+      ],
+      "novelty_lead_hits": [
+        "administration",
+        "agency",
+        "bermuda",
+        "building",
+        "club",
+        "community",
+        "eviction",
+        "exactly",
+        "memorial",
+        "new",
+        "notice",
+        "one",
+        "outside",
+        "permanent",
+        "serving",
+        "since",
+        "unveiled",
+        "while",
+        "year"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 0.9,
+        "date_gap_days": 0,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+        "incoming_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+        "candidate_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "prospective_lastmod": "2026-11-21",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 58,
+        "baseline_anchor": "fatality",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "deputies",
+          "duty",
+          "indian",
+          "killed",
+          "line",
+          "river",
+          "unveiling"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+        "novelty_anchor": "semantic_gate_novel_fact",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "memorial"
+        ],
+        "semantic_novel_fact_hits": [
+          "administration",
+          "building",
+          "memorial",
+          "outside",
+          "permanent"
+        ],
+        "semantic_novel_fact_token_count": 8,
+        "missing": [],
+        "source_title": "New memorial honors two Indian River County deputies killed in line of duty",
+        "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty"
+      },
+      "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty"
+    }
+  ],
+  "material_updates": [
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+      "source_story_id": "story_029046",
+      "target_story_id": "story_028464",
+      "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
+      "updated_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Precautionary boil water notice affecting approximately 21,000 customers in western Port St. Lucie, including Tradition",
+        "Affected area associated with Glades Cut Off Road and Becker Road",
+        "Contractor-related water main disruption followed by water-quality testing"
+      ],
+      "novel_facts": [
+        "The city lifted the notice at 3:15 p.m. Saturday after testing confirmed the water was safe to drink",
+        "Affected customers no longer need to boil their water"
+      ],
+      "updated_at": "2026-11-21T23:48:34Z",
+      "composition": {
+        "phase": "forward_publication",
+        "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 227,
+        "paragraph_count": 5,
+        "baseline_lead_hits": [
+          "000",
+          "boil",
+          "customers",
+          "lucie",
+          "notice",
+          "port",
+          "water"
+        ],
+        "novelty_lead_hits": [
+          "affected",
+          "approximately",
+          "areas",
+          "break",
+          "confirmed",
+          "cut",
+          "drink",
+          "followed",
+          "glades",
+          "interstate",
+          "lifted",
+          "longer",
+          "main",
+          "need",
+          "off",
+          "other",
+          "road",
+          "safe",
+          "saturday",
+          "tests",
+          "their",
+          "tradition",
+          "tuesday",
+          "west"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 0.8182,
+          "date_gap_days": 3,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+          "incoming_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+          "candidate_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+          "prospective_lastmod": "2026-11-21",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 63,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "21000",
+            "boil",
+            "customers",
+            "lucie",
+            "notice",
+            "port",
+            "water"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Boil water notice extended 24 hours for 21,000 customers in western Port St. Lucie",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "break",
+            "lifted",
+            "main"
+          ],
+          "semantic_novel_fact_hits": [
+            "15",
+            "affected",
+            "confirmed",
+            "drink",
+            "lifted",
+            "longer",
+            "need",
+            "safe",
+            "saturday"
+          ],
+          "semantic_novel_fact_token_count": 9,
+          "missing": [],
+          "source_title": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
+          "headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted"
+        },
+        "headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted"
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+      "source_story_id": "story_029014",
+      "target_story_id": "story_028972",
+      "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
+      "updated_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+      "confidence": 0.99,
+      "shared_anchors": [
+        "Same Saturday memorial-unveiling ceremony at the Indian River County Sheriff’s Office",
+        "Memorial honors Sgt. Terri Sweeting-Mashkow and Cpl. Richard Raczkoski",
+        "Both articles published November 21, 2026"
+      ],
+      "novel_facts": [
+        "The scheduled unveiling has taken place, establishing the permanent memorial outside the sheriff’s office’s new administration building."
+      ],
+      "updated_at": "2026-11-21T23:49:23Z",
+      "composition": {
+        "phase": "forward_publication",
+        "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 246,
+        "paragraph_count": 5,
+        "baseline_lead_hits": [
+          "deputies",
+          "duty",
+          "indian",
+          "killed",
+          "line",
+          "river",
+          "two",
+          "unveiling"
+        ],
+        "novelty_lead_hits": [
+          "administration",
+          "agency",
+          "bermuda",
+          "building",
+          "club",
+          "community",
+          "eviction",
+          "exactly",
+          "memorial",
+          "new",
+          "notice",
+          "one",
+          "outside",
+          "permanent",
+          "serving",
+          "since",
+          "unveiled",
+          "while",
+          "year"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 0.9,
+          "date_gap_days": 0,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+          "incoming_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+          "candidate_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+          "prospective_lastmod": "2026-11-21",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 58,
+          "baseline_anchor": "fatality",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "deputies",
+            "duty",
+            "indian",
+            "killed",
+            "line",
+            "river",
+            "unveiling"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+          "novelty_anchor": "semantic_gate_novel_fact",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "memorial"
+          ],
+          "semantic_novel_fact_hits": [
+            "administration",
+            "building",
+            "memorial",
+            "outside",
+            "permanent"
+          ],
+          "semantic_novel_fact_token_count": 8,
+          "missing": [],
+          "source_title": "New memorial honors two Indian River County deputies killed in line of duty",
+          "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty"
+        },
+        "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty"
+      }
+    }
+  ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 10,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "status": "consolidated",
+    "directives_considered": 9,
+    "story_records_merged": 2,
+    "aliases_written": 2,
     "already_consolidated": 0,
     "skipped": [
       {
@@ -1695,30 +2350,6 @@
         ],
         "resolved_source_story_id": "story_028910",
         "resolved_target_story_id": "story_026738"
-      },
-      {
-        "source_story_id": "story_028747",
-        "target_story_id": "story_028624",
-        "target_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
-        "incoming_headline": "Flooding closed about 12 Indian River County roads, limited Vero Lake Estates access",
-        "confidence": 0.94,
-        "shared_anchors": [
-          "Flooded roads disrupting travel in Indian River County during the same Thursday-Friday period",
-          "Road closures and restricted access in Vero Lake Estates",
-          "Indian River County schools closed Friday because of flooding"
-        ],
-        "reason": "The candidate already covers the same flooded-road disruption in Vero Lake Estates and the accompanying Friday school closure. The incoming article adds a road-count estimate and resident observations, not a consequential new development or independently newsworthy follow-up. Its Thursday-evening account also precedes the candidate's Friday-morning flood-watch cancellation.",
-        "relationship_type": "duplicate",
-        "novel_facts": [
-          "Approximately 12 roads were closed Thursday evening",
-          "Residents Terry Holly and Marjorie Hale describe travel difficulties, household preparations, insurance concerns and passing vehicles creating waves"
-        ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
-        ],
-        "resolved_source_story_id": "story_028747",
-        "resolved_target_story_id": "story_028624"
       },
       {
         "source_story_id": "story_019789",
@@ -2118,32 +2749,79 @@
         ],
         "resolved_source_story_id": "story_028910",
         "resolved_target_story_id": "story_026738"
-      },
-      {
-        "source_story_id": "story_028747",
-        "target_story_id": "story_028624",
-        "target_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
-        "incoming_headline": "Flooding closed about 12 Indian River County roads, limited Vero Lake Estates access",
-        "confidence": 0.94,
-        "shared_anchors": [
-          "Flooded roads disrupting travel in Indian River County during the same Thursday-Friday period",
-          "Road closures and restricted access in Vero Lake Estates",
-          "Indian River County schools closed Friday because of flooding"
-        ],
-        "reason": "The candidate already covers the same flooded-road disruption in Vero Lake Estates and the accompanying Friday school closure. The incoming article adds a road-count estimate and resident observations, not a consequential new development or independently newsworthy follow-up. Its Thursday-evening account also precedes the candidate's Friday-morning flood-watch cancellation.",
-        "relationship_type": "duplicate",
-        "novel_facts": [
-          "Approximately 12 roads were closed Thursday evening",
-          "Residents Terry Holly and Marjorie Hale describe travel difficulties, household preparations, insurance concerns and passing vehicles creating waves"
-        ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
-        ],
-        "resolved_source_story_id": "story_028747",
-        "resolved_target_story_id": "story_028624"
       }
     ],
-    "merges": []
-  }
+    "merges": [
+      {
+        "source_story_id": "story_029046",
+        "target_story_id": "story_028464",
+        "target_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+        "incoming_headline": "Port St. Lucie lifts boil water notice for about 21,000 customers west of I-95",
+        "confidence": 0.99,
+        "shared_anchors": [
+          "Precautionary boil water notice affecting approximately 21,000 customers in western Port St. Lucie, including Tradition",
+          "Affected area associated with Glades Cut Off Road and Becker Road",
+          "Contractor-related water main disruption followed by water-quality testing"
+        ],
+        "reason": "The incoming article resolves the same boil water notice that the canonical reported as extended. Confirmed water safety and removal of the boiling requirement materially change public guidance, but belong in the existing incident article rather than a separate follow-up.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "The city lifted the notice at 3:15 p.m. Saturday after testing confirmed the water was safe to drink",
+          "Affected customers no longer need to boil their water"
+        ],
+        "resolved_source_story_id": "story_029046",
+        "resolved_target_story_id": "story_028464"
+      },
+      {
+        "source_story_id": "story_029014",
+        "target_story_id": "story_028972",
+        "target_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "incoming_headline": "Indian River County unveils permanent memorial honoring two fallen deputies",
+        "confidence": 0.99,
+        "shared_anchors": [
+          "Same Saturday memorial-unveiling ceremony at the Indian River County Sheriff’s Office",
+          "Memorial honors Sgt. Terri Sweeting-Mashkow and Cpl. Richard Raczkoski",
+          "Both articles published November 21, 2026"
+        ],
+        "reason": "The incoming article confirms completion of the exact ceremony previewed by the candidate. That event-status development warrants updating the existing canonical, not a separate URL; attendance, quotations and ceremonial details do not establish an independently newsworthy follow-up.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "The scheduled unveiling has taken place, establishing the permanent memorial outside the sheriff’s office’s new administration building."
+        ],
+        "resolved_source_story_id": "story_029014",
+        "resolved_target_story_id": "story_028972"
+      }
+    ]
+  },
+  "late_published_skip_materiality_decisions": [
+    {
+      "phase": "late_published_skip_write_barrier",
+      "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
+      "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+      "canonical_headline": "Indian River County plans monument unveiling for two deputies killed in line of duty",
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "hold_material_update_composition_failed",
+      "semantic_status": "validated",
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "November 21, 2026, memorial unveiling at the Indian River County Sheriff’s Office",
+        "Memorial honoring Sgt. Terri Sweeting-Mashkow and Cpl. Richard Raczkoski"
+      ],
+      "novel_facts": [
+        "The previously scheduled unveiling has taken place outside the sheriff’s office’s new administration building."
+      ],
+      "reason": "The incoming article reports completion of the exact ceremony previewed by the canonical candidate. Confirmation that the memorial was unveiled updates the event’s status; attendance, ceremonial details and anniversary reflections do not warrant a separate URL.",
+      "validation_errors": [
+        "headline_missing_material_development"
+      ],
+      "composition_status": "invalid_composition"
+    }
+  ]
 }
