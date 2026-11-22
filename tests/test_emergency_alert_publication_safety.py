@@ -83,11 +83,20 @@ def test_reworded_warning_source_still_held(gen):
     assert gen._unverified_automated_live_alert_policy(row)['action'] == 'retire'
 
 
-def test_source_bulletin_does_not_block_new_confirmed_impacts(gen):
+def test_source_bulletin_cannot_be_recast_as_unverified_damage_report(gen):
+    row = {
+        'date': '2026-11-21',
+        'headline': 'Crews assess alleged damage in St. Lucie County after storm',
+        'source_headline': 'Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC',
+    }
+    assert gen._unverified_automated_live_alert_policy(row)['action'] == 'retire'
+
+
+def test_independent_post_storm_damage_story_remains_eligible(gen):
     row = {
         'date': '2026-11-21',
         'headline': 'Crews assess confirmed damage in St. Lucie County after storm',
-        'source_headline': 'Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC',
+        'source_headline': 'Crews assess storm damage in St. Lucie County',
     }
     assert gen._unverified_automated_live_alert_policy(row) is None
 
