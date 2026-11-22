@@ -10018,30 +10018,15 @@ def _write_category_eligibility_report(records, output_path=None):
 # -- HTML GENERATION --
 
 def now_et():
-    from datetime import timezone, timedelta
-    utc = datetime.now(timezone.utc)
-    et  = utc - timedelta(hours=4)
-    return et.strftime("%-I:%M %p ET")
+    """Display the actual current Eastern clock time, including DST transitions."""
+    et = datetime.now(timezone.utc).astimezone(ZoneInfo("America/New_York"))
+    return f"{et.hour % 12 or 12}:{et.strftime('%M')} {et.strftime('%p')} ET"
 
 def _now_eastern_rfc822():
-    """Current time as an RFC-822 string in US Eastern time (EDT/EST aware).
-    Used as the first-published timestamp for RSS pubDate so consumers like Nextdoor
-    show when a story appeared on OUR site, not when the original source posted it."""
-    from datetime import timezone as _tz, timedelta as _td
-    # Eastern is UTC-4 (EDT) Mar-Nov, UTC-5 (EST) otherwise. Determine DST roughly by
-    # US rules: 2nd Sunday March through 1st Sunday November.
-    u = datetime.now(_tz.utc)
-    y = u.year
-    def _nth_sun(month, nth):
-        d = datetime(y, month, 1, tzinfo=_tz.utc)
-        first_sun = 1 + (6 - d.weekday()) % 7
-        return first_sun + (nth - 1) * 7
-    dst_start = datetime(y, 3, _nth_sun(3, 2), 7, tzinfo=_tz.utc)   # 2am EST = 7am UTC
-    dst_end   = datetime(y, 11, _nth_sun(11, 1), 6, tzinfo=_tz.utc) # 2am EDT = 6am UTC
-    offset = -4 if dst_start <= u < dst_end else -5
-    eastern = u + _td(hours=offset)
-    tzname = "-0400" if offset == -4 else "-0500"
-    return eastern.strftime(f"%a, %d %b %Y %H:%M:%S {tzname}")
+    """Stamp publication receipts in real US Eastern time (DST-aware)."""
+    return datetime.now(timezone.utc).astimezone(
+        ZoneInfo("America/New_York")
+    ).strftime("%a, %d %b %Y %H:%M:%S %z")
 
 
 def _stamp_brand_new_tct_publication_time(item):
@@ -20012,6 +19997,32 @@ def validate_custom_body_fidelity(hero, page_html):
     return True
 
 
+def _format_article_timestamp_eastern(raw):
+    """Format an absolute publication receipt using the timezone at its own date.
+
+    UTC-4 is EDT, but Florida switches to UTC-5 in November. A fixed offset
+    must never be used for reader-visible publication or update timestamps.
+    """
+    raw = str(raw or "").strip()
+    if not raw:
+        return ""
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw):
+        try:
+            date_only = datetime.strptime(raw, "%Y-%m-%d")
+            return f"{date_only.strftime('%B')} {date_only.day}, {date_only.year}"
+        except ValueError:
+            return raw
+    parsed = _parse_any_datetime(raw)
+    if parsed is None:
+        return raw
+    eastern = parsed.astimezone(ZoneInfo("America/New_York"))
+    return (
+        f"{eastern.strftime('%B')} {eastern.day}, {eastern.year} at "
+        f"{eastern.hour % 12 or 12}:{eastern.strftime('%M')} "
+        f"{eastern.strftime('%p')} ET"
+    )
+
+
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
     """Render a permanent article page for a single TCT story."""
     _apply_article_image_override(hero, slug=slug)
@@ -20020,27 +20031,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # first-published time; fall back to the pub_date passed in. "Updated" only shows
     # when it differs from published (a genuinely revised story).
     def _fmt_full(raw):
-        # "July 18, 2026 at 3:45 PM ET" from an RFC-822 string; falls back to raw.
-        try:
-            from email.utils import parsedate_to_datetime
-            from datetime import timezone as _tz, timedelta as _td
-            et = _tz(_td(hours=-4))
-            try:
-                dt = parsedate_to_datetime(str(raw)).astimezone(et)
-            except Exception:
-                dt = datetime.fromisoformat(
-                    str(raw).replace("Z", "+00:00")
-                )
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=_tz.utc)
-                dt = dt.astimezone(et)
-            hour = dt.hour % 12 or 12
-            ampm = "AM" if dt.hour < 12 else "PM"
-            months = ["January","February","March","April","May","June","July",
-                      "August","September","October","November","December"]
-            return f"{months[dt.month-1]} {dt.day}, {dt.year} at {hour}:{dt.strftime('%M')} {ampm} ET"
-        except Exception:
-            return raw or ""
+        return _format_article_timestamp_eastern(raw)
+
     # Published time is OURS: when the article first appeared on this site, never the
     # source/RSS publish time. Use first_published (full Eastern timestamp set when the
     # article is first archived); fall back only to the archive date, never to
@@ -20893,7 +20885,7 @@ def _rss_publication_datetime(entry):
             try:
                 parsed = datetime.strptime(raw, "%Y-%m-%d")
                 return parsed.replace(
-                    hour=9, tzinfo=timezone(timedelta(hours=-4))
+                    hour=9, tzinfo=ZoneInfo("America/New_York")
                 ).astimezone(timezone.utc)
             except Exception:
                 pass
@@ -21547,7 +21539,7 @@ def update_news_sitemap(archive_entries):
                 return None
             try:
                 # date-only -> 9am Eastern (rough but valid), then to aware UTC
-                et = _tz(timedelta(hours=-4))
+                et = ZoneInfo("America/New_York")
                 dt = datetime.strptime(d, "%Y-%m-%d").replace(hour=9, tzinfo=et)
             except Exception:
                 return None
@@ -36041,15 +36033,14 @@ def _repair_article_shells(output_root):
             "wrapped": wrapped, "header_normalized": header_normalized,
             "sidebar_css_normalized": sidebar_css_normalized, "unrepairable": unrepairable}
 
-def _repair_prepublication_article_timestamps(output_root, limit=250):
-    """Correct impossible update-before-publication dates on retained article pages.
+def _repair_prepublication_article_timestamps(output_root, limit=350):
+    """Reconcile retained article bylines with authoritative publication metadata.
 
-    Newly generated pages use validated chronology in render_article_page(). Existing
-    HTML is intentionally retained between runs, so normalize recent direct pages
-    without rewriting their prose, canonical identity, or legitimate later updates.
+    Earlier renderers hardcoded UTC-4 year-round and displayed winter articles
+    one hour in the future. Read the stored absolute first-publication receipt
+    from Open Graph or NewsArticle schema; do not change the receipt itself.
+    Continue repairing impossible updates without rewriting article prose.
     """
-    from zoneinfo import ZoneInfo
-
     publication_pattern = re.compile(
         r'<span class="article-published">Published ([^<]+)</span>', re.I
     )
@@ -36059,6 +36050,12 @@ def _repair_prepublication_article_timestamps(output_root, limit=250):
     schema_pattern = re.compile(
         r'(<script\s+type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
         re.I | re.S,
+    )
+    meta_published_pattern = re.compile(
+        r'<meta\s+property="article:published_time"\s+content="([^"]+)"', re.I
+    )
+    meta_modified_pattern = re.compile(
+        r'<meta\s+property="article:modified_time"\s+content="([^"]+)"', re.I
     )
     eastern = ZoneInfo("America/New_York")
 
@@ -36073,13 +36070,50 @@ def _repair_prepublication_article_timestamps(output_root, limit=250):
     for path in paths:
         original = path.read_text(encoding="utf-8", errors="ignore")
         html = original
+        meta_pub = meta_published_pattern.search(html)
+        meta_mod = meta_modified_pattern.search(html)
+        schema_data = {}
+        if not meta_pub or not meta_mod:
+            for match in schema_pattern.finditer(html):
+                try:
+                    value = json.loads(match.group(2))
+                except (ValueError, TypeError):
+                    continue
+                if isinstance(value, dict) and value.get("@type") in ("NewsArticle", "Article"):
+                    schema_data = value
+                    break
+        publication_raw = (meta_pub.group(1) if meta_pub else schema_data.get("datePublished")) or ""
+        modified_raw = (meta_mod.group(1) if meta_mod else schema_data.get("dateModified")) or ""
+        authoritative_pub = _parse_any_datetime(publication_raw) if publication_raw else None
+        authoritative_mod = _parse_any_datetime(modified_raw) if modified_raw else None
+        # Date-only source fields are not precise receipts and must not invent
+        # a 12 AM UTC clock time on the prior calendar day.
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", publication_raw):
+            authoritative_pub = None
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", modified_raw):
+            authoritative_mod = None
+
+        pub_match = publication_pattern.search(html)
+        if pub_match and authoritative_pub is not None:
+            correct_label = _format_article_timestamp_eastern(publication_raw)
+            if pub_match.group(1) != correct_label:
+                html = (html[:pub_match.start(1)] + correct_label + html[pub_match.end(1):])
+
         pub_match = publication_pattern.search(html)
         upd_match = update_pattern.search(html)
-        if pub_match and upd_match:
-            pub_dt = _byline_dt(pub_match.group(1))
-            upd_dt = _byline_dt(upd_match.group(1))
-            if pub_dt is not None and upd_dt is not None and upd_dt <= pub_dt:
-                html = html[:upd_match.start()] + html[upd_match.end():]
+        if upd_match:
+            if authoritative_pub is not None and authoritative_mod is not None:
+                if authoritative_mod <= authoritative_pub:
+                    html = html[:upd_match.start()] + html[upd_match.end():]
+                else:
+                    correct_label = _format_article_timestamp_eastern(modified_raw)
+                    if upd_match.group(1) != correct_label:
+                        html = html[:upd_match.start(1)] + correct_label + html[upd_match.end(1):]
+            elif pub_match:
+                pub_dt = _byline_dt(pub_match.group(1))
+                upd_dt = _byline_dt(upd_match.group(1))
+                if pub_dt is not None and upd_dt is not None and upd_dt <= pub_dt:
+                    html = html[:upd_match.start()] + html[upd_match.end():]
 
         def _repair_schema(match):
             try:
@@ -44046,7 +44080,7 @@ def main():
     _repair_article_shells(OUTPUT_DIR)
     _timestamp_repair = _repair_prepublication_article_timestamps(OUTPUT_DIR)
     if _timestamp_repair["repaired"]:
-        print(f"  Repaired {_timestamp_repair['repaired']} impossible article update timestamp(s)")
+        print(f"  Reconciled {_timestamp_repair['repaired']} article timestamp/byline(s) with Eastern receipts")
     _article_prose_policy = _normalize_article_prose_policy_sitewide(OUTPUT_DIR)
     print(
         "  Article prose policy contract PASSED: "
