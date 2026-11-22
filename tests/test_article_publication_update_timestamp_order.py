@@ -2,6 +2,8 @@
 import ast
 import json
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+import re
 from pathlib import Path
 
 
@@ -11,9 +13,11 @@ SOURCE = Path(__file__).resolve().parents[1] / 'scripts' / 'generate.py'
 def _render_date_block():
     source = SOURCE.read_text(encoding='utf-8')
     tree = ast.parse(source)
-    namespace = {'datetime': datetime, 'timezone': timezone, '_slug_date': lambda slug: None}
+    namespace = {'datetime': datetime, 'timezone': timezone, 'ZoneInfo': ZoneInfo,
+                 're': re, '_slug_date': lambda slug: None}
     for name in ('_parse_any_datetime', '_latest_news_publication_datetime',
-                 '_latest_news_validated_update_datetime'):
+                 '_latest_news_validated_update_datetime',
+                 '_format_article_timestamp_eastern'):
         node = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
         exec(compile(ast.Module(body=[node], type_ignores=[]), str(SOURCE), 'exec'), namespace)
     start = source.index('    def _fmt_full(raw):', source.index('def render_article_page('))
@@ -39,6 +43,28 @@ def _hero(published, update=None, validated=True, **overrides):
         'last_meaningful_update_at': update or '',
         **overrides,
     }
+
+
+def test_november_est_uses_utc_minus_five_not_summer_dst():
+    result = _render_date_block()(_hero('Sun, 22 Nov 2026 11:47:51 -0500'), '2026-11-22')
+    assert result['published'] == 'November 22, 2026 at 11:47 AM ET'
+    assert result['published_raw'] == 'Sun, 22 Nov 2026 11:47:51 -0500'
+
+
+def test_summer_edt_uses_utc_minus_four():
+    result = _render_date_block()(_hero('2026-07-22T15:47:51+00:00'), '2026-07-22')
+    assert result['published'] == 'July 22, 2026 at 11:47 AM ET'
+
+
+def test_dst_fall_back_transition_has_correct_wall_clock():
+    first = _render_date_block()(_hero('2026-11-01T05:30:00+00:00'), '2026-11-01')
+    second = _render_date_block()(_hero('2026-11-01T06:30:00+00:00'), '2026-11-01')
+    assert first['published'] == second['published'] == 'November 1, 2026 at 1:30 AM ET'
+
+
+def test_date_only_fallback_does_not_invent_previous_day_time():
+    result = _render_date_block()(_hero('', date='2026-11-22'), '2026-11-22')
+    assert result['published'] == 'November 22, 2026'
 
 
 def test_oct20_article_cannot_be_updated_on_oct19():
@@ -93,8 +119,9 @@ def _retained_repair():
     source = SOURCE.read_text(encoding='utf-8')
     tree = ast.parse(source)
     namespace = {'datetime': datetime, 'timezone': timezone, 'Path': Path,
-                 'json': json, 're': re}
+                 'json': json, 're': re, 'ZoneInfo': ZoneInfo}
     for name in ('_parse_any_datetime', '_recent_direct_article_paths',
+                 '_format_article_timestamp_eastern',
                  '_repair_prepublication_article_timestamps'):
         node = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == name)
         exec(compile(ast.Module(body=[node], type_ignores=[]), str(SOURCE), 'exec'), namespace)
@@ -116,6 +143,49 @@ def _make_article(root, stem, published_label, updated_label, pub_raw, mod_raw):
     path.write_text(html)
     (root / 'archive.json').write_text(json.dumps([{'slug':stem}]))
     return path
+
+
+def test_retained_november_published_byline_uses_metadata_receipt(tmp_path):
+    path = _make_article(
+        tmp_path, '2026-11-22-fort-pierce-test',
+        'November 22, 2026 at 12:47 PM ET',
+        'November 22, 2026 at 12:47 PM ET',
+        '2026-11-22T11:47:51-05:00', '2026-11-22T11:47:51-05:00'
+    )
+    original = path.read_text()
+    html = original.replace(
+        '<html>',
+        '<html><head><meta property="article:published_time" content="Sun, 22 Nov 2026 11:47:51 -0500">'
+        '<meta property="article:modified_time" content="Sun, 22 Nov 2026 11:47:51 -0500"></head>'
+    )
+    path.write_text(html)
+    assert _retained_repair()(tmp_path) == {'checked':1, 'repaired':1}
+    repaired = path.read_text()
+    assert '<span class="article-published">Published November 22, 2026 at 11:47 AM ET</span>' in repaired
+    assert 'class="article-updated"' not in repaired
+    assert 'Unchanged article content' in repaired
+    assert '2026-11-22T11:47:51-05:00' in repaired
+    assert _retained_repair()(tmp_path)['repaired'] == 0
+
+
+def test_retained_winter_valid_update_both_labels_corrected(tmp_path):
+    path = _make_article(
+        tmp_path, '2026-11-22-st-lucie-test',
+        'November 22, 2026 at 12:47 PM ET', 'November 22, 2026 at 1:15 PM ET',
+        '2026-11-22T11:47:51-05:00', '2026-11-22T12:15:00-05:00'
+    )
+    assert _retained_repair()(tmp_path)['repaired'] == 1
+    html = path.read_text()
+    assert 'Published November 22, 2026 at 11:47 AM ET' in html
+    assert 'Updated November 22, 2026 at 12:15 PM ET' in html
+
+
+def test_source_no_fixed_summer_offset_for_eastern_clock():
+    source = SOURCE.read_text(encoding='utf-8')
+    assert 'utc - timedelta(hours=4)' not in source
+    assert 'hour=9, tzinfo=timezone(timedelta(hours=-4))' not in source
+    assert 'et = _tz(timedelta(hours=-4))' not in source
+    assert 'ZoneInfo("America/New_York")' in source
 
 
 def test_retained_articles_fix_byline_and_jsonld_without_touching_content(tmp_path):
