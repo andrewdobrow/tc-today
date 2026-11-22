@@ -18735,6 +18735,7 @@ def _source_retirement_policy_for_slug(slug, policies):
 _AUTOMATED_ACTIVE_ALERT_START = re.compile(
     r"^(?:breaking(?:\s+news)?\s*[:\-]\s*)?"
     r"(?:(?:nws|national\s+weather\s+service)\s+)?"
+    r"(?:(?:a|an|the)\s+)?"
     r"(?:flash[\s-]+flood|tornado|severe[\s-]+(?:thunderstorm|storm)|thunderstorm)\s+"
     r"(?:warnings?|watches?|advisories)\b",
     flags=re.I,
