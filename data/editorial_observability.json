@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-22T16:50:30Z",
+  "generated_at": "2026-11-22T19:50:30Z",
   "mode": "enforce",
-  "publication_behavior_changed": true,
+  "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,72 +19,16 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 1,
-    "enforceable_recommendation_count": 1,
-    "applied_action_count": 1,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
+    "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 6,
+    "placements_before": 5,
     "placements_after": 5,
-    "publication_behavior_changed": true,
+    "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.95,
-        "source_url": "https://cw34.com/news/local/national-weather-service-canceled-flood-watch-indian-river-county-road-closures-schools-closed-indian-river-county-emergency-services-florida-news",
-        "headline": "Indian River County roads closed Friday despite flood watch cancellation",
-        "source_title_key": "indian river county roads closed friday despite flood watch cancellation",
-        "incoming_article_id": "",
-        "target_article_id": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
-        "story_id": "story-canceled-closed-continued-county-s-damage-a6bded36",
-        "canonical_is_custom": false,
-        "canonical_title": "Indian River County flood watch canceled; flooded roads and schools remain closed",
-        "canonical_source": "",
-        "canonical_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
-        "reason": "Same story and safe normalized stage 'incident-active' at 95% confidence.",
-        "category": "indian_river",
-        "placement": "card"
-      }
-    ],
-    "applied_actions": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.95,
-        "source_url": "https://cw34.com/news/local/national-weather-service-canceled-flood-watch-indian-river-county-road-closures-schools-closed-indian-river-county-emergency-services-florida-news",
-        "headline": "Indian River County roads closed Friday despite flood watch cancellation",
-        "source_title_key": "indian river county roads closed friday despite flood watch cancellation",
-        "incoming_article_id": "",
-        "target_article_id": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
-        "story_id": "story-canceled-closed-continued-county-s-damage-a6bded36",
-        "canonical_is_custom": false,
-        "canonical_title": "Indian River County flood watch canceled; flooded roads and schools remain closed",
-        "canonical_source": "",
-        "canonical_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
-        "reason": "Same story and safe normalized stage 'incident-active' at 95% confidence.",
-        "category": "indian_river",
-        "placement": "card",
-        "slug": "",
-        "source_title": "Indian River County roads closed Friday despite flood watch cancellation",
-        "date": "Nov 20, 10:20 PM ET",
-        "category_key": "indian_river",
-        "is_custom": false,
-        "story_stage": "incident-active",
-        "decision": "SUPPRESSED_DUPLICATE",
-        "action_taken": true,
-        "eligible_for_activation": true,
-        "match_confidence": 95,
-        "matched_prior_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
-        "matched_prior_headline": "Indian River County flood watch canceled; flooded roads and schools remain closed",
-        "matched_prior_source": "",
-        "matched_prior_source_url": "https://treasurecoast.today/articles/2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected.html",
-        "matched_prior_is_custom": false,
-        "activation_managed": true
-      }
-    ],
+    "recommendations": [],
+    "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -105,19 +49,19 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 181,
+    "candidates_processed": 183,
     "routes": {
       "generate_new": 25,
-      "skip": 156
+      "skip": 158
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 136,
-      "publishable": 43
+      "low_value": 135,
+      "publishable": 46
     },
     "source_classes": {
-      "aggregator": 138,
-      "local_news": 22,
+      "aggregator": 137,
+      "local_news": 25,
       "regional_news": 19,
       "unknown": 2
     },
@@ -145,14 +89,40 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 19,
-      "same_event": 162
+      "new_story": 24,
+      "same_event": 159
     },
     "examples": [
+      {
+        "story_id": "story_029137",
+        "title": "Democrats clinch House majority of at least 258 seats, largest since 1992",
+        "event_key": "unknown-event-e5df4574de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_016900",
         "title": "Florida history facts & finds from Treasure Coast 50 years ago today - Treasure Coast News",
         "event_key": "unknown-event-d295febacb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029053",
+        "title": "Vero Beach football playoff game postponed due to weather - Treasure Coast News",
+        "event_key": "unknown-event-d1f9a739ae",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -237,20 +207,6 @@
         "story_id": "story_028910",
         "title": "Florida emergency management director responds to FEMA delays as Jensen Beach flood victims wait for help",
         "event_key": "unknown-event-45df545bde",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_028618",
-        "title": "St. Lucie, Indian River County schools close Friday amid flooding concerns - cw34.com",
-        "event_key": "unknown-event-8d4cb33c49",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -391,20 +347,6 @@
         "story_id": "story_028815",
         "title": "School board in Florida rescinds teacher’s firing over Kirk comments on Facebook - Baltimore Sun",
         "event_key": "unknown-event-f1e5822415",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_028816",
-        "title": "Veterans Day: Gratitude in air at inspirational ceremony - Vero News",
-        "event_key": "unknown-event-78f73746c1",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -432,9 +374,37 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_029137",
+        "title": "Democrats clinch House majority of at least 258 seats, largest since 1992",
+        "event_key": "unknown-event-e5df4574de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_016900",
         "title": "Florida history facts & finds from Treasure Coast 50 years ago today - Treasure Coast News",
         "event_key": "unknown-event-d295febacb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029053",
+        "title": "Vero Beach football playoff game postponed due to weather - Treasure Coast News",
+        "event_key": "unknown-event-d1f9a739ae",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -525,21 +495,6 @@
         "story_id": "story_028910",
         "title": "Florida emergency management director responds to FEMA delays as Jensen Beach flood victims wait for help",
         "event_key": "unknown-event-45df545bde",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_028618",
-        "title": "St. Lucie, Indian River County schools close Friday amid flooding concerns - cw34.com",
-        "event_key": "unknown-event-8d4cb33c49",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -690,21 +645,6 @@
         "story_id": "story_028815",
         "title": "School board in Florida rescinds teacher’s firing over Kirk comments on Facebook - Baltimore Sun",
         "event_key": "unknown-event-f1e5822415",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_028816",
-        "title": "Veterans Day: Gratitude in air at inspirational ceremony - Vero News",
-        "event_key": "unknown-event-78f73746c1",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -736,102 +676,22 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 2,
-    "high_confidence_candidate_count": 1,
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 2
-    },
-    "milestones": {
-      "closure": 1,
-      "death": 1
-    },
-    "reason_codes": {
-      "agency_match": 2,
-      "entity_match": 2,
-      "identity_anchor_qualified": 2,
-      "location_match": 2,
-      "novel_milestone": 2,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "Pedestrian killed in train incident in Fort Pierce, several crossings blocked - WPEC",
-        "event_key": "unknown-event-af1fd673bc",
-        "current_story_id": "story_029134",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_026652",
-        "candidate_confidence": 0.73,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "agency_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_026652",
-          "Novel milestones: death",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.30",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.73"
-        ]
-      },
-      {
-        "headline": "Fatal train-pedestrian incident shuts down key Fort Pierce railroad crossings - WPBF",
-        "event_key": "unknown-event-f24fcf6859",
-        "current_story_id": "story_029136",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_029134",
-        "candidate_confidence": 0.76,
-        "candidate_milestones": [
-          "closure"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "agency_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_029134",
-          "Novel milestones: closure",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.60",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.76"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 11,
     "retrospective_high_confidence_candidate_count": 4,
     "retrospective_activation_eligible_candidate_count": 4,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 349,
-      "timeline_entries_examined": 1022,
-      "transitions_examined": 635,
+      "stories_with_timelines": 346,
+      "timeline_entries_examined": 1016,
+      "transitions_examined": 631,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 11,
       "high_confidence_candidate_count": 4,
@@ -1281,10 +1141,10 @@
         "same_timestamp_order_uncertain": 3,
         "timeline_identity_unanchored": 6
       },
-      "excluded_entry_count": 38,
+      "excluded_entry_count": 39,
       "exclusion_reasons": {
         "insufficient_title_detail": 4,
-        "social_source": 34
+        "social_source": 35
       },
       "examples": [
         {
@@ -2078,28 +1938,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 620,
+      "florida": 618,
       "treasure_coast_local": 467,
       "treasure_coast_region": 148,
-      "unknown": 1213
+      "unknown": 1218
     },
-    "average_score": 58.63
+    "average_score": 58.57
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 620,
+      "florida": 618,
       "treasure_coast_local": 467,
       "treasure_coast_region": 148,
-      "unknown": 1213
+      "unknown": 1218
     },
-    "average_priority": 2.64
+    "average_priority": 2.62
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1472,
+      "active": 1452,
       "breaking": 1,
-      "developing": 88,
-      "ongoing": 885,
+      "developing": 81,
+      "ongoing": 915,
       "resolved": 2
     }
   },
@@ -2139,15 +1999,15 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-22T02:47:45Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2448
+    "active_story_count": 2451
   },
   "stories": {
-    "total": 2448,
+    "total": 2451,
     "importance_levels": {
       "breaking": 2,
       "high": 40,
       "normal": 265,
-      "low": 2141,
+      "low": 2144,
       "archived": 0
     },
     "average_importance": 5.96,
@@ -2156,16 +2016,16 @@
         "story_id": "story_029050",
         "title": "Two teens dead and two adults seriously injured after Martin County fire - WKYT",
         "score": 100,
-        "editorial_priority": 98,
-        "editorial_score": 98,
+        "editorial_priority": 94,
+        "editorial_score": 94,
         "score_breakdown": {
-          "score": 98,
+          "score": 94,
           "importance": 100,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 5.01
+          "age_hours": 8.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2211,7 +2071,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 5.01,
+          "hours_since_update": 8.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2220,16 +2080,16 @@
         "story_id": "story_028972",
         "title": "New memorial honors two Indian River County deputies killed in line of duty",
         "score": 75,
-        "editorial_priority": 81,
-        "editorial_score": 81,
+        "editorial_priority": 85,
+        "editorial_score": 85,
         "score_breakdown": {
-          "score": 81,
+          "score": 85,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 19.06
+          "age_hours": 0.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2264,17 +2124,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 2,
-        "timeline_entries": 2,
+        "event_count": 3,
+        "timeline_entries": 3,
         "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
+        "canonical_source_candidates": 3,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-21T21:41:42.642522+00:00",
-          "hours_since_update": 19.06,
-          "event_count": 2,
-          "timeline_entries": 2
+          "last_updated": "2026-11-22T19:42:13.208349+00:00",
+          "hours_since_update": 0.05,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -2290,7 +2150,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 48.0
+          "age_hours": 51.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2333,7 +2193,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 48.0,
+          "hours_since_update": 51.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2351,7 +2211,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 64.99
+          "age_hours": 68.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2395,7 +2255,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 64.99,
+          "hours_since_update": 68.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2413,7 +2273,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 253.49
+          "age_hours": 256.5
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2463,7 +2323,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 253.49,
+          "hours_since_update": 256.5,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2481,7 +2341,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 88.99
+          "age_hours": 92.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2527,7 +2387,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 88.99,
+          "hours_since_update": 92.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2545,7 +2405,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 229.92
+          "age_hours": 232.92
         },
         "level": "high",
         "importance_reasons": [
@@ -2588,7 +2448,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 229.92,
+          "hours_since_update": 232.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2606,7 +2466,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 192.0
+          "age_hours": 195.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2648,7 +2508,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 192.0,
+          "hours_since_update": 195.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2666,7 +2526,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 305.0
+          "age_hours": 308.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2710,7 +2570,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 305.0,
+          "hours_since_update": 308.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2728,7 +2588,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 293.0
+          "age_hours": 296.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2772,7 +2632,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 293.0,
+          "hours_since_update": 296.01,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2790,7 +2650,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 216.0
+          "age_hours": 219.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2833,7 +2693,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 216.0,
+          "hours_since_update": 219.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2851,7 +2711,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 192.0
+          "age_hours": 195.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2895,7 +2755,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 192.0,
+          "hours_since_update": 195.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2913,7 +2773,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 214.72
+          "age_hours": 217.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2956,7 +2816,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 214.72,
+          "hours_since_update": 217.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2974,7 +2834,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 146.29
+          "age_hours": 149.29
         },
         "level": "high",
         "importance_reasons": [
@@ -3012,7 +2872,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-16T14:24:33.437384+00:00",
-          "hours_since_update": 146.29,
+          "hours_since_update": 149.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3030,7 +2890,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.04
+          "age_hours": 3.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -3057,13 +2917,13 @@
         },
         "event_count": 1,
         "timeline_entries": 1,
-        "relationship_decisions": 1,
+        "relationship_decisions": 0,
         "canonical_source_candidates": 1,
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 3.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3081,7 +2941,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.04
+          "age_hours": 3.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -3108,13 +2968,13 @@
         },
         "event_count": 1,
         "timeline_entries": 1,
-        "relationship_decisions": 1,
+        "relationship_decisions": 0,
         "canonical_source_candidates": 1,
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 3.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3132,7 +2992,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 37.99
+          "age_hours": 41.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -3170,7 +3030,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-21T02:42:22.808106+00:00",
-          "hours_since_update": 37.99,
+          "hours_since_update": 41.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3188,7 +3048,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.04
+          "age_hours": 3.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -3222,7 +3082,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 3.04,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3240,7 +3100,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 192.04
+          "age_hours": 195.05
         },
         "level": "high",
         "importance_reasons": [
@@ -3284,7 +3144,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 192.04,
+          "hours_since_update": 195.05,
           "event_count": 35,
           "timeline_entries": 35
         }
@@ -3302,7 +3162,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 240.0
+          "age_hours": 243.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3345,7 +3205,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 240.0,
+          "hours_since_update": 243.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3355,7 +3215,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-22T16:45:51Z",
+    "generated_at": "2026-11-22T19:46:00Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3371,15 +3231,14 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 1,
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 2,
-        "no_publishable_sources": 1
+        "category_eligibility_archive_recovery": 6,
+        "generated_live": 2
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
       "model_attempt_count": 2,
-      "model_elapsed_seconds": 47.327,
+      "model_elapsed_seconds": 31.928,
       "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
@@ -3387,10 +3246,10 @@
       "category_eligibility_rejection_count": 3,
       "published_story_duplicate_suppression_count": 37,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 8,
+      "material_update_promotion_evaluation_count": 9,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 8,
-      "material_update_promotion_model_call_count": 0
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
@@ -3398,7 +3257,7 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3434,7 +3293,7 @@
             "source_url": "https://www.wptv.com/trees-downed-patios-damaged-as-severe-weather-races-through-saturday"
           }
         ],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3463,16 +3322,6 @@
             "editorial_story_id": "story_028910",
             "canonical_slug": "2026-11-21-federal-disaster-request-for-martin-county-flooding-remains-pending",
             "canonical_headline": "Federal disaster request for Martin County flooding remains pending",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "St. Lucie, Indian River County schools close Friday amid flooding concerns - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOeE5pNmVoYWRYdHVYTEhPcTFjVlRZREdaMk9uWXJQM29TbTBZN2ttSTAxT2JHYzZEVEZ5c3lsb2VTNEhaX2JZeTlkVVFqeDNWdzAzWWsxSEhxYmpLOWR6UExLTW5WMUFPeXNqczlZdHBrQ2g1QUhjZnAzb3VXSHJTREctQ1JYdHNDdVk5YVlNQ29LWVM1TzJVd3BwTmhsaGE2Qkc5bG1hTURzX3BlZzFSN3FYejVJZGZDOGNCQjl2YjhRaXBSblVxbzF6aEZBZlhqNFltVG5PbnU1QQ",
-            "editorial_story_id": "story_028618",
-            "canonical_slug": "2026-11-19-indian-river-county-public-schools-to-close-friday-as-flooding-shuts-roads",
-            "canonical_headline": "Indian River County public schools to close Friday as flooding shuts roads",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3591,21 +3440,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "St. Lucie, Indian River County schools close Friday amid flooding concerns - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOeE5pNmVoYWRYdHVYTEhPcTFjVlRZREdaMk9uWXJQM29TbTBZN2ttSTAxT2JHYzZEVEZ5c3lsb2VTNEhaX2JZeTlkVVFqeDNWdzAzWWsxSEhxYmpLOWR6UExLTW5WMUFPeXNqczlZdHBrQ2g1QUhjZnAzb3VXSHJTREctQ1JYdHNDdVk5YVlNQ29LWVM1TzJVd3BwTmhsaGE2Qkc5bG1hTURzX3BlZzFSN3FYejVJZGZDOGNCQjl2YjhRaXBSblVxbzF6aEZBZlhqNFltVG5PbnU1QQ",
-            "canonical_slug": "2026-11-19-indian-river-county-public-schools-to-close-friday-as-flooding-shuts-roads",
-            "canonical_headline": "Indian River County public schools to close Friday as flooding shuts roads",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "'We need answers': Martin County officials address outrage over proposed data center",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-answers-martin-county-officials-address-outrage-over-proposed-data-center",
             "canonical_slug": "2026-11-20-martin-county-cancels-kanner-highway-data-center-meeting-promises-public-forums",
@@ -3708,8 +3542,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 4,
-        "elapsed_seconds": 27.254
+        "new_publication_stale_rejected_count": 7,
+        "elapsed_seconds": 37.129
       },
       {
         "category_key": "crime",
@@ -3717,7 +3551,7 @@
         "status": "cache_hit",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 4,
+        "publishable_source_count": 3,
         "selected_source_count": 1,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -3850,7 +3684,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Severe storms sweep Treasure Coast, Palm Beach County; fallen trees block roads",
-        "elapsed_seconds": 24.378
+        "elapsed_seconds": 17.833
       },
       {
         "category_key": "business",
@@ -3858,7 +3692,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 19,
-        "publishable_source_count": 5,
+        "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4031,24 +3865,24 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 18.779
+        "new_publication_stale_rejected_count": 4,
+        "elapsed_seconds": 19.762
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "no_publishable_sources",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
+        "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Sports category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4078,7 +3912,8 @@
           "available_this_run": 2
         },
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.065
+        "sports_editorial_source_rejections": [],
+        "elapsed_seconds": 16.163
       },
       {
         "category_key": "things_to_do",
@@ -4160,7 +3995,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.816
+        "elapsed_seconds": 15.703
       },
       {
         "category_key": "florida",
@@ -4198,14 +4033,14 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.765
+        "elapsed_seconds": 18.772
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 23,
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4260,12 +4095,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "editorial_story_id": "story_028909",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
             "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4366,12 +4201,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
             "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4411,16 +4246,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.86
+        "elapsed_seconds": 17.997
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4428,11 +4263,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 17.74,
+            "elapsed_seconds": 8.122,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 17.74,
+        "model_elapsed_seconds": 8.122,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4443,15 +4278,35 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Pedestrian killed in train incident in Fort Pierce, several crossings blocked - WPEC",
+            "source_url": "https://cbs12.com/news/local/pedestrian-killed-in-train-incident-in-fort-pierce-several-crossings-blocked",
+            "editorial_story_id": "story_029134",
+            "canonical_slug": "2026-11-22-pedestrian-killed-in-fort-pierce-train-incident-seaway-drive-crossing-blocked",
+            "canonical_headline": "Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
             "source_url": "https://cbs12.com/features/the-wellness-experience/photos/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+            "editorial_story_id": "story_028464",
+            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie lifts boil water notice for customers west of I-95 after main break - WPBF",
+            "source_url": "https://www.wpbf.com/article/port-st-lucie-restores-water-service-main-break-boil-water-notice/74468979",
             "editorial_story_id": "story_028464",
             "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
             "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
@@ -4490,22 +4345,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-            "editorial_story_id": "story_028464",
-            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Flooded roads snarl travel across Port St. Lucie - WPEC",
             "source_url": "https://cbs12.com/news/local/flooded-roads-snarl-travel-across-port-st-lucie-barricades-public-worksstreets-detours-avoid-areas-lanes-closed",
             "editorial_story_id": "story_028551",
             "canonical_slug": "2026-11-19-flooding-leaves-port-st-lucie-lanes-impassable-as-crews-deploy-barricades",
             "canonical_headline": "Flooding leaves Port St. Lucie lanes impassable as crews deploy barricades",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
+            "editorial_story_id": "story_028612",
+            "canonical_slug": "2026-11-19-advocate-says-warnings-preceded-st-lucie-countys-historic-flooding",
+            "canonical_headline": "Advocate says warnings preceded St. Lucie County’s historic flooding",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4521,11 +4376,38 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 5,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 4,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Pedestrian killed in train incident in Fort Pierce, several crossings blocked - WPEC",
+            "source_url": "https://cbs12.com/news/local/pedestrian-killed-in-train-incident-in-fort-pierce-several-crossings-blocked",
+            "canonical_slug": "2026-11-22-pedestrian-killed-in-fort-pierce-train-incident-seaway-drive-crossing-blocked",
+            "canonical_headline": "Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Same WPEC source URL and November 22, 2026 publication date",
+              "Pedestrian killed Sunday morning at the Seaway Drive railroad crossing in Fort Pierce",
+              "Stopped southbound freight train blocking crossings",
+              "Fort Pierce Police Department investigating"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article matches the canonical's source and fatal train incident exactly. Additional timing, train-length and detour details elaborate on the same incident without establishing a material development or independently newsworthy follow-up.",
+            "validation_errors": []
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
@@ -4555,6 +4437,21 @@
             ],
             "reason": "The canonical already reports the same main break and Saturday lifting of the notice for 21,000 customers. The incoming article adds timing and repair background, but no further change in water safety or other material development.",
             "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie lifts boil water notice for customers west of I-95 after main break - WPBF",
+            "source_url": "https://www.wpbf.com/article/port-st-lucie-restores-water-service-main-break-boil-water-notice/74468979",
+            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -4614,21 +4511,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Flooded roads snarl travel across Port St. Lucie - WPEC",
             "source_url": "https://cbs12.com/news/local/flooded-roads-snarl-travel-across-port-st-lucie-barricades-public-worksstreets-detours-avoid-areas-lanes-closed",
             "canonical_slug": "2026-11-19-flooding-leaves-port-st-lucie-lanes-impassable-as-crews-deploy-barricades",
@@ -4652,6 +4534,21 @@
             "novel_facts": [],
             "reason": "The incoming article repeats the same Thursday roadway-flooding report at the same specific locations. Added drainage explanations, sandbag information, weather context and references to other storm consequences do not establish a material development in this road-flooding event. The later publication date alone does not make it a new event.",
             "validation_errors": []
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
+            "canonical_slug": "2026-11-19-advocate-says-warnings-preceded-st-lucie-countys-historic-flooding",
+            "canonical_headline": "Advocate says warnings preceded St. Lucie County’s historic flooding",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -4686,18 +4583,18 @@
         "new_publication_stale_rejected_count": 1,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked",
-        "generated_card_count": 1,
-        "elapsed_seconds": 38.306
+        "live_hero_headline": "Fatal train-pedestrian incident closes Seaway Drive crossing in Fort Pierce",
+        "generated_card_count": 0,
+        "elapsed_seconds": 30.519
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generated_live",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 4,
-        "selected_source_count": 2,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 5,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4705,11 +4602,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 29.587,
+            "elapsed_seconds": 23.806,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 29.587,
+        "model_elapsed_seconds": 23.806,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4720,24 +4617,14 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
             "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
-            "editorial_story_id": "story_028972",
-            "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
-            "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "New memorial honors two Indian River County deputies killed in line of duty - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
             "editorial_story_id": "story_028972",
             "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
@@ -4776,21 +4663,6 @@
           {
             "category_key": "indian_river",
             "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
-            "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
-            "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "New memorial honors two Indian River County deputies killed in line of duty - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
             "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
             "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
@@ -4848,9 +4720,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Severe thunderstorm warning cited 60 mph gust threat for Vero Beach area",
+        "live_hero_headline": "Severe thunderstorm warning cited 60 mph gusts for southeastern Indian River County",
         "generated_card_count": 1,
-        "elapsed_seconds": 43.95
+        "elapsed_seconds": 38.756
       }
     ]
   }
