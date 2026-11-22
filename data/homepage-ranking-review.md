@@ -4,32 +4,34 @@
 
 ## Hero
 
-- Current: **Water safe to drink after Port St. Lucie main break; boil water notice lifted**
-- Recommended: **Water safe to drink after Port St. Lucie main break; boil water notice lifted**
+- Current: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
+- Recommended: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | William Reaves Executed in Indian River County Deputy's 1986 Killing | Indian River County flood watch canceled; flooded roads and schools remain closed | 43 | importance 0; freshness 37.52; urgency 4/10; validated material update |
-| 2 | Indian River County flood watch canceled; flooded roads and schools remain closed | Investigation into alleged misconduct involving child at Stuart hospital suspended | 39 | importance 0; freshness 64.97; urgency 2/10 |
-| 3 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | 35 | importance 0; freshness 43.3; urgency 4/10 |
-| 4 | Investigation into alleged misconduct involving child at Stuart hospital suspended | Port St. Lucie gets approval to add contractor for swale-liner backlog | 34 | importance 0; freshness 41.69; urgency 2/10 |
-| 5 | Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure | Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure | 34 | importance 0; freshness 25.09; urgency 4/10 |
-| 6 | Port St. Lucie gets approval to add contractor for swale-liner backlog | Martin County cancels Kanner Highway data center meeting, promises public forums | 33 | importance 0; freshness 37.51; urgency 2/10 |
-| 7 | Martin County cancels Kanner Highway data center meeting, promises public forums | Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday | 30 | importance 0; freshness 25.09; urgency 2/10 |
-| 8 | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Nov. 20–Dec. 4 | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Nov. 20–Dec. 4 | 29 | importance 0; freshness 37.51; urgency 2/10 |
-| 9 | Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole | Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole | 33 | importance 0; freshness 37.51; urgency 2/10; -6 category saturation |
-| 10 | Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday | — |  |  |
+| 1 | Water safe to drink after Port St. Lucie main break; boil water notice lifted | Water safe to drink after Port St. Lucie main break; boil water notice lifted | 60 | importance 0; freshness 71.63; urgency 8/10; validated material update |
+| 2 | William Reaves Executed in Indian River County Deputy's 1986 Killing | Indian River County flood watch canceled; flooded roads and schools remain closed | 42 | importance 0; freshness 32.49; urgency 4/10; validated material update |
+| 3 | Indian River County flood watch canceled; flooded roads and schools remain closed | Investigation into alleged misconduct involving child at Stuart hospital suspended | 38 | importance 0; freshness 59.94; urgency 2/10 |
+| 4 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | 34 | importance 0; freshness 38.27; urgency 4/10 |
+| 5 | Investigation into alleged misconduct involving child at Stuart hospital suspended | Port St. Lucie gets approval to add contractor for swale-liner backlog | 33 | importance 0; freshness 36.66; urgency 2/10 |
+| 6 | Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure | Martin County cancels Kanner Highway data center meeting, promises public forums | 32 | importance 0; freshness 32.48; urgency 2/10 |
+| 7 | Port St. Lucie gets approval to add contractor for swale-liner backlog | Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday | 29 | importance 0; freshness 20.06; urgency 2/10 |
+| 8 | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Nov. 20–Dec. 4 | Treasure Coast traffic report: I-95 ramp closures, roadwork planned Nov. 20–Dec. 4 | 28 | importance 0; freshness 32.48; urgency 2/10 |
+| 9 | Martin County cancels Kanner Highway data center meeting, promises public forums | Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure | 33 | importance 0; freshness 20.06; urgency 4/10; -6 category saturation |
+| 10 | Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole | Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole | 32 | importance 0; freshness 32.48; urgency 2/10; -12 category saturation; -4 county saturation |
+| 11 | Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday | — |  |  |
 
 ## Recommended moves
 
-- **Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday**: 10 → 7 — importance 0; freshness 25.09; urgency 2/10
-- **Investigation into alleged misconduct involving child at Stuart hospital suspended**: 4 → 2 — importance 0; freshness 64.97; urgency 2/10
-- **Port St. Lucie gets approval to add contractor for swale-liner backlog**: 6 → 4 — importance 0; freshness 41.69; urgency 2/10
-- **Indian River County flood watch canceled; flooded roads and schools remain closed**: 2 → 1 — importance 0; freshness 37.52; urgency 4/10; validated material update
-- **Martin County cancels Kanner Highway data center meeting, promises public forums**: 7 → 6 — importance 0; freshness 37.51; urgency 2/10
+- **Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday**: 11 → 7 — importance 0; freshness 20.06; urgency 2/10
+- **Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure**: 6 → 9 — importance 0; freshness 20.06; urgency 4/10; -6 category saturation
+- **Martin County cancels Kanner Highway data center meeting, promises public forums**: 9 → 6 — importance 0; freshness 32.48; urgency 2/10
+- **Investigation into alleged misconduct involving child at Stuart hospital suspended**: 5 → 3 — importance 0; freshness 59.94; urgency 2/10
+- **Port St. Lucie gets approval to add contractor for swale-liner backlog**: 7 → 5 — importance 0; freshness 36.66; urgency 2/10
+- **Indian River County flood watch canceled; flooded roads and schools remain closed**: 3 → 2 — importance 0; freshness 32.49; urgency 4/10; validated material update
 
 ## Guardrails
 
