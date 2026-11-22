@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-22T11:50:17Z",
+  "generated_at": "2026-11-22T13:49:25Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,36 +49,27 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 180,
+    "candidates_processed": 176,
     "routes": {
-      "generate_new": 33,
-      "skip": 147
+      "generate_new": 7,
+      "skip": 169
     },
     "eligibility": {
-      "listing": 3,
-      "low_value": 134,
-      "publishable": 43
+      "listing": 2,
+      "low_value": 132,
+      "publishable": 42
     },
     "source_classes": {
-      "aggregator": 137,
+      "aggregator": 134,
       "local_news": 25,
-      "regional_news": 17,
+      "regional_news": 16,
       "unknown": 1
     },
-    "rejected_count": 3,
+    "rejected_count": 2,
     "rejected_examples": [
       {
         "headline": "157 SE Lakehurst Dr, Port Saint Lucie, FL 34983 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxORjE4SlZYNzBjTm1FUkJURUwzVTBtTkJkVGFQa3Z5aWstdlpzV2d5YzZhNG4xS0tUMnVad0dLQWV2NTQtbWEydzZ1dXFkaDd2X3hJdUY2MTBFTHdJVVNlTjJ4MVNvWTh1UXY5U042OGEwa3pYTmJtNEVxOTgwOVFzOVpEWXBXVlFEai0taEt2aXpEUlotOUZiT0pmRQ?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "468 NW Raymond Ln, Port Saint Lucie, FL 34983 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOY2lySmNZU2M3LUhYMEVlZWJ0eVUzNWFBWjdQb0xwdnNSZklwMUlxQlJqeDlYUDdYVnY3d1pGNTVlWTdHV2hYU0QxZmlvUm4tTTZxcC0tUVlMSHV5bjItWGUzb2JMZWhkU1FzQTNVSTREVS1UTmJKazlwbWRSbExOWDRJaXh0QXZld3V0MWp1TE0xYmNEbk5pTGVRWEY?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -98,8 +89,8 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 33,
-      "same_event": 147
+      "new_story": 8,
+      "same_event": 168
     },
     "examples": [
       {
@@ -108,10 +99,11 @@
         "event_key": "unknown-event-d295febacb",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -119,12 +111,14 @@
         "story_id": "story_029084",
         "title": "Trees downed, patios damaged as severe weather races through Saturday",
         "event_key": "unknown-event-c1339ed433",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -388,10 +382,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -399,13 +394,15 @@
         "story_id": "story_029084",
         "title": "Trees downed, patios damaged as severe weather races through Saturday",
         "event_key": "unknown-event-c1339ed433",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -1945,28 +1942,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 621,
-      "treasure_coast_local": 469,
-      "treasure_coast_region": 149,
-      "unknown": 1219
+      "florida": 618,
+      "treasure_coast_local": 467,
+      "treasure_coast_region": 148,
+      "unknown": 1213
     },
     "average_score": 58.62
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 621,
-      "treasure_coast_local": 469,
-      "treasure_coast_region": 149,
-      "unknown": 1219
+      "florida": 618,
+      "treasure_coast_local": 467,
+      "treasure_coast_region": 148,
+      "unknown": 1213
     },
-    "average_priority": 2.56
+    "average_priority": 2.59
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1466,
+      "active": 1476,
       "breaking": 1,
-      "developing": 84,
-      "ongoing": 905,
+      "developing": 85,
+      "ongoing": 882,
       "resolved": 2
     }
   },
@@ -2006,18 +2003,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-22T02:47:45Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2458
+    "active_story_count": 2446
   },
   "stories": {
-    "total": 2458,
+    "total": 2446,
     "importance_levels": {
       "breaking": 2,
       "high": 40,
-      "normal": 261,
-      "low": 2155,
+      "normal": 263,
+      "low": 2141,
       "archived": 0
     },
-    "average_importance": 5.86,
+    "average_importance": 5.93,
     "top": [
       {
         "story_id": "story_029050",
@@ -2032,7 +2029,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.01
+          "age_hours": 2.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2078,7 +2075,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 0.01,
+          "hours_since_update": 2.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2096,7 +2093,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.07
+          "age_hours": 16.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2139,7 +2136,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-21T21:41:42.642522+00:00",
-          "hours_since_update": 14.07,
+          "hours_since_update": 16.05,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2157,7 +2154,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 43.0
+          "age_hours": 45.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2200,7 +2197,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 43.0,
+          "hours_since_update": 45.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2218,7 +2215,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 59.99
+          "age_hours": 62.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2262,7 +2259,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 59.99,
+          "hours_since_update": 62.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2280,7 +2277,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 248.49
+          "age_hours": 250.5
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2330,7 +2327,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 248.49,
+          "hours_since_update": 250.5,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2348,7 +2345,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 83.99
+          "age_hours": 86.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2394,7 +2391,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 83.99,
+          "hours_since_update": 86.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2412,7 +2409,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 224.92
+          "age_hours": 226.92
         },
         "level": "high",
         "importance_reasons": [
@@ -2455,7 +2452,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 224.92,
+          "hours_since_update": 226.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2473,7 +2470,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 187.0
+          "age_hours": 189.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2515,7 +2512,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 187.0,
+          "hours_since_update": 189.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2533,7 +2530,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 300.0
+          "age_hours": 302.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2577,7 +2574,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 300.0,
+          "hours_since_update": 302.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2595,7 +2592,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 288.0
+          "age_hours": 290.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2639,7 +2636,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 288.0,
+          "hours_since_update": 290.0,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2657,7 +2654,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 211.0
+          "age_hours": 213.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2700,7 +2697,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 211.0,
+          "hours_since_update": 213.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2718,7 +2715,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 187.0
+          "age_hours": 189.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2762,7 +2759,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 187.0,
+          "hours_since_update": 189.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2780,7 +2777,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 209.72
+          "age_hours": 211.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2823,7 +2820,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 209.72,
+          "hours_since_update": 211.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2841,7 +2838,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 141.29
+          "age_hours": 143.29
         },
         "level": "high",
         "importance_reasons": [
@@ -2879,7 +2876,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-16T14:24:33.437384+00:00",
-          "hours_since_update": 141.29,
+          "hours_since_update": 143.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2897,7 +2894,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 32.99
+          "age_hours": 35.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -2935,7 +2932,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-21T02:42:22.808106+00:00",
-          "hours_since_update": 32.99,
+          "hours_since_update": 35.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2953,7 +2950,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 187.0
+          "age_hours": 189.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2997,7 +2994,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 187.0,
+          "hours_since_update": 189.0,
           "event_count": 35,
           "timeline_entries": 35
         }
@@ -3015,7 +3012,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 235.0
+          "age_hours": 237.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3058,7 +3055,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 235.0,
+          "hours_since_update": 237.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3076,7 +3073,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 256.0
+          "age_hours": 258.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3117,7 +3114,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 256.0,
+          "hours_since_update": 258.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3135,7 +3132,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 256.52
+          "age_hours": 258.52
         },
         "level": "high",
         "importance_reasons": [
@@ -3174,7 +3171,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 256.52,
+          "hours_since_update": 258.52,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3192,7 +3189,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 312.0
+          "age_hours": 314.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3230,7 +3227,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-09T11:42:04.038427+00:00",
-          "hours_since_update": 312.0,
+          "hours_since_update": 314.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3240,7 +3237,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-22T11:46:03Z",
+    "generated_at": "2026-11-22T13:45:01Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3255,25 +3252,25 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 3
+        "cache_hit": 3,
+        "category_eligibility_archive_recovery": 6
       },
       "failures": {
         "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 43.859,
+      "model_attempt_count": 0,
+      "model_elapsed_seconds": 0.0,
       "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 4,
-      "published_story_duplicate_suppression_count": 38,
+      "published_story_duplicate_suppression_count": 39,
       "story_aware_update_context_count": 0,
       "material_update_promotion_evaluation_count": 8,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 6,
-      "material_update_promotion_model_call_count": 2
+      "material_update_promotion_cache_hit_count": 8,
+      "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
@@ -3581,28 +3578,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 33.384
+        "elapsed_seconds": 27.316
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 19,
         "publishable_source_count": 4,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.048,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.048,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3753,11 +3743,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Severe storms sweep Treasure Coast, Palm Beach County; fallen trees block roads",
-        "generated_card_count": 0,
-        "elapsed_seconds": 33.037
+        "elapsed_seconds": 24.679
       },
       {
         "category_key": "business",
@@ -3939,7 +3926,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 19.738
+        "elapsed_seconds": 19.631
       },
       {
         "category_key": "sports",
@@ -3986,7 +3973,7 @@
         },
         "new_publication_stale_rejected_count": 0,
         "sports_editorial_source_rejections": [],
-        "elapsed_seconds": 24.089
+        "elapsed_seconds": 11.242
       },
       {
         "category_key": "things_to_do",
@@ -4068,7 +4055,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.34
+        "elapsed_seconds": 14.905
       },
       {
         "category_key": "florida",
@@ -4106,7 +4093,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.26
+        "elapsed_seconds": 13.94
       },
       {
         "category_key": "martin",
@@ -4168,12 +4155,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "editorial_story_id": "story_028909",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
             "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4201,8 +4188,8 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 2,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
@@ -4215,8 +4202,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4274,12 +4261,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
             "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -4319,28 +4306,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 22.177
+        "elapsed_seconds": 15.526
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 1,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.895,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.895,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4354,7 +4334,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4379,6 +4359,16 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+            "editorial_story_id": "story_028909",
+            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
+            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "editorial_story_id": "story_028909",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
@@ -4441,8 +4431,8 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
@@ -4455,8 +4445,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -4503,6 +4493,21 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+            "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
+            "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
             "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
             "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
@@ -4617,32 +4622,22 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Storm warning cited 60-mph gust threat in northwestern St. Lucie County",
-        "generated_card_count": 0,
-        "elapsed_seconds": 34.586
+        "elapsed_seconds": 16.772
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 21,
         "publishable_source_count": 3,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.916,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.916,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4779,11 +4774,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Severe thunderstorm warning for Vero Beach cited threat of 60 mph gusts",
-        "generated_card_count": 0,
-        "elapsed_seconds": 31.111
+        "elapsed_seconds": 14.468
       }
     ]
   }
