@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-22T03:15:28Z",
+  "generated_at": "2026-11-22T11:46:03Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,26 +15,25 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
       "category_eligibility_archive_recovery": 6,
-      "generated_live": 2
+      "generated_live": 3
     },
     "failures": {
       "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 22.235,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 43.859,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 42,
+    "category_eligibility_rejection_count": 4,
+    "published_story_duplicate_suppression_count": 38,
     "story_aware_update_context_count": 0,
-    "material_update_promotion_evaluation_count": 6,
+    "material_update_promotion_evaluation_count": 8,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 6,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
@@ -42,7 +41,7 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -60,9 +59,23 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Trees downed, patios damaged as severe weather races through Saturday",
+          "source_url": "https://www.wptv.com/trees-downed-patios-damaged-as-severe-weather-races-through-saturday"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -78,7 +91,7 @@
           "source_url": "https://cbs12.com/news/local/national-weather-service-canceled-flood-watch-indian-river-county-road-closures-schools-closed-indian-river-county-emergency-services-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -158,16 +171,6 @@
           "canonical_slug": "2026-11-19-indian-river-county-public-schools-to-close-friday-as-flooding-shuts-roads",
           "canonical_headline": "Indian River County public schools to close Friday as flooding shuts roads",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools closed Friday as heavy rain threatens morning commute - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-closed-friday-as-heavy-rain-threatens-morning-commute",
-          "editorial_story_id": "story_028688",
-          "canonical_slug": "2026-11-19-st-lucie-county-schools-to-close-friday-as-heavy-rain-threatens-morning-commute",
-          "canonical_headline": "St. Lucie County schools to close Friday as heavy rain threatens morning commute",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -323,21 +326,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools closed Friday as heavy rain threatens morning commute - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-closed-friday-as-heavy-rain-threatens-morning-commute",
-          "canonical_slug": "2026-11-19-st-lucie-county-schools-to-close-friday-as-heavy-rain-threatens-morning-commute",
-          "canonical_headline": "St. Lucie County schools to close Friday as heavy rain threatens morning commute",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Flooded roads reported in Vero Lake Estates as Indian River County schools close - WPEC",
           "source_url": "https://cbs12.com/news/local/flooded-roads-reported-in-vero-lake-estates-as-indian-river-county-schools-close-road-closures-lane-closures-saturated-ground-rain-flooding-",
           "canonical_slug": "2026-11-19-flooded-roads-disrupt-indian-river-county-travel-trash-service-could-be-affected",
@@ -352,22 +340,29 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 18.508
+      "new_publication_stale_rejected_count": 3,
+      "elapsed_seconds": 33.384
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "cache_hit",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 6,
+      "status": "generated_live",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 4,
       "selected_source_count": 1,
-      "cache_hit": true,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 14.048,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 14.048,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -378,38 +373,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "How much rain did we get? See the highest totals across Treasure Coast and Palm Beaches - WPEC",
-          "source_url": "https://cbs12.com/news/local/how-much-rain-did-we-get-see-the-highest-totals-across-treasure-coast-and-palm-beaches"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - cw34.com",
-          "source_url": "https://cw34.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates?teaserSource=trending"
-        }
-      ],
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
@@ -547,8 +513,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Indian River County Sheriff's Office unveils monument honoring two fallen deputies",
-      "elapsed_seconds": 16.257
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Severe storms sweep Treasure Coast, Palm Beach County; fallen trees block roads",
+      "generated_card_count": 0,
+      "elapsed_seconds": 33.037
     },
     {
       "category_key": "business",
@@ -573,9 +542,26 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:treasure coast"
+          ],
+          "headline": "Trees downed, patios damaged as severe weather races through Saturday",
+          "source_url": "https://www.wptv.com/trees-downed-patios-damaged-as-severe-weather-races-through-saturday"
+        }
+      ],
       "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
@@ -713,14 +699,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 14.216
+      "elapsed_seconds": 19.738
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -758,17 +744,17 @@
         "remaining_week": 5,
         "available_this_run": 2
       },
-      "new_publication_stale_rejected_count": 1,
+      "new_publication_stale_rejected_count": 0,
       "sports_editorial_source_rejections": [],
-      "elapsed_seconds": 9.621
+      "elapsed_seconds": 24.089
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 6,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -785,8 +771,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-attendable-activity-focus",
@@ -803,22 +789,6 @@
           ],
           "headline": "Weather-related closures, impacts across South Florida and the Treasure Coast - WPEC",
           "source_url": "https://cbs12.com/news/local/weather-related-closures-impacts-across-south-florida-and-the-treasure-coast-schools-roads-transporatation-zoo-events-waste-services-parks-facilities-palm-beach-martin-st-lucie-indian-river-broward-counties"
-        },
-        {
-          "contract_version": "1.0-local-attendable-activity-focus",
-          "category_key": "things_to_do",
-          "mode": "enforce",
-          "policy": "local_attendable_activity_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_attendable_activity_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "treasure_coast_locality"
-          ],
-          "headline": "Port St. Lucie prepares for more rain after viral video shows student swimming home - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/port-st-lucie-prepares-for-more-rain-after-viral-video-shows-student-swimming-home-nov-1"
         }
       ],
       "published_story_duplicate_suppression_count": 1,
@@ -858,7 +828,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.092
+      "elapsed_seconds": 15.34
     },
     {
       "category_key": "florida",
@@ -896,14 +866,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.119
+      "elapsed_seconds": 15.26
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 21,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -924,8 +894,18 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "editorial_story_id": "story_028286",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Martin County report alleges conduct involving a child at a Stuart hospital - WPBF",
@@ -948,12 +928,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
           "editorial_story_id": "story_028909",
           "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
           "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -979,11 +959,38 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+          "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+          "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Identical WPTV source URL and source headline",
+            "Martin County commissioners' Tuesday approval of $200,000 from the stormwater budget to investigate development and drainage changes",
+            "Jensen Beach flooding affecting Cheri Drive residents",
+            "Forecast of additional heavy rain during flood recovery"
+          ],
+          "novel_facts": [],
+          "reason": "The incoming article repeats the source story already represented by the canonical, including the same commission action and threatened additional rainfall. Its later publication date does not establish a new development, and the fuller text provides no evidence of a subsequent vote, finding, or other material update.",
+          "validation_errors": []
+        },
         {
           "category_key": "martin",
           "source_headline": "Martin County report alleges conduct involving a child at a Stuart hospital - WPBF",
@@ -1027,12 +1034,12 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
+          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WFLX",
+          "source_url": "https://www.wflx.com/2026/11/21/port-st-lucie-family-waits-years-swale-liner-standing-water-brings-mosquitoes?outputType=amp",
           "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
           "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1072,14 +1079,14 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.613
+      "elapsed_seconds": 22.177
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 19,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 1,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -1089,11 +1096,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.403,
+          "elapsed_seconds": 14.895,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 10.403,
+      "model_elapsed_seconds": 14.895,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1107,16 +1114,16 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/severe-thunderstorm-warning-for-indian-river-st-lucie-county",
-          "editorial_story_id": "story_029068",
-          "canonical_slug": "2026-11-21-severe-storm-warning-for-northwestern-st-lucie-county-cited-60-mph-gust-threat",
-          "canonical_headline": "Severe storm warning for northwestern St. Lucie County cited 60 mph gust threat",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
+          "source_url": "https://cbs12.com/features/the-wellness-experience/photos/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+          "editorial_story_id": "story_028464",
+          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1126,16 +1133,6 @@
           "editorial_story_id": "story_028894",
           "canonical_slug": "2026-11-20-port-st-lucie-road-partially-collapses-after-flooding-as-neighbor-warns-of-growi",
           "canonical_headline": "Port St. Lucie road partially collapses after flooding as neighbor warns of growing hole",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-          "editorial_story_id": "story_028909",
-          "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-          "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1151,52 +1148,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-          "editorial_story_id": "story_028464",
-          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
           "editorial_story_id": "story_028464",
           "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
           "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
-          "editorial_story_id": "story_028545",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "I-95 South shut down for miles in Fort Pierce as police activity prompts major closure - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMimgNBVV95cUxQdEFHUUdwR2VFc0VPVGlfVDhCeURnRGprYVh6MlRkQ2RHUXpuY0ZXYS1UVlJDV2xTaGtIQzRpVVVHUVBTU2JxeFlUVmxiV1U5S1YxMHNnZEREMnhhMHFqbm5BdEJ0bV9Fcmt0OUx5dXU3VEtVQnc2THpsNnhsclhWNEpqdDBHUFR2ekVPYlQzU2o3R1FvZHVsRDhMZzlHa25yMHY4dUc0QkhJNVZSS1dxSGpCUkphUFdsT1VwazgxNHNjT0MyVTZTdHdnVTBxRlRObEhqdHdTZ1B5TG1ZN1FVZGZrNnlHbHZ4bzZLS0NOWVQxeEpCdVlKMlVFTlZvX3k5Ry1iT2hTYkhSXzFBNFZYSkVZOEw3dVRoYWZVR2t4dS1vdGZJbkFZVndaSDZzbC01OTJCNXQ5QnJoLWRiODlSejR2X2ZuczhtWFBmeV9UY1kxUUdPRVVYeEYzcURvbXdaaDB1a2VVckxEUm1sbWRsTl8tSy0xby1TTFJCQlZVUnJfdVBORFBTZzgxQ2lJY2JpM0dMOUw2U1dnUQ",
-          "editorial_story_id": "story_027686",
-          "canonical_slug": "2026-11-14-driver-killed-in-fort-pierce-i-95-crash-after-fleeing-trooper-southbound-lanes-r",
-          "canonical_headline": "Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates",
-          "editorial_story_id": "story_028804",
-          "canonical_slug": "2026-11-20-glades-cut-off-road-in-port-st-lucie-set-for-indefinite-closure-after-culvert-fa",
-          "canonical_headline": "Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1218,29 +1175,64 @@
           "canonical_headline": "Advocate says warnings preceded St. Lucie County’s historic flooding",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County schools closed as families prepare for more heavy rain - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-closed-as-families-prepare-for-more-heavy-rain",
+          "editorial_story_id": "story_028140",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie schools closed Wednesday as more flooding threatens Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-schools-closed-wednesday-as-more-flooding-threatens-treasure-coast-florida-weather-news-rain-storm-saturated-ground-no-school-rain-day-",
+          "editorial_story_id": "story_028140",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 3,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/severe-thunderstorm-warning-for-indian-river-st-lucie-county",
-          "canonical_slug": "2026-11-21-severe-storm-warning-for-northwestern-st-lucie-county-cited-60-mph-gust-threat",
-          "canonical_headline": "Severe storm warning for northwestern St. Lucie County cited 60 mph gust threat",
+          "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
+          "source_url": "https://cbs12.com/features/the-wellness-experience/photos/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
+          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "Tuesday water main break in Port St. Lucie affecting approximately 21,000 customers",
+            "Tradition and western Port St. Lucie near Glades Cut Off Road and Becker Road",
+            "Precautionary boil water notice lifted Saturday after testing confirmed safe drinking water"
+          ],
+          "novel_facts": [
+            "The all-clear was announced at 3:15 p.m. Saturday",
+            "A contractor on a project unrelated to the city damaged a 36-inch water main",
+            "Repairs were completed within hours, followed by flushing and water quality testing"
+          ],
+          "reason": "The canonical already reports the same main break and Saturday lifting of the notice for 21,000 customers. The incoming article adds timing and repair background, but no further change in water safety or other material development.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1270,21 +1262,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-          "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-          "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
           "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
@@ -1300,85 +1277,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
           "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
           "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "Identical WPEC source URL and source headline",
-            "Thursday crash blocking the right lane at southbound Florida's Turnpike Exit 138 toward Becker Road",
-            "Florida 511 attribution",
-            "Traffic cameras showing vehicles passing slowly near a construction zone",
-            "Persistent story identity match"
-          ],
-          "novel_facts": [],
-          "reason": "The exact source and distinctive crash details identify the same incident despite differing publication metadata. The incoming article adds no confirmed injuries, cause, or other material development.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "I-95 South shut down for miles in Fort Pierce as police activity prompts major closure - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMimgNBVV95cUxQdEFHUUdwR2VFc0VPVGlfVDhCeURnRGprYVh6MlRkQ2RHUXpuY0ZXYS1UVlJDV2xTaGtIQzRpVVVHUVBTU2JxeFlUVmxiV1U5S1YxMHNnZEREMnhhMHFqbm5BdEJ0bV9Fcmt0OUx5dXU3VEtVQnc2THpsNnhsclhWNEpqdDBHUFR2ekVPYlQzU2o3R1FvZHVsRDhMZzlHa25yMHY4dUc0QkhJNVZSS1dxSGpCUkphUFdsT1VwazgxNHNjT0MyVTZTdHdnVTBxRlRObEhqdHdTZ1B5TG1ZN1FVZGZrNnlHbHZ4bzZLS0NOWVQxeEpCdVlKMlVFTlZvX3k5Ry1iT2hTYkhSXzFBNFZYSkVZOEw3dVRoYWZVR2t4dS1vdGZJbkFZVndaSDZzbC01OTJCNXQ5QnJoLWRiODlSejR2X2ZuczhtWFBmeV9UY1kxUUdPRVVYeEYzcURvbXdaaDB1a2VVckxEUm1sbWRsTl8tSy0xby1TTFJCQlZVUnJfdVBORFBTZzgxQ2lJY2JpM0dMOUw2U1dnUQ",
-          "canonical_slug": "2026-11-14-driver-killed-in-fort-pierce-i-95-crash-after-fleeing-trooper-southbound-lanes-r",
-          "canonical_headline": "Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County closes stretch of Glades Cut Off Road between LTC Ranch and Wylder - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-closes-stretch-of-glades-cut-off-road-between-ltc-ranch-and-wylder-florida-news-local-news-traffic-updates",
-          "canonical_slug": "2026-11-20-glades-cut-off-road-in-port-st-lucie-set-for-indefinite-closure-after-culvert-fa",
-          "canonical_headline": "Glades Cut Off Road in Port St. Lucie set for indefinite closure after culvert failure",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1426,22 +1330,66 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County schools closed as families prepare for more heavy rain - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-closed-as-families-prepare-for-more-heavy-rain",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "St. Lucie County public schools and district offices closed Wednesday, Nov. 18, because of flooding concerns",
+            "Decision on Thursday reopening expected Wednesday evening",
+            "Additional heavy rain following recent flooding"
+          ],
+          "novel_facts": [
+            "Wednesday aftercare, after-school activities and athletic events are also canceled",
+            "Residents describe sandbagging, buying supplies and preparing to remain home"
+          ],
+          "reason": "Although the candidate's slug references Tuesday's early dismissal, its current headline and lead already report the same Wednesday closure and pending Thursday decision. The incoming article adds routine closure details and resident preparation, not a new school-day decision or a material, independently newsworthy development.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie schools closed Wednesday as more flooding threatens Treasure Coast - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-schools-closed-wednesday-as-more-flooding-threatens-treasure-coast-florida-weather-news-rain-storm-saturated-ground-no-school-rain-day-",
+          "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
+          "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 0,
+      "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie lifts boil water notice for 21,000 customers in Tradition, west of I-95",
+      "live_hero_headline": "Storm warning cited 60-mph gust threat in northwestern St. Lucie County",
       "generated_card_count": 0,
-      "elapsed_seconds": 21.578
+      "elapsed_seconds": 34.586
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -1450,11 +1398,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.832,
+          "elapsed_seconds": 14.916,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.832,
+      "model_elapsed_seconds": 14.916,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1465,14 +1413,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
           "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
+          "editorial_story_id": "story_028972",
+          "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+          "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "New memorial honors two Indian River County deputies killed in line of duty - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
           "editorial_story_id": "story_028972",
           "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
@@ -1499,26 +1457,6 @@
           "canonical_headline": "Vero Beach sets daily rainfall record at 2.25 inches; drier weather expected Sunday",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-          "editorial_story_id": "story_028909",
-          "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-          "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Florida emergency management director responds to FEMA delays as Jensen Beach flood victims wait for help",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-emergency-management-director-responds-to-fema-delays-as-jensen-beach-flood-victims-wait-for-help",
-          "editorial_story_id": "story_028910",
-          "canonical_slug": "2026-11-21-federal-disaster-request-for-martin-county-flooding-remains-pending",
-          "canonical_headline": "Federal disaster request for Martin County flooding remains pending",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1531,6 +1469,21 @@
         {
           "category_key": "indian_river",
           "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
+          "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+          "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "New memorial honors two Indian River County deputies killed in line of duty - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
           "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
           "canonical_headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
@@ -1583,44 +1536,14 @@
           "novel_facts": [],
           "reason": "The incoming article repeats the same record-rainfall report from the identical source story. Additional West Palm Beach totals and routine forecast detail do not establish a material development or independently newsworthy follow-up.",
           "validation_errors": []
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie family waits years for swale liner as standing water brings mosquitoes",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-family-waits-years-for-swale-liner-as-standing-water-brings-mosquitoes",
-          "canonical_slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-          "canonical_headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Florida emergency management director responds to FEMA delays as Jensen Beach flood victims wait for help",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-emergency-management-director-responds-to-fema-delays-as-jensen-beach-flood-victims-wait-for-help",
-          "canonical_slug": "2026-11-21-federal-disaster-request-for-martin-county-flooding-remains-pending",
-          "canonical_headline": "Federal disaster request for Martin County flooding remains pending",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County unveils monument honoring two fallen deputies",
+      "live_hero_headline": "Severe thunderstorm warning for Vero Beach cited threat of 60 mph gusts",
       "generated_card_count": 0,
-      "elapsed_seconds": 22.334
+      "elapsed_seconds": 31.111
     }
   ]
 }
