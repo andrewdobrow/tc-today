@@ -18801,20 +18801,16 @@ def _unverified_automated_live_alert_policy(item):
         return _AUTOMATED_ACTIVE_ALERT_POLICY
 
     # A feed headline can be softened by the writer even when the source is
-    # just an unverified warning bulletin. Do not let rewording bypass the hold.
+    # only an unverified warning bulletin. Rewording cannot validate an alert.
+    # Genuine impact follow-ups sourced from independent aftermath reporting
+    # remain eligible through the normal editorial pipeline.
     source_title = str(item.get("source_headline") or "").strip()
     if source_title and (
         _AUTOMATED_ACTIVE_ALERT_START.search(source_title)
         or _AUTOMATED_ACTIVE_ALERT_ISSUED.search(source_title)
         or _AUTOMATED_ACTIVE_ALERT_UNDER.search(source_title)
     ):
-        # Legitimate subsequent damage/impact reporting remains eligible.
-        if not re.search(
-            r"\b(?:confirm(?:s|ed)?|damage|damaged|injur(?:y|ies|ed)|killed|"
-            r"fatalit(?:y|ies)|outage|downed|cleanup|recovery|struck|"
-            r"closures?|reopened|aftermath)\b", title, flags=re.I
-        ):
-            return _AUTOMATED_ACTIVE_ALERT_POLICY
+        return _AUTOMATED_ACTIVE_ALERT_POLICY
     return None
 
 
