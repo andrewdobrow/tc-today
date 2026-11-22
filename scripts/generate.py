@@ -18735,7 +18735,8 @@ def _source_retirement_policy_for_slug(slug, policies):
 _AUTOMATED_ACTIVE_ALERT_START = re.compile(
     r"^(?:breaking(?:\s+news)?\s*[:\-]\s*)?"
     r"(?:(?:nws|national\s+weather\s+service)\s+)?"
-    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:(?:a|an|the)\s+)?"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+(?:thunderstorm|storm)|thunderstorm)\s+"
     r"(?:warnings?|watches?|advisories)\b",
     flags=re.I,
 )
@@ -18743,13 +18744,13 @@ _AUTOMATED_ACTIVE_ALERT_ISSUED = re.compile(
     r"^(?:breaking(?:\s+news)?\s*[:\-]\s*)?"
     r"(?:nws|national\s+weather\s+service)\s+"
     r"(?:issues?|extends?|renews?|updates?)\s+(?:a|an|the)?\s*"
-    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+(?:thunderstorm|storm)|thunderstorm)\s+"
     r"(?:warnings?|watches?|advisories)\b",
     flags=re.I,
 )
 _AUTOMATED_ACTIVE_ALERT_UNDER = re.compile(
     r"\b(?:under|faces?|hit\s+by)\s+(?:a|an|the)?\s*"
-    r"(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+    r"(?:flash[\s-]+flood|tornado|severe[\s-]+(?:thunderstorm|storm)|thunderstorm)\s+"
     r"(?:warnings?|watches?|advisories)\b",
     flags=re.I,
 )
@@ -18789,7 +18790,7 @@ def _unverified_automated_live_alert_policy(item):
     # A genuine retrospective ("warning expired/lifted/ended") is not an
     # announcement that an active warning is currently in force.
     if re.match(
-        r"^(?:flash[\s-]+flood|tornado|severe[\s-]+thunderstorm)\s+"
+        r"^(?:flash[\s-]+flood|tornado|severe[\s-]+(?:thunderstorm|storm)|thunderstorm)\s+"
         r"(?:warnings?|watches?|advisories)\s+"
         r"(?:expired|lifted|cancelled|canceled|ended)\b", title, flags=re.I
     ):
@@ -18797,6 +18798,18 @@ def _unverified_automated_live_alert_policy(item):
     if (_AUTOMATED_ACTIVE_ALERT_START.search(title)
             or _AUTOMATED_ACTIVE_ALERT_ISSUED.search(title)
             or _AUTOMATED_ACTIVE_ALERT_UNDER.search(title)):
+        return _AUTOMATED_ACTIVE_ALERT_POLICY
+
+    # A feed headline can be softened by the writer even when the source is
+    # only an unverified warning bulletin. Rewording cannot validate an alert.
+    # Genuine impact follow-ups sourced from independent aftermath reporting
+    # remain eligible through the normal editorial pipeline.
+    source_title = str(item.get("source_headline") or "").strip()
+    if source_title and (
+        _AUTOMATED_ACTIVE_ALERT_START.search(source_title)
+        or _AUTOMATED_ACTIVE_ALERT_ISSUED.search(source_title)
+        or _AUTOMATED_ACTIVE_ALERT_UNDER.search(source_title)
+    ):
         return _AUTOMATED_ACTIVE_ALERT_POLICY
     return None
 

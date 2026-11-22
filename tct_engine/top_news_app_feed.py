@@ -20,9 +20,9 @@ SUPPLEMENT_MAX_AGE_DAYS = 7
 # Current emergency warnings are only ever allowed through the primary editorial
 # deck after the site's separate authoritative verification guards.
 _UNVERIFIED_WARNING = re.compile(
-    r"\b(?:flash flood|flood|tornado|severe thunderstorm|storm surge)\s+"
+    r"\b(?:flash flood|flood|tornado|severe thunderstorm|severe storm|thunderstorm|storm surge)\s+"
     r"(?:warning|watch|advisory)\b|\bunder (?:a |an )?"
-    r"(?:flash flood|flood|tornado|severe thunderstorm|storm surge)\s+"
+    r"(?:flash flood|flood|tornado|severe thunderstorm|severe storm|thunderstorm|storm surge)\s+"
     r"(?:warning|watch|advisory)\b", re.I,
 )
 

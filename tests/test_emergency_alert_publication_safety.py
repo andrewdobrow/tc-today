@@ -54,6 +54,9 @@ def test_third_known_permanently_retired_and_earlier_two_preserved(gen,site):
     'NWS Issues Flash Flood Warning for Hobe Sound',
     'Breaking: Tornado Warning Issued for St. Lucie County',
     'Severe Thunderstorm Warning for Indian River County',
+    'Severe storm warning for northwestern St. Lucie County cited 60 mph gust threat',
+    'A severe storm warning remains in effect for St. Lucie County',
+    'Thunderstorm warning for Vero Beach and Lakewood Park',
 ])
 def test_new_reworded_warning_with_fresh_slug_still_held(gen, headline):
     row={'slug':'2026-10-17-new-different-title-'+gen.slugify(headline),'date':'2026-10-17','headline':headline}
@@ -68,6 +71,44 @@ def test_new_reworded_warning_with_fresh_slug_still_held(gen, headline):
 ])
 def test_post_event_reporting_is_not_suppressed(gen, headline):
     assert gen._unverified_automated_live_alert_policy({'date':'2026-10-17','headline':headline}) is None
+
+def test_reworded_warning_source_still_held(gen):
+    row = {
+        'slug': '2026-11-21-wind-gust-threat-st-lucie',
+        'date': '2026-11-21',
+        'headline': 'Northwestern St. Lucie County faced 60 mph wind gust threat',
+        'source_headline': 'Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC',
+        'teaser': 'Warning in effect until 8:45 p.m. EST.',
+    }
+    assert gen._unverified_automated_live_alert_policy(row)['action'] == 'retire'
+
+
+def test_source_bulletin_cannot_be_recast_as_unverified_damage_report(gen):
+    row = {
+        'date': '2026-11-21',
+        'headline': 'Crews assess alleged damage in St. Lucie County after storm',
+        'source_headline': 'Severe Thunderstorm Warning for Indian River & St. Lucie County - WPEC',
+    }
+    assert gen._unverified_automated_live_alert_policy(row)['action'] == 'retire'
+
+
+def test_independent_post_storm_damage_story_remains_eligible(gen):
+    row = {
+        'date': '2026-11-21',
+        'headline': 'Crews assess confirmed damage in St. Lucie County after storm',
+        'source_headline': 'Crews assess storm damage in St. Lucie County',
+    }
+    assert gen._unverified_automated_live_alert_policy(row) is None
+
+
+def test_nov21_expired_warning_exact_slug_retired(gen, site):
+    slug = '2026-11-21-severe-storm-warning-for-northwestern-st-lucie-county-cited-60-mph-gust-threat'
+    policies = gen._source_retirement_policy_by_slug(site)
+    assert gen._source_retirement_policy_for_slug(slug, policies)['action'] == 'retire'
+    warning = {'slug': slug, 'headline': 'Severe storm warning for northwestern St. Lucie County cited 60 mph gust threat'}
+    good = {'slug': '2026-11-21-storm-damage-confirmed', 'headline': 'Storm damage confirmed in St. Lucie County'}
+    assert gen._filter_source_retirement_archive_view([warning, good], site) == [good]
+
 
 def test_manually_written_alert_not_automatically_suppressed(gen):
     assert gen._unverified_automated_live_alert_policy({
