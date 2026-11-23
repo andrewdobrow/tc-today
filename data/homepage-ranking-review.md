@@ -5,20 +5,19 @@
 ## Hero
 
 - Current: **Investigation into alleged misconduct involving child at Stuart hospital suspended**
-- Recommended: **Indian River County unveils permanent memorial to two deputies killed in line of duty**
+- Recommended: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Indian River County unveils permanent memorial to two deputies killed in line of duty | 49 | importance 0; freshness 52.67; urgency 5/10; validated material update |
-| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 48 | importance 0; freshness 80.97; urgency 4/10 |
+| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 45 | importance 0; freshness 68.27; urgency 4/10 |
+| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 40 | importance 0; freshness 39.98; urgency 2/10; validated material update |
 
 ## Recommended moves
 
-- **Indian River County unveils permanent memorial to two deputies killed in line of duty**: 2 → 1 — importance 0; freshness 52.67; urgency 5/10; validated material update
-- **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**: 1 → 2 — importance 0; freshness 80.97; urgency 4/10
+No top-deck moves recommended.
 
 ## Guardrails
 
