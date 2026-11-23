@@ -180,3 +180,29 @@ def test_train_sheriff_copyedit_survives_full_generation_overrides(tmp_path):
     assert CORRECT_ST in row["body"]
     assert row["published"] == "Sun, 22 Nov 2026 11:47:51 -0500"
     assert row.get("meaningful_update_validated") is not True
+
+
+def test_publisher_source_extraction_does_not_drop_st_from_sheriff_agency():
+    original = (
+        "The incident was reported at about 7:16 a.m. Nov. 22. "
+        "The St. Lucie County Sheriff’s Office said it was assisting the "
+        "Fort Pierce Police Department, the lead agency investigating."
+    )
+    sentences = generate._split_publisher_source_sentences(original)
+    assert len(sentences) == 2
+    assert sentences[0].endswith("7:16 a.m. Nov. 22.")
+    assert sentences[1].startswith("The St. Lucie County Sheriff’s Office")
+    assert "The St." not in sentences
+    cleaned = " ".join(s for s in sentences if len(s.strip()) > 25)
+    assert "The St. Lucie County Sheriff’s Office said" in cleaned
+
+
+def test_publisher_sentence_split_still_separates_genuine_sentences():
+    raw = (
+        "Police closed the crossing after a train struck a pedestrian. "
+        "The St. Lucie County Sheriff’s Office assisted investigators. "
+        "Traffic was diverted to another bridge."
+    )
+    sentences = generate._split_publisher_source_sentences(raw)
+    assert len(sentences) == 3
+    assert sentences[1].startswith("The St. Lucie County")
