@@ -4,17 +4,18 @@
 
 ## Hero
 
-- Current: **Florida agencies could qualify for $1.4 billion in immigration enforcement funds**
-- Recommended: **Florida agencies could qualify for $1.4 billion in immigration enforcement funds**
+- Current: **St. Lucie County to consider Port of Fort Pierce master plan Dec. 1**
+- Recommended: **St. Lucie County to consider Port of Fort Pierce master plan Dec. 1**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 43 | importance 0; freshness 94.96; urgency 2/10 |
-| 2 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 41 | importance 0; freshness 54.92; urgency 4/10 |
-| 3 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 36 | importance 0; freshness 26.63; urgency 2/10; validated material update |
+| 1 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 47 | importance 0; freshness 96.67; urgency 2/10 |
+| 2 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 42 | importance 0; freshness 91.67; urgency 2/10 |
+| 3 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 41 | importance 0; freshness 51.64; urgency 4/10 |
+| 4 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 36 | importance 0; freshness 23.35; urgency 2/10; validated material update |
 
 ## Recommended moves
 
