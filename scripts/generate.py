@@ -15026,6 +15026,28 @@ def _final_canonical_surface_identity(item, permalink, context):
         )
         identity_key = f"incident:{incident_anchor}"
         identity_basis = "structured_incident_anchor"
+
+        # Final-surface canonicalization runs AFTER the seven-day semantic gate
+        # and the fourteen-day working-set gate. A persisted person/death anchor
+        # must not reach back indefinitely and replace a newly published event
+        # with an old article merely because both mention the same deputy.
+        # Keep different public articles separate once they are outside the
+        # ordinary fourteen-day story window, unless the live item has a
+        # separately validated, target-bound material-update authorization.
+        if preferred_slug and canonical_slug and preferred_slug != canonical_slug:
+            owner = archive_by_slug.get(preferred_slug) or {}
+            incoming = raw_entry or item
+            owner_published = _latest_news_publication_datetime(owner)
+            incoming_published = _latest_news_publication_datetime(incoming)
+            if (
+                owner_published is not None
+                and incoming_published is not None
+                and abs((incoming_published - owner_published).total_seconds()) > 14 * 86400
+                and not _has_self_consistent_pre_generation_material_update_authority(item)
+            ):
+                preferred_slug = canonical_slug
+                identity_key = f"slug:{canonical_slug}"
+                identity_basis = "separate_publication_outside_incident_window"
     elif incident_anchor and not persisted_incident_anchor:
         # A live-only candidate anchor may keep two rich in-memory placements distinct
         # until rendered URL projection self-heals them, but it cannot choose another
