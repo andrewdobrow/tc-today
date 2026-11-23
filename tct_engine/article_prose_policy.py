@@ -270,7 +270,7 @@ def repair_multparagraph_quote_continuations(body_html: str) -> tuple[str, int]:
 # Protect common abbreviations before sentence splitting. The guard only needs
 # editorially safe sentence boundaries; it is not intended as a general NLP parser.
 _ABBREVIATION_RE = re.compile(
-    r"\b(?:St|Mt|Mr|Mrs|Ms|Dr|Gov|Sen|Rep|Lt|Sgt|Capt|No|Inc|Co|Corp|Dept|Ave|Blvd|Rd|Fla)\.",
+    r"\b(?:St|Mt|Mr|Mrs|Ms|Dr|Gov|Sen|Rep|Lt|Sgt|Capt|No|Inc|Co|Corp|Dept|Ave|Blvd|Rd|Fla|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.",
     re.IGNORECASE,
 )
 _DOTTED_ABBREVIATION_RE = re.compile(r"\b(?:U\.S|U\.S\.A|a\.m|p\.m)\.", re.IGNORECASE)

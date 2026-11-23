@@ -10334,6 +10334,10 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
         html = resp.text
 
         def clean_article_text(raw):
+            # Source extraction must protect place names like "St. Lucie"
+            # before removing short fragments. Keep this import local because
+            # the fetcher is also exercised in an isolated test harness.
+            from tct_engine.article_prose_policy import _split_sentences
             raw = re.sub(r"<script.*?</script>", " ", raw or "", flags=re.DOTALL | re.IGNORECASE)
             raw = re.sub(r"<style.*?</style>", " ", raw, flags=re.DOTALL | re.IGNORECASE)
             raw = re.sub(r"<[^>]+>", " ", raw)
@@ -10344,7 +10348,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
                 "terms of service", "privacy policy", "follow us", "newsletter",
                 "download our app", "watch live", "copyright"
             ]
-            sentences = re.split(r"(?<=[.!?])\s+", raw)
+            sentences = _split_sentences(raw)
             kept = [s.strip() for s in sentences if len(s.strip()) > 25 and not any(j in s.lower() for j in junk)]
             words = " ".join(kept).split()
             return " ".join(words[:max_words]).strip()
