@@ -4,23 +4,21 @@
 
 ## Hero
 
-- Current: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
-- Recommended: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
-- Recommendation: KEEP (not enforced)
+- Current: **Investigation into alleged misconduct involving child at Stuart hospital suspended**
+- Recommended: **Indian River County unveils permanent memorial to two deputies killed in line of duty**
+- Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | William Reaves Executed in Indian River County Deputy's 1986 Killing | Investigation into alleged misconduct involving child at Stuart hospital suspended | 35 | importance 0; freshness 45.89; urgency 2/10 |
-| 2 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | Thanksgiving break: 15 family-friendly Treasure Coast events for Nov. 21–29 | 31 | importance 0; freshness 24.23; urgency 4/10 |
-| 3 | Investigation into alleged misconduct involving child at Stuart hospital suspended | Port St. Lucie gets approval to add contractor for swale-liner backlog | 29 | importance 0; freshness 22.61; urgency 2/10 |
-| 4 | Port St. Lucie gets approval to add contractor for swale-liner backlog | — |  |  |
+| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Indian River County unveils permanent memorial to two deputies killed in line of duty | 49 | importance 0; freshness 52.67; urgency 5/10; validated material update |
+| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 48 | importance 0; freshness 80.97; urgency 4/10 |
 
 ## Recommended moves
 
-- **Investigation into alleged misconduct involving child at Stuart hospital suspended**: 3 → 1 — importance 0; freshness 45.89; urgency 2/10
-- **Port St. Lucie gets approval to add contractor for swale-liner backlog**: 4 → 3 — importance 0; freshness 22.61; urgency 2/10
+- **Indian River County unveils permanent memorial to two deputies killed in line of duty**: 2 → 1 — importance 0; freshness 52.67; urgency 5/10; validated material update
+- **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**: 1 → 2 — importance 0; freshness 80.97; urgency 4/10
 
 ## Guardrails
 
