@@ -488,3 +488,65 @@ def test_two_redirect_placements_rebound_to_same_canonical_are_collapsed_before_
     assert kept[0]["headline"] == canonical["headline"]
     assert report["removed_count"] == 1
     assert report["canonical_rewrite_count"] == 2
+
+
+def test_november_memorial_does_not_rebind_to_october_reaves_article(tmp_path):
+    """A shared deceased deputy does not make a later memorial an October update."""
+    g = _load_generate()
+    anchor = "named-person-death:richard-raczkoski"
+    october = {
+        "slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+        "date": "2026-10-08",
+        "incident_anchor_key": anchor,
+    }
+    november = {
+        "slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+        "date": "2026-11-21",
+        # Historical incident extraction already persisted this mistaken shared key.
+        "incident_anchor_key": anchor,
+    }
+    context = g._build_final_canonical_surface_context(
+        [october, november], tmp_path, identity_index=_identity_index(), redirect_map={}
+    )
+    memorial = {**november, "_archived_slug": november["slug"], "cat_key": "indian_river"}
+    identity = g._final_canonical_surface_identity(memorial, _resolver(memorial), context)
+
+    assert identity["canonical_slug"] == november["slug"]
+    assert identity["identity_basis"] == "separate_publication_outside_incident_window"
+    assert identity["identity_key"] == f"slug:{november['slug']}"
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        [memorial], _resolver, surface_context=context
+    )
+    assert kept == [memorial]
+    assert kept[0]["headline"] == november["headline"]
+    assert kept[0]["_archived_slug"] == november["slug"]
+    assert report["canonical_rewrite_count"] == 0
+
+
+def test_short_gap_actual_same_incident_can_still_use_canonical_permalink(tmp_path):
+    g = _load_generate()
+    anchor = "named-person-death:example-person"
+    original = {
+        "slug": "2026-11-10-example-person-death",
+        "headline": "Example Person dies",
+        "date": "2026-11-10",
+        "incident_anchor_key": anchor,
+    }
+    same_incident = {
+        "slug": "2026-11-12-example-person-death-follow-up",
+        "headline": "More details released in Example Person death",
+        "date": "2026-11-12",
+        "incident_anchor_key": anchor,
+    }
+    context = g._build_final_canonical_surface_context(
+        [original, same_incident], tmp_path,
+        identity_index=_identity_index(), redirect_map={},
+    )
+    identity = g._final_canonical_surface_identity(
+        same_incident, _resolver(same_incident), context
+    )
+    assert identity["canonical_slug"] == original["slug"]
+    assert identity["identity_basis"] == "structured_incident_anchor"
