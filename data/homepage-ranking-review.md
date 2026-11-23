@@ -12,8 +12,8 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 45 | importance 0; freshness 68.27; urgency 4/10 |
-| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 40 | importance 0; freshness 39.98; urgency 2/10; validated material update |
+| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 44 | importance 0; freshness 64.94; urgency 4/10 |
+| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 39 | importance 0; freshness 36.64; urgency 2/10; validated material update |
 
 ## Recommended moves
 
