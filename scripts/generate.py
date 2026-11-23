@@ -37,7 +37,7 @@ from scripts.compact_editorial_audit import compact_editorial_audit_log
 from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_client
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
-from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
+from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html, _split_sentences
 from tct_engine.critical_source_facts import named_suspect_facts, missing_named_suspects, facts_instruction, as_named_suspect_facts, reconcile_same_article_extraction
 from tct_engine.article_image_mirror import get_article_image_mirror, finalize_article_image_mirror
 from tct_engine.local_sports_editorial import (
@@ -10275,6 +10275,17 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
+def _split_publisher_source_sentences(text):
+    """Keep abbreviations intact before dropping short publisher boilerplate.
+
+    The old bare punctuation splitter would turn "The St. Lucie County
+    Sheriff's Office" into "The St." plus "Lucie County Sheriff's Office".
+    The length filter then discarded "The St.", corrupting the source facts
+    supplied to the newsroom model.
+    """
+    return _split_sentences(text)
+
+
 def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     """Fetch readable article body text.
 
@@ -10344,7 +10355,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
                 "terms of service", "privacy policy", "follow us", "newsletter",
                 "download our app", "watch live", "copyright"
             ]
-            sentences = re.split(r"(?<=[.!?])\s+", raw)
+            sentences = _split_publisher_source_sentences(raw)
             kept = [s.strip() for s in sentences if len(s.strip()) > 25 and not any(j in s.lower() for j in junk)]
             words = " ".join(kept).split()
             return " ".join(words[:max_words]).strip()
