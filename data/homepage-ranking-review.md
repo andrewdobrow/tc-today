@@ -4,16 +4,16 @@
 
 ## Hero
 
-- Current: **Investigation into alleged misconduct involving child at Stuart hospital suspended**
-- Recommended: **Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked**
+- Current: **Indian River County unveils permanent memorial to two deputies killed in line of duty**
+- Recommended: **Florida prepares second federal disaster request after renewed flooding**
 - Recommendation: CHANGE (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 44 | importance 0; freshness 64.94; urgency 4/10 |
-| 2 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 39 | importance 0; freshness 36.64; urgency 2/10; validated material update |
+| 1 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 59 | importance 0; freshness 99.94; urgency 9/10 |
+| 2 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 43 | importance 0; freshness 59.91; urgency 4/10 |
 
 ## Recommended moves
 
