@@ -556,3 +556,99 @@ def test_short_gap_actual_same_incident_can_still_use_canonical_permalink(tmp_pa
     )
     assert identity["canonical_slug"] == original["slug"]
     assert identity["identity_basis"] == "structured_incident_anchor"
+
+
+def test_november_memorial_homepage_headline_matches_own_canonical_article(tmp_path):
+    """Reproduce Nov. 22 production's alternative memorial headline failure."""
+    g = _load_generate()
+    anchor = "named-person-death:richard-raczkoski"
+    october = {
+        "slug": "2026-10-08-reaves-family-pleads-for-clemency-before-oct-20-execution-in-deputys-death",
+        "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+        "date": "2026-10-08",
+        "incident_anchor_key": anchor,
+    }
+    november = {
+        "slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
+        "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+        "date": "2026-11-21",
+        "incident_anchor_key": anchor,
+    }
+    _write_surface_files(tmp_path, [october, november], [])
+    context = g._build_final_canonical_surface_context(
+        [october, november], tmp_path, identity_index=_identity_index(), redirect_map={}
+    )
+    hero = {
+        **november,
+        "headline": "Indian River County unveils monument honoring two fallen sheriff's deputies",
+        "_archived_slug": november["slug"],
+        "cat_key": "indian_river",
+    }
+    identity = g._final_canonical_surface_identity(hero, _resolver(hero), context)
+    assert identity["identity_basis"] == "separate_publication_outside_incident_window"
+    assert identity["canonical_slug"] == november["slug"]
+    assert g._apply_final_canonical_surface_identity(hero, identity) is True
+    assert hero["headline"] == november["headline"]
+    assert hero["link"].endswith(november["slug"] + ".html")
+    assert hero["headline"] != october["headline"]
+    assert g.reconcile_homepage_hero_headline_permalink(
+        {"hero": hero}, tmp_path
+    )["action"] == "verified"
+
+
+def test_distinct_old_article_copy_stays_original_after_memorial_guard(tmp_path):
+    g = _load_generate()
+    anchor = "named-person-death:richard-raczkoski"
+    old = {
+        "slug": "2026-10-08-reaves-execution",
+        "headline": "William Reaves Executed",
+        "date": "2026-10-08",
+        "incident_anchor_key": anchor,
+    }
+    new = {
+        "slug": "2026-11-21-deputies-memorial",
+        "headline": "Two deputies honored at memorial unveiling",
+        "date": "2026-11-21",
+        "incident_anchor_key": anchor,
+    }
+    context = g._build_final_canonical_surface_context(
+        [old, new], tmp_path, identity_index=_identity_index(), redirect_map={}
+    )
+    live = {**old, "_archived_slug": old["slug"]}
+    identity = g._final_canonical_surface_identity(live, _resolver(live), context)
+    g._apply_final_canonical_surface_identity(live, identity)
+    assert live["headline"] == old["headline"]
+    assert live["_archived_slug"] == old["slug"]
+
+
+def test_late_reselected_memorial_hero_self_heals_on_final_guard(tmp_path):
+    """The final freshness gate can select this hero after the canonical pass."""
+    g = _load_generate()
+    anchor = "named-person-death:richard-raczkoski"
+    october = {
+        "slug": "2026-10-08-reaves-execution",
+        "headline": "William Reaves Executed in Indian River County Deputy's 1986 Killing",
+        "date": "2026-10-08",
+        "incident_anchor_key": anchor,
+    }
+    november = {
+        "slug": "2026-11-21-deputies-memorial",
+        "headline": "Indian River County unveils permanent memorial to two deputies killed in line of duty",
+        "date": "2026-11-21",
+        "incident_anchor_key": anchor,
+    }
+    _write_surface_files(tmp_path, [october, november], [])
+    hero = {
+        **november,
+        "headline": "Indian River County unveils monument honoring two fallen sheriff's deputies",
+        "_archived_slug": november["slug"],
+        "link": _resolver(november),
+    }
+    # No prior _apply_final_canonical_surface_identity call: the hero arrived
+    # from late re-selection and must be fixed at the final reconciliation gate.
+    result = g.reconcile_homepage_hero_headline_permalink({"hero": hero}, tmp_path)
+    assert result["action"] == "verified_canonical_copy"
+    assert hero["headline"] == november["headline"]
+    assert hero["_archived_slug"] == november["slug"]
+    assert hero["link"] == _resolver(november)
+    assert hero["headline"] != october["headline"]

@@ -15130,6 +15130,10 @@ def _apply_final_canonical_surface_identity(item, identity):
                 "persistent_story_id",
                 "durable_custom_event",
                 "structured_incident_anchor",
+                # A separate article kept its own URL after an age-gap guard.
+                # Its live placement must also adopt its OWN published headline
+                # and copy, not an alternate incoming candidate headline.
+                "separate_publication_outside_incident_window",
             }
         )
     )
@@ -16888,6 +16892,25 @@ def reconcile_homepage_hero_headline_permalink(top_cat, output_root):
         return {"action": "verified", "slug": actual_slug}
     if not current:
         return {"action": "unbound", "slug": actual_slug}
+
+    # The final homepage hero can be reselected after category-wide canonical
+    # binding. When the 14-day incident guard has explicitly kept this newly
+    # published article separate from a much older incident, display the OWN
+    # persisted article headline rather than an alternative incoming headline.
+    # This is NOT a title-similarity redirect: the verified URL stays unchanged.
+    context = _build_final_canonical_surface_context(archive, root)
+    own_identity = _final_canonical_surface_identity(
+        hero, _canonical_article_permalink(actual_slug), context
+    )
+    if (
+        own_identity.get("identity_basis") == "separate_publication_outside_incident_window"
+        and own_identity.get("canonical_slug") == actual_slug
+        and not own_identity.get("redirect_source")
+    ):
+        _apply_final_canonical_surface_identity(hero, own_identity)
+        if _homepage_hero_headline_key(hero.get("headline")) == _homepage_hero_headline_key(current.get("headline")):
+            print(f"  Homepage hero adopted own canonical article headline: {actual_slug}")
+            return {"action": "verified_canonical_copy", "slug": actual_slug}
 
     corrected = _homepage_hero_exact_archive_owner(
         hero.get("headline"), archive, root / "articles"
