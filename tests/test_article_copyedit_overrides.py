@@ -22,6 +22,7 @@ if "json_repair" not in sys.modules:
     sys.modules["json_repair"] = json_repair
 
 from scripts import generate
+from tct_engine.article_prose_policy import _split_sentences
 
 
 SLUG = "2026-10-02-two-miami-women-charged-after-tow-yard-shooting-near-stuart-sparks-school-lockou"
@@ -188,7 +189,7 @@ def test_publisher_source_extraction_does_not_drop_st_from_sheriff_agency():
         "The St. Lucie County Sheriff’s Office said it was assisting the "
         "Fort Pierce Police Department, the lead agency investigating."
     )
-    sentences = generate._split_publisher_source_sentences(original)
+    sentences = _split_sentences(original)
     assert len(sentences) == 2
     assert sentences[0].endswith("7:16 a.m. Nov. 22.")
     assert sentences[1].startswith("The St. Lucie County Sheriff’s Office")
@@ -203,6 +204,6 @@ def test_publisher_sentence_split_still_separates_genuine_sentences():
         "The St. Lucie County Sheriff’s Office assisted investigators. "
         "Traffic was diverted to another bridge."
     )
-    sentences = generate._split_publisher_source_sentences(raw)
+    sentences = _split_sentences(raw)
     assert len(sentences) == 3
     assert sentences[1].startswith("The St. Lucie County")
