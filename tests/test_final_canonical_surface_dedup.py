@@ -523,7 +523,13 @@ def test_november_memorial_does_not_rebind_to_october_reaves_article(tmp_path):
     assert kept == [memorial]
     assert kept[0]["headline"] == november["headline"]
     assert kept[0]["_archived_slug"] == november["slug"]
-    assert report["canonical_rewrite_count"] == 0
+    assert kept[0]["link"] == _resolver(memorial)
+    # Adding a missing canonical URL/metadata counts as a rewrite, even when
+    # the identity remains correct. Reject only rewrites to the OLD article.
+    assert all(
+        rewrite["canonical_slug"] == november["slug"]
+        for rewrite in report["rewrites"]
+    )
 
 
 def test_short_gap_actual_same_incident_can_still_use_canonical_permalink(tmp_path):
