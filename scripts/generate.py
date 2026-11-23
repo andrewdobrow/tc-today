@@ -15130,6 +15130,10 @@ def _apply_final_canonical_surface_identity(item, identity):
                 "persistent_story_id",
                 "durable_custom_event",
                 "structured_incident_anchor",
+                # A separate article kept its own URL after an age-gap guard.
+                # Its live placement must also adopt its OWN published headline
+                # and copy, not an alternate incoming candidate headline.
+                "separate_publication_outside_incident_window",
             }
         )
     )
