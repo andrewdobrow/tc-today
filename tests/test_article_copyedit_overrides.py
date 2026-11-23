@@ -125,3 +125,58 @@ def test_copyedit_override_repairs_live_body_without_marking_meaningful_update()
     assert OLD not in item["body"]
     assert "is_meaningful_update" not in item
     assert "update_status" not in item
+
+
+TRAIN_SLUG = "2026-11-22-pedestrian-killed-in-fort-pierce-train-incident-seaway-drive-crossing-blocked"
+MISSING_ST = "with assistance from the Lucie County Sheriff’s Office."
+CORRECT_ST = "with assistance from the St. Lucie County Sheriff’s Office."
+
+
+def test_train_sheriff_copyedit_is_source_scoped_and_preserves_date():
+    root = Path(__file__).resolve().parents[1]
+    payload = json.loads((root / "data" / "article-content-overrides.json").read_text())
+    override = payload["overrides"][TRAIN_SLUG]
+    assert override["mark_meaningful_update"] is False
+    assert {"from": MISSING_ST, "to": CORRECT_ST} in override["body_replacements"]
+    page = (root / "articles" / f"{TRAIN_SLUG}.html").read_text()
+    assert CORRECT_ST in page
+    assert MISSING_ST not in page
+    assert "Published November 22, 2026" in page
+
+
+def test_train_sheriff_copyedit_survives_full_generation_overrides(tmp_path):
+    root = tmp_path
+    articles = root / "articles"
+    data_dir = root / "data"
+    articles.mkdir()
+    data_dir.mkdir()
+    override = {
+        "version": 1,
+        "overrides": {
+            TRAIN_SLUG: {
+                "body_replacements": [{"from": MISSING_ST, "to": CORRECT_ST}],
+                "mark_meaningful_update": False,
+                "update_status": "copyedit_correction",
+            }
+        },
+    }
+    (data_dir / "article-content-overrides.json").write_text(json.dumps(override))
+    (root / "archive.json").write_text(json.dumps([{
+        "slug": TRAIN_SLUG, "headline": "Fort Pierce train incident",
+        "body": f"Fort Pierce police are investigating, {MISSING_ST}",
+        "published": "Sun, 22 Nov 2026 11:47:51 -0500",
+    }]))
+    article = articles / f"{TRAIN_SLUG}.html"
+    article.write_text(
+        '<html><head><title>Fort Pierce train incident</title></head><body>'
+        '<div class="article-body"><p>Fort Pierce police are investigating, '
+        + MISSING_ST + '</p></div><div class="article-share"></div></body></html>'
+    )
+    assert generate._apply_article_content_overrides_to_outputs(root) == 1
+    after = article.read_text()
+    assert CORRECT_ST in after
+    assert MISSING_ST not in after
+    row = json.loads((root / "archive.json").read_text())[0]
+    assert CORRECT_ST in row["body"]
+    assert row["published"] == "Sun, 22 Nov 2026 11:47:51 -0500"
+    assert row.get("meaningful_update_validated") is not True
