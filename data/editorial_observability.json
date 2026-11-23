@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-23T21:49:18Z",
+  "generated_at": "2026-11-23T23:51:09Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 3,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,33 +49,24 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 180,
+    "candidates_processed": 182,
     "routes": {
-      "generate_new": 35,
-      "skip": 145
+      "generate_new": 33,
+      "skip": 149
     },
     "eligibility": {
-      "listing": 2,
-      "low_value": 142,
+      "listing": 1,
+      "low_value": 145,
       "publishable": 36
     },
     "source_classes": {
-      "aggregator": 144,
-      "local_news": 25,
-      "regional_news": 10,
+      "aggregator": 146,
+      "local_news": 24,
+      "regional_news": 11,
       "unknown": 1
     },
-    "rejected_count": 2,
+    "rejected_count": 1,
     "rejected_examples": [
-      {
-        "headline": "11704 SW Bennington Cir, Port Saint Lucie, FL 34987 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNV1dtLVdMb1B4dE9GbFMxUHBfTXVMTWlXUkVCS2N1ZWxsa3J5bnBDYWMxU0gtcFZsNVdBZnVENWhqSzJCdUt3cVNSVWZoZDlSUnRsVElQVEFxa3lVV3Q4RjJITEZuRzNETFVXZjBPYkFWVzBxLU4zMEpOb19fWlZSZHdGbjNTRUVNMFBMc2E1Yk5XR1RfLXZUTG9tMGFXRWNK?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
       {
         "headline": "2222 SE Midtown Rd, Port Saint Lucie, FL 34952 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOSXRSNVl6VThNRW1QaTJRc05fRVJMN3Q2bzluN3dULXM2YVRIbDhzNURUVzlVZ0xjbGxtRVdscDJwNjdjenFXSjRIT282NU16MmVfOFVoZXRxOFBYRnVvNWNpRm5lRHpaa2kwcWg1X1ROTXRmZlBVNUZKUUJFcmNjYm1SYi1KcmVRWXNtcmY4ODliSlJfSHBTMGpn?oc=5",
@@ -89,20 +80,34 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 32,
-      "same_event": 148
+      "new_story": 25,
+      "same_event": 157
     },
     "examples": [
       {
-        "story_id": "story_029393",
-        "title": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
-        "event_key": "unknown-event-c620ecdfa9",
+        "story_id": "story_029425",
+        "title": "Thanksgiving airfare jumps 17% as travelers face higher prices, potential delays",
+        "event_key": "unknown-event-07c56be7bc",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029393",
+        "title": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+        "event_key": "unknown-event-c620ecdfa9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -187,6 +192,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029426",
+        "title": "Deltona, Florida, cancels Christmas parade, cites $23 million in Amendment 3 cuts - WPEC",
+        "event_key": "unknown-event-6e9f2498ff",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -333,34 +350,6 @@
         "story_id": "story_029212",
         "title": "EF-1 tornado damages communities in southern Palm Beach County with 102 mph winds",
         "event_key": "unknown-event-3575229c4f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029213",
-        "title": "Football: Vero Beach rolls past Dr. Phillips, earns Region 2-6A final berth - Treasure Coast News",
-        "event_key": "unknown-event-fbb52abfbc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029170",
-        "title": "FHSAA Football: John Carroll/Pahokee to resume Region 4-1A semifinal Monday - Treasure Coast News",
-        "event_key": "unknown-event-488053ff83",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -374,9 +363,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_029393",
-        "title": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
-        "event_key": "unknown-event-c620ecdfa9",
+        "story_id": "story_029425",
+        "title": "Thanksgiving airfare jumps 17% as travelers face higher prices, potential delays",
+        "event_key": "unknown-event-07c56be7bc",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -384,6 +373,21 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029393",
+        "title": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+        "event_key": "unknown-event-c620ecdfa9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -474,6 +478,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029426",
+        "title": "Deltona, Florida, cancels Christmas parade, cites $23 million in Amendment 3 cuts - WPEC",
+        "event_key": "unknown-event-6e9f2498ff",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -630,36 +647,6 @@
         "story_id": "story_029212",
         "title": "EF-1 tornado damages communities in southern Palm Beach County with 102 mph winds",
         "event_key": "unknown-event-3575229c4f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029213",
-        "title": "Football: Vero Beach rolls past Dr. Phillips, earns Region 2-6A final berth - Treasure Coast News",
-        "event_key": "unknown-event-fbb52abfbc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029170",
-        "title": "FHSAA Football: John Carroll/Pahokee to resume Region 4-1A semifinal Monday - Treasure Coast News",
-        "event_key": "unknown-event-488053ff83",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -689,8 +676,8 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 355,
-      "timeline_entries_examined": 1029,
+      "stories_with_timelines": 358,
+      "timeline_entries_examined": 1032,
       "transitions_examined": 632,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 12,
@@ -2011,27 +1998,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 622,
-      "treasure_coast_local": 453,
-      "treasure_coast_region": 164,
+      "florida": 623,
+      "treasure_coast_local": 451,
+      "treasure_coast_region": 165,
       "unknown": 1275
     },
-    "average_score": 58.05
+    "average_score": 58.03
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 622,
-      "treasure_coast_local": 453,
-      "treasure_coast_region": 164,
+      "florida": 623,
+      "treasure_coast_local": 451,
+      "treasure_coast_region": 165,
       "unknown": 1275
     },
-    "average_priority": 2.51
+    "average_priority": 2.54
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1485,
-      "developing": 85,
-      "ongoing": 942,
+      "active": 1469,
+      "developing": 92,
+      "ongoing": 951,
       "resolved": 2
     }
   },
@@ -2078,11 +2065,11 @@
     "importance_levels": {
       "breaking": 2,
       "high": 43,
-      "normal": 260,
-      "low": 2209,
+      "normal": 263,
+      "low": 2206,
       "archived": 0
     },
-    "average_importance": 5.91,
+    "average_importance": 5.95,
     "top": [
       {
         "story_id": "story_029050",
@@ -2097,7 +2084,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.01
+          "age_hours": 36.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2143,7 +2130,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 34.01,
+          "hours_since_update": 36.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2161,7 +2148,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 26.02
+          "age_hours": 28.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2204,7 +2191,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T19:42:13.208349+00:00",
-          "hours_since_update": 26.02,
+          "hours_since_update": 28.03,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2222,7 +2209,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.01
+          "age_hours": 26.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2266,7 +2253,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T21:42:13.135439+00:00",
-          "hours_since_update": 24.01,
+          "hours_since_update": 26.06,
           "event_count": 36,
           "timeline_entries": 36
         }
@@ -2284,7 +2271,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 94.0
+          "age_hours": 96.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2328,7 +2315,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 94.0,
+          "hours_since_update": 96.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2346,7 +2333,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 77.01
+          "age_hours": 79.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2389,7 +2376,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 77.01,
+          "hours_since_update": 79.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2407,7 +2394,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 29.05
+          "age_hours": 31.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2450,7 +2437,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 29.05,
+          "hours_since_update": 31.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2468,7 +2455,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 282.5
+          "age_hours": 284.5
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2518,7 +2505,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 282.5,
+          "hours_since_update": 284.5,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2536,7 +2523,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 118.0
+          "age_hours": 120.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2582,7 +2569,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 118.0,
+          "hours_since_update": 120.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2600,7 +2587,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 258.93
+          "age_hours": 260.93
         },
         "level": "high",
         "importance_reasons": [
@@ -2643,7 +2630,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 258.93,
+          "hours_since_update": 260.93,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2661,7 +2648,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 221.01
+          "age_hours": 223.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2703,7 +2690,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 221.01,
+          "hours_since_update": 223.01,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2721,7 +2708,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 334.01
+          "age_hours": 336.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2765,7 +2752,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-09T23:42:06.613908+00:00",
-          "hours_since_update": 334.01,
+          "hours_since_update": 336.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2783,7 +2770,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 322.01
+          "age_hours": 324.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2827,7 +2814,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-10T11:41:55.165203+00:00",
-          "hours_since_update": 322.01,
+          "hours_since_update": 324.01,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -2845,7 +2832,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 245.01
+          "age_hours": 247.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2888,7 +2875,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 245.01,
+          "hours_since_update": 247.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2906,7 +2893,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 221.01
+          "age_hours": 223.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2950,7 +2937,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 221.01,
+          "hours_since_update": 223.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2968,7 +2955,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 243.73
+          "age_hours": 245.73
         },
         "level": "high",
         "importance_reasons": [
@@ -3011,7 +2998,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 243.73,
+          "hours_since_update": 245.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3029,7 +3016,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 67.01
+          "age_hours": 69.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -3067,7 +3054,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-21T02:42:22.808106+00:00",
-          "hours_since_update": 67.01,
+          "hours_since_update": 69.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3085,7 +3072,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 269.01
+          "age_hours": 271.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3128,7 +3115,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 269.01,
+          "hours_since_update": 271.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3146,7 +3133,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 290.01
+          "age_hours": 292.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3187,7 +3174,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 290.01,
+          "hours_since_update": 292.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3205,7 +3192,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 290.53
+          "age_hours": 292.53
         },
         "level": "high",
         "importance_reasons": [
@@ -3244,7 +3231,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 290.53,
+          "hours_since_update": 292.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3262,7 +3249,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 243.73
+          "age_hours": 245.73
         },
         "level": "high",
         "importance_reasons": [
@@ -3300,7 +3287,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 243.73,
+          "hours_since_update": 245.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3310,7 +3297,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-23T21:45:39Z",
+    "generated_at": "2026-11-23T23:46:25Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3325,36 +3312,36 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
+        "cache_hit": 2,
         "category_eligibility_archive_recovery": 5,
         "generated_live": 1,
-        "no_publishable_sources": 2
+        "no_publishable_sources": 1
       },
       "failures": {
         "no_category_eligible_sources": 5
       },
       "model_attempt_count": 1,
-      "model_elapsed_seconds": 13.179,
-      "archive_recovery_requested_count": 7,
+      "model_elapsed_seconds": 11.633,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 7,
-      "published_story_duplicate_suppression_count": 27,
-      "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 5,
+      "published_story_duplicate_suppression_count": 29,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 6,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 0
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 26,
+        "fetched_candidate_count": 27,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 10,
+        "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3371,23 +3358,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3417,8 +3390,18 @@
             "source_url": "https://cbs12.com/news/local/severe-thunderstorm-warning-for-indian-river-st-lucie-county"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
+            "editorial_story_id": "story_029393",
+            "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
+            "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
@@ -3457,6 +3440,21 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
+            "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
+            "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
@@ -3516,7 +3514,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 19.624
+        "elapsed_seconds": 33.386
       },
       {
         "category_key": "crime",
@@ -3541,9 +3539,23 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "'Don't come here and do stupid things': Two accused of breaking into Martin County business to play games - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-video-games-burglary-arrest-business/74511776"
+          },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
@@ -3646,7 +3658,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.543
+        "elapsed_seconds": 24.377
       },
       {
         "category_key": "business",
@@ -3654,7 +3666,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 17,
-        "publishable_source_count": 9,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3894,8 +3906,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 20.285
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 24.749
       },
       {
         "category_key": "sports",
@@ -3942,7 +3954,7 @@
         },
         "new_publication_stale_rejected_count": 0,
         "sports_editorial_source_rejections": [],
-        "elapsed_seconds": 17.242
+        "elapsed_seconds": 14.103
       },
       {
         "category_key": "things_to_do",
@@ -4024,7 +4036,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.732
+        "elapsed_seconds": 15.967
       },
       {
         "category_key": "florida",
@@ -4114,21 +4126,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.159
+        "elapsed_seconds": 15.954
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 11.633,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 11.633,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4139,7 +4158,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
@@ -4204,28 +4223,25 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.58
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Two face felony burglary charges in Hutchinson Island game-room break-in",
+        "generated_card_count": 0,
+        "elapsed_seconds": 42.272
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 3,
-        "selected_source_count": 2,
-        "cache_hit": false,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.179,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 13.179,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4236,11 +4252,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
+            "editorial_story_id": "story_029393",
+            "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
+            "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding - WPTV",
@@ -4274,7 +4300,7 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
-            "source_url": "https://cbs12.com/news/local/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+            "source_url": "https://cbs12.com/features/the-wellness-experience/photos/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
             "editorial_story_id": "story_028464",
             "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
             "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
@@ -4312,13 +4338,69 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMivgJBVV95cUxOYng1RGNBTFlUNzRBa3BCblF5anhKUVlqdGk4MkF1RlFybDN5TllEb0tsQUVkR1hDYy03ZnhUZ2dZVGhJUjBadGpRZG5OeHNVRi1hTEI3VE94dUNJNjZHUnJ3TC1NSnd2Ym5sVTN1UUM0VEwxUW9lSEZLNE9CQ3RYSE9SajBGX0EzVWZmc3hCQXpvOXZRUk9tWVk0MllXVE9BOE40TEdHbXd4WFdkWkt6RUtUQmhXa0IzTE1sU0F5SDdNRC1WSnVKRXp5U2lPVnBWLWxrbEFXc083eFFBckUtMGdLUVdCbjVvRXJRWkVKcXEzUlZGdjlfaE9oTWFtV21XUXEtNHFrbFZMbmNkdXRzSHQxWEZkaXhvUkZwV1dqX3ozeFVBa0cyNmRCUndyZWh4aUVOUFJUellYRjVRNlE",
+            "publisher": "news.google.com",
+            "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
+            "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
+            "basis": "event-identity-authority:governing_body_plus_policy_subject",
+            "identity_keys": [
+              "story:story_029393",
+              "source:https://news.google.com/rss/articles/CBMivgJBVV95cUxOYng1RGNBTFlUNzRBa3BCblF5anhKUVlqdGk4MkF1RlFybDN5TllEb0tsQUVkR1hDYy03ZnhUZ2dZVGhJUjBadGpRZG5OeHNVRi1hTEI3VE94dUNJNjZHUnJ3TC1NSnd2Ym5sVTN1UUM0VEwxUW9lSEZLNE9CQ3RYSE9SajBGX0EzVWZmc3hCQXpvOXZRUk9tWVk0MllXVE9BOE40TEdHbXd4WFdkWkt6RUtUQmhXa0IzTE1sU0F5SDdNRC1WSnVKRXp5U2lPVnBWLWxrbEFXc083eFFBckUtMGdLUVdCbjVvRXJRWkVKcXEzUlZGdjlfaE9oTWFtV21XUXEtNHFrbFZMbmNkdXRzSHQxWEZkaXhvUkZwV1dqX3ozeFVBa0cyNmRCUndyZWh4aUVOUFJUellYRjVRNlE"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_agency",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=legacy_archive_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=0",
+              "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+              "shared_event_families=['public-policy']",
+              "shared_named_people=[]",
+              "shared_precise_locations=[]",
+              "shared_agencies=['st-lucie-county-commission']",
+              "shared_subject_phrases=['consid-fort-mast', 'consid-fort-mast-plan', 'fort-mast-plan', 'fort-mast-plan-dec', 'mast-plan-dec']",
+              "shared_headline_topic_core=['consid', 'dec', 'fort', 'mast', 'plan']",
+              "shared_distinctive_token_count=5",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 5,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 4,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
+            "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
+            "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding - WPTV",
@@ -4395,17 +4477,31 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Boil water notice lifted for 21,000 Port St. Lucie customers after water main break - WPEC",
-            "source_url": "https://cbs12.com/news/local/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
+            "source_url": "https://cbs12.com/features/the-wellness-experience/photos/boil-water-notice-lifted-for-21000-port-st-lucie-customers-after-water-main-break",
             "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
             "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
             "promoted": false,
             "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Tuesday water main break in Port St. Lucie affecting approximately 21,000 customers",
+              "Affected communities in Tradition and western Port St. Lucie near Glades Cut Off Road and Becker Road",
+              "Precautionary boil water notice lifted Saturday after testing confirmed the water was safe to drink"
+            ],
+            "novel_facts": [
+              "Incoming specifies the all-clear announcement time as 3:15 p.m.",
+              "Incoming attributes the break to an unrelated construction contractor damaging a 36-inch water main and describes repairs, flushing and testing"
+            ],
+            "reason": "The canonical already reports the same main break and Saturday lifting of the boil water notice for 21,000 customers. The announcement time and additional repair and cause details do not establish a new consequential development or independently newsworthy follow-up.",
+            "validation_errors": []
           },
           {
             "category_key": "st_lucie",
@@ -4482,11 +4578,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
-        "generated_card_count": 0,
-        "elapsed_seconds": 28.172
+        "live_hero_headline": "Northwestern St. Lucie County storm warning cited threat of 60 mph gusts",
+        "elapsed_seconds": 24.008
       },
       {
         "category_key": "indian_river",
@@ -4494,7 +4587,7 @@
         "status": "cache_hit",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
+        "publishable_source_count": 9,
         "selected_source_count": 1,
         "cache_hit": true,
         "archive_recovery_requested": false,
@@ -4511,7 +4604,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
@@ -4577,7 +4670,7 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Severe storm warning for southeastern Indian River County cited 60 mph wind threat",
-        "elapsed_seconds": 15.969
+        "elapsed_seconds": 24.459
       }
     ]
   }

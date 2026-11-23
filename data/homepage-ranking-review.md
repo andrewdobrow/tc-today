@@ -4,18 +4,18 @@
 
 ## Hero
 
-- Current: **St. Lucie County to consider Port of Fort Pierce master plan Dec. 1**
-- Recommended: **St. Lucie County to consider Port of Fort Pierce master plan Dec. 1**
+- Current: **Two face felony burglary charges in Hutchinson Island game-room break-in**
+- Recommended: **Two face felony burglary charges in Hutchinson Island game-room break-in**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 47 | importance 0; freshness 96.67; urgency 2/10 |
-| 2 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 42 | importance 0; freshness 91.67; urgency 2/10 |
-| 3 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 41 | importance 0; freshness 51.64; urgency 4/10 |
-| 4 | Indian River County unveils permanent memorial to two deputies killed in line of duty | Indian River County unveils permanent memorial to two deputies killed in line of duty | 36 | importance 0; freshness 23.35; urgency 2/10; validated material update |
+| 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 47 | importance 0; freshness 96.58; urgency 2/10 |
+| 2 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 46 | importance 0; freshness 93.29; urgency 2/10 |
+| 3 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 41 | importance 0; freshness 88.29; urgency 2/10 |
+| 4 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 40 | importance 0; freshness 48.26; urgency 4/10 |
 
 ## Recommended moves
 
