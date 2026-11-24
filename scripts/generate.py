@@ -1222,7 +1222,7 @@ def _focus_sinclair_chrome_article(text, source):
     for idx, sentence in enumerate(sentences):
         if not unrelated_named_crime_facts(title, sentence):
             continue
-        prefix = re.sub(r"\\s+", " ", " ".join(sentences[:idx])).strip()
+        prefix = re.sub(r"\s+", " ", " ".join(sentences[:idx])).strip()
         if (
             idx >= 2
             and 45 <= _word_count(prefix) <= 180
