@@ -1207,6 +1207,15 @@ def _focus_sinclair_chrome_article(text, source):
     if len(sentences) < 4:
         return text
     title = str(source.get("title") or source.get("source_title") or "")
+    # A short Sinclair bulletin can carry related-story cards immediately
+    # after the factual story. Stop at a named charge from a disjoint crime
+    # incident; these are not facts of this article just because the same HTML
+    # page contains them. Use this before heuristic topic-overlap scoring.
+    for idx, sentence in enumerate(sentences):
+        if unrelated_named_crime_facts(title, sentence):
+            focused = re.sub(r"\\s+", " ", " ".join(sentences[:idx])).strip()
+            if 45 <= _word_count(focused) <= 180:
+                return focused
     topic_words = set(re.findall(r"[a-z]{4,}", title.lower())) - {
         "county", "florida", "deputies", "emergency", "crews", "respond",
         "local", "news", "after", "following", "with", "from", "cw34",
@@ -10324,7 +10333,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     temporal_max_age = _temporal_source_refresh_interval(source)
     cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
-        return _focus_extracted_source_text(str(cached.get("text", "")), source)
+        return (globals().get("_focus_extracted_source_text") or (lambda value, _source: value))(str(cached.get("text", "")), source)
 
     # Multiple category workers can encounter the same source at once. Only one
     # worker performs the network extraction; the others recheck the cache after
@@ -10334,12 +10343,12 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         fetch_lock.release()
-        return _focus_extracted_source_text(str(cached.get("text", "")), source)
+        return (globals().get("_focus_extracted_source_text") or (lambda value, _source: value))(str(cached.get("text", "")), source)
 
     def _finish(text):
         # Apply publisher-specific chrome containment before the persistent
         # source cache. Cache hits also revalidate against the current guard.
-        text = _focus_extracted_source_text(str(text or ""), source)
+        text = (globals().get("_focus_extracted_source_text") or (lambda value, _source: value))(str(text or ""), source)
         try:
             # Successful extractions remain valid while the feed fingerprint is stable.
             # Short-lived negative caching prevents repeatedly hammering blocked sources.
