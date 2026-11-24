@@ -97,3 +97,25 @@ def test_final_publication_gate_blocks_cross_story_named_crime_allegation():
         "body": CLEAN_BODY + "\n\n" + CONTAMINANT,
     }
     assert not generate._publishable_article(row, hero=True)
+
+
+def test_alternate_extractor_cannot_reintroduce_different_incident_charge():
+    from tct_engine.critical_source_facts import reconcile_same_article_extraction
+    primary = CLEAN_BODY
+    alternate = CLEAN_BODY + " " + CONTAMINANT
+    assert reconcile_same_article_extraction(
+        primary, alternate, source_title=SOURCE_TITLE
+    ) == CLEAN_BODY
+
+
+def test_alternate_extractor_still_adds_real_named_suspect_from_same_case():
+    from tct_engine.critical_source_facts import reconcile_same_article_extraction
+    primary = "The police continue to investigate an attempted murder stabbing."
+    alternate = (
+        "Police said they arrested Bradley Martin after the stabbing. "
+        "Bradley Martin, 32, was charged with attempted murder."
+    )
+    result = reconcile_same_article_extraction(
+        primary, alternate, source_title="Bradley Martin charged after stabbing"
+    )
+    assert "Bradley Martin" in result
