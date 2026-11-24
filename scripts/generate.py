@@ -1215,6 +1215,21 @@ def _focus_sinclair_chrome_article(text, source):
     }
     if len(topic_words) < 2:
         return text
+    # A short official bulletin may mention the named event only once. When
+    # publisher chrome adds a *positively identifiable different crime*, keep
+    # the whole preceding contiguous bulletin rather than requiring the writer
+    # to use an already-contaminated short source.
+    for idx, sentence in enumerate(sentences):
+        if not unrelated_named_crime_facts(title, sentence):
+            continue
+        prefix = re.sub(r"\\s+", " ", " ".join(sentences[:idx])).strip()
+        if (
+            idx >= 2
+            and 45 <= _word_count(prefix) <= 180
+            and len(set(re.findall(r"[a-z]{4,}", prefix.lower())) & topic_words) >= 2
+        ):
+            return prefix
+        break
     kept = []
     weak = 0
     strong = 0
