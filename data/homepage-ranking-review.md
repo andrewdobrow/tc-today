@@ -12,12 +12,11 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | 51 | importance 0; freshness 96.73; urgency 4/10 |
-| 2 | Two face felony burglary charges in Hutchinson Island game-room break-in | Two face felony burglary charges in Hutchinson Island game-room break-in | 42 | importance 0; freshness 76.69; urgency 2/10 |
-| 3 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 41 | importance 0; freshness 73.32; urgency 2/10 |
-| 4 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 41 | importance 0; freshness 70.03; urgency 2/10 |
-| 5 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 35 | importance 0; freshness 65.03; urgency 2/10 |
-| 6 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 34 | importance 0; freshness 25.0; urgency 4/10 |
+| 1 | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | 50 | importance 0; freshness 91.66; urgency 4/10 |
+| 2 | Two face felony burglary charges in Hutchinson Island game-room break-in | Two face felony burglary charges in Hutchinson Island game-room break-in | 41 | importance 0; freshness 71.61; urgency 2/10 |
+| 3 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 40 | importance 0; freshness 68.24; urgency 2/10 |
+| 4 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 40 | importance 0; freshness 64.95; urgency 2/10 |
+| 5 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 34 | importance 0; freshness 59.96; urgency 2/10 |
 
 ## Recommended moves
 

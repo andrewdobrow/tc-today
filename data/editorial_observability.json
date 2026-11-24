@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-24T13:48:15Z",
+  "generated_at": "2026-11-24T16:51:18Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 2,
-    "placements_after": 2,
+    "placements_before": 3,
+    "placements_after": 3,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,20 +49,21 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 174,
+    "candidates_processed": 172,
     "routes": {
-      "generate_new": 32,
-      "skip": 142
+      "generate_new": 39,
+      "skip": 133
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 132,
-      "publishable": 40
+      "low_value": 131,
+      "publishable": 39
     },
     "source_classes": {
-      "aggregator": 134,
-      "local_news": 26,
-      "regional_news": 14
+      "aggregator": 133,
+      "local_news": 25,
+      "regional_news": 12,
+      "unknown": 2
     },
     "rejected_count": 2,
     "rejected_examples": [
@@ -88,14 +89,63 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 32,
-      "same_event": 142
+      "new_story": 33,
+      "same_event": 139
     },
     "examples": [
       {
+        "story_id": "story_029540",
+        "title": "4 men taken into custody after overnight burglary, manhunt in Martin County",
+        "event_key": "unknown-event-07e1afb6d0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029541",
+        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
+        "event_key": "unknown-event-63bee36c7f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029542",
+        "title": "King tides from Tuesday’s supermoon could prompt more coastal flooding - Central Florida Public Media",
+        "event_key": "unknown-event-e8f764c9fc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_029475",
-        "title": "Florida Republican Dan Green plans rematch against Rep. Darren Soto - Yahoo",
-        "event_key": "unknown-event-42f2393e19",
+        "title": "Florida Republican Dan Green plans rematch against Rep. Darren Soto - Treasure Coast News",
+        "event_key": "unknown-event-6d4239f29b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029482",
+        "title": "Jury finds Scott Hodges guilty of 2021 murder near Vero Lakes Estates - Treasure Coast News",
+        "event_key": "unknown-event-c097dfa469",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -173,6 +223,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029443",
+        "title": "Florida city issues boil water notice following a water main break - Yahoo",
+        "event_key": "unknown-event-4182b69f77",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -301,78 +364,66 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_029315",
-        "title": "WPTV anchor Hollani Davis emcees 2026 Black Chamber of Palm Beach County Ascension Awards",
-        "event_key": "unknown-event-3875e8a506",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029289",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Bradenton Herald",
-        "event_key": "unknown-event-f67702eca6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029289",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Daytona Beach News-Journal",
-        "event_key": "unknown-event-094341ef6c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029480",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Tallahassee Democrat",
-        "event_key": "unknown-event-d782a76eb0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "",
-        "title": "11704 SW Bennington Cir, Port Saint Lucie, FL 34987 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
       }
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_029540",
+        "title": "4 men taken into custody after overnight burglary, manhunt in Martin County",
+        "event_key": "unknown-event-07e1afb6d0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029541",
+        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
+        "event_key": "unknown-event-63bee36c7f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_029542",
+        "title": "King tides from Tuesday’s supermoon could prompt more coastal flooding - Central Florida Public Media",
+        "event_key": "unknown-event-e8f764c9fc",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_029475",
-        "title": "Florida Republican Dan Green plans rematch against Rep. Darren Soto - Yahoo",
-        "event_key": "unknown-event-42f2393e19",
+        "title": "Florida Republican Dan Green plans rematch against Rep. Darren Soto - Treasure Coast News",
+        "event_key": "unknown-event-6d4239f29b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029482",
+        "title": "Jury finds Scott Hodges guilty of 2021 murder near Vero Lakes Estates - Treasure Coast News",
+        "event_key": "unknown-event-c097dfa469",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -456,6 +507,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029443",
+        "title": "Florida city issues boil water notice following a water main break - Yahoo",
+        "event_key": "unknown-event-4182b69f77",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -583,81 +648,6 @@
         "story_id": "story_029314",
         "title": "Palm Beach County partners help families facing food insecurity this Thanksgiving",
         "event_key": "unknown-event-ae36d5f6b1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029315",
-        "title": "WPTV anchor Hollani Davis emcees 2026 Black Chamber of Palm Beach County Ascension Awards",
-        "event_key": "unknown-event-3875e8a506",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029289",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Bradenton Herald",
-        "event_key": "unknown-event-f67702eca6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029289",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Daytona Beach News-Journal",
-        "event_key": "unknown-event-094341ef6c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029480",
-        "title": "Is there school today in Florida? When Thanksgiving begins - Tallahassee Democrat",
-        "event_key": "unknown-event-d782a76eb0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_029234",
-        "title": "State Cross Country roundup: Treasure Coast from FHSAA championships - Treasure Coast News",
-        "event_key": "unknown-event-2f69108515",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -692,12 +682,12 @@
     },
     "examples": [
       {
-        "headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-        "event_key": "unknown-event-d8fdee609c",
-        "current_story_id": "story_029510",
+        "headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
+        "event_key": "unknown-event-07e1afb6d0",
+        "current_story_id": "story_029540",
         "current_relationship": "new_story",
         "candidate_story_id": "story_027669",
-        "candidate_confidence": 0.725,
+        "candidate_confidence": 0.714286,
         "candidate_milestones": [
           "arrest"
         ],
@@ -714,14 +704,14 @@
           "Novel milestones: arrest",
           "Exact event-key anchor: False",
           "Facts overlap: 0.00",
-          "Title overlap: 0.25",
+          "Title overlap: 0.14",
           "Location match: True",
           "Agency match: True",
           "Event type match: False",
           "Entity match: True",
           "Agency conflict: False",
           "Event type conflict: False",
-          "Candidate confidence: 0.72"
+          "Candidate confidence: 0.71"
         ]
       }
     ],
@@ -731,9 +721,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 349,
-      "timeline_entries_examined": 1001,
-      "transitions_examined": 610,
+      "stories_with_timelines": 351,
+      "timeline_entries_examined": 1007,
+      "transitions_examined": 614,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 12,
       "high_confidence_candidate_count": 5,
@@ -2017,27 +2007,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 621,
+      "florida": 623,
       "treasure_coast_local": 434,
-      "treasure_coast_region": 169,
-      "unknown": 1286
+      "treasure_coast_region": 172,
+      "unknown": 1298
     },
-    "average_score": 57.7
+    "average_score": 57.64
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 621,
+      "florida": 623,
       "treasure_coast_local": 434,
-      "treasure_coast_region": 169,
-      "unknown": 1286
+      "treasure_coast_region": 172,
+      "unknown": 1298
     },
-    "average_priority": 2.52
+    "average_priority": 2.5
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1490,
-      "developing": 83,
-      "ongoing": 935,
+      "active": 1505,
+      "developing": 86,
+      "ongoing": 934,
       "resolved": 2
     }
   },
@@ -2077,18 +2067,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-24T11:41:45Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2510
+    "active_story_count": 2527
   },
   "stories": {
-    "total": 2510,
+    "total": 2527,
     "importance_levels": {
       "breaking": 2,
       "high": 41,
-      "normal": 260,
-      "low": 2207,
+      "normal": 259,
+      "low": 2225,
       "archived": 0
     },
-    "average_importance": 5.87,
+    "average_importance": 5.83,
     "top": [
       {
         "story_id": "story_029050",
@@ -2103,7 +2093,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 50.0
+          "age_hours": 53.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2149,7 +2139,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 50.0,
+          "hours_since_update": 53.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2167,7 +2157,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 42.02
+          "age_hours": 45.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2210,7 +2200,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T19:42:13.208349+00:00",
-          "hours_since_update": 42.02,
+          "hours_since_update": 45.03,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2228,7 +2218,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.99
+          "age_hours": 5.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2262,7 +2252,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-24T11:42:58.636048+00:00",
-          "hours_since_update": 1.99,
+          "hours_since_update": 5.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2280,7 +2270,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 40.0
+          "age_hours": 43.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2324,7 +2314,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T21:42:13.135439+00:00",
-          "hours_since_update": 40.0,
+          "hours_since_update": 43.0,
           "event_count": 36,
           "timeline_entries": 36
         }
@@ -2342,7 +2332,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 10.99
+          "age_hours": 14.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2381,7 +2371,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-24T02:42:35.119839+00:00",
-          "hours_since_update": 10.99,
+          "hours_since_update": 14.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2399,7 +2389,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 110.0
+          "age_hours": 113.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2443,7 +2433,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 110.0,
+          "hours_since_update": 113.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2461,7 +2451,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 93.0
+          "age_hours": 96.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2504,7 +2494,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 93.0,
+          "hours_since_update": 96.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2522,7 +2512,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 45.05
+          "age_hours": 48.06
         },
         "level": "high",
         "importance_reasons": [
@@ -2565,7 +2555,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 45.05,
+          "hours_since_update": 48.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2583,7 +2573,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 298.5
+          "age_hours": 301.5
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2633,7 +2623,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 298.5,
+          "hours_since_update": 301.5,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2651,7 +2641,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 134.0
+          "age_hours": 137.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2697,7 +2687,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 134.0,
+          "hours_since_update": 137.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2715,7 +2705,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 274.92
+          "age_hours": 277.93
         },
         "level": "high",
         "importance_reasons": [
@@ -2758,7 +2748,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 274.92,
+          "hours_since_update": 277.93,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2776,7 +2766,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 237.0
+          "age_hours": 240.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2818,7 +2808,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 237.0,
+          "hours_since_update": 240.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2836,7 +2826,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 261.0
+          "age_hours": 264.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2879,7 +2869,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 261.0,
+          "hours_since_update": 264.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2897,7 +2887,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 237.0
+          "age_hours": 240.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2941,7 +2931,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 237.0,
+          "hours_since_update": 240.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2959,7 +2949,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 259.72
+          "age_hours": 262.72
         },
         "level": "high",
         "importance_reasons": [
@@ -3002,7 +2992,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 259.72,
+          "hours_since_update": 262.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3020,7 +3010,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 285.0
+          "age_hours": 288.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3063,7 +3053,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 285.0,
+          "hours_since_update": 288.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3081,7 +3071,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 306.0
+          "age_hours": 309.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3122,7 +3112,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 306.0,
+          "hours_since_update": 309.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3140,7 +3130,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 306.52
+          "age_hours": 309.53
         },
         "level": "high",
         "importance_reasons": [
@@ -3179,7 +3169,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 306.52,
+          "hours_since_update": 309.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3197,7 +3187,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 259.72
+          "age_hours": 262.72
         },
         "level": "high",
         "importance_reasons": [
@@ -3235,7 +3225,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 259.72,
+          "hours_since_update": 262.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3253,7 +3243,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 306.52
+          "age_hours": 309.53
         },
         "level": "high",
         "importance_reasons": [
@@ -3292,7 +3282,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 306.52,
+          "hours_since_update": 309.53,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3302,7 +3292,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-24T13:45:07Z",
+    "generated_at": "2026-11-24T16:46:20Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3317,25 +3307,24 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
-        "generated_live": 1,
-        "no_publishable_sources": 2
+        "category_eligibility_archive_recovery": 7,
+        "generated_live": 2
       },
       "failures": {
-        "no_category_eligible_sources": 6
+        "no_category_eligible_sources": 7
       },
-      "model_attempt_count": 1,
-      "model_elapsed_seconds": 23.02,
-      "archive_recovery_requested_count": 8,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 21.743,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 7,
-      "published_story_duplicate_suppression_count": 29,
-      "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 4,
+      "category_eligibility_rejection_count": 9,
+      "published_story_duplicate_suppression_count": 25,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 4,
+      "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
@@ -3345,7 +3334,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 10,
+        "publishable_source_count": 12,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3362,9 +3351,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_government_action",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_incident:burglary"
+            ],
+            "local_nexus_signals": [],
+            "headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3481,16 +3486,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 17.139
+        "elapsed_seconds": 36.307
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 8,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 9,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3498,11 +3503,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 23.02,
+            "elapsed_seconds": 10.938,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 23.02,
+        "model_elapsed_seconds": 10.938,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3513,7 +3518,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
           {
@@ -3545,15 +3550,15 @@
             "source_url": "https://cbs12.com/news/local/free-food-distributions-and-thanksgiving-meals-across-the-treasure-coast-prepared-food-fort-pierce-port-st-lucie-indiantown-sebastian"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news",
-            "editorial_story_id": "story_029452",
-            "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
-            "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3596,16 +3601,6 @@
             "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOQ3JaVEhLRUN1MnQ2bWhIdzdpRV9xaXg2a2RucE44ajAwSGFpV1RKd0NLMXVhM0RGcWszeFNPRHNXdnV0OVN2aTF5T0ZMYWNDMlNjWFRrcmd0RUFvckxucjVxdUxCb0NtQ2tpVTJUUDJWU1RIcjdIal9DN0VVNU9maHBydGh3eGZkcGJIdzNZbmtMbGlaWFZPalZIYU82UjJlTjVDOTVkY1BydGlqR05keWRyZ0U2VFMtcGdPd0U0TVhSVDNURmJVUFNWY1c0V3QzWlNqT1UxSkRrc0pJWUlN",
-            "editorial_story_id": "story_029348",
-            "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-            "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -3617,10 +3612,10 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - WPEC",
-            "source_url": "https://cbs12.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news",
-            "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
-            "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -3689,37 +3684,22 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOQ3JaVEhLRUN1MnQ2bWhIdzdpRV9xaXg2a2RucE44ajAwSGFpV1RKd0NLMXVhM0RGcWszeFNPRHNXdnV0OVN2aTF5T0ZMYWNDMlNjWFRrcmd0RUFvckxucjVxdUxCb0NtQ2tpVTJUUDJWU1RIcjdIal9DN0VVNU9maHBydGh3eGZkcGJIdzNZbmtMbGlaWFZPalZIYU82UjJlTjVDOTVkY1BydGlqR05keWRyZ0U2VFMtcGdPd0U0TVhSVDNURmJVUFNWY1c0V3QzWlNqT1UxSkRrc0pJWUlN",
-            "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-            "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+        "live_hero_headline": "Four men taken into custody after Palm City burglary and overnight manhunt",
         "generated_card_count": 0,
-        "elapsed_seconds": 42.082
+        "elapsed_seconds": 31.679
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 11,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 13,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3736,9 +3716,28 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_public_safety:burglary"
+            ],
+            "local_nexus_signals": [
+              "source_locality:martin county",
+              "source_locality:palm city"
+            ],
+            "headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -3773,7 +3772,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/nearly-1-8-million-chickens-to-be-depopulated-after-bird-flu-detected-at-okeechobee-county-facility"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -3823,16 +3822,6 @@
             "canonical_slug": "2026-11-20-martin-county-cancels-kanner-highway-data-center-meeting-promises-public-forums",
             "canonical_headline": "Martin County cancels Kanner Highway data center meeting, promises public forums",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-            "editorial_story_id": "story_028464",
-            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -3917,25 +3906,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-            "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-            "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 19.315
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 27.496
       },
       {
         "category_key": "sports",
@@ -3982,7 +3956,7 @@
         },
         "new_publication_stale_rejected_count": 0,
         "sports_editorial_source_rejections": [],
-        "elapsed_seconds": 17.618
+        "elapsed_seconds": 16.882
       },
       {
         "category_key": "things_to_do",
@@ -4037,23 +4011,23 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.918
+        "elapsed_seconds": 20.208
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 0,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Florida category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4062,10 +4036,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "florida",
@@ -4074,16 +4048,6 @@
             "editorial_story_id": "story_029496",
             "canonical_slug": "2026-11-24-flood-watch-issued-for-wednesday-as-treasure-coast-rain-chances-increase",
             "canonical_headline": "Flood watch issued for Wednesday as Treasure Coast rain chances increase",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "florida",
-            "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
-            "source_url": "https://www.wptv.com/wptv-investigates/florida-law-enforcement-agencies-could-get-more-than-1-billion-in-federal-funds-for-immigration-enforcement",
-            "editorial_story_id": "story_029348",
-            "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-            "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -4109,39 +4073,31 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "florida",
-            "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
-            "source_url": "https://www.wptv.com/wptv-investigates/florida-law-enforcement-agencies-could-get-more-than-1-billion-in-federal-funds-for-immigration-enforcement",
-            "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-            "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.29
+        "elapsed_seconds": 20.183
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "no_publishable_sources",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 4,
+        "selected_source_count": 3,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 10.805,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 10.805,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4152,19 +4108,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQWjk2ZFRRdVhYMk5jeV8wVHRNbkd2eDJUNWstRWRJR3NBb2VrYWdBU0J5aGtrYlh0Skk5d0RsTjZ1TzN1OFF2Zzk0d2lvN1NyYzVucEY2blhHdDBpXzU2V2VHS09lVWItbmRWY0dhdkpEMG5oSHdUVUllSmppbzhUVjNST2VrczNHSFJ3QTBPc0NtZmpPS191dWExTXdZRFd2NjhLZ290Vm9hVVRwTFZERmMyNTZERGZHYTI2TU9nVktCVzRHN1NTSWF2MmhkR0lZVVE",
-            "editorial_story_id": "story_029452",
-            "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
-            "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4188,8 +4144,50 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - cw34.com",
+            "source_url": "https://cw34.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news?teaserSource=trending",
+            "publisher": "cw34.com",
+            "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
+            "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_029452",
+              "source:https://cw34.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news?teaserSource=trending"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_agency",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=0",
+              "shared_locality=['hobe-sound', 'martin-county']",
+              "shared_event_families=['crash', 'drug-case']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['southeast-hobe-terrace']",
+              "shared_agencies=['martin-county-sheriff']",
+              "shared_subject_phrases=['car-tractor-trail', 'crash-involv-car', 'crash-involv-car-tractor', 'hurt-crash-involv', 'hurt-crash-involv-car', 'involv-car-tractor', 'involv-car-tractor-trail']",
+              "shared_headline_topic_core=['car', 'crash', 'hurt', 'involv', 'tractor', 'trail']",
+              "shared_distinctive_token_count=43",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
@@ -4197,13 +4195,13 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQWjk2ZFRRdVhYMk5jeV8wVHRNbkd2eDJUNWstRWRJR3NBb2VrYWdBU0J5aGtrYlh0Skk5d0RsTjZ1TzN1OFF2Zzk0d2lvN1NyYzVucEY2blhHdDBpXzU2V2VHS09lVWItbmRWY0dhdkpEMG5oSHdUVUllSmppbzhUVjNST2VrczNHSFJ3QTBPc0NtZmpPS191dWExTXdZRFd2NjhLZ290Vm9hVVRwTFZERmMyNTZERGZHYTI2TU9nVktCVzRHN1NTSWF2MmhkR0lZVVE",
-            "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
-            "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
             "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4242,14 +4240,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.565
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Four men taken into custody after Palm City burglary and overnight manhunt",
+        "generated_card_count": 0,
+        "elapsed_seconds": 33.332
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4270,7 +4272,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4334,6 +4336,16 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
+            "editorial_story_id": "story_028545",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
             "editorial_story_id": "story_028612",
@@ -4341,33 +4353,13 @@
             "canonical_headline": "Advocate says warnings preceded St. Lucie County’s historic flooding",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County schools closed as families prepare for more heavy rain - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-closed-as-families-prepare-for-more-heavy-rain",
-            "editorial_story_id": "story_028140",
-            "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-            "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
-            "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
-            "editorial_story_id": "story_028168",
-            "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
-            "canonical_headline": "Indian River County extends flood emergency through Nov. 23 as more rain threatens",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 4,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 4,
+        "material_update_promotion_cache_hit_count": 3,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -4505,6 +4497,21 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
+            "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
+            "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
+            "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
             "canonical_slug": "2026-11-19-advocate-says-warnings-preceded-st-lucie-countys-historic-flooding",
@@ -4517,53 +4524,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "St. Lucie County schools closed as families prepare for more heavy rain - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-schools-closed-as-families-prepare-for-more-heavy-rain",
-            "canonical_slug": "2026-11-17-st-lucie-county-schools-releasing-students-two-hours-early-ahead-of-flood-watch",
-            "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "St. Lucie County public schools and district offices closed Wednesday, Nov. 18, because of the heavy-rain and flooding threat.",
-              "A decision about reopening Thursday is expected Wednesday evening."
-            ],
-            "novel_facts": [
-              "Residents Leo Vargas and Glen Ferlance describe previous flooding and preparations for additional rain.",
-              "The incoming article provides sand-distribution locations and supply details."
-            ],
-            "reason": "Although the candidate slug references Tuesday's early dismissal, its current headline and lead already report Wednesday's closure and the pending Thursday decision. The incoming article repeats that same school-day status; resident reactions and preparedness details do not constitute a material update or independently newsworthy follow-up.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Treasure Coast counties prepare for flooding as heavy rain and gusty winds move in - WPEC",
-            "source_url": "https://cbs12.com/news/local/treasure-coast-prepare-heavy-rainfall-gusty-winds-historic-flooding-emergency-operations-center-st-lucie-county-martin-county-okeechobee-county-florida-news",
-            "canonical_slug": "2026-11-17-indian-river-county-remains-under-partial-emergency-activation-as-more-rain-thre",
-            "canonical_headline": "Indian River County extends flood emergency through Nov. 23 as more rain threatens",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 12.874
+        "new_publication_stale_rejected_count": 1,
+        "elapsed_seconds": 16.841
       },
       {
         "category_key": "indian_river",
@@ -4571,7 +4535,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 5,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4588,7 +4552,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -4601,7 +4565,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.592
+        "elapsed_seconds": 19.476
       }
     ]
   }
