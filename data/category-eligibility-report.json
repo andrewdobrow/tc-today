@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-24T21:47:14Z",
+  "generated_at": "2026-11-24T23:48:19Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 32,
-    "rejected_count": 10,
+    "assessed_count": 33,
+    "rejected_count": 9,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,7 +34,7 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 3,
       "rejections": [
         {
@@ -44,12 +44,14 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
           "local_nexus_signals": [],
-          "headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes"
+          "headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -61,11 +63,11 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:charged"
+            "crime_incident:arrested"
           ],
           "local_nexus_signals": [],
-          "headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-mother-accused-of-killing-6-year-old-son-declared-unfit-to-stand-trial"
+          "headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -88,23 +90,9 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 7,
-      "rejected_count": 2,
+      "assessed_count": 6,
+      "rejected_count": 1,
       "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "West Boca Raton neighbors clean up after EF-1 tornado damages homes, cars",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/west-boca-raton-neighbors-clean-up-after-ef-1-tornado-damages-homes-cars"
-        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -136,16 +124,18 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
+          "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:indian river county",
-            "source_locality:vero beach"
+          "competing_signals": [
+            "crime_public_safety:arrested"
           ],
-          "headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes"
+          "local_nexus_signals": [
+            "source_locality:martin county",
+            "source_locality:stuart",
+            "source_locality:palm city"
+          ],
+          "headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -157,15 +147,15 @@
           "reason": "competing_story_form_without_business_development_focus",
           "positive_signals": [],
           "competing_signals": [
-            "crime_public_safety:charged"
+            "crime_public_safety:arrested"
           ],
           "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:st lucie county",
-            "source_locality:fort pierce"
+            "source_locality:martin county",
+            "source_locality:stuart",
+            "source_locality:palm city"
           ],
-          "headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-mother-accused-of-killing-6-year-old-son-declared-unfit-to-stand-trial"
+          "headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -207,7 +197,7 @@
       "category_label": "Sports",
       "mode": "observe_only",
       "policy": "existing_athletic_guard_retained",
-      "assessed_count": 0,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -251,7 +241,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -260,7 +250,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 4,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -269,7 +259,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 6,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     }

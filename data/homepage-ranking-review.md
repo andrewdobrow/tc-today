@@ -4,29 +4,26 @@
 
 ## Hero
 
-- Current: **Indian River County extends emergency as more rain threatens flooded Heritage Plantation**
-- Recommended: **Indian River County extends emergency as more rain threatens flooded Heritage Plantation**
+- Current: **Four face attempted home invasion charges at Palm City's Evergreen Club**
+- Recommended: **Four face attempted home invasion charges at Palm City's Evergreen Club**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County mother accused in son's death found incompetent to stand trial | St. Lucie County mother accused in son's death found incompetent to stand trial | 59 | importance 0; freshness 99.96; urgency 7/10 |
-| 2 | Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts | Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts | 59 | importance 0; freshness 99.96; urgency 7/10 |
-| 3 | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | 48 | importance 0; freshness 83.32; urgency 4/10 |
-| 4 | Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County | Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County | 47 | importance 0; freshness 96.65; urgency 2/10 |
-| 5 | Two face felony burglary charges in Hutchinson Island game-room break-in | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 38 | importance 0; freshness 59.9; urgency 2/10 |
-| 6 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 38 | importance 0; freshness 56.61; urgency 2/10 |
-| 7 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida prepares second federal disaster request after renewed flooding | 32 | importance 0; freshness 51.62; urgency 2/10 |
-| 8 | Florida prepares second federal disaster request after renewed flooding | Two face felony burglary charges in Hutchinson Island game-room break-in | 39 | importance 0; freshness 63.27; urgency 2/10; -6 category saturation; -4 county saturation |
+| 1 | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | 65 | importance 0; freshness 99.94; urgency 7/10; validated material update |
+| 2 | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | Indian River County extends emergency as more rain threatens flooded Heritage Plantation | 47 | importance 0; freshness 96.56; urgency 2/10 |
+| 3 | Indian River County extends emergency as more rain threatens flooded Heritage Plantation | Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital | 47 | importance 0; freshness 79.92; urgency 4/10 |
+| 4 | Two face felony burglary charges in Hutchinson Island game-room break-in | Two face felony burglary charges in Hutchinson Island game-room break-in | 38 | importance 0; freshness 59.88; urgency 2/10 |
+| 5 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 37 | importance 0; freshness 56.51; urgency 2/10 |
+| 6 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 37 | importance 0; freshness 53.22; urgency 2/10 |
+| 7 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 31 | importance 0; freshness 48.22; urgency 2/10 |
 
 ## Recommended moves
 
-- **Two face felony burglary charges in Hutchinson Island game-room break-in**: 5 → 8 — importance 0; freshness 63.27; urgency 2/10; -6 category saturation; -4 county saturation
-- **St. Lucie County to consider Port of Fort Pierce master plan Dec. 1**: 6 → 5 — importance 0; freshness 59.9; urgency 2/10
-- **Florida agencies could qualify for $1.4 billion in immigration enforcement funds**: 7 → 6 — importance 0; freshness 56.61; urgency 2/10
-- **Florida prepares second federal disaster request after renewed flooding**: 8 → 7 — importance 0; freshness 51.62; urgency 2/10
+- **Indian River County extends emergency as more rain threatens flooded Heritage Plantation**: 3 → 2 — importance 0; freshness 96.56; urgency 2/10
+- **Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital**: 2 → 3 — importance 0; freshness 79.92; urgency 4/10
 
 ## Guardrails
 
