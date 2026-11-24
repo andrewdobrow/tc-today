@@ -12,10 +12,10 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 47 | importance 0; freshness 96.58; urgency 2/10 |
-| 2 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 46 | importance 0; freshness 93.29; urgency 2/10 |
-| 3 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 41 | importance 0; freshness 88.29; urgency 2/10 |
-| 4 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 40 | importance 0; freshness 48.26; urgency 4/10 |
+| 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | St. Lucie County to consider Port of Fort Pierce master plan Dec. 1 | 46 | importance 0; freshness 91.57; urgency 2/10 |
+| 2 | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | Florida agencies could qualify for $1.4 billion in immigration enforcement funds | 45 | importance 0; freshness 88.28; urgency 2/10 |
+| 3 | Florida prepares second federal disaster request after renewed flooding | Florida prepares second federal disaster request after renewed flooding | 40 | importance 0; freshness 83.28; urgency 2/10 |
+| 4 | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | Pedestrian killed in Fort Pierce train incident; Seaway Drive crossing blocked | 39 | importance 0; freshness 43.25; urgency 4/10 |
 
 ## Recommended moves
 
