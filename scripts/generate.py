@@ -38,7 +38,7 @@ from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_clien
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
 from tct_engine.article_prose_policy import sanitize_article_text, sanitize_article_body_html
-from tct_engine.critical_source_facts import named_suspect_facts, missing_named_suspects, facts_instruction, as_named_suspect_facts, reconcile_same_article_extraction
+from tct_engine.critical_source_facts import named_suspect_facts, missing_named_suspects, facts_instruction, as_named_suspect_facts, reconcile_same_article_extraction, conflicting_named_crime_claim, unrelated_named_crime_facts
 from tct_engine.article_image_mirror import get_article_image_mirror, finalize_article_image_mirror
 from tct_engine.local_sports_editorial import (
     SPORTS_EDITORIAL_VERSION, SPORTS_ASSIGNMENT_RULE, SPORTS_WRITER_RULE,
@@ -1210,14 +1210,22 @@ def _focus_sinclair_chrome_article(text, source):
     topic_words = set(re.findall(r"[a-z]{4,}", title.lower())) - {
         "county", "florida", "deputies", "emergency", "crews", "respond",
         "local", "news", "after", "following", "with", "from", "cw34",
-        "cbs12", "wpec",
+        "cbs12", "wpec", "martin", "palm", "city", "lucie", "river",
+        "indian", "beach",
     }
     if len(topic_words) < 2:
         return text
     kept = []
     weak = 0
     strong = 0
+    crime_cut = False
     for sentence in sentences:
+        # A publisher's recommendation module can be shorter than the story.
+        # A different named criminal incident must not be imported as article fact,
+        # even if a surname overlaps with the county in the source headline.
+        if unrelated_named_crime_facts(title, sentence):
+            crime_cut = True
+            break
         words = set(re.findall(r"[a-z]{4,}", sentence.lower()))
         if words & topic_words:
             strong += 1
@@ -1233,7 +1241,7 @@ def _focus_sinclair_chrome_article(text, source):
     focused = re.sub(r"\s+", " ", " ".join(kept)).strip()
     if strong < 2 or not 50 <= _word_count(focused) <= 180:
         return text
-    if _word_count(focused) >= _word_count(text) * 0.70:
+    if _word_count(focused) >= _word_count(text) * 0.70 and not crime_cut:
         return text
     return focused
 
@@ -1251,12 +1259,16 @@ def _focus_extracted_source_text(text, source):
     general summarizer.
     """
     text = re.sub(r"\s+", " ", str(text or "")).strip()
-    if not text or len(text.split()) < 220:
+    if not text:
         return text
     source = source if isinstance(source, dict) else {}
+    # Recognizable publisher chrome can contaminate a 100-word breaking
+    # bulletin. The 220-word heuristic applies only to generic page cleanup.
     chrome_focused = _focus_sinclair_chrome_article(text, source)
     if chrome_focused != text:
         return chrome_focused
+    if len(text.split()) < 220:
+        return text
     title = str(source.get("title") or source.get("source_title") or source.get("headline") or "")
     if not title:
         return text
@@ -5839,8 +5851,17 @@ def _publishable_article(item, hero=False):
         return True
     if item.get("_archive_only"):
         return bool(item.get("_archive_verified_quality"))
-    _source_fact_candidates = item.get("_critical_named_suspects") or named_suspect_facts(
-        item.get("article_text") or ""
+    source_title = str(item.get("source_title") or item.get("source_headline") or item.get("headline") or "")
+    if unrelated_named_crime_facts(source_title, item.get("body") or ""):
+        # Never publish a named criminal allegation from a competing incident,
+        # including archived/cache-generated cards that bypass the live writer.
+        return False
+    _source_fact_candidates = tuple(
+        fact for fact in as_named_suspect_facts(
+            item.get("_critical_named_suspects")
+            or named_suspect_facts(item.get("article_text") or "", source_title=source_title)
+        )
+        if not conflicting_named_crime_claim(source_title, fact.evidence)
     )
     if _source_fact_candidates and missing_named_suspects(
         str(item.get("headline") or "") + " " + str(item.get("body") or ""),
@@ -10288,7 +10309,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     temporal_max_age = _temporal_source_refresh_interval(source)
     cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
-        return str(cached.get("text", ""))
+        return _focus_extracted_source_text(str(cached.get("text", "")), source)
 
     # Multiple category workers can encounter the same source at once. Only one
     # worker performs the network extraction; the others recheck the cache after
@@ -10298,10 +10319,12 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
     cached = GENERATION_CACHE.get("source_text", cache_key, max_age_seconds=temporal_max_age)
     if cached is not _CACHE_MISS:
         fetch_lock.release()
-        return str(cached.get("text", ""))
+        return _focus_extracted_source_text(str(cached.get("text", "")), source)
 
     def _finish(text):
-        text = str(text or "")
+        # Apply publisher-specific chrome containment before the persistent
+        # source cache. Cache hits also revalidate against the current guard.
+        text = _focus_extracted_source_text(str(text or ""), source)
         try:
             # Successful extractions remain valid while the feed fingerprint is stable.
             # Short-lived negative caching prevents repeatedly hammering blocked sources.
@@ -12057,7 +12080,7 @@ def _build_assignment_editor_packet(
         index = len(source_inputs) + 1
         complete_article_text = str(source.get("article_text") or source.get("summary") or "")
         article_text = complete_article_text[:14000]
-        source_named_facts = named_suspect_facts(complete_article_text)
+        source_named_facts = named_suspect_facts(complete_article_text, source_title=str(source.get("title") or ""))
         source_inputs.append({
             "source_index": index,
             "title": str(source.get("title") or ""),
@@ -12646,8 +12669,11 @@ def _run_assignment_writer(packet, assignment, *, role, timeout_seconds=None):
     story_form = str(source.get("story_form") or "")
     source_text = str(source.get("article_text") or "")
     source_words = _word_count(source_text)
-    named_facts = as_named_suspect_facts(
-        source.get("_critical_named_suspects") or named_suspect_facts(source_text)
+    named_facts = tuple(
+        fact for fact in as_named_suspect_facts(
+            source.get("_critical_named_suspects") or named_suspect_facts(source_text, source_title=title)
+        )
+        if not conflicting_named_crime_claim(title, fact.evidence)
     )
     critical_source_facts_prompt = facts_instruction(named_facts)
     prior_context = ""
@@ -12880,6 +12906,16 @@ Return ONLY JSON: {{"headline":"..."}}
                 "SOURCE FACT GUARD: refusing generated article missing explicitly "
                 f"named suspect(s) from the same source: {', '.join(f.name for f in missing_facts)}"
             ) from exc
+
+    # Fail closed at the writer boundary even if a generated draft itself
+    # adds a cross-event allegation that was not in the clean source packet.
+    cross_story_facts = unrelated_named_crime_facts(title, item.get("body", ""))
+    if cross_story_facts:
+        raise ValueError(
+            "CROSS_STORY_NAMED_CRIME: refusing a named criminal allegation "
+            "about an incident incompatible with this source headline: "
+            + ", ".join(f.name for f in cross_story_facts)
+        )
 
     # Editorial metadata comes from the validated assignment/source, never from the writer.
     item["source_index"] = source_index
