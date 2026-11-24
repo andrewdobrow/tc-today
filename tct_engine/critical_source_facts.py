@@ -148,7 +148,7 @@ def facts_instruction(facts: Iterable[NamedSuspectFact]) -> str:
     )
 
 
-def reconcile_same_article_extraction(primary_text: str, alternate_text: str) -> str:
+def reconcile_same_article_extraction(primary_text: str, alternate_text: str, *, source_title: str = "") -> str:
     """Retain explicit identifying fact sentences a primary extractor omitted.
 
     ``alternate_text`` MUST be from the same publisher HTML article, not a
@@ -159,7 +159,7 @@ def reconcile_same_article_extraction(primary_text: str, alternate_text: str) ->
     alternate = str(alternate_text or "").strip()
     if not primary:
         return alternate
-    missing = missing_named_suspects(primary, named_suspect_facts(alternate))
+    missing = missing_named_suspects(primary, named_suspect_facts(alternate, source_title=source_title))
     if not missing:
         return primary
     additions = list(dict.fromkeys(fact.evidence for fact in missing))
