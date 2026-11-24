@@ -112,6 +112,7 @@ def _fetcher_isolated_from_generator(monkeypatch, page_html):
     import types
 
     from tct_engine.critical_source_facts import reconcile_same_article_extraction
+    from scripts import generate
 
     generator = Path(__file__).resolve().parents[1] / "scripts" / "generate.py"
     tree = ast.parse(generator.read_text())
@@ -135,6 +136,7 @@ def _fetcher_isolated_from_generator(monkeypatch, page_html):
         "_source_fetch_lock": lambda key: threading.Lock(),
         "_normalize_cache_url": lambda u: u.rstrip("/"),
         "reconcile_same_article_extraction": reconcile_same_article_extraction,
+        "_focus_extracted_source_text": generate._focus_extracted_source_text,
     }
     exec(compile(ast.Module(body=[copy.deepcopy(node)], type_ignores=[]), str(generator), "exec"), ns)
     return ns["fetch_article_text"]

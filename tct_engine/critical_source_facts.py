@@ -33,6 +33,33 @@ _BLOCKED_NAMES = {
 }
 
 
+# A named charge imported from a publisher's related-story widget is not proof
+# that person belongs to the assigned story. These are deliberately narrow,
+# *different-incident* families: mere "arrested/charged" wording is not an
+# incident identity. If a story intentionally covers both events, its headline
+# will explicitly establish both. Otherwise do not auto-insert the accusation.
+_STRONG_EVENT_FAMILIES = {
+    "burglary": re.compile(r"\b(?:burglar\w*|break[- ]ins?|breaking\s+and\s+entering)\b", re.I),
+    "violent_attack": re.compile(r"\b(?:attempted\s+murder|murder|homicide|stabb\w*|slash\w*|shooting|gunfire|box\s+cutter|aggravated\s+battery)\b", re.I),
+    "crash": re.compile(r"\b(?:crash\w*|collision|hit[- ]and[- ]run|vehicle\s+struck|car\s+wreck)\b", re.I),
+    "financial_fraud": re.compile(r"\b(?:fraud\w*|embezzl\w*|cryptocurrency\s+scheme)\b", re.I),
+    "drug_case": re.compile(r"\b(?:drug\s+bust|drug\s+trafficking|narcotics\s+seizure|cocaine\s+seizure)\b", re.I),
+}
+
+
+def conflicting_named_crime_claim(source_title: str, evidence: str) -> bool:
+    """True only for an explicit competing crime/incident type.
+
+    This is a safety veto for *automatically mandatory* named-suspect facts.
+    Lack of overlap in ordinary wording never proves an unrelated case.
+    """
+    headline = str(source_title or "")
+    claim = str(evidence or "")
+    title_events = {name for name, pat in _STRONG_EVENT_FAMILIES.items() if pat.search(headline)}
+    claim_events = {name for name, pat in _STRONG_EVENT_FAMILIES.items() if pat.search(claim)}
+    return bool(title_events and claim_events and title_events.isdisjoint(claim_events))
+
+
 @dataclass(frozen=True)
 class NamedSuspectFact:
     name: str
@@ -48,13 +75,17 @@ def _sentences(text: str) -> Iterable[str]:
             yield clean
 
 
-def named_suspect_facts(source_text: str, *, max_facts: int = 5) -> tuple[NamedSuspectFact, ...]:
+def named_suspect_facts(source_text: str, *, max_facts: int = 5, source_title: str = "") -> tuple[NamedSuspectFact, ...]:
     found: list[NamedSuspectFact] = []
     for sentence in _sentences(source_text):
         if not re.search(r"\b(arrested|charged|apprehended|taken into custody|suspect|driver)\b", sentence, re.I):
             continue
         # Ignore reporting about an explicitly denied/unconfirmed arrest.
         if re.search(r"\b(?:not|never|hasn.t|haven.t|wasn.t|didn.t)\s+(?:been\s+)?(?:arrested|charged|identified)\b", sentence, re.I):
+            continue
+        if source_title and conflicting_named_crime_claim(source_title, sentence):
+            # The same HTML page may include a wholly different criminal case.
+            # Never make that allegation a mandatory fact in the assigned story.
             continue
         for pattern in _ARREST_NAME_PATTERNS:
             for match in pattern.finditer(sentence):
@@ -73,6 +104,14 @@ def named_suspect_facts(source_text: str, *, max_facts: int = 5) -> tuple[NamedS
                 if len(found) >= max_facts:
                     return tuple(found)
     return tuple(found)
+
+
+def unrelated_named_crime_facts(source_title: str, article_text: str) -> tuple[NamedSuspectFact, ...]:
+    """Hard publication veto on cross-incident named criminal allegations."""
+    return tuple(
+        fact for fact in named_suspect_facts(article_text)
+        if conflicting_named_crime_claim(source_title, fact.evidence)
+    )
 
 
 def as_named_suspect_facts(facts: Iterable) -> tuple[NamedSuspectFact, ...]:
@@ -109,7 +148,7 @@ def facts_instruction(facts: Iterable[NamedSuspectFact]) -> str:
     )
 
 
-def reconcile_same_article_extraction(primary_text: str, alternate_text: str) -> str:
+def reconcile_same_article_extraction(primary_text: str, alternate_text: str, *, source_title: str = "") -> str:
     """Retain explicit identifying fact sentences a primary extractor omitted.
 
     ``alternate_text`` MUST be from the same publisher HTML article, not a
@@ -120,7 +159,7 @@ def reconcile_same_article_extraction(primary_text: str, alternate_text: str) ->
     alternate = str(alternate_text or "").strip()
     if not primary:
         return alternate
-    missing = missing_named_suspects(primary, named_suspect_facts(alternate))
+    missing = missing_named_suspects(primary, named_suspect_facts(alternate, source_title=source_title))
     if not missing:
         return primary
     additions = list(dict.fromkeys(fact.evidence for fact in missing))
