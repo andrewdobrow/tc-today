@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-11-24T19:47:59Z",
+  "generated_at": "2026-11-24T21:47:14Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,60 +16,48 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 4,
-      "generated_live": 4,
-      "generation_failed_archive_recovery": 1
+      "generated_live": 5
     },
     "failures": {
-      "article_framing_integrity": 1,
       "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 95.084,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 90.688,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 30,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 10,
+    "published_story_duplicate_suppression_count": 37,
     "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 9,
+    "material_update_promotion_evaluation_count": 12,
     "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 7,
+    "material_update_promotion_cache_hit_count": 10,
     "material_update_promotion_model_call_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 24,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 21,
       "publishable_source_count": 10,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.779,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Sheriff renews unified dispatch proposal before Vero Beach City Council"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.065,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Sheriff renews unified dispatch push in Vero Beach; council member seeks costs"
+          "elapsed_seconds": 16.639,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 35.844,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Sheriff renews unified dispatch push in Vero Beach; council member seeks costs",
+      "model_elapsed_seconds": 16.639,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -78,9 +66,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:charged"
+          ],
+          "local_nexus_signals": [],
+          "headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-mother-accused-of-killing-6-year-old-son-declared-unfit-to-stand-trial"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -96,8 +114,28 @@
           "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/west-boca-raton-neighbors-clean-up-after-ef-1-tornado-damages-homes-cars"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
+          "editorial_story_id": "story_023762",
+          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -117,65 +155,60 @@
           "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
+          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Both articles involve the Indian River County Sheriff's Office."
+          ],
+          "novel_facts": [
+            "Sheriff Eric Flowers renewed a unified emergency-dispatch proposal before the Vero Beach City Council on November 24.",
+            "Flowers presented consolidation as potential savings ahead of Amendment 3 revenue losses.",
+            "Council member Tracey Zudans requested cost and response-time figures; the council took no action."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-law-enforcement-agencies-could-get-more-than-1-billion-in-federal-funds-for-immigration-enforcement",
-          "editorial_story_id": "story_029348",
-          "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-          "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
-          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
-          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_029573",
-            "source:https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=28",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['com', 'cw34']",
-            "shared_distinctive_token_count=10",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
-      "material_update_promotion_decisions": [
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -187,8 +220,8 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
+          "cache_hit": true,
+          "model_call": false,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
@@ -218,36 +251,23 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-law-enforcement-agencies-could-get-more-than-1-billion-in-federal-funds-for-immigration-enforcement",
-          "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-          "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 80.765
+      "live_hero_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
+      "generated_card_count": 0,
+      "elapsed_seconds": 41.534
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 9,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 11,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -255,11 +275,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.578,
+          "elapsed_seconds": 28.634,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.578,
+      "model_elapsed_seconds": 28.634,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -270,7 +290,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
         {
@@ -302,16 +322,16 @@
           "source_url": "https://cbs12.com/newsletter-daily/free-food-distributions-and-thanksgiving-meals-across-the-treasure-coast-prepared-food-fort-pierce-port-st-lucie-indiantown-sebastian"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
-          "editorial_story_id": "story_029510",
-          "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-          "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -326,12 +346,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
           "editorial_story_id": "story_029510",
           "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
           "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -346,16 +366,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQdVlqSlVpa2RZRDN4SkJOTjVPeEJEU01CUVdyZG1IRk1QMW5DLWd2QTRpdUI5SWVDdlpwekxyZDhRc3hiMW16ZjlBdk1GWEUweUVoUW9ZVFJVWWQ5bTVzd1F1b1Q1VnVTRnVTc3NobkpXb3hFVXJnaDJHQXpNcFVsZjFtazFXN3FfZGV0T1ZDRkRWVk5PcENEeGRDR0tQbjJKWF9NeTdrVWlEaVJ0SC16a3JmMklrcm90bUFpaXZCZ0UxME9iWVM0d3FvRWJRZw",
-          "editorial_story_id": "story_029348",
-          "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-          "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "'Don't come here and do stupid things': Two accused of breaking into Martin County business to play games - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-video-games-burglary-arrest-business/74511776",
           "editorial_story_id": "story_029427",
@@ -365,40 +375,51 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
+          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+          "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_029510",
+            "source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_029510,source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
-          "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-          "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
           "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.99,
-          "shared_anchors": [
-            "November 24 report of an overnight burglary at the Evergreen Club in Palm City",
-            "Four men from Jacksonville taken into custody",
-            "Martin County Sheriff's Office investigating",
-            "Suspects wearing masks and gloves",
-            "Residents asked to check their property for signs of burglary"
-          ],
-          "novel_facts": [],
-          "reason": "Both articles describe the same Evergreen Club burglary and overnight apprehension of four Jacksonville men. The incoming report repeats the custody outcome and property-check advisory without adding suspect identities, new charges, or another material development.",
-          "validation_errors": []
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "crime",
@@ -430,18 +451,31 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
           "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
           "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "November 24 report of an overnight burglary at the Evergreen Club in Palm City",
+            "Four men from Jacksonville taken into custody",
+            "Martin County Sheriff's Office investigating",
+            "Suspects wearing masks and gloves",
+            "Residents asked to check their property for signs of burglary"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles describe the same Evergreen Club burglary and overnight apprehension of four Jacksonville men. The incoming report repeats the custody outcome and property-check advisory without adding suspect identities, new charges, or another material development.",
+          "validation_errors": []
         },
         {
           "category_key": "crime",
@@ -452,21 +486,6 @@
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Florida law enforcement agencies could get more than $1 billion in federal funds for immigration enforcement - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQdVlqSlVpa2RZRDN4SkJOTjVPeEJEU01CUVdyZG1IRk1QMW5DLWd2QTRpdUI5SWVDdlpwekxyZDhRc3hiMW16ZjlBdk1GWEUweUVoUW9ZVFJVWWQ5bTVzd1F1b1Q1VnVTRnVTc3NobkpXb3hFVXJnaDJHQXpNcFVsZjFtazFXN3FfZGV0T1ZDRkRWVk5PcENEeGRDR0tQbjJKWF9NeTdrVWlEaVJ0SC16a3JmMklrcm90bUFpaXZCZ0UxME9iWVM0d3FvRWJRZw",
-          "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
-          "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -492,16 +511,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
-      "generated_card_count": 0,
-      "elapsed_seconds": 42.054
+      "live_hero_headline": "911 call interrupts attempted home invasion at Palm City's Evergreen Club; four arrested",
+      "generated_card_count": 1,
+      "elapsed_seconds": 52.254
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -519,8 +538,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -533,10 +552,32 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [
-            "source_locality:port st lucie"
+            "source_locality:treasure coast",
+            "source_locality:indian river county",
+            "source_locality:vero beach"
           ],
-          "headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme"
+          "headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:charged"
+          ],
+          "local_nexus_signals": [
+            "source_locality:treasure coast",
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-mother-accused-of-killing-6-year-old-son-declared-unfit-to-stand-trial"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -572,8 +613,18 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/nearly-1-8-million-chickens-to-be-depopulated-after-bird-flu-detected-at-okeechobee-county-facility"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -591,16 +642,6 @@
           "editorial_story_id": "story_029348",
           "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
           "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding",
-          "source_url": "https://www.wptv.com/news/state/desantis-says-florida-will-seek-another-federal-disaster-declaration-after-historic-flooding",
-          "editorial_story_id": "story_029312",
-          "canonical_slug": "2026-11-23-florida-prepares-second-federal-disaster-request-after-renewed-flooding",
-          "canonical_headline": "Florida prepares second federal disaster request after renewed flooding",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -633,16 +674,6 @@
           "canonical_headline": "Martin County cancels Kanner Highway data center meeting, promises public forums",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-          "editorial_story_id": "story_028464",
-          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -652,6 +683,21 @@
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -686,21 +732,6 @@
           "source_url": "https://www.wptv.com/wptv-investigates/florida-law-enforcement-agencies-could-get-more-than-1-billion-in-federal-funds-for-immigration-enforcement",
           "canonical_slug": "2026-11-23-florida-agencies-could-qualify-for-14-billion-in-immigration-enforcement-funds",
           "canonical_headline": "Florida agencies could qualify for $1.4 billion in immigration enforcement funds",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding",
-          "source_url": "https://www.wptv.com/news/state/desantis-says-florida-will-seek-another-federal-disaster-declaration-after-historic-flooding",
-          "canonical_slug": "2026-11-23-florida-prepares-second-federal-disaster-request-after-renewed-flooding",
-          "canonical_headline": "Florida prepares second federal disaster request after renewed flooding",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -754,25 +785,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Port St. Lucie extends boil water notice for 21,000 customers after main break",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-extends-boil-water-notice-for-21-000-customers-after-main-break",
-          "canonical_slug": "2026-11-18-boil-water-notice-remains-in-tradition-and-western-port-st-lucie-as-service-retu",
-          "canonical_headline": "Water safe to drink after Port St. Lucie main break; boil water notice lifted",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 24.756
+      "elapsed_seconds": 21.77
     },
     {
       "category_key": "sports",
@@ -780,7 +796,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -819,7 +835,7 @@
       },
       "new_publication_stale_rejected_count": 0,
       "sports_editorial_source_rejections": [],
-      "elapsed_seconds": 15.67
+      "elapsed_seconds": 16.192
     },
     {
       "category_key": "things_to_do",
@@ -874,13 +890,13 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 16.939
+      "elapsed_seconds": 13.281
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
       "publishable_source_count": 3,
       "selected_source_count": 0,
@@ -902,26 +918,53 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Palm Beach County, Treasure Coast face warm week before scattered showers and thunderstorms - WPBF",
+          "source_url": "https://www.wpbf.com/article/wednesday-showers-and-storms/74510590",
+          "editorial_story_id": "story_029496",
+          "canonical_slug": "2026-11-24-flood-watch-issued-for-wednesday-as-treasure-coast-rain-chances-increase",
+          "canonical_headline": "Flood watch issued for Wednesday as Treasure Coast rain chances increase",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Palm Beach County, Treasure Coast face warm week before scattered showers and thunderstorms - WPBF",
+          "source_url": "https://www.wpbf.com/article/wednesday-showers-and-storms/74510590",
+          "canonical_slug": "2026-11-24-flood-watch-issued-for-wednesday-as-treasure-coast-rain-chances-increase",
+          "canonical_headline": "Flood watch issued for Wednesday as Treasure Coast rain chances increase",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.849
+      "elapsed_seconds": 15.576
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -929,11 +972,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.235,
+          "elapsed_seconds": 12.508,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.235,
+      "model_elapsed_seconds": 12.508,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -944,11 +987,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+          "editorial_story_id": "story_029596",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNMDMtenU1ZklOUXpHVmNJNjZIRVhhR21KYlVZYWtqeThYcV9QRTFTWkhfV1FzSU5fRUU3LURqR1lTV0IzVDZIQ29wV2RFSDJmTTI0YjYyZS03ZmcwNXNIOFpZUkhwNlJ6U1lySlRqN0Q2SlNNTHc4ZG9OWEpfZ1RUWDdRUmFtRlEtbGxGbHNXTEVmWHRheHFRUUVoNVpiZUVEaFJNOW9mOVN4ZWxOWkN1NW9hWW1xeDM3TzlJRWxCUHJjVGhwU3oxSGFLSlc2RVF4bU1TdnNQT2FXdklfTXZvT1lfczVoSXhXVVp1M2NJZm5zVjN5cUZxMjVCSUo5d0FZV3c",
+          "editorial_story_id": "story_029596",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -961,22 +1024,22 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
           "editorial_story_id": "story_029510",
           "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
           "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "martin",
           "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - cw34.com",
-          "source_url": "https://cw34.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news?teaserSource=trending",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQWjk2ZFRRdVhYMk5jeV8wVHRNbkd2eDJUNWstRWRJR3NBb2VrYWdBU0J5aGtrYlh0Skk5d0RsTjZ1TzN1OFF2Zzk0d2lvN1NyYzVucEY2blhHdDBpXzU2V2VHS09lVWItbmRWY0dhdkpEMG5oSHdUVUllSmppbzhUVjNST2VrczNHSFJ3QTBPc0NtZmpPS191dWExTXdZRFd2NjhLZ290Vm9hVVRwTFZERmMyNTZERGZHYTI2TU9nVktCVzRHN1NTSWF2MmhkR0lZVVE",
           "editorial_story_id": "story_029452",
           "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
           "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
-          "basis": "same_event_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1000,13 +1063,67 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
+          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+          "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_029510",
+            "source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_029510,source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNMDMtenU1ZklOUXpHVmNJNjZIRVhhR21KYlVZYWtqeThYcV9QRTFTWkhfV1FzSU5fRUU3LURqR1lTV0IzVDZIQ29wV2RFSDJmTTI0YjYyZS03ZmcwNXNIOFpZUkhwNlJ6U1lySlRqN0Q2SlNNTHc4ZG9OWEpfZ1RUWDdRUmFtRlEtbGxGbHNXTEVmWHRheHFRUUVoNVpiZUVEaFJNOW9mOVN4ZWxOWkN1NW9hWW1xeDM3TzlJRWxCUHJjVGhwU3oxSGFLSlc2RVF4bU1TdnNQT2FXdklfTXZvT1lfczVoSXhXVVp1M2NJZm5zVjN5cUZxMjVCSUo5d0FZV3c",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "martin",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -1037,28 +1154,41 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-          "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+          "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
           "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
           "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.99,
+          "shared_anchors": [
+            "November 24 report of an overnight burglary at the Evergreen Club in Palm City",
+            "Four men from Jacksonville taken into custody",
+            "Martin County Sheriff's Office investigating",
+            "Suspects wearing masks and gloves",
+            "Residents asked to check their property for signs of burglary"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles describe the same Evergreen Club burglary and overnight apprehension of four Jacksonville men. The incoming report repeats the custody outcome and property-check advisory without adding suspect identities, new charges, or another material development.",
+          "validation_errors": []
         },
         {
           "category_key": "martin",
           "source_headline": "2 hurt in U.S. 1 crash in Hobe Sound involving car and tractor-trailer - cw34.com",
-          "source_url": "https://cw34.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news?teaserSource=trending",
+          "source_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQWjk2ZFRRdVhYMk5jeV8wVHRNbkd2eDJUNWstRWRJR3NBb2VrYWdBU0J5aGtrYlh0Skk5d0RsTjZ1TzN1OFF2Zzk0d2lvN1NyYzVucEY2blhHdDBpXzU2V2VHS09lVWItbmRWY0dhdkpEMG5oSHdUVUllSmppbzhUVjNST2VrczNHSFJ3QTBPc0NtZmpPS191dWExTXdZRFd2NjhLZ290Vm9hVVRwTFZERmMyNTZERGZHYTI2TU9nVktCVzRHN1NTSWF2MmhkR0lZVVE",
           "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
           "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
           "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1099,17 +1229,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+      "live_hero_headline": "911 call interrupts attempted home invasion at Evergreen Club in Palm City; four arrested",
       "generated_card_count": 0,
-      "elapsed_seconds": 52.151
+      "elapsed_seconds": 28.165
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 4,
       "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -1118,11 +1248,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.128,
+          "elapsed_seconds": 21.192,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.128,
+      "model_elapsed_seconds": 21.192,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1133,11 +1263,41 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+          "editorial_story_id": "story_029596",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - cw34.com",
@@ -1190,16 +1350,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
-          "editorial_story_id": "story_028545",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
           "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
           "editorial_story_id": "story_028612",
@@ -1217,6 +1367,16 @@
           "canonical_headline": "St. Lucie County schools to close Wednesday after early dismissal amid flood threat",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
+          "editorial_story_id": "story_028329",
+          "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1226,6 +1386,51 @@
       "material_update_promotion_cache_hit_count": 3,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+          "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+          "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - cw34.com",
@@ -1334,21 +1539,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Crash blocks lane on Florida’s Turnpike southbound ramp in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/crash-blocks-lane-on-floridas-turnpike-southbound-ramp-in-st-lucie-county-morning-rush-florida-news",
-          "canonical_slug": "2026-10-12-crashes-near-becker-road-snarl-i-95-and-floridas-turnpike-in-st-lucie-county",
-          "canonical_headline": "Crash blocks right lane at Becker Road exit on Florida's Turnpike in St. Lucie County",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Who’s responsible for improving drainage after St. Lucie County’s historic flooding? - WPEC",
           "source_url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQbzZ6amhlcTJSTS1uZm8ySUl0ajhMOVVGTEF1S1VpVHNYR0MxeU9lQmFPNW9NbWRxc2FXNXJIOWhfQVN2WWxfaUtqSnFReF9SdFhtOUNGVmx2UEJLbV9yZFBKMmZTSVpBN3dMSE1NZDBfYUtSTGt0eXV4YXlCc0VVSGd2RmFWUnZOdTlWUGk2ZVplT3h5ajZzV05OTjlid3lXZWtGZGNBTTJIeGk1OG1oZFI1RGF0a0ZEaVEtWVo3UGpyMWVlSUU0MjA3RzNvdGU1VzlWWXdmbFlCaDFEeGp3b1FBNmhZaHQ1TjdVcUt0R0J6Rk43ck9zSQ",
           "canonical_slug": "2026-11-19-advocate-says-warnings-preceded-st-lucie-countys-historic-flooding",
@@ -1389,23 +1579,38 @@
           ],
           "reason": "Although the candidate slug references Tuesday's early dismissal, its current headline and lead already report Wednesday's closure and the pending Thursday decision. The incoming article repeats that same school-day status; resident reactions and preparedness details do not constitute a material update or independently newsworthy follow-up.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County superintendent of schools promises review of district policies after historic flooding - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-st-lucie-county-schools-flooding-response/74459795",
+          "canonical_slug": "2026-11-18-st-lucie-county-schools-close-wednesday-as-superintendent-pledges-flood-review",
+          "canonical_headline": "St. Lucie schools superintendent pledges review after bus flooding incident",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
-      "generated_card_count": 0,
-      "elapsed_seconds": 33.918
+      "live_hero_headline": "St. Lucie County mother accused of killing son found unfit to stand trial",
+      "generated_card_count": 1,
+      "elapsed_seconds": 38.632
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 6,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1413,11 +1618,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.299,
+          "elapsed_seconds": 11.715,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 15.299,
+      "model_elapsed_seconds": 11.715,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1428,11 +1633,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
+          "editorial_story_id": "story_023762",
+          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "editorial_story_id": "story_029574",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -1444,53 +1669,58 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
-          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
-          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_023762",
-            "source:https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=28",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['com', 'cw34']",
-            "shared_distinctive_token_count=10",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+          "source_url": "https://cw34.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
+          "canonical_slug": "2026-10-27-manatee-rescued-from-shallow-ditch-in-indian-river-county-safely-released",
+          "canonical_headline": "Manatee rescued from shallow ditch in Indian River County, safely released",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Both mention the Indian River County Sheriff's Office."
+          ],
+          "novel_facts": [
+            "Sheriff Eric Flowers renewed a unified emergency-dispatch proposal before the Vero Beach City Council on November 24.",
+            "Council member Tracey Zudans requested cost and response-time figures as the city anticipates Amendment 3 revenue losses.",
+            "Council members took no action on the dispatch proposal."
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
+          "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
+          "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "4 men taken into custody after overnight burglary, manhunt in Martin County",
@@ -1523,9 +1753,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Sheriff renews unified 911 dispatch proposal as Vero Beach weighs tax cuts",
+      "live_hero_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
       "generated_card_count": 0,
-      "elapsed_seconds": 33.118
+      "elapsed_seconds": 30.55
     }
   ]
 }
