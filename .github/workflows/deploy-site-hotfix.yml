@@ -1,0 +1,70 @@
+name: Deploy TCT site (safe content hotfix)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/deploy-site-hotfix.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout latest production branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Refuse to deploy if Evergreen cross-story allegation remains
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          slug = "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec"
+          page = (Path("articles") / (slug + ".html")).read_text(encoding="utf-8")
+          assert "Four men from Jacksonville" in page, "Correct burglary story is missing"
+          assert "Bradley Martin" not in page, "Unrelated criminal allegation remains in public article"
+          overrides = json.loads(Path("data/article-content-overrides.json").read_text(encoding="utf-8"))
+          assert slug in overrides.get("overrides", {}), "Permanent editorial correction is missing"
+          assert Path("tests/test_evergreen_cross_story_source_integrity.py").is_file()
+          assert Path("tct_engine/critical_source_facts.py").is_file()
+          print("Critical editorial hotfix present, deploying:", slug)
+          PY
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Retain normal deploy-only presentation corrections
+        shell: bash
+        run: |
+          python scripts/replace_header_app_store.py
+          python scripts/repair_headline_copyedits.py
+          python scripts/enforce_editorial_crash_image.py
+          python scripts/reconcile_editorial_image_surfaces.py
+          python scripts/clean_public_image_attributions.py
+          python scripts/clean_public_image_attributions.py --check
+          python scripts/sync_article_reader_support.py
+          node --check main.js
+
+      - name: Upload unique-run Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
