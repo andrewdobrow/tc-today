@@ -10457,7 +10457,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
                         continue
                     cleaned = clean_article_text(c.get("articleBody", ""))
                     if len(cleaned.split()) >= 80:
-                        primary = reconcile_same_article_extraction(primary, cleaned)
+                        primary = reconcile_same_article_extraction(primary, cleaned, source_title=source_headline)
 
         # The <article> element belongs to the same page even when trafilatura
         # missed an updated paragraph. Never search all image captions or the
@@ -10467,7 +10467,7 @@ def fetch_article_text(url, max_words=2500, content_hint="", source=None):
         paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
         paragraph_text = clean_article_text(" ".join(paras))
         if len(paragraph_text.split()) >= 80:
-            primary = reconcile_same_article_extraction(primary, paragraph_text)
+            primary = reconcile_same_article_extraction(primary, paragraph_text, source_title=source_headline)
         return _finish(primary if len(primary.split()) >= 80 else "")
 
     except Exception:
