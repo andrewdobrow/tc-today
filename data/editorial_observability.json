@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-24T23:53:44Z",
+  "generated_at": "2026-11-25T02:54:08Z",
   "mode": "enforce",
-  "publication_behavior_changed": true,
+  "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,72 +19,16 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 1,
-    "enforceable_recommendation_count": 1,
-    "applied_action_count": 1,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
+    "applied_action_count": 0,
     "circuit_breaker_tripped": false,
     "placements_before": 4,
-    "placements_after": 3,
-    "publication_behavior_changed": true,
+    "placements_after": 4,
+    "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.98,
-        "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-        "headline": "4 arrested in attempted home invasion case at Palm City's Evergreen Club",
-        "source_title_key": "4 arrested in attempted home invasion case at palm city s evergreen club",
-        "incoming_article_id": "",
-        "target_article_id": "",
-        "story_id": "story-16-year-old-17-year-old-911-a-m-according-f0c7418b",
-        "canonical_is_custom": false,
-        "canonical_title": "Four arrested after alleged attempted home invasion at Palm City's Evergreen Club",
-        "canonical_source": "",
-        "canonical_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
-        "category": "martin",
-        "placement": "hero"
-      }
-    ],
-    "applied_actions": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.98,
-        "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-        "headline": "4 arrested in attempted home invasion case at Palm City's Evergreen Club",
-        "source_title_key": "4 arrested in attempted home invasion case at palm city s evergreen club",
-        "incoming_article_id": "",
-        "target_article_id": "",
-        "story_id": "story-16-year-old-17-year-old-911-a-m-according-f0c7418b",
-        "canonical_is_custom": false,
-        "canonical_title": "Four arrested after alleged attempted home invasion at Palm City's Evergreen Club",
-        "canonical_source": "",
-        "canonical_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
-        "category": "martin",
-        "placement": "hero",
-        "slug": "",
-        "source_title": "4 arrested in attempted home invasion case at Palm City's Evergreen Club",
-        "date": "A few minutes ago",
-        "category_key": "martin",
-        "is_custom": false,
-        "story_stage": "arrest-or-charges",
-        "decision": "SUPPRESSED_DUPLICATE",
-        "action_taken": true,
-        "eligible_for_activation": true,
-        "match_confidence": 98,
-        "matched_prior_slug": "",
-        "matched_prior_headline": "Four arrested after alleged attempted home invasion at Palm City's Evergreen Club",
-        "matched_prior_source": "",
-        "matched_prior_source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-        "matched_prior_is_custom": false,
-        "activation_managed": true
-      }
-    ],
+    "recommendations": [],
+    "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -105,27 +49,37 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 174,
+    "candidates_processed": 175,
     "routes": {
-      "generate_new": 34,
-      "skip": 140
+      "generate_new": 35,
+      "skip": 139,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 129,
-      "publishable": 44
+      "listing": 2,
+      "low_value": 125,
+      "publishable": 48
     },
     "source_classes": {
-      "aggregator": 130,
-      "local_news": 25,
-      "regional_news": 17,
-      "unknown": 2
+      "aggregator": 127,
+      "local_news": 26,
+      "regional_news": 21,
+      "unknown": 1
     },
-    "rejected_count": 1,
+    "rejected_count": 2,
     "rejected_examples": [
       {
         "headline": "4 Plantation Dr Apt 103, Vero Beach, FL 32966 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNMUIwSXR4MVBXNjkybVc5MVRfWVJZcEFDUnFlVDREejR4YXM3S2l6OG50SnNCTUhaVkJlREltbkpGOTd3a19GQ3cxY1ZSSXFJbU1Pc1RDa1R4aWZTWWNoYzJIZ3N2SUJCc0pmOFZFdnV3d0NleTVUdjJtY0llVlFDSjFENmFNcmpydGJSYVRIbjVXTGNNRU01U0FTSE8?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
+        "headline": "Middle-Class California Families Face Staggering Annual Cost of Living Penalty, Report Reveals - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPU2NkX3I5OXgwdUllYlBra01nXzhpb2EyYV83U0FxdWUyRmI3T0FxeHhKdEpJVkRoNnFlUlNLUGVaT2N3d2FKLTVfM1pCNy1yNDVRZmhYX0xYUzN4VGxxQTJHZ2dISDl6LVdnRng2QTJVZEQwc1pvdVFDOWlLNWJXUWJ4YlNqaGFabEluM2VZU3BjMndYY1BxQi1IanFDV3NWTm81aWVlUjh3QmQ4UGxCbllTMmxPcWtROVVCSTJEa3FFdjlLVkdveXd3?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -136,44 +90,51 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 29,
-      "same_event": 145
+      "follow_up": 1,
+      "new_story": 25,
+      "same_event": 149
     },
     "examples": [
       {
         "story_id": "story_029640",
         "title": "A preventable Chinatown murder: Letters to the Editor — Nov. 25, 2026 - New York Post",
         "event_key": "unknown-event-d32017344f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029641",
         "title": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
         "event_key": "unknown-event-1a2f9c6c74",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029642",
         "title": "Florida Sheriff Floats Changes to 911 Amid Amendment 3 Budget Cut Concerns - Newsweek",
         "event_key": "unknown-event-0c947b0418",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -194,24 +155,28 @@
         "story_id": "story_029643",
         "title": "West Palm Beach police officers deliver 150 Thanksgiving meals to residents in need",
         "event_key": "unknown-event-4b53de347b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029644",
         "title": "Adopt-A-Family of the Palm Beaches helps local families find stability this holiday season",
         "event_key": "unknown-event-8b6c74c3fb",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -318,10 +283,11 @@
         "event_key": "unknown-event-08b1da8060",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -340,9 +306,9 @@
         ]
       },
       {
-        "story_id": "story_029576",
-        "title": "King tides from Tuesday's supermoon could prompt more coastal flooding - WLRN",
-        "event_key": "unknown-event-56d1dcbdb2",
+        "story_id": "story_029510",
+        "title": "4 taken into custody after overnight burglary, manhunt in Martin County",
+        "event_key": "unknown-event-530b7b9154",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -354,22 +320,23 @@
         ]
       },
       {
-        "story_id": "story_029510",
-        "title": "4 taken into custody after overnight burglary, manhunt in Martin County",
-        "event_key": "unknown-event-530b7b9154",
+        "story_id": "story_029541",
+        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
+        "event_key": "unknown-event-63bee36c7f",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_029541",
-        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
-        "event_key": "unknown-event-63bee36c7f",
+        "story_id": "story_029542",
+        "title": "King tides from Tuesday’s supermoon could prompt more coastal flooding - Central Florida Public Media",
+        "event_key": "unknown-event-e8f764c9fc",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -414,39 +381,45 @@
         "story_id": "story_029640",
         "title": "A preventable Chinatown murder: Letters to the Editor — Nov. 25, 2026 - New York Post",
         "event_key": "unknown-event-d32017344f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029641",
         "title": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
         "event_key": "unknown-event-1a2f9c6c74",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029642",
         "title": "Florida Sheriff Floats Changes to 911 Amid Amendment 3 Budget Cut Concerns - Newsweek",
         "event_key": "unknown-event-0c947b0418",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -468,26 +441,30 @@
         "story_id": "story_029643",
         "title": "West Palm Beach police officers deliver 150 Thanksgiving meals to residents in need",
         "event_key": "unknown-event-4b53de347b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_029644",
         "title": "Adopt-A-Family of the Palm Beaches helps local families find stability this holiday season",
         "event_key": "unknown-event-8b6c74c3fb",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -602,10 +579,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -625,9 +603,9 @@
         ]
       },
       {
-        "story_id": "story_029576",
-        "title": "King tides from Tuesday's supermoon could prompt more coastal flooding - WLRN",
-        "event_key": "unknown-event-56d1dcbdb2",
+        "story_id": "story_029510",
+        "title": "4 taken into custody after overnight burglary, manhunt in Martin County",
+        "event_key": "unknown-event-530b7b9154",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -640,23 +618,24 @@
         ]
       },
       {
-        "story_id": "story_029510",
-        "title": "4 taken into custody after overnight burglary, manhunt in Martin County",
-        "event_key": "unknown-event-530b7b9154",
+        "story_id": "story_029541",
+        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
+        "event_key": "unknown-event-63bee36c7f",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_029541",
-        "title": "Man arrested after 19-year-old woman escapes attempted sexual assault in Boca Raton, police say",
-        "event_key": "unknown-event-63bee36c7f",
+        "story_id": "story_029542",
+        "title": "King tides from Tuesday’s supermoon could prompt more coastal flooding - Central Florida Public Media",
+        "event_key": "unknown-event-e8f764c9fc",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -704,69 +683,72 @@
     "mode": "observe_only",
     "publication_behavior_changed": false,
     "candidate_count": 1,
-    "high_confidence_candidate_count": 0,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
     "current_relationships": {
-      "new_story": 1
+      "follow_up": 1
     },
     "milestones": {
-      "arrest": 1
+      "death": 1,
+      "identified": 1
     },
     "reason_codes": {
-      "agency_match": 1,
+      "enforced_follow_up": 1,
       "entity_match": 1,
+      "fact_continuity": 1,
       "identity_anchor_qualified": 1,
       "location_match": 1,
-      "novel_milestone": 1
+      "title_continuity": 1
     },
     "examples": [
       {
-        "headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
-        "event_key": "unknown-event-1a2f9c6c74",
-        "current_story_id": "story_029641",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_027669",
-        "candidate_confidence": 0.722222,
+        "headline": "'A huge loss’: Family remembers 24-year-old killed in Port St. Lucie hit-and-run - WPEC",
+        "event_key": "named-person-death:minerva-benitez",
+        "current_story_id": "story_028436",
+        "current_relationship": "follow_up",
+        "candidate_story_id": "story_028436",
+        "candidate_confidence": 0.886667,
         "candidate_milestones": [
-          "arrest"
+          "death",
+          "identified"
         ],
         "candidate_reason_codes": [
-          "novel_milestone",
+          "enforced_follow_up",
           "location_match",
-          "agency_match",
           "entity_match",
+          "title_continuity",
+          "fact_continuity",
           "identity_anchor_qualified"
         ],
         "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_027669",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.22",
+          "Relationship: follow_up",
+          "Distinctive facts overlap: 1.00",
+          "Identity anchor qualified: True",
           "Location match: True",
-          "Agency match: True",
+          "Agency match: False",
           "Event type match: False",
           "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.72"
+          "Lifecycle signal: True",
+          "Novel milestones: death, identified",
+          "Novel fact ratio: 0.50",
+          "Confidence: 0.89",
+          "Threshold: 0.68"
         ]
       }
     ],
-    "retrospective_candidate_count": 13,
-    "retrospective_high_confidence_candidate_count": 5,
-    "retrospective_activation_eligible_candidate_count": 4,
+    "retrospective_candidate_count": 15,
+    "retrospective_high_confidence_candidate_count": 7,
+    "retrospective_activation_eligible_candidate_count": 6,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 350,
-      "timeline_entries_examined": 1013,
-      "transitions_examined": 621,
+      "timeline_entries_examined": 1018,
+      "transitions_examined": 625,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 13,
-      "high_confidence_candidate_count": 5,
-      "activation_eligible_candidate_count": 4,
+      "candidate_count": 15,
+      "high_confidence_candidate_count": 7,
+      "activation_eligible_candidate_count": 6,
       "same_source_evolution_count": 5,
       "same_source_evolution_milestones": {
         "approval": 1,
@@ -1201,11 +1183,11 @@
       "milestones": {
         "arrest": 2,
         "closure": 2,
-        "death": 4,
+        "death": 5,
         "investigation": 1,
         "opening": 2,
         "recovery": 1,
-        "resolution": 1
+        "resolution": 2
       },
       "blocking_conflicts": {
         "event_family_conflict": 2,
@@ -1213,12 +1195,86 @@
         "timeline_identity_unanchored": 7,
         "weak_title_continuity": 1
       },
-      "excluded_entry_count": 43,
+      "excluded_entry_count": 44,
       "exclusion_reasons": {
         "insufficient_title_detail": 6,
-        "social_source": 37
+        "social_source": 38
       },
       "examples": [
+        {
+          "story_id": "story_028436",
+          "story_title": "'A huge loss’: Family remembers 24-year-old killed in Port St. Lucie hit-and-run - WPEC",
+          "milestones": [
+            "death"
+          ],
+          "matched_phrases": {
+            "death": [
+              "death",
+              "killed"
+            ]
+          },
+          "confidence": 1.0,
+          "activation_eligible": true,
+          "timeline_incoherent": false,
+          "identity_anchor_qualified": true,
+          "identity_anchor_codes": [
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "shared_title_tokens": [
+            "hit",
+            "lucie",
+            "old",
+            "port",
+            "run",
+            "year"
+          ],
+          "blocking_conflicts": [],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified",
+            "prior_title_continuity",
+            "canonical_title_continuity_context_only",
+            "chronology_supported",
+            "activation_evidence_candidate"
+          ],
+          "prior_title_overlap": 0.75,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-3966a33c8070da66c4a2",
+            "event_key": "unknown-event-9877ad7909",
+            "published_at": "2026-11-18T19:42:21.610740+00:00",
+            "title": "18-year-old charged in Port St. Lucie hit-and-run - WFLX",
+            "source": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNMWdOSWJ3ZXkxN2pFWFlPaVZmLUtrQ0V5RGNMbE00Q29GcGtseUNDdUtkRTVqVndZckV5a3JMWllJbUlEOVZROVJGMXgxcUVSa3RwSVdzVUZEYlNBRDdEV0o3Q0ljTy1lTEJvem56Z0hCSC1adi1XeW9tcVdra3VtUVo2Smk4YkxSMDdfaQ?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNMWdOSWJ3ZXkxN2pFWFlPaVZmLUtrQ0V5RGNMbE00Q29GcGtseUNDdUtkRTVqVndZckV5a3JMWllJbUlEOVZROVJGMXgxcUVSa3RwSVdzVUZEYlNBRDdEV0o3Q0ljTy1lTEJvem56Z0hCSC1adi1XeW9tcVdra3VtUVo2Smk4YkxSMDdfaQ?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-00de31c8b51bc69f30d7",
+            "event_key": "named-person-death:minerva-benitez",
+            "published_at": "2026-11-25T02:42:29.760631+00:00",
+            "title": "'A huge loss’: Family remembers 24-year-old killed in Port St. Lucie hit-and-run - WPEC",
+            "source": "https://cbs12.com/news/local/a-huge-loss-family-remembers-24-year-old-killed-in-port-st-lucie-hit-and-run-florida-news-local-news",
+            "url": "https://cbs12.com/news/local/a-huge-loss-family-remembers-24-year-old-killed-in-port-st-lucie-hit-and-run-florida-news-local-news"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_028436",
+            "Novel milestones: death",
+            "Identity anchor qualified: True",
+            "Identity anchor codes: strong_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_qualified",
+            "Prior title overlap: 0.75",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: False",
+            "Blocking conflicts: none",
+            "Candidate confidence: 1.00",
+            "Activation eligible: True"
+          ]
+        },
         {
           "story_id": "story_026737",
           "story_title": "Port St. Lucie to break ground on new 6,000-seat soccer stadium in December - WPTV",
@@ -1503,6 +1559,71 @@
             "Same timestamp: False",
             "Blocking conflicts: none",
             "Candidate confidence: 0.84",
+            "Activation eligible: True"
+          ]
+        },
+        {
+          "story_id": "story_029596",
+          "story_title": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+          "milestones": [
+            "resolution"
+          ],
+          "matched_phrases": {
+            "resolution": [
+              "cleared"
+            ]
+          },
+          "confidence": 0.806667,
+          "activation_eligible": true,
+          "timeline_incoherent": false,
+          "identity_anchor_qualified": true,
+          "identity_anchor_codes": [
+            "event_family_match",
+            "identity_anchor_qualified"
+          ],
+          "shared_title_tokens": [
+            "martin",
+            "turnpike"
+          ],
+          "blocking_conflicts": [],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_match",
+            "identity_anchor_qualified",
+            "chronology_supported",
+            "activation_evidence_candidate"
+          ],
+          "prior_title_overlap": 0.222222,
+          "canonical_title_overlap": 0.222222,
+          "prior_article": {
+            "article_id": "rss-0e3b3819ea3d49614333",
+            "event_key": "traffic-crash-7cf67e48fc-7cf67e48fc",
+            "published_at": "2026-11-24T19:42:17.486787+00:00",
+            "title": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
+            "source": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+            "url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news"
+          },
+          "newer_article": {
+            "article_id": "rss-ec0e33b4acd6d9c1e14e",
+            "event_key": "traffic-crash-6b4c4b5ba3-6b4c4b5ba3",
+            "published_at": "2026-11-24T23:42:32.625723+00:00",
+            "title": "Truck-SUV crash cleared on Florida's Turnpike North in Martin County - cw34.com",
+            "source": "https://cw34.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
+            "url": "https://cw34.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_029596",
+            "Novel milestones: resolution",
+            "Identity anchor qualified: True",
+            "Identity anchor codes: event_family_match, identity_anchor_qualified",
+            "Prior title overlap: 0.22",
+            "Canonical title overlap (context only): 0.22",
+            "Same timestamp: False",
+            "Blocking conflicts: none",
+            "Candidate confidence: 0.81",
             "Activation eligible: True"
           ]
         },
@@ -2146,27 +2267,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 627,
-      "treasure_coast_local": 440,
+      "florida": 632,
+      "treasure_coast_local": 439,
       "treasure_coast_region": 166,
-      "unknown": 1306
+      "unknown": 1303
     },
-    "average_score": 57.6
+    "average_score": 57.62
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 627,
-      "treasure_coast_local": 440,
+      "florida": 632,
+      "treasure_coast_local": 439,
       "treasure_coast_region": 166,
-      "unknown": 1306
+      "unknown": 1303
     },
-    "average_priority": 2.55
+    "average_priority": 2.57
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1594,
-      "developing": 90,
-      "ongoing": 853,
+      "active": 1592,
+      "developing": 96,
+      "ongoing": 850,
       "resolved": 2
     }
   },
@@ -2206,18 +2327,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-24T23:41:24Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2539
+    "active_story_count": 2540
   },
   "stories": {
-    "total": 2539,
+    "total": 2540,
     "importance_levels": {
       "breaking": 2,
       "high": 41,
-      "normal": 264,
-      "low": 2232,
+      "normal": 263,
+      "low": 2234,
       "archived": 0
     },
-    "average_importance": 5.87,
+    "average_importance": 5.85,
     "top": [
       {
         "story_id": "story_029050",
@@ -2232,7 +2353,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 60.01
+          "age_hours": 63.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2278,7 +2399,69 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 60.01,
+          "hours_since_update": 63.01,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_028436",
+        "title": "'A huge loss’: Family remembers 24-year-old killed in Port St. Lucie hit-and-run - WPEC",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie",
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-25T02:42:29.760631+00:00",
+          "hours_since_update": 0.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2296,7 +2479,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 52.04
+          "age_hours": 55.05
         },
         "level": "high",
         "importance_reasons": [
@@ -2339,65 +2522,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T19:42:13.208349+00:00",
-          "hours_since_update": 52.04,
+          "hours_since_update": 55.05,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_029598",
-        "title": "Boca Raton Police Investigate Fatal Train Collision Involving Palm City Pedestrian - The Boca Raton Tribune",
-        "score": 65,
-        "editorial_priority": 64,
-        "editorial_score": 64,
-        "score_breakdown": {
-          "score": 64,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 4.07
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Palm City"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-24T19:42:17.486787+00:00",
-          "hours_since_update": 4.07,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -2413,7 +2540,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 50.01
+          "age_hours": 53.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2457,7 +2584,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T21:42:13.135439+00:00",
-          "hours_since_update": 50.01,
+          "hours_since_update": 53.0,
           "event_count": 36,
           "timeline_entries": 36
         }
@@ -2475,7 +2602,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 21.01
+          "age_hours": 24.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2514,7 +2641,63 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-24T02:42:35.119839+00:00",
-          "hours_since_update": 21.01,
+          "hours_since_update": 24.0,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_029598",
+        "title": "Boca Raton Police Investigate Fatal Train Collision Involving Palm City Pedestrian - The Boca Raton Tribune",
+        "score": 65,
+        "editorial_priority": 61,
+        "editorial_score": 61,
+        "score_breakdown": {
+          "score": 61,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 7.0
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Palm City"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-11-24T19:42:17.486787+00:00",
+          "hours_since_update": 7.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2532,7 +2715,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 12.01
+          "age_hours": 15.04
         },
         "level": "high",
         "importance_reasons": [
@@ -2566,7 +2749,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-24T11:42:58.636048+00:00",
-          "hours_since_update": 12.01,
+          "hours_since_update": 15.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2584,7 +2767,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 120.01
+          "age_hours": 123.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2628,7 +2811,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-19T23:42:25.492044+00:00",
-          "hours_since_update": 120.01,
+          "hours_since_update": 123.0,
           "event_count": 20,
           "timeline_entries": 20
         }
@@ -2646,7 +2829,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 103.01
+          "age_hours": 106.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2689,7 +2872,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 103.01,
+          "hours_since_update": 106.0,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2707,7 +2890,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.01
+          "age_hours": 58.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2750,7 +2933,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 55.01,
+          "hours_since_update": 58.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2768,7 +2951,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 308.51
+          "age_hours": 311.5
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2818,7 +3001,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T03:12:26.936938+00:00",
-          "hours_since_update": 308.51,
+          "hours_since_update": 311.5,
           "event_count": 21,
           "timeline_entries": 21
         }
@@ -2836,7 +3019,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 144.01
+          "age_hours": 147.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2882,7 +3065,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 144.01,
+          "hours_since_update": 147.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2900,7 +3083,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 284.93
+          "age_hours": 287.93
         },
         "level": "high",
         "importance_reasons": [
@@ -2943,7 +3126,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 284.93,
+          "hours_since_update": 287.93,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2961,7 +3144,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 247.01
+          "age_hours": 250.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3003,7 +3186,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 247.01,
+          "hours_since_update": 250.01,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -3021,7 +3204,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 271.01
+          "age_hours": 274.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3064,7 +3247,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 271.01,
+          "hours_since_update": 274.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3082,7 +3265,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 247.01
+          "age_hours": 250.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3126,7 +3309,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 247.01,
+          "hours_since_update": 250.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3144,7 +3327,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 269.73
+          "age_hours": 272.73
         },
         "level": "high",
         "importance_reasons": [
@@ -3187,7 +3370,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 269.73,
+          "hours_since_update": 272.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3205,7 +3388,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 295.01
+          "age_hours": 298.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3248,7 +3431,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-12T16:41:59.922949+00:00",
-          "hours_since_update": 295.01,
+          "hours_since_update": 298.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3266,7 +3449,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 316.01
+          "age_hours": 319.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3307,7 +3490,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-11T19:42:09.404449+00:00",
-          "hours_since_update": 316.01,
+          "hours_since_update": 319.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3325,7 +3508,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 316.53
+          "age_hours": 319.53
         },
         "level": "high",
         "importance_reasons": [
@@ -3364,63 +3547,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-11T19:10:45.302001+00:00",
-          "hours_since_update": 316.53,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_027499",
-        "title": "Woman, 75, struck and killed while crossing road in Fort Pierce - WPBF",
-        "score": 65,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 269.73
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Story remains open pending a resolution or archival threshold",
-          "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 269.73,
+          "hours_since_update": 319.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3430,7 +3557,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-24T23:48:19Z",
+    "generated_at": "2026-11-25T02:49:12Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3445,27 +3572,27 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 6,
+        "category_eligibility_archive_recovery": 5,
         "generated_live": 2,
-        "generation_failed_archive_recovery": 1
+        "generation_failed_archive_recovery": 2
       },
       "failures": {
-        "article_framing_integrity": 1,
-        "no_category_eligible_sources": 6
+        "contextless_update_lead": 2,
+        "no_category_eligible_sources": 5
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 87.537,
+      "model_attempt_count": 6,
+      "model_elapsed_seconds": 171.536,
       "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 42,
-      "story_aware_update_context_count": 3,
-      "material_update_promotion_evaluation_count": 8,
-      "material_update_promotion_count": 1,
+      "contextual_update_lead_rejection_count": 3,
+      "article_framing_rejection_count": 0,
+      "category_eligibility_rejection_count": 6,
+      "published_story_duplicate_suppression_count": 44,
+      "story_aware_update_context_count": 1,
+      "material_update_promotion_evaluation_count": 5,
+      "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 5,
-      "material_update_promotion_model_call_count": 3
+      "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
@@ -3473,8 +3600,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 8,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3491,8 +3618,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3509,39 +3636,9 @@
             "local_nexus_signals": [],
             "headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
             "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:arrested"
-            ],
-            "local_nexus_signals": [],
-            "headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "West Boca Raton neighbors clean up after EF-1 tornado damages homes, cars",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/west-boca-raton-neighbors-clean-up-after-ef-1-tornado-damages-homes-cars"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3585,6 +3682,26 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQNmtHdlh5YzVLcE5jNXlHRk4zNTFGOGJKSHQ3ellhMTN5MFU3NmYwSmE3Vm9uVXJmTmhOVGJKdzd3ZEJ5ZUpoZ1AzbUhaRl9yWkFZblFqekxwSXdUZGs1bFlPbkFfQnJjbk85UFh6bF9oS3UwaGE2YVN1QlhEX2JJeTZEM3ctOEFVQVM1RFI5ZW5qR3hMdFdLTk5ZbEVtckZNaEdnczRwV2tmZUJLdkpMMHRERGo4VHVoTTFvQ2pXT25IZkpIeWtBOFNBMm5ndV9sY01GMDdtVXVrTktuek4tY21hXzJIcm5FUThKeVIzdTNmNklNaXdLRGl0c0ltSDJoM2pqeVJHQndXY0ZEQUZWRWJqU2lWLXgxcTBwLVZxVGlzZkhHWDVJ",
+            "editorial_story_id": "story_029573",
+            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
+            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
             "editorial_story_id": "story_029393",
@@ -3598,8 +3715,8 @@
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
@@ -3612,8 +3729,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -3675,6 +3792,36 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMipwJBVV95cUxQNmtHdlh5YzVLcE5jNXlHRk4zNTFGOGJKSHQ3ellhMTN5MFU3NmYwSmE3Vm9uVXJmTmhOVGJKdzd3ZEJ5ZUpoZ1AzbUhaRl9yWkFZblFqekxwSXdUZGs1bFlPbkFfQnJjbk85UFh6bF9oS3UwaGE2YVN1QlhEX2JJeTZEM3ctOEFVQVM1RFI5ZW5qR3hMdFdLTk5ZbEVtckZNaEdnczRwV2tmZUJLdkpMMHRERGo4VHVoTTFvQ2pXT25IZkpIeWtBOFNBMm5ndV9sY01GMDdtVXVrTktuek4tY21hXzJIcm5FUThKeVIzdTNmNklNaXdLRGl0c0ltSDJoM2pqeVJHQndXY0ZEQUZWRWJqU2lWLXgxcTBwLVZxVGlzZkhHWDVJ",
+            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
+            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "St. Lucie County commissioners to consider Port of Fort Pierce master plan Dec. 1 - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-commissioners-to-consider-port-of-fort-pierce-master-plan-dec-1-rocket-recovery-facility-harbour-pointe-public-district-mega-yacht-expansion-new-access-ifrastructure",
             "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
@@ -3690,30 +3837,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 31.809
+        "elapsed_seconds": 30.395
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 10,
-        "selected_source_count": 5,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 9,
+        "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 27.683,
-            "result": "success"
+            "elapsed_seconds": 40.739,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 42.586,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV"
           }
         ],
-        "model_elapsed_seconds": 27.683,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 83.325,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3722,7 +3879,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -3740,7 +3897,7 @@
             "source_url": "https://cbs12.com/newsletter-daily/free-food-distributions-and-thanksgiving-meals-across-the-treasure-coast-prepared-food-fort-pierce-port-st-lucie-indiantown-sebastian"
           }
         ],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3774,11 +3931,21 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
+            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - cw34.com",
             "source_url": "https://cw34.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
             "editorial_story_id": "story_029510",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3794,11 +3961,11 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMilwJBVV95cUxQZjdFNW85UXJ1Z25ZVFdGSHJpaDllRWVHbEtQMGVPMURNY3pYc0xJOTZ4N1BwQnpfTG11XzQzMkdnVnZ4ZExSd2VxcG9keUtRMzgxVGg1ZEhhYzlBMVJ3czM4eVkyQXdIMHRoaUk2bUM2NEpSVGdhT1YyNWFOX19KWVZfcFFEZ3kxWkViZktDVmJJMzVjR1pOMGpVMExIeFplakhLOEhvMkJCVVdpRXRodjlqcE1zaGY0M1JWaGJzZDM4SkZZY3BxS29RZFlsSTJ0TGd3VVg5WVV1djVSZXVtdmlrZFY2bFNFZm0xTkxiLTRxVGxSdDhXb0lnZFBnVlEwcmpzZW52WEUtSWIydk53T3RDTUdRbTA",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
             "editorial_story_id": "story_029510",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3823,36 +3990,12 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
-            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_029510",
-              "source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_029510,source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 3,
-        "material_update_promotion_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
@@ -3916,60 +4059,30 @@
             "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
             "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "update_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "update_existing_canonical",
-            "confidence": 0.96,
-            "shared_anchors": [
-              "Identical WPEC source URL and publication date",
-              "Four Jacksonville suspects arrested at the Evergreen Club in Palm City",
-              "Martin County Sheriff's Office investigation",
-              "Request for Palm City residents to check their property"
-            ],
-            "novel_facts": [
-              "Three adult suspects are identified by name, and the fourth suspect is identified as a 16-year-old boy",
-              "All four face attempted home invasion charges",
-              "Nathaniel Phillip Wise Jr. faces additional grand theft and firearm possession charges",
-              "The incident occurred at a home on SW Bimini Circle, where a homeowner called 911"
-            ],
-            "reason": "The identical source and distinctive incident details establish the same event. The incoming report adds suspect identities, clarifies that one suspect is a juvenile, and specifies attempted home invasion and additional charges absent from the supplied canonical text. These are material developments for the existing article, not an independently newsworthy follow-up.",
-            "validation_errors": []
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "crime",
             "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - cw34.com",
             "source_url": "https://cw34.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
             "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "November 24 overnight burglary at the Evergreen Club in Palm City",
-              "Four suspects from Jacksonville taken into custody",
-              "Martin County Sheriff's Office investigation",
-              "Request for Palm City residents to check homes and vehicles for missing property",
-              "Identical source headline and article URL path across CW34 and WPEC"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article is another publication of the same arrest report, with matching incident details, source headline and URL path. The candidate's body is unavailable, so the incoming names and charges do not establish a subsequent development. No material update or independently newsworthy follow-up is demonstrated.",
-            "validation_errors": []
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "crime",
@@ -3988,13 +4101,13 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMilwJBVV95cUxQZjdFNW85UXJ1Z25ZVFdGSHJpaDllRWVHbEtQMGVPMURNY3pYc0xJOTZ4N1BwQnpfTG11XzQzMkdnVnZ4ZExSd2VxcG9keUtRMzgxVGg1ZEhhYzlBMVJ3czM4eVkyQXdIMHRoaUk2bUM2NEpSVGdhT1YyNWFOX19KWVZfcFFEZ3kxWkViZktDVmJJMzVjR1pOMGpVMExIeFplakhLOEhvMkJCVVdpRXRodjlqcE1zaGY0M1JWaGJzZDM4SkZZY3BxS29RZFlsSTJ0TGd3VVg5WVV1djVSZXVtdmlrZFY2bFNFZm0xTkxiLTRxVGxSdDhXb0lnZFBnVlEwcmpzZW52WEUtSWIydk53T3RDTUdRbTA",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4033,19 +4146,17 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Four arrested after alleged attempted home invasion at Palm City's Evergreen Club",
-        "generated_card_count": 0,
-        "elapsed_seconds": 67.138
+        "elapsed_seconds": 109.351
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 13,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 12,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4062,8 +4173,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-business-development-primary-focus",
@@ -4084,26 +4195,6 @@
             ],
             "headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says",
             "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_public_safety:arrested"
-            ],
-            "local_nexus_signals": [
-              "source_locality:martin county",
-              "source_locality:stuart",
-              "source_locality:palm city"
-            ],
-            "headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county"
           },
           {
             "contract_version": "1.0-business-development-primary-focus",
@@ -4139,7 +4230,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/nearly-1-8-million-chickens-to-be-depopulated-after-bird-flu-detected-at-okeechobee-county-facility"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4169,6 +4260,16 @@
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
             "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4236,6 +4337,21 @@
           },
           {
             "category_key": "business",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
             "source_headline": "New memorial honors two Indian River County deputies killed in line of duty",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/new-memorial-honors-two-indian-river-county-deputies-killed-in-line-of-duty",
             "canonical_slug": "2026-11-21-indian-river-county-plans-monument-unveiling-for-two-deputies-killed-in-line-of",
@@ -4251,23 +4367,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 25.452
+        "elapsed_seconds": 24.097
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 2,
-        "selected_source_count": 0,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Sports category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 13.352,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 13.352,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4279,15 +4402,42 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "sports",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/neighbors-plead-help-repeated-flooding-threatens-their-indian-river-county-homes?outputType=amp",
+            "editorial_story_id": "story_029611",
+            "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
+            "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "sports",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/neighbors-plead-help-repeated-flooding-threatens-their-indian-river-county-homes?outputType=amp",
+            "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
+            "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "sports_weekly_budget": {
           "week_start_et": "2026-11-23",
           "published": 0,
@@ -4298,7 +4448,11 @@
         },
         "new_publication_stale_rejected_count": 0,
         "sports_editorial_source_rejections": [],
-        "elapsed_seconds": 18.614
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Fort Pierce boxing gym wins three state titles, takes second overall",
+        "generated_card_count": 0,
+        "elapsed_seconds": 45.215
       },
       {
         "category_key": "things_to_do",
@@ -4353,7 +4507,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.687
+        "elapsed_seconds": 16.619
       },
       {
         "category_key": "florida",
@@ -4418,30 +4572,40 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 18.838
+        "elapsed_seconds": 17.947
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 4,
         "selected_source_count": 4,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "archive_recovery_requested": true,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 32.545,
-            "result": "success"
+            "elapsed_seconds": 24.263,
+            "result": "copydesk_integrity",
+            "error_type": "CopyDeskIntegrityError",
+            "error_summary": "Copy-desk repair still violates TCT house style: chained_and"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 24.674,
+            "result": "contextless_update_lead",
+            "error_type": "ContextualUpdateLeadError",
+            "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV"
           }
         ],
-        "model_elapsed_seconds": 32.545,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 48.937,
+        "failure_code": "contextless_update_lead",
+        "failure_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4453,45 +4617,15 @@
         "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
-            "editorial_story_id": "story_029611",
-            "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
-            "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
-            "editorial_story_id": "story_029596",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNMDMtenU1ZklOUXpHVmNJNjZIRVhhR21KYlVZYWtqeThYcV9QRTFTWkhfV1FzSU5fRUU3LURqR1lTV0IzVDZIQ29wV2RFSDJmTTI0YjYyZS03ZmcwNXNIOFpZUkhwNlJ6U1lySlRqN0Q2SlNNTHc4ZG9OWEpfZ1RUWDdRUmFtRlEtbGxGbHNXTEVmWHRheHFRUUVoNVpiZUVEaFJNOW9mOVN4ZWxOWkN1NW9hWW1xeDM3TzlJRWxCUHJjVGhwU3oxSGFLSlc2RVF4bU1TdnNQT2FXdklfTXZvT1lfczVoSXhXVVp1M2NJZm5zVjN5cUZxMjVCSUo5d0FZV3c",
-            "editorial_story_id": "story_029596",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - cw34.com",
-            "source_url": "https://cw34.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "http://cbs12.com/news/crime/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
             "editorial_story_id": "story_029510",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -4512,16 +4646,6 @@
             "editorial_story_id": "story_029452",
             "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
             "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "'Don't come here and do stupid things': Two accused of breaking into Martin County business to play games - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-video-games-burglary-arrest-business/74511776",
-            "editorial_story_id": "story_029427",
-            "canonical_slug": "2026-11-23-two-face-felony-burglary-charges-in-hutchinson-island-game-room-break-in",
-            "canonical_headline": "Two face felony burglary charges in Hutchinson Island game-room break-in",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -4529,106 +4653,46 @@
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - WPEC",
-            "source_url": "https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "source_headline": "Truck-SUV crash cleared on Florida's Turnpike North in Martin County - WPEC",
+            "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
             "publisher": "cbs12.com",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
-            "basis": "exact_source_url",
+            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
+            "canonical_headline": "Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals",
+            "basis": "event-identity-authority:exact_source_url",
             "identity_keys": [
-              "story:story_029510",
-              "source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news"
+              "story:story_029596"
             ],
-            "match_confidence": 0.99,
+            "match_confidence": 1.0,
             "evidence_dimensions": [
-              "story",
-              "source"
+              "source_url"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=story:story_029510,source:https://cbs12.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+              "exact_source_url=True",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
-            "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
-            "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Emergency vehicles block left lane of Florida's Turnpike South in Martin County - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNMDMtenU1ZklOUXpHVmNJNjZIRVhhR21KYlVZYWtqeThYcV9QRTFTWkhfV1FzSU5fRUU3LURqR1lTV0IzVDZIQ29wV2RFSDJmTTI0YjYyZS03ZmcwNXNIOFpZUkhwNlJ6U1lySlRqN0Q2SlNNTHc4ZG9OWEpfZ1RUWDdRUmFtRlEtbGxGbHNXTEVmWHRheHFRUUVoNVpiZUVEaFJNOW9mOVN4ZWxOWkN1NW9hWW1xeDM3TzlJRWxCUHJjVGhwU3oxSGFLSlc2RVF4bU1TdnNQT2FXdklfTXZvT1lfczVoSXhXVVp1M2NJZm5zVjN5cUZxMjVCSUo5d0FZV3c",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Multi-vehicle crash closes all northbound lanes of Florida's Turnpike in Martin County",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - cw34.com",
-            "source_url": "https://cw34.com/news/local/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
+            "source_headline": "4 men arrested after overnight burglary at Martin County’s Evergreen Club - WPEC",
+            "source_url": "http://cbs12.com/news/crime/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
             "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Four arrested after Evergreen Club burglary in Palm City; residents asked to check property",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
             "promoted": false,
-            "cache_hit": true,
+            "cache_hit": false,
             "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.98,
-            "shared_anchors": [
-              "November 24 overnight burglary at the Evergreen Club in Palm City",
-              "Four suspects from Jacksonville taken into custody",
-              "Martin County Sheriff's Office investigation",
-              "Request for Palm City residents to check homes and vehicles for missing property",
-              "Identical source headline and article URL path across CW34 and WPEC"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article is another publication of the same arrest report, with matching incident details, source headline and URL path. The candidate's body is unavailable, so the incoming names and charges do not establish a subsequent development. No material update or independently newsworthy follow-up is demonstrated.",
-            "validation_errors": []
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "martin",
@@ -4651,21 +4715,6 @@
             "source_url": "https://cbs12.com/news/local/one-flown-with-life-threatening-injuries-after-us-1-crash-second-person-hurt-florida-news-local-news",
             "canonical_slug": "2026-11-24-two-injured-in-us-1-tractor-trailer-crash-in-hobe-sound-one-flown-to-hospital",
             "canonical_headline": "Two injured in U.S. 1 tractor-trailer crash in Hobe Sound; one flown to hospital",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "'Don't come here and do stupid things': Two accused of breaking into Martin County business to play games - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-video-games-burglary-arrest-business/74511776",
-            "canonical_slug": "2026-11-23-two-face-felony-burglary-charges-in-hutchinson-island-game-room-break-in",
-            "canonical_headline": "Two face felony burglary charges in Hutchinson Island game-room break-in",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -4677,44 +4726,32 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
+        "generation_status": "failed",
         "budget_seconds": 180.0,
-        "live_hero_headline": "4 arrested in attempted home invasion case at Palm City's Evergreen Club",
-        "generated_card_count": 1,
-        "elapsed_seconds": 58.072
+        "elapsed_seconds": 72.219
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 18,
         "publishable_source_count": 3,
         "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.868,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Downtown Fort Pierce shops prepare for Small Business Saturday and gift card raffle"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.442,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: surname_only_first_reference — Downtown Fort Pierce shops prepare for Small Business Saturday and holiday sales"
+            "elapsed_seconds": 25.922,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 27.309,
-        "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: surname_only_first_reference — Downtown Fort Pierce shops prepare for Small Business Saturday and holiday sales",
+        "model_elapsed_seconds": 25.922,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4750,7 +4787,17 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+            "source_headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/st-lucie-county-mother-accused-killing-6-year-old-son-declared-unfit-stand-trial?outputType=amp",
+            "editorial_story_id": "story_029612",
+            "canonical_slug": "2026-11-24-st-lucie-county-mother-accused-in-sons-death-found-incompetent-to-stand-trial",
+            "canonical_headline": "St. Lucie County mother accused in son's death found incompetent to stand trial",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
             "editorial_story_id": "story_029574",
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
@@ -4760,7 +4807,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
+            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
             "editorial_story_id": "story_029574",
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
@@ -4786,16 +4833,6 @@
             "canonical_slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
             "canonical_headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc29YZnRRbHVfdVBHeEhjQlo5SjZjUld3Vi1YUTkwb1hFS0l4MS0zMENDWkFLVldFci1Xd3lIUE5EU0NWSnBCN1BoalNoZVBlak1Bd1REV0JmWkYzZVlLR3UzTkdHbXBWOFg3NnprVV9NaWY0VTMydUFwMHM2RmhFSGNxZ3NWV1p4VDNuUDFyM1UtMmg2MGtTRWs2NHg1T3Izci1xaG93TXFKc2RrcVlMN2ljRGJsS05KOUtwODc4RFpwdw",
-            "editorial_story_id": "story_029312",
-            "canonical_slug": "2026-11-23-florida-prepares-second-federal-disaster-request-after-renewed-flooding",
-            "canonical_headline": "Florida prepares second federal disaster request after renewed flooding",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4849,33 +4886,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/24/st-lucie-county-mother-accused-killing-6-year-old-son-declared-unfit-stand-trial?outputType=amp",
-            "publisher": "www.wflx.com",
-            "canonical_slug": "2026-11-24-st-lucie-county-mother-accused-in-sons-death-found-incompetent-to-stand-trial",
-            "canonical_headline": "St. Lucie County mother accused in son's death found incompetent to stand trial",
-            "basis": "exact_structured_incident_key",
-            "identity_keys": [
-              "incident:named-person-death:rhonda-paulynice",
-              "story:story_029612",
-              "source:https://www.wflx.com/2026/11/24/st-lucie-county-mother-accused-killing-6-year-old-son-declared-unfit-stand-trial?outputType=amp"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:rhonda-paulynice,story:story_029612",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 2,
@@ -4913,7 +4925,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
+            "source_headline": "St. Lucie County mother accused of killing 6-year-old son declared unfit to stand trial - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/st-lucie-county-mother-accused-killing-6-year-old-son-declared-unfit-stand-trial?outputType=amp",
+            "canonical_slug": "2026-11-24-st-lucie-county-mother-accused-in-sons-death-found-incompetent-to-stand-trial",
+            "canonical_headline": "St. Lucie County mother accused in son's death found incompetent to stand trial",
+            "canonical_is_custom": false,
+            "identity_basis": "same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
             "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
@@ -4928,7 +4955,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme - WPTV",
+            "source_headline": "Port St. Lucie man sentenced to nearly 4 years in $260K AI cryptocurrency fraud scheme",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-man-sentenced-to-nearly-4-years-in-260k-ai-cryptocurrency-fraud-scheme",
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
             "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
@@ -4965,21 +4992,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "DeSantis says Florida will seek another federal disaster declaration after historic flooding - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQc29YZnRRbHVfdVBHeEhjQlo5SjZjUld3Vi1YUTkwb1hFS0l4MS0zMENDWkFLVldFci1Xd3lIUE5EU0NWSnBCN1BoalNoZVBlak1Bd1REV0JmWkYzZVlLR3UzTkdHbXBWOFg3NnprVV9NaWY0VTMydUFwMHM2RmhFSGNxZ3NWV1p4VDNuUDFyM1UtMmg2MGtTRWs2NHg1T3Izci1xaG93TXFKc2RrcVlMN2ljRGJsS05KOUtwODc4RFpwdw",
-            "canonical_slug": "2026-11-23-florida-prepares-second-federal-disaster-request-after-renewed-flooding",
-            "canonical_headline": "Florida prepares second federal disaster request after renewed flooding",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5091,17 +5103,19 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 50.536
+        "live_hero_headline": "Port St. Lucie family remembers Alexis Cuellar ahead of Fort Pierce funeral",
+        "generated_card_count": 1,
+        "elapsed_seconds": 47.961
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 8,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5118,10 +5132,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -5135,17 +5149,17 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/neighbors-plead-help-repeated-flooding-threatens-their-indian-river-county-homes?outputType=amp",
             "editorial_story_id": "story_029611",
             "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
             "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WPTV",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
             "editorial_story_id": "story_029611",
             "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
@@ -5171,6 +5185,16 @@
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
             "canonical_headline": "Port St. Lucie man gets 47 months in prison for $260K AI cryptocurrency fraud",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5210,12 +5234,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/neighbors-plead-help-repeated-flooding-threatens-their-indian-river-county-homes?outputType=amp",
             "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
             "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -5225,7 +5249,7 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WPTV",
+            "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/neighbors-plead-for-help-as-repeated-flooding-threatens-their-indian-river-county-homes",
             "canonical_slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
             "canonical_headline": "Indian River County extends emergency as more rain threatens flooded Heritage Plantation",
@@ -5267,10 +5291,25 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "4 taken into custody after overnight burglary, manhunt in Martin County",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-men-taken-into-custody-after-overnight-burglary-manhunt-in-martin-county",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Four face attempted home invasion charges at Palm City's Evergreen Club",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 21.779
+        "elapsed_seconds": 22.153
       }
     ]
   }
