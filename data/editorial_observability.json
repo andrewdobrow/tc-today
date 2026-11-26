@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-26T21:48:30Z",
+  "generated_at": "2026-11-26T23:51:04Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,21 +49,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 185,
+    "candidates_processed": 184,
     "routes": {
-      "generate_new": 18,
-      "skip": 167
+      "generate_new": 16,
+      "skip": 167,
+      "update_existing": 1
     },
     "eligibility": {
       "listing": 2,
-      "low_value": 134,
-      "publishable": 49
+      "low_value": 137,
+      "publishable": 45
     },
     "source_classes": {
-      "aggregator": 136,
-      "local_news": 27,
-      "regional_news": 18,
-      "unknown": 4
+      "aggregator": 139,
+      "local_news": 28,
+      "regional_news": 14,
+      "unknown": 3
     },
     "rejected_count": 2,
     "rejected_examples": [
@@ -89,20 +90,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 18,
-      "same_event": 167
+      "new_story": 16,
+      "same_event": 168
     },
     "examples": [
       {
         "story_id": "story_030011",
         "title": "More than a meal: Delray Beach man spends Thanksgiving feeding those in need",
         "event_key": "unknown-event-faaf0b9ddd",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -125,10 +128,11 @@
         "event_key": "named-person-death:while-license",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/palm-beach-county/major-crash-shuts-down-i-95-southbound-in-palm-beach-county-on-thanksgiving-morning",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -273,20 +277,6 @@
         ]
       },
       {
-        "story_id": "story_029913",
-        "title": "Story to Share: Former US ambassador in Naples still fighting hunger at local food pantries - Gulf Coast News and Weather",
-        "event_key": "unknown-event-6c7f9ad5f6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_029858",
         "title": "Thanksgiving travelers face delays but few cancellations at President Donald J. Trump International Airport",
         "event_key": "unknown-event-15b7312b2d",
@@ -360,6 +350,20 @@
         "story_id": "story_029959",
         "title": "Norovirus outbreak sickens over 120 students, staff at one elementary school - WFLX",
         "event_key": "unknown-event-eac9a3743b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029691",
+        "title": "Dexter, an electronic storage detection dog, has success in Florida - Treasure Coast News",
+        "event_key": "unknown-event-51c61ad628",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -376,13 +380,15 @@
         "story_id": "story_030011",
         "title": "More than a meal: Delray Beach man spends Thanksgiving feeding those in need",
         "event_key": "unknown-event-faaf0b9ddd",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -407,10 +413,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/palm-beach-county/major-crash-shuts-down-i-95-southbound-in-palm-beach-county-on-thanksgiving-morning",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -565,21 +572,6 @@
         ]
       },
       {
-        "story_id": "story_029913",
-        "title": "Story to Share: Former US ambassador in Naples still fighting hunger at local food pantries - Gulf Coast News and Weather",
-        "event_key": "unknown-event-6c7f9ad5f6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_029858",
         "title": "Thanksgiving travelers face delays but few cancellations at President Donald J. Trump International Airport",
         "event_key": "unknown-event-15b7312b2d",
@@ -658,6 +650,21 @@
         "story_id": "story_029959",
         "title": "Norovirus outbreak sickens over 120 students, staff at one elementary school - WFLX",
         "event_key": "unknown-event-eac9a3743b",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_029691",
+        "title": "Dexter, an electronic storage detection dog, has success in Florida - Treasure Coast News",
+        "event_key": "unknown-event-51c61ad628",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -687,16 +694,17 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 340,
-      "timeline_entries_examined": 979,
-      "transitions_examined": 598,
+      "stories_with_timelines": 339,
+      "timeline_entries_examined": 977,
+      "transitions_examined": 597,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 11,
       "high_confidence_candidate_count": 6,
       "activation_eligible_candidate_count": 5,
-      "same_source_evolution_count": 5,
+      "same_source_evolution_count": 6,
       "same_source_evolution_milestones": {
         "approval": 1,
+        "arrest": 1,
         "death": 1,
         "opening": 1,
         "recovery": 2
@@ -736,6 +744,42 @@
             "title": "Man dies in FHP trooper-involved shooting incident shuts down I-95 in Indian River County",
             "source": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county",
             "url": "https://www.wptv.com/traffic/traffic-news/law-enforcement-investigation-shuts-down-i-95-in-indian-river-county"
+          }
+        },
+        {
+          "story_id": "story_029980",
+          "story_title": "PBSO deputy killed in Thanksgiving wrong-way crash on I-95 in Palm Beach Gardens - WPEC",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "event_family_match",
+            "strong_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-17964a79d07b79147687",
+            "event_key": "traffic-crash-27a13849f2-27a13849f2",
+            "published_at": "2026-11-26T16:41:46.958556+00:00",
+            "title": "PBSO deputy killed in Thanksgiving wrong-way crash on I-95 in Palm Beach Gardens - WPEC",
+            "source": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOeEhRVUMyWU9aMy1Tbk9NSW1lcnJaVVJQQXZPaW52M3o3WkZHUFQ0SzVkelBGcEpiTVpEVDNWbVZFVkVXSjk0M0hkWHB4VGFpRFdxZFdTV1ZVQ29NWDlKdENtSjZJMFJMSm95VXJwTzBROWFVcTJyQXpnTExYak0zX2NRSXZmcDN4WHNBNDdUZkJYaXhRY1JZVzlGMFBFYTlqUmRvTXFjM0hidlhGWXhHTVlUWjZMbWJ1Y2JVUzVKOExibWQ4SldKeWxCWHo2OTJDUzFwYXg1cThHUmVuXzJkWEtCd2plUm9haW1kWHFOQmxMcmtLNm03VWZJRE1MRjRKbnc?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOeEhRVUMyWU9aMy1Tbk9NSW1lcnJaVVJQQXZPaW52M3o3WkZHUFQ0SzVkelBGcEpiTVpEVDNWbVZFVkVXSjk0M0hkWHB4VGFpRFdxZFdTV1ZVQ29NWDlKdENtSjZJMFJMSm95VXJwTzBROWFVcTJyQXpnTExYak0zX2NRSXZmcDN4WHNBNDdUZkJYaXhRY1JZVzlGMFBFYTlqUmRvTXFjM0hidlhGWXhHTVlUWjZMbWJ1Y2JVUzVKOExibWQ4SldKeWxCWHo2OTJDUzFwYXg1cThHUmVuXzJkWEtCd2plUm9haW1kWHFOQmxMcmtLNm03VWZJRE1MRjRKbnc?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-78bda6f5dd53d9da0a1c",
+            "event_key": "traffic-crash-c9118e2abe-c9118e2abe",
+            "published_at": "2026-11-26T23:42:29.660161+00:00",
+            "title": "Wrong-way driver arrested in fatal Thanksgiving crash that killed PBSO detective - WPEC",
+            "source": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOeEhRVUMyWU9aMy1Tbk9NSW1lcnJaVVJQQXZPaW52M3o3WkZHUFQ0SzVkelBGcEpiTVpEVDNWbVZFVkVXSjk0M0hkWHB4VGFpRFdxZFdTV1ZVQ29NWDlKdENtSjZJMFJMSm95VXJwTzBROWFVcTJyQXpnTExYak0zX2NRSXZmcDN4WHNBNDdUZkJYaXhRY1JZVzlGMFBFYTlqUmRvTXFjM0hidlhGWXhHTVlUWjZMbWJ1Y2JVUzVKOExibWQ4SldKeWxCWHo2OTJDUzFwYXg1cThHUmVuXzJkWEtCd2plUm9haW1kWHFOQmxMcmtLNm03VWZJRE1MRjRKbnc?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOeEhRVUMyWU9aMy1Tbk9NSW1lcnJaVVJQQXZPaW52M3o3WkZHUFQ0SzVkelBGcEpiTVpEVDNWbVZFVkVXSjk0M0hkWHB4VGFpRFdxZFdTV1ZVQ29NWDlKdENtSjZJMFJMSm95VXJwTzBROWFVcTJyQXpnTExYak0zX2NRSXZmcDN4WHNBNDdUZkJYaXhRY1JZVzlGMFBFYTlqUmRvTXFjM0hidlhGWXhHTVlUWjZMbWJ1Y2JVUzVKOExibWQ4SldKeWxCWHo2OTJDUzFwYXg1cThHUmVuXzJkWEtCd2plUm9haW1kWHFOQmxMcmtLNm03VWZJRE1MRjRKbnc?oc=5"
           }
         },
         {
@@ -1870,28 +1914,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 637,
-      "treasure_coast_local": 419,
+      "florida": 633,
+      "treasure_coast_local": 415,
       "treasure_coast_region": 153,
-      "unknown": 1368
+      "unknown": 1374
     },
-    "average_score": 56.55
+    "average_score": 56.42
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 637,
-      "treasure_coast_local": 419,
+      "florida": 633,
+      "treasure_coast_local": 415,
       "treasure_coast_region": 153,
-      "unknown": 1368
+      "unknown": 1374
     },
-    "average_priority": 2.32
+    "average_priority": 2.29
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1566,
+      "active": 1590,
       "breaking": 1,
-      "developing": 78,
-      "ongoing": 930,
+      "developing": 67,
+      "ongoing": 915,
       "resolved": 2
     }
   },
@@ -1899,8 +1943,8 @@
     "repair_version": 16,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2566,
-    "active_stories_after": 2566,
+    "active_stories_before": 2560,
+    "active_stories_after": 2560,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -1925,24 +1969,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 26,
+    "incident_anchor_to_story_count": 27,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-11-26T16:41:03Z",
+    "generated_at": "2026-11-26T23:41:22Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2577
+    "active_story_count": 2575
   },
   "stories": {
-    "total": 2577,
+    "total": 2575,
     "importance_levels": {
       "breaking": 2,
       "high": 35,
-      "normal": 255,
-      "low": 2285,
+      "normal": 256,
+      "low": 2282,
       "archived": 0
     },
-    "average_importance": 5.57,
+    "average_importance": 5.58,
     "top": [
       {
         "story_id": "story_027961",
@@ -1957,7 +2001,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.01
+          "age_hours": 36.03
         },
         "level": "high",
         "importance_reasons": [
@@ -2002,7 +2046,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-25T11:41:49.846940+00:00",
-          "hours_since_update": 34.01,
+          "hours_since_update": 36.03,
           "event_count": 23,
           "timeline_entries": 23
         }
@@ -2020,7 +2064,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 106.0
+          "age_hours": 108.01
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2066,7 +2110,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 106.0,
+          "hours_since_update": 108.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2084,7 +2128,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.01
+          "age_hours": 2.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2128,7 +2172,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-11-26T21:41:57.612488+00:00",
-          "hours_since_update": 0.01,
+          "hours_since_update": 2.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2146,7 +2190,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 98.0
+          "age_hours": 100.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2189,7 +2233,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T19:42:13.208349+00:00",
-          "hours_since_update": 98.0,
+          "hours_since_update": 100.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2207,7 +2251,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 148.99
+          "age_hours": 151.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2250,7 +2294,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 148.99,
+          "hours_since_update": 151.01,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2268,7 +2312,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 66.99
+          "age_hours": 69.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2307,7 +2351,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-24T02:42:35.119839+00:00",
-          "hours_since_update": 66.99,
+          "hours_since_update": 69.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2325,7 +2369,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 57.98
+          "age_hours": 60.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2359,7 +2403,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-24T11:42:58.636048+00:00",
-          "hours_since_update": 57.98,
+          "hours_since_update": 60.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2377,7 +2421,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 49.99
+          "age_hours": 52.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2415,7 +2459,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-24T19:42:17.486787+00:00",
-          "hours_since_update": 49.99,
+          "hours_since_update": 52.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2433,7 +2477,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 96.0
+          "age_hours": 98.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2477,7 +2521,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T21:42:13.135439+00:00",
-          "hours_since_update": 96.0,
+          "hours_since_update": 98.01,
           "event_count": 36,
           "timeline_entries": 36
         }
@@ -2495,7 +2539,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 330.92
+          "age_hours": 332.93
         },
         "level": "high",
         "importance_reasons": [
@@ -2538,7 +2582,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T02:46:47.152415+00:00",
-          "hours_since_update": 330.92,
+          "hours_since_update": 332.93,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2556,7 +2600,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 293.0
+          "age_hours": 295.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2598,7 +2642,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 293.0,
+          "hours_since_update": 295.01,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2616,7 +2660,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 101.0
+          "age_hours": 103.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2659,7 +2703,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 101.0,
+          "hours_since_update": 103.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2677,7 +2721,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 317.0
+          "age_hours": 319.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2720,7 +2764,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 317.0,
+          "hours_since_update": 319.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2738,7 +2782,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 293.0
+          "age_hours": 295.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2782,7 +2826,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 293.0,
+          "hours_since_update": 295.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2800,7 +2844,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 315.72
+          "age_hours": 317.73
         },
         "level": "high",
         "importance_reasons": [
@@ -2843,59 +2887,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 315.72,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_029977",
-        "title": "1 dead, 6 others wounded in Thanksgiving morning shooting at Airbnb in Polk County, Florida",
-        "score": 65,
-        "editorial_priority": 41,
-        "editorial_score": 41,
-        "score_breakdown": {
-          "score": 41,
-          "importance": 65,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.03
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-11-26T16:41:46.958556+00:00",
-          "hours_since_update": 5.03,
+          "hours_since_update": 317.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2913,7 +2905,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 315.72
+          "age_hours": 317.73
         },
         "level": "high",
         "importance_reasons": [
@@ -2951,7 +2943,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 315.72,
+          "hours_since_update": 317.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2969,7 +2961,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 189.99
+          "age_hours": 192.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3015,7 +3007,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 189.99,
+          "hours_since_update": 192.01,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -3033,7 +3025,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.0
+          "age_hours": 36.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -3067,7 +3059,59 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-25T11:41:49.846940+00:00",
-          "hours_since_update": 34.0,
+          "hours_since_update": 36.02,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_029977",
+        "title": "1 dead, 6 others wounded in Thanksgiving morning shooting at Airbnb in Polk County, Florida",
+        "score": 65,
+        "editorial_priority": 39,
+        "editorial_score": 39,
+        "score_breakdown": {
+          "score": 39,
+          "importance": 65,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 7.05
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-11-26T16:41:46.958556+00:00",
+          "hours_since_update": 7.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3076,16 +3120,16 @@
         "story_id": "story_029611",
         "title": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WPTV",
         "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
+        "editorial_priority": 38,
+        "editorial_score": 38,
         "score_breakdown": {
-          "score": 40,
+          "score": 38,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.04
+          "age_hours": 7.07
         },
         "level": "normal",
         "importance_reasons": [
@@ -3123,7 +3167,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-26T16:41:46.958556+00:00",
-          "hours_since_update": 5.04,
+          "hours_since_update": 7.07,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3133,7 +3177,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-26T21:45:04Z",
+    "generated_at": "2026-11-26T23:46:31Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3157,17 +3201,17 @@
         "no_category_eligible_sources": 7
       },
       "model_attempt_count": 2,
-      "model_elapsed_seconds": 26.029,
+      "model_elapsed_seconds": 23.255,
       "archive_recovery_requested_count": 9,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 2,
-      "published_story_duplicate_suppression_count": 30,
+      "category_eligibility_rejection_count": 1,
+      "published_story_duplicate_suppression_count": 24,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 8,
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 8,
+      "material_update_promotion_cache_hit_count": 5,
       "material_update_promotion_model_call_count": 0
     },
     "categories": [
@@ -3175,8 +3219,8 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 22,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3212,7 +3256,7 @@
             "source_url": "https://www.sebastiandaily.com/business/sheriff-renews-call-for-unified-911-dispatch-as-vero-beach-faces-amendment-3-cuts-96970/"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3246,26 +3290,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Truck-SUV crash cleared on Florida's Turnpike North in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
-            "editorial_story_id": "story_029596",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-            "editorial_story_id": "story_029573",
-            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
-            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Port St. Lucie man gets 47 months in federal prison for $260K N3ON deepfake cryptoscam - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-man-gets-47-months-in-federal-prison-for-260k-n3on-deepfake-cryptoscam-dave-the-jeweler-ai-audio-voice-deception-crytpcurrency-scam-memecoin-project-streamer-",
             "editorial_story_id": "story_029574",
@@ -3287,9 +3311,9 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
@@ -3362,48 +3386,6 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Truck-SUV crash cleared on Florida's Turnpike North in Martin County - WPEC",
-            "source_url": "https://cbs12.com/news/local/emergency-vehicles-block-left-floridas-turnpike-south-in-martin-county-mile-marker-130-florida-highway-patrol-traffic-alert-florida-news",
-            "canonical_slug": "2026-11-24-multi-vehicle-crash-closes-all-northbound-lanes-of-floridas-turnpike-in-martin-c",
-            "canonical_headline": "Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
-            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.99,
-            "shared_anchors": [
-              "Identical WPEC source URL and November 24, 2026 publication date",
-              "Sheriff Eric Flowers asked the Vero Beach City Council on Tuesday to reconsider unified emergency dispatch",
-              "The proposal was presented as potential savings in response to Amendment 3 property-tax revenue losses",
-              "Retrieval evidence confirms an exact-source and persistent-story identity match"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article is the same source report already represented by the canonical. Its additional detail elaborates on the same council discussion, with no evidence of a subsequent decision or other material development.",
-            "validation_errors": []
-          },
-          {
-            "category_key": "local_gov",
             "source_headline": "Port St. Lucie man gets 47 months in federal prison for $260K N3ON deepfake cryptoscam - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-man-gets-47-months-in-federal-prison-for-260k-n3on-deepfake-cryptoscam-dave-the-jeweler-ai-audio-voice-deception-crytpcurrency-scam-memecoin-project-streamer-",
             "canonical_slug": "2026-11-24-port-st-lucie-man-gets-47-months-in-prison-for-260k-ai-cryptocurrency-fraud",
@@ -3434,13 +3416,13 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 26.594
+        "elapsed_seconds": 22.177
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 28,
+        "fetched_candidate_count": 27,
         "fresh_candidate_count": 24,
         "publishable_source_count": 7,
         "selected_source_count": 0,
@@ -3462,8 +3444,18 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/4-arrested-after-attempted-home-invasion-palm-citys-evergreen-club-sheriff-says",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Palm City family confronts masked intruders during attempted home invasion - WPBF",
@@ -3483,26 +3475,6 @@
             "canonical_headline": "Alexis Cuellar identified as rider killed in Port St. Lucie e-scooter hit-and-run",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-            "editorial_story_id": "story_029510",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - cw34.com",
-            "source_url": "https://cw34.com/newsletter-daily/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
-            "editorial_story_id": "story_029510",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -3512,6 +3484,21 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/4-arrested-after-attempted-home-invasion-palm-citys-evergreen-club-sheriff-says",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "Palm City family confronts masked intruders during attempted home invasion - WPBF",
@@ -3556,40 +3543,10 @@
             ],
             "reason": "The canonical already reports Cuellar's identity, death and the driver's charge status. The incoming article adds family remembrances, personal background and funeral information, but no new charge, investigative finding or other material development. Its remembrance angle does not constitute an independently newsworthy follow-up.",
             "validation_errors": []
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WPTV",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/4-arrested-after-attempted-home-invasion-at-palm-citys-evergreen-club-sheriff-says",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "4 men arrested after attempted home invasion at Martin County’s Evergreen Club - cw34.com",
-            "source_url": "https://cw34.com/newsletter-daily/4-men-arrested-after-overnight-burlgary-martins-county-evergreen-club-caught-wearing-masks-gloves-palm-city-residents-check-vehicles-crime-florida-news",
-            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.333
+        "elapsed_seconds": 22.671
       },
       {
         "category_key": "business",
@@ -3597,7 +3554,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 11,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3728,8 +3685,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.416
+        "new_publication_stale_rejected_count": 1,
+        "elapsed_seconds": 25.582
       },
       {
         "category_key": "sports",
@@ -3776,15 +3733,15 @@
         },
         "new_publication_stale_rejected_count": 0,
         "sports_editorial_source_rejections": [],
-        "elapsed_seconds": 12.934
+        "elapsed_seconds": 15.627
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3802,36 +3759,46 @@
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "local_attendable_activity_required",
         "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
           {
-            "contract_version": "1.0-local-attendable-activity-focus",
             "category_key": "things_to_do",
-            "mode": "enforce",
-            "policy": "local_attendable_activity_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_attendable_activity_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "treasure_coast_locality"
-            ],
-            "headline": "Weather-related closures, impacts across South Florida and the Treasure Coast - WPEC",
-            "source_url": "https://cbs12.com/news/local/weather-related-closures-impacts-across-south-florida-and-the-treasure-coast-schools-roads-transporatation-zoo-events-waste-services-parks-facilities-palm-beach-martin-st-lucie-indian-river-broward-counties"
+            "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
+            "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
+            "editorial_story_id": "story_028117",
+            "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
+            "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Jensen Beach Festival of Giving brings together more than 50 local nonprofits",
+            "source_url": "https://www.wptv.com/shining-a-light/jensen-beach-festival-of-giving-brings-together-more-than-50-local-nonprofits",
+            "canonical_slug": "2026-11-17-family-night-set-for-nov-17-at-jensen-beachs-festival-of-giving",
+            "canonical_headline": "Jensen Beach Festival of Giving hosts Family Night Nov. 17, pajama party Friday",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.031
+        "elapsed_seconds": 19.269
       },
       {
         "category_key": "florida",
@@ -3839,7 +3806,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 3,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3856,7 +3823,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -3869,13 +3836,13 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.983
+        "elapsed_seconds": 16.043
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "no_publishable_sources",
-        "fetched_candidate_count": 27,
+        "fetched_candidate_count": 26,
         "fresh_candidate_count": 23,
         "publishable_source_count": 0,
         "selected_source_count": 0,
@@ -3897,7 +3864,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -3911,22 +3878,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/25/high-water-bill-martin-county-says-issue-affecting-10-communities?outputType=amp",
-            "editorial_story_id": "story_029805",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
+            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/4-arrested-after-attempted-home-invasion-palm-citys-evergreen-club-sheriff-says",
+            "editorial_story_id": "story_029510",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/high-water-bill-martin-county-says-issue-affecting-10-communities",
-            "editorial_story_id": "story_029805",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3964,28 +3921,13 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities - WFLX",
-            "source_url": "https://www.wflx.com/2026/11/25/high-water-bill-martin-county-says-issue-affecting-10-communities?outputType=amp",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
+            "source_headline": "4 arrested after attempted home invasion at Palm City's Evergreen Club, sheriff says - WFLX",
+            "source_url": "https://www.wflx.com/2026/11/24/4-arrested-after-attempted-home-invasion-palm-citys-evergreen-club-sheriff-says",
+            "canonical_slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
+            "canonical_headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/high-water-bill-martin-county-says-issue-affecting-10-communities",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -4009,14 +3951,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.39
+        "elapsed_seconds": 17.179
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4037,18 +3979,8 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
-            "editorial_story_id": "story_028286",
-            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
-            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie woman says flood damage left her 'landlocked' as road caved due to flooding - WPEC",
@@ -4071,22 +4003,22 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Palm Beach County, Treasure Coast residents eligible for federal aid after storms, flooding - WPTV",
+            "source_url": "https://www.wptv.com/news/state/palm-beach-county-treasure-coast-residents-eligible-for-federal-aid-after-storms-flooding",
+            "editorial_story_id": "story_029762",
+            "canonical_slug": "2026-11-25-fema-aid-opens-for-flood-hit-residents-in-indian-river-martin-and-st-lucie-count",
+            "canonical_headline": "FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "'A huge loss’: Family remembers 24-year-old killed in Port St. Lucie hit-and-run - WPEC",
             "source_url": "https://cbs12.com/news/local/a-huge-loss-family-remembers-24-year-old-killed-in-port-st-lucie-hit-and-run-florida-news-local-news",
             "editorial_story_id": "story_027961",
             "canonical_slug": "2026-11-16-delays-expected-after-crash-at-sw-gatlin-boulevard-and-sw-feather-terrace-in-por",
             "canonical_headline": "Alexis Cuellar identified as rider killed in Port St. Lucie e-scooter hit-and-run",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'Busiest shopping day': Fort Pierce businesses urge community to shop local on Small Business Saturday - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-shop-small-business-saturday-customers/74523481",
-            "editorial_story_id": "story_029663",
-            "canonical_slug": "2026-11-24-downtown-fort-pierce-merchants-prepare-for-small-business-saturday-shopping-even",
-            "canonical_headline": "Downtown Fort Pierce merchants prepare for Small Business Saturday shopping event",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4122,38 +4054,11 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 3,
+        "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
-            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
-            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.99,
-            "shared_anchors": [
-              "Identical WPTV source URL and matching source headline",
-              "Martin County commissioners approved shifting $200,000 from the stormwater budget to investigate flooding",
-              "Investigation concerns development and drainage changes affecting Jensen Beach",
-              "Cheri Drive flooding and the threat of another foot of rain"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article repeats the same sourced report and commission action already represented by the canonical. Its fuller text supplies details of that report, but there is no evidence of a subsequent decision or other material development. The different publication date alone does not establish a new event or update.",
-            "validation_errors": []
-          },
           {
             "category_key": "st_lucie",
             "source_headline": "Port St. Lucie woman says flood damage left her 'landlocked' as road caved due to flooding - WPEC",
@@ -4172,6 +4077,21 @@
           {
             "category_key": "st_lucie",
             "source_headline": "Palm Beach County, Treasure Coast residents eligible for federal aid after storms, flooding",
+            "source_url": "https://www.wptv.com/news/state/palm-beach-county-treasure-coast-residents-eligible-for-federal-aid-after-storms-flooding",
+            "canonical_slug": "2026-11-25-fema-aid-opens-for-flood-hit-residents-in-indian-river-martin-and-st-lucie-count",
+            "canonical_headline": "FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Palm Beach County, Treasure Coast residents eligible for federal aid after storms, flooding - WPTV",
             "source_url": "https://www.wptv.com/news/state/palm-beach-county-treasure-coast-residents-eligible-for-federal-aid-after-storms-flooding",
             "canonical_slug": "2026-11-25-fema-aid-opens-for-flood-hit-residents-in-indian-river-martin-and-st-lucie-count",
             "canonical_headline": "FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties",
@@ -4213,21 +4133,6 @@
             ],
             "reason": "The canonical already reports Cuellar's identity, death and the driver's charge status. The incoming article adds family remembrances, personal background and funeral information, but no new charge, investigative finding or other material development. Its remembrance angle does not constitute an independently newsworthy follow-up.",
             "validation_errors": []
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'Busiest shopping day': Fort Pierce businesses urge community to shop local on Small Business Saturday - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-shop-small-business-saturday-customers/74523481",
-            "canonical_slug": "2026-11-24-downtown-fort-pierce-merchants-prepare-for-small-business-saturday-shopping-even",
-            "canonical_headline": "Downtown Fort Pierce merchants prepare for Small Business Saturday shopping event",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -4291,14 +4196,14 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 13.578
+        "elapsed_seconds": 16.306
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 23,
+        "fresh_candidate_count": 25,
         "publishable_source_count": 9,
         "selected_source_count": 1,
         "cache_hit": false,
@@ -4308,23 +4213,23 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.652,
+            "elapsed_seconds": 12.249,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County forms Task Force 3 to help homeowners claim property tax benefits"
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County announces Task Force 3 to help homeowners claim property tax relief"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.377,
+            "elapsed_seconds": 11.006,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County announces Task Force 3 to help homeowners claim property tax benefits"
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County forms Task Force 3 to help homeowners claim property tax benefits"
           }
         ],
-        "model_elapsed_seconds": 26.029,
+        "model_elapsed_seconds": 23.255,
         "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County announces Task Force 3 to help homeowners claim property tax benefits",
+        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County forms Task Force 3 to help homeowners claim property tax benefits",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4336,18 +4241,8 @@
         "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/high-water-bill-martin-county-says-issue-affecting-10-communities",
-            "editorial_story_id": "story_029805",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "indian_river",
             "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
@@ -4357,40 +4252,15 @@
             "canonical_headline": "Heritage Plantation residents seek help as more rain threatens flooded homes",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-            "editorial_story_id": "story_029573",
-            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
-            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 1,
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "High water bill? Martin County says issue affecting 10 communities",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/high-water-bill-martin-county-says-issue-affecting-10-communities",
-            "canonical_slug": "2026-11-25-martin-county-meter-data-issue-leaves-customers-in-10-communities-with-high-wate",
-            "canonical_headline": "Martin County meter data issue leaves customers in 10 communities with high water bills",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "indian_river",
             "source_headline": "Neighbors plead for help as repeated flooding threatens their Indian River County homes - WFLX",
@@ -4405,39 +4275,12 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "IRC sheriff renews push for unified 911 dispatch as Vero Beach weighs Amendment 3 cuts - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-indian-river-county-sheriff-renews-push-for-unified-911-dispatch-as-vero-beach-weighs-amendment-3-cuts-cost-savings-revenue-losses-florida-voters-commission",
-            "canonical_slug": "2026-11-24-sheriff-renews-unified-dispatch-push-as-vero-beach-weighs-property-tax-cuts",
-            "canonical_headline": "Sheriff renews unified dispatch push as Vero Beach weighs property tax cuts",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": true,
-            "model_call": false,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "validated",
-            "semantic_action": "duplicate_use_existing_canonical",
-            "confidence": 0.99,
-            "shared_anchors": [
-              "Identical WPEC source URL and November 24, 2026 publication date",
-              "Sheriff Eric Flowers asked the Vero Beach City Council on Tuesday to reconsider unified emergency dispatch",
-              "The proposal was presented as potential savings in response to Amendment 3 property-tax revenue losses",
-              "Retrieval evidence confirms an exact-source and persistent-story identity match"
-            ],
-            "novel_facts": [],
-            "reason": "The incoming article is the same source report already represented by the canonical. Its additional detail elaborates on the same council discussion, with no evidence of a subsequent decision or other material development.",
-            "validation_errors": []
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 42.307
+        "elapsed_seconds": 44.634
       }
     ]
   }
