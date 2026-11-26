@@ -12,19 +12,19 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Martin County meter data issue leaves customers in 10 communities with high water bills | Martin County meter data issue leaves customers in 10 communities with high water bills | 53 | importance 0; freshness 65.05; urgency 8/10 |
-| 2 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Palm City Evergreen Club home invasion suspect also faces firearm charges | 48 | importance 0; freshness 55.01; urgency 4/10; validated material update |
-| 3 | Palm City Evergreen Club home invasion suspect also faces firearm charges | Stuart warns businesses of fake city invoices seeking thousands in project fees | 45 | importance 0; freshness 71.68; urgency 4/10 |
-| 4 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 42 | importance 0; freshness 76.65; urgency 2/10 |
-| 5 | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 38 | importance 0; freshness 60.06; urgency 2/10 |
-| 6 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | 42 | importance 0; freshness 31.75; urgency 4/10; validated material update; -6 category saturation; -4 county saturation |
+| 1 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Palm City Evergreen Club home invasion suspect also faces firearm charges | 46 | importance 0; freshness 49.84; urgency 4/10; validated material update |
+| 2 | Palm City Evergreen Club home invasion suspect also faces firearm charges | Stuart warns businesses of fake city invoices seeking thousands in project fees | 44 | importance 0; freshness 66.51; urgency 4/10 |
+| 3 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 41 | importance 0; freshness 71.48; urgency 2/10 |
+| 4 | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | 40 | importance 0; freshness 26.57; urgency 4/10; validated material update |
+| 5 | Martin County meter data issue leaves customers in 10 communities with high water bills | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 37 | importance 0; freshness 54.89; urgency 2/10 |
+| 6 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | Martin County meter data issue leaves customers in 10 communities with high water bills | 38 | importance 0; freshness 59.88; urgency 2/10; -6 category saturation; -4 county saturation |
 
 ## Recommended moves
 
-- **Palm City Evergreen Club home invasion suspect also faces firearm charges**: 3 → 2 — importance 0; freshness 55.01; urgency 4/10; validated material update
-- **Stuart warns businesses of fake city invoices seeking thousands in project fees**: 2 → 3 — importance 0; freshness 71.68; urgency 4/10
-- **Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals**: 5 → 6 — importance 0; freshness 31.75; urgency 4/10; validated material update; -6 category saturation; -4 county saturation
-- **FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties**: 6 → 5 — importance 0; freshness 60.06; urgency 2/10
+- **Palm City Evergreen Club home invasion suspect also faces firearm charges**: 2 → 1 — importance 0; freshness 49.84; urgency 4/10; validated material update
+- **Stuart warns businesses of fake city invoices seeking thousands in project fees**: 1 → 2 — importance 0; freshness 66.51; urgency 4/10
+- **Martin County meter data issue leaves customers in 10 communities with high water bills**: 5 → 6 — importance 0; freshness 59.88; urgency 2/10; -6 category saturation; -4 county saturation
+- **FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties**: 6 → 5 — importance 0; freshness 54.89; urgency 2/10
 
 ## Guardrails
 
