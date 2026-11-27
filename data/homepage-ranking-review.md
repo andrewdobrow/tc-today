@@ -12,10 +12,10 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Stuart warns businesses of fake city invoices seeking thousands in project fees | 37 | importance 0; freshness 36.65; urgency 4/10 |
-| 2 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 34 | importance 0; freshness 41.62; urgency 2/10 |
-| 3 | Martin County meter data issue leaves customers in 10 communities with high water bills | Martin County meter data issue leaves customers in 10 communities with high water bills | 31 | importance 0; freshness 30.02; urgency 2/10 |
-| 4 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 29 | importance 0; freshness 25.03; urgency 2/10 |
+| 1 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Stuart warns businesses of fake city invoices seeking thousands in project fees | 36 | importance 0; freshness 31.65; urgency 4/10 |
+| 2 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 32 | importance 0; freshness 36.62; urgency 2/10 |
+| 3 | Martin County meter data issue leaves customers in 10 communities with high water bills | Martin County meter data issue leaves customers in 10 communities with high water bills | 30 | importance 0; freshness 25.02; urgency 2/10 |
+| 4 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 28 | importance 0; freshness 20.03; urgency 2/10 |
 
 ## Recommended moves
 

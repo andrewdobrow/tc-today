@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "2.0",
-  "generated_at": "2026-11-27T13:48:49.307680+00:00",
+  "generated_at": "2026-11-27T16:48:51.343133+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 48,
+    "evaluations": 47,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 48,
+    "no_candidate_passes": 47,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "new_stories_allowed": 0,
     "retroactive_rows_retained": 47,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,22 +81,22 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 3,
+    "pre_generation_materiality_evaluations": 4,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 1,
-    "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 1,
-    "terminal_permalink_candidate_pairs": 12,
-    "terminal_permalink_model_calls": 1,
+    "pre_generation_materiality_duplicates": 2,
+    "pre_generation_materiality_holds": 2,
+    "pre_generation_materiality_model_calls": 4,
+    "pre_generation_materiality_cache_hits": 0,
+    "terminal_permalink_evaluations": 0,
+    "terminal_permalink_candidate_pairs": 0,
+    "terminal_permalink_model_calls": 0,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
     "terminal_permalink_new_authorized": 0,
-    "terminal_permalink_duplicates_blocked": 1,
+    "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0,
     "late_published_skip_materiality_evaluations": 0,
@@ -105,36 +105,75 @@
   "pre_generation_materiality_decisions": [
     {
       "category_key": "local_gov",
-      "source_headline": "Businesses report fake City of Stuart invoice emails seeking thousands in project fees - WPEC",
-      "source_url": "https://cbs12.com/newsletter-daily/businesses-report-fake-city-of-stuart-invoice-emails-seeking-thousands-in-project-fees-florida-news-local-news-florida-crime-stuart-scam",
-      "canonical_slug": "2026-11-25-stuart-warns-businesses-of-fake-city-invoices-seeking-thousands-in-project-fees",
-      "canonical_headline": "Stuart warns businesses of fake city invoices seeking thousands in project fees",
+      "source_headline": "Flood victims demand answers as FEMA delays disaster decision amid millions in damage",
+      "source_url": "https://www.wptv.com/wptv-investigates/flood-victims-demand-answers-as-fema-delays-disaster-decision-amid-millions-in-damage",
+      "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+      "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
       "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.99,
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.88,
       "shared_anchors": [
-        "City of Stuart warning businesses and contractors about fraudulent city invoice emails",
-        "Demands for thousands of dollars in development, building, planning or project-related fees",
-        "Identical WPEC source headline and matching source URL article identifier"
+        "Martin County flood recovery",
+        "Tuesday's Martin County Commission meeting",
+        "Residents seeking help as additional rain threatens"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article repeats the same Stuart scam warning through WPEC's newsletter URL rather than its local-news URL. The later publication date and added payment-verification details do not establish a new incident or material development.",
-      "validation_errors": []
+      "novel_facts": [
+        "FEMA confirmed that the major disaster declaration request remains under review.",
+        "County officials estimate approximately $18 million in known damage.",
+        "Martin County has approximately $1 million in SHIP housing assistance available, with grants up to $25,000.",
+        "The state has promised additional disaster relief funding without confirming its amount or arrival date."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "martin",
-      "source_headline": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595",
+      "source_headline": "Flood victims demand answers as FEMA delays disaster decision amid millions in damage",
+      "source_url": "https://www.wptv.com/wptv-investigates/flood-victims-demand-answers-as-fema-delays-disaster-decision-amid-millions-in-damage",
       "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
       "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.86,
+      "shared_anchors": [
+        "Tuesday's Martin County Commission meeting addressing flood recovery",
+        "Martin County flood victims seeking help while additional rain threatened damaged properties"
+      ],
+      "novel_facts": [
+        "FEMA confirmed that the major disaster declaration request remains under review.",
+        "County officials warned that the absence of federal reimbursement could leave Martin County responsible for millions in recovery costs.",
+        "Approximately $1 million in SHIP housing assistance is available, while additional state disaster funding has no confirmed amount or arrival date.",
+        "Residents challenged commissioners about delays in obtaining financial assistance."
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "37th Stuart Air Show draws big crowds for picture-perfect weekend",
+      "source_url": "https://www.wptv.com/news/treasure-coast/37th-stuart-air-show-draws-big-crowds-for-picture-perfect-weekend",
+      "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+      "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
       "canonical_is_custom": false,
       "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
@@ -147,41 +186,45 @@
       "semantic_action": "duplicate_use_existing_canonical",
       "confidence": 0.98,
       "shared_anchors": [
-        "Martin County commissioners approved $200,000 for a study investigating recent Jensen Beach flooding.",
-        "The investigation concerns whether development and drainage patterns contributed to the flooding."
+        "Same named Stuart Air Show in Stuart",
+        "Coverage dates align with the same November 2026 air-show weekend"
       ],
       "novel_facts": [
-        "The incoming article specifies that the hydraulic model will examine water movement through the Savannas Preserve and questions about Blackwell Reservoir discharges.",
-        "It describes the model's objectives and provides background on a separate county analysis identifying 53 repetitive-loss areas."
+        "Organizers described strong attendance and a possible record Sunday turnout for Veterans Appreciation Day",
+        "Friday night featured a drone and fireworks show",
+        "Attendees shared family traditions and enthusiasm for the C-17 and F-16"
       ],
-      "reason": "Both articles cover the same $200,000 county approval for the Jensen Beach flood investigation. The incoming report adds study scope, explanatory quotations and mitigation background, but reports no new vote, study findings or other consequential development. These details do not establish a material update or an independently newsworthy follow-up.",
+      "reason": "The incoming article recaps the same air show covered by the access guide. Attendance impressions, attendee reactions, weather and entertainment details are routine event color, not a material development or independently newsworthy follow-up.",
       "validation_errors": []
     },
     {
       "category_key": "martin",
-      "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
-      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
-      "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
-      "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+      "source_headline": "Stuart Air Show celebrates 37th year at Witham Field in Martin County",
+      "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-air-show-celebrates-37th-year-at-witham-field-in-martin-county",
+      "canonical_slug": "2026-11-13-stuart-air-show-access-monterey-road-entrances-free-parking-at-witham-field",
+      "canonical_headline": "Stuart Air Show access: Monterey Road entrances, free parking at Witham Field",
       "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.99,
+      "confidence": 0.98,
       "shared_anchors": [
-        "Identical WPTV source URL and matching source headline",
-        "Martin County commissioners approved shifting $200,000 from the stormwater budget to investigate flooding",
-        "Investigation concerns development and drainage changes affecting Jensen Beach",
-        "Cheri Drive flooding and the threat of another foot of rain"
+        "Stuart Air Show at Witham Field in Stuart",
+        "Both articles published November 13, 2026, about the same air-show weekend",
+        "Incoming article explicitly references the traffic, parking and access guide covered by the candidate"
       ],
-      "novel_facts": [],
-      "reason": "The incoming article repeats the same sourced report and commission action already represented by the canonical. Its fuller text supplies details of that report, but there is no evidence of a subsequent decision or other material development. The different publication date alone does not establish a new event or update.",
+      "novel_facts": [
+        "The show is celebrating its 37th year and runs through November 15",
+        "Maj. Taylor Hiester and the F-16 Viper Demonstration Team are participating",
+        "Student STEM activities include lessons on aviation weather"
+      ],
+      "reason": "Both articles cover the same air show. The incoming article adds performer interviews, anniversary framing and educational activities, but no consequential development or independently newsworthy follow-up. These are additional event-preview details rather than grounds for a new URL or material update.",
       "validation_errors": []
     }
   ],
@@ -1125,206 +1168,6 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Fort Pierce boxing gym earns three state champions, second-place team finish",
-      "incoming_source_url": "https://www.wflx.com/2026/11/25/local-boxing-gym-brings-two-cs-community-championships",
-      "incoming_story_id": "story_029671",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.2",
-      "resolution_version": "1.0",
-      "model": "gpt-6.1-sol",
-      "incoming_headline": "Fort Pierce boxing gym earns three state champions, second-place team finish",
-      "incoming_source_url": "https://www.wflx.com/2026/11/25/local-boxing-gym-brings-two-cs-community-championships",
-      "incoming_story_id": "story_029671",
-      "candidates": [
-        {
-          "slug": "2026-11-24-fort-pierce-boxing-gym-wins-three-state-titles-takes-second-overall",
-          "headline": "Fort Pierce boxing gym wins three state titles, takes second overall",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.9743,
-          "retrieval_score": 0.8373,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "shared_locality_and_event_family",
-            "strong_content_event_continuity",
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-23-st-lucie-county-to-consider-port-of-fort-pierce-master-plan-dec-1",
-          "headline": "St. Lucie County to consider Port of Fort Pierce master plan Dec. 1",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5838,
-          "retrieval_score": 0.4498,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-13-fort-pierce-mother-questions-police-response-before-daughters-killing-in-fort-la",
-          "headline": "Fort Pierce mother questions police response before daughter’s killing in Fort Lauderdale",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5207,
-          "retrieval_score": 0.5167,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-11-24-downtown-fort-pierce-merchants-prepare-for-small-business-saturday-shopping-even",
-          "headline": "Downtown Fort Pierce merchants prepare for Small Business Saturday shopping event",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.513,
-          "retrieval_score": 0.476,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-12-fort-pierce-veterans-military-families-honored-at-veterans-day-ceremony",
-          "headline": "Fort Pierce veterans, military families honored at Veterans Day ceremony",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4824,
-          "retrieval_score": 0.4814,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-11-14-driver-killed-in-fort-pierce-i-95-crash-after-fleeing-trooper-southbound-lanes-r",
-          "headline": "Driver killed in Fort Pierce I-95 crash after fleeing trooper; southbound lanes reopen",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4435,
-          "retrieval_score": 0.4365,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-11-23-florida-prepares-second-federal-disaster-request-after-renewed-flooding",
-          "headline": "Florida prepares second federal disaster request after renewed flooding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4297,
-          "retrieval_score": 0.3957,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-11-17-fort-pierce-police-administrative-offices-close-emergency-services-remain-operat",
-          "headline": "Fort Pierce police administrative offices close; emergency services remain operational",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4189,
-          "retrieval_score": 0.4029,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-11-25-stuart-warns-businesses-of-fake-city-invoices-seeking-thousands-in-project-fees",
-          "headline": "Stuart warns businesses of fake city invoices seeking thousands in project fees",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4086,
-          "retrieval_score": 0.3686,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-11-20-port-st-lucie-gets-approval-to-add-contractor-for-swale-liner-backlog",
-          "headline": "Port St. Lucie gets approval to add contractor for swale-liner backlog",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4076,
-          "retrieval_score": 0.3826,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-11-24-indian-river-county-extends-emergency-as-more-rain-threatens-flooded-heritage-pl",
-          "headline": "Heritage Plantation residents seek help as more rain threatens flooded homes",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4054,
-          "retrieval_score": 0.3684,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-11-24-four-arrested-after-evergreen-club-burglary-in-palm-city-residents-asked-to-chec",
-          "headline": "Palm City Evergreen Club home invasion suspect also faces firearm charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3956,
-          "retrieval_score": 0.3556,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-24-fort-pierce-boxing-gym-wins-three-state-titles-takes-second-overall",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [
-          "A Future Worth Fighting 4 boxing gym in Fort Pierce",
-          "2026 Florida State Police Athletic League tournament",
-          "Three state champions, one silver medalist and second place overall"
-        ],
-        "novel_facts": [
-          "The incoming text adds the gym's daily school-attendance requirement and owner Darrion Henry's teaching role at Dan McCarty.",
-          "The incoming text includes athlete testimonials and Frantzner Jean's first-fight unanimous-decision win."
-        ],
-        "reason": "Both articles report the same gym's identical results at the same tournament. The added participation rules and athlete anecdotes provide background and color, not a material subsequent development or independently newsworthy follow-up.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-11-24-fort-pierce-boxing-gym-wins-three-state-titles-takes-second-overall",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.99,
-        "shared_anchors": [
-          "A Future Worth Fighting 4 boxing gym in Fort Pierce",
-          "2026 Florida State Police Athletic League tournament",
-          "Three state champions, one silver medalist and second place overall"
-        ],
-        "novel_facts": [
-          "The incoming text adds the gym's daily school-attendance requirement and owner Darrion Henry's teaching role at Dan McCarty.",
-          "The incoming text includes athlete testimonials and Frantzner Jean's first-fight unanimous-decision win."
-        ],
-        "reason": "Both articles report the same gym's identical results at the same tournament. The added participation rules and athlete anecdotes provide background and color, not a material subsequent development or independently newsworthy follow-up.",
-        "validation_errors": [],
-        "consistency_repairs": []
-      }
     }
   ],
   "archive_repairs": [],
@@ -1332,10 +1175,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 9,
+    "directives_considered": 8,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_019789",
