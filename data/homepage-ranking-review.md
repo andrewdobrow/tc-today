@@ -12,19 +12,16 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Palm City Evergreen Club home invasion suspect also faces firearm charges | 45 | importance 0; freshness 43.28; urgency 4/10; validated material update |
-| 2 | Palm City Evergreen Club home invasion suspect also faces firearm charges | Stuart warns businesses of fake city invoices seeking thousands in project fees | 42 | importance 0; freshness 59.95; urgency 4/10 |
-| 3 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 39 | importance 0; freshness 64.92; urgency 2/10 |
-| 4 | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | Florida's Turnpike lanes reopen after Martin County crash sends five to hospitals | 39 | importance 0; freshness 20.02; urgency 4/10; validated material update |
-| 5 | Martin County meter data issue leaves customers in 10 communities with high water bills | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 35 | importance 0; freshness 48.33; urgency 2/10 |
-| 6 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | Martin County meter data issue leaves customers in 10 communities with high water bills | 37 | importance 0; freshness 53.32; urgency 2/10; -6 category saturation; -4 county saturation |
+| 1 | Stuart warns businesses of fake city invoices seeking thousands in project fees | Palm City Evergreen Club home invasion suspect also faces firearm charges | 44 | importance 0; freshness 38.39; urgency 4/10; validated material update |
+| 2 | Palm City Evergreen Club home invasion suspect also faces firearm charges | Stuart warns businesses of fake city invoices seeking thousands in project fees | 41 | importance 0; freshness 55.06; urgency 4/10 |
+| 3 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 38 | importance 0; freshness 60.03; urgency 2/10 |
+| 4 | Martin County meter data issue leaves customers in 10 communities with high water bills | Martin County meter data issue leaves customers in 10 communities with high water bills | 36 | importance 0; freshness 48.43; urgency 2/10 |
+| 5 | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties | 34 | importance 0; freshness 43.44; urgency 2/10 |
 
 ## Recommended moves
 
-- **Palm City Evergreen Club home invasion suspect also faces firearm charges**: 2 → 1 — importance 0; freshness 43.28; urgency 4/10; validated material update
-- **Stuart warns businesses of fake city invoices seeking thousands in project fees**: 1 → 2 — importance 0; freshness 59.95; urgency 4/10
-- **Martin County meter data issue leaves customers in 10 communities with high water bills**: 5 → 6 — importance 0; freshness 53.32; urgency 2/10; -6 category saturation; -4 county saturation
-- **FEMA aid opens for flood-hit residents in Indian River, Martin and St. Lucie counties**: 6 → 5 — importance 0; freshness 48.33; urgency 2/10
+- **Palm City Evergreen Club home invasion suspect also faces firearm charges**: 2 → 1 — importance 0; freshness 38.39; urgency 4/10; validated material update
+- **Stuart warns businesses of fake city invoices seeking thousands in project fees**: 1 → 2 — importance 0; freshness 55.06; urgency 4/10
 
 ## Guardrails
 
