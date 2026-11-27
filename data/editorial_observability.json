@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-11-27T11:49:01Z",
+  "generated_at": "2026-11-27T13:49:45Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,23 +49,23 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 190,
+    "candidates_processed": 197,
     "routes": {
-      "generate_new": 45,
-      "skip": 145
+      "generate_new": 28,
+      "skip": 169
     },
     "eligibility": {
-      "listing": 2,
-      "low_value": 150,
-      "publishable": 38
+      "listing": 3,
+      "low_value": 154,
+      "publishable": 40
     },
     "source_classes": {
-      "aggregator": 152,
-      "local_news": 27,
-      "regional_news": 9,
+      "aggregator": 157,
+      "local_news": 28,
+      "regional_news": 10,
       "unknown": 2
     },
-    "rejected_count": 2,
+    "rejected_count": 3,
     "rejected_examples": [
       {
         "headline": "12778 SW Forli Way, Port Saint Lucie, FL 34987 - Realtor.com",
@@ -84,25 +84,36 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
+      },
+      {
+        "headline": "6413 S Header Canal Rd, Port Saint Lucie, FL 34987 [Updated 11/25] - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNX0JONTNOaHoyNVRKV0tSSVlGckZVZm1hWTRlTklLaGFyS2ctV21xRzNqbzIzV1ZYVkhnOXlYVzVLbXFOTk53dUJleWItNmIya00xNHJlSGxyRVI4TU1ScEVGaVpkZEhpVFY4Zm4zVFFyWV90Rmp5LTlxaGRYdlowSW1WSzFkcGk2N0Z6X05PTGwyeFZpMGppM05ab3E5ZkVjX00tbXQxMmdCX0Nv?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 41,
-      "same_event": 149
+      "new_story": 29,
+      "same_event": 168
     },
     "examples": [
       {
         "story_id": "story_030062",
         "title": "Trump Marks Thanksgiving by Signing Florida Flood Relief - Newsmax",
         "event_key": "unknown-event-38d43a6336",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -139,10 +150,11 @@
         "event_key": "unknown-event-3c6534bc6b",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMipgFBVV95cUxPdHJFSjBlOWxZOGZiQjd2MDVQTUJtQTVMNU9ydVRTNjQ5Y2JmcGpNdVdMZkZfUXFSNGNvUzJfS3lpdFZvNWZyc25IbGQyakxjREJoVlVhOFNMdUpCa1gyeWRnZVVXb1B5Ylk5ek8teF9QOVNtSFczRHYtUDkzYTRvY3V1QWg3OVFSazNqdEZfdUhQWU1WZzlNMjBSalhHeENhSnMwdmpB",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -332,12 +344,14 @@
         "story_id": "story_030063",
         "title": "YNW Melly murder retrial set for jury selection in January - Sun Sentinel",
         "event_key": "unknown-event-7177db021e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -374,13 +388,15 @@
         "story_id": "story_030062",
         "title": "Trump Marks Thanksgiving by Signing Florida Flood Relief - Newsmax",
         "event_key": "unknown-event-38d43a6336",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -420,10 +436,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMipgFBVV95cUxPdHJFSjBlOWxZOGZiQjd2MDVQTUJtQTVMNU9ydVRTNjQ5Y2JmcGpNdVdMZkZfUXFSNGNvUzJfS3lpdFZvNWZyc25IbGQyakxjREJoVlVhOFNMdUpCa1gyeWRnZVVXb1B5Ylk5ek8teF9QOVNtSFczRHYtUDkzYTRvY3V1QWg3OVFSazNqdEZfdUhQWU1WZzlNMjBSalhHeENhSnMwdmpB",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -626,13 +643,15 @@
         "story_id": "story_030063",
         "title": "YNW Melly murder retrial set for jury selection in January - Sun Sentinel",
         "event_key": "unknown-event-7177db021e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -677,61 +696,59 @@
       "new_story": 1
     },
     "milestones": {
-      "approval": 1
+      "opening": 1
     },
     "reason_codes": {
       "entity_match": 1,
       "identity_anchor_qualified": 1,
       "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 1
+      "novel_milestone": 1
     },
     "examples": [
       {
-        "headline": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
-        "event_key": "unknown-event-32785dde21",
-        "current_story_id": "story_030092",
+        "headline": "Max & Louie's Diner Opens First Florida Location in Port St. Lucie - Hoodline",
+        "event_key": "unknown-event-3f79cdd67d",
+        "current_story_id": "story_030123",
         "current_relationship": "new_story",
-        "candidate_story_id": "story_026169",
-        "candidate_confidence": 0.64,
+        "candidate_story_id": "story_027961",
+        "candidate_confidence": 0.63,
         "candidate_milestones": [
-          "approval"
+          "opening"
         ],
         "candidate_reason_codes": [
           "novel_milestone",
           "location_match",
           "entity_match",
-          "title_continuity",
           "identity_anchor_qualified"
         ],
         "candidate_trace": [
           "Follow-up candidate mode: observe_only",
-          "Candidate story: story_026169",
-          "Novel milestones: approval",
+          "Candidate story: story_027961",
+          "Novel milestones: opening",
           "Exact event-key anchor: False",
           "Facts overlap: 0.00",
-          "Title overlap: 0.40",
+          "Title overlap: 0.30",
           "Location match: True",
           "Agency match: False",
           "Event type match: False",
           "Entity match: True",
           "Agency conflict: False",
           "Event type conflict: False",
-          "Candidate confidence: 0.64"
+          "Candidate confidence: 0.63"
         ]
       }
     ],
-    "retrospective_candidate_count": 11,
+    "retrospective_candidate_count": 12,
     "retrospective_high_confidence_candidate_count": 6,
     "retrospective_activation_eligible_candidate_count": 5,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 334,
-      "timeline_entries_examined": 966,
-      "transitions_examined": 592,
+      "stories_with_timelines": 330,
+      "timeline_entries_examined": 962,
+      "transitions_examined": 591,
       "candidate_scope": "distinct_article_transitions",
-      "candidate_count": 11,
+      "candidate_count": 12,
       "high_confidence_candidate_count": 6,
       "activation_eligible_candidate_count": 5,
       "same_source_evolution_count": 4,
@@ -884,9 +901,9 @@
           }
         }
       ],
-      "identity_anchor_rejected_count": 5,
-      "incoherent_transition_count": 5,
-      "incoherent_story_count": 5,
+      "identity_anchor_rejected_count": 6,
+      "incoherent_transition_count": 6,
+      "incoherent_story_count": 6,
       "incoherent_stories": [
         {
           "story_id": "story_026946",
@@ -1068,9 +1085,45 @@
               "prior_title_overlap": 0.333333
             }
           ]
+        },
+        {
+          "story_id": "story_028286",
+          "story_title": "'WE NEED HELP': Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "transition_count": 1,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 1
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-c2e280e0fbd49119b8d0",
+                "event_key": "fire-jensen-beach-92a06898e5",
+                "published_at": "2026-11-19T02:41:53.380689+00:00",
+                "title": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+                "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+                "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain"
+              },
+              "newer_article": {
+                "article_id": "rss-a0224522a84650a142d9",
+                "event_key": "unknown-event-32785dde21",
+                "published_at": "2026-11-27T11:42:00.270311+00:00",
+                "title": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
+                "source": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595",
+                "url": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595"
+              },
+              "milestones": [
+                "approval"
+              ],
+              "identity_anchor_codes": [
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.1
+            }
+          ]
         }
       ],
       "milestones": {
+        "approval": 1,
         "arrest": 1,
         "closure": 2,
         "death": 3,
@@ -1081,13 +1134,13 @@
       "blocking_conflicts": {
         "event_family_conflict": 2,
         "same_timestamp_order_uncertain": 2,
-        "timeline_identity_unanchored": 5,
-        "weak_title_continuity": 1
+        "timeline_identity_unanchored": 6,
+        "weak_title_continuity": 2
       },
-      "excluded_entry_count": 41,
+      "excluded_entry_count": 42,
       "exclusion_reasons": {
         "insufficient_title_detail": 6,
-        "social_source": 35
+        "social_source": 36
       },
       "examples": [
         {
@@ -1804,6 +1857,71 @@
           ]
         },
         {
+          "story_id": "story_028286",
+          "story_title": "'WE NEED HELP': Martin County flood victims fear more devastation as county braces for another foot of rain",
+          "milestones": [
+            "approval"
+          ],
+          "matched_phrases": {
+            "approval": [
+              "approves"
+            ]
+          },
+          "confidence": 0.61,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [
+            "martin"
+          ],
+          "blocking_conflicts": [
+            "weak_title_continuity",
+            "timeline_identity_unanchored"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "identity_anchor_missing",
+            "chronology_supported",
+            "timeline_incoherent"
+          ],
+          "prior_title_overlap": 0.1,
+          "canonical_title_overlap": 0.1,
+          "prior_article": {
+            "article_id": "rss-c2e280e0fbd49119b8d0",
+            "event_key": "fire-jensen-beach-92a06898e5",
+            "published_at": "2026-11-19T02:41:53.380689+00:00",
+            "title": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain"
+          },
+          "newer_article": {
+            "article_id": "rss-a0224522a84650a142d9",
+            "event_key": "unknown-event-32785dde21",
+            "published_at": "2026-11-27T11:42:00.270311+00:00",
+            "title": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
+            "source": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595",
+            "url": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_028286",
+            "Novel milestones: approval",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: identity_anchor_missing",
+            "Prior title overlap: 0.10",
+            "Canonical title overlap (context only): 0.10",
+            "Same timestamp: False",
+            "Blocking conflicts: weak_title_continuity, timeline_identity_unanchored",
+            "Candidate confidence: 0.61",
+            "Activation eligible: False"
+          ]
+        },
+        {
           "story_id": "story_026946",
           "story_title": "Martin County firefighters raise staffing concerns after it says hiring class canceled - WPEC",
           "milestones": [
@@ -1876,27 +1994,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 627,
-      "treasure_coast_local": 409,
-      "treasure_coast_region": 151,
-      "unknown": 1390
+      "florida": 629,
+      "treasure_coast_local": 411,
+      "treasure_coast_region": 145,
+      "unknown": 1388
     },
-    "average_score": 56.13
+    "average_score": 56.1
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 627,
-      "treasure_coast_local": 409,
-      "treasure_coast_region": 151,
-      "unknown": 1390
+      "florida": 629,
+      "treasure_coast_local": 411,
+      "treasure_coast_region": 145,
+      "unknown": 1388
     },
     "average_priority": 2.25
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1537,
-      "developing": 69,
-      "ongoing": 971
+      "active": 1530,
+      "breaking": 2,
+      "developing": 64,
+      "ongoing": 977
     }
   },
   "registry_health": {
@@ -1935,18 +2054,18 @@
     "remaining_unified_incident_groups": 0,
     "generated_at": "2026-11-27T11:41:12Z",
     "quarantined_story_records_retained": 5265,
-    "active_story_count": 2577
+    "active_story_count": 2573
   },
   "stories": {
-    "total": 2577,
+    "total": 2573,
     "importance_levels": {
-      "breaking": 2,
-      "high": 33,
-      "normal": 253,
-      "low": 2289,
+      "breaking": 3,
+      "high": 34,
+      "normal": 249,
+      "low": 2287,
       "archived": 0
     },
-    "average_importance": 5.47,
+    "average_importance": 5.49,
     "top": [
       {
         "story_id": "story_027961",
@@ -1961,7 +2080,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.01
+          "age_hours": 50.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2006,7 +2125,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-25T11:41:49.846940+00:00",
-          "hours_since_update": 48.01,
+          "hours_since_update": 50.01,
           "event_count": 23,
           "timeline_entries": 23
         }
@@ -2024,7 +2143,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 120.0
+          "age_hours": 122.0
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2070,9 +2189,71 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T11:41:58.634063+00:00",
-          "hours_since_update": 120.0,
+          "hours_since_update": 122.0,
           "event_count": 2,
           "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_029957",
+        "title": "1 dead, 1 seriously injured in wrong-way crash on I-95 in northern Palm Beach County on Thanksgiving morning",
+        "score": 100,
+        "editorial_priority": 62,
+        "editorial_score": 62,
+        "score_breakdown": {
+          "score": 62,
+          "importance": 100,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.02
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "serious_injury",
+            "label": "Serious injury reported",
+            "points": 30
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "breaking",
+          "reason": "Breaking importance with a current or undated update",
+          "last_updated": "2026-11-27T13:42:15.980427+00:00",
+          "hours_since_update": 0.02,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -2088,7 +2269,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 112.0
+          "age_hours": 114.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2131,71 +2312,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T19:42:13.208349+00:00",
-          "hours_since_update": 112.0,
+          "hours_since_update": 114.0,
           "event_count": 3,
           "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_029957",
-        "title": "1 dead, 1 seriously injured in wrong-way crash on I-95 in northern Palm Beach County on Thanksgiving morning",
-        "score": 100,
-        "editorial_priority": 59,
-        "editorial_score": 59,
-        "score_breakdown": {
-          "score": 59,
-          "importance": 100,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 14.01
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "serious_injury",
-            "label": "Serious injury reported",
-            "points": 30
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-11-26T21:41:57.612488+00:00",
-          "hours_since_update": 14.01,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -2211,7 +2330,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 163.0
+          "age_hours": 165.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2254,61 +2373,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-20T16:42:16.290882+00:00",
-          "hours_since_update": 163.0,
+          "hours_since_update": 165.0,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_029478",
-        "title": "West Boca Raton neighbors clean up after EF-1 tornado damages homes, cars",
-        "score": 60,
-        "editorial_priority": 55,
-        "editorial_score": 55,
-        "score_breakdown": {
-          "score": 55,
-          "importance": 60,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 71.99
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "weather_emergency",
-            "label": "Weather emergency",
-            "points": 35
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-11-24T11:42:58.636048+00:00",
-          "hours_since_update": 71.99,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -2324,7 +2391,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 64.0
+          "age_hours": 66.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2362,7 +2429,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-24T19:42:17.486787+00:00",
-          "hours_since_update": 64.0,
+          "hours_since_update": 66.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2380,7 +2447,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 110.0
+          "age_hours": 112.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2424,7 +2491,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T21:42:13.135439+00:00",
-          "hours_since_update": 110.0,
+          "hours_since_update": 112.0,
           "event_count": 36,
           "timeline_entries": 36
         }
@@ -2442,7 +2509,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 307.0
+          "age_hours": 309.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2484,7 +2551,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 307.0,
+          "hours_since_update": 309.0,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2502,7 +2569,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 115.0
+          "age_hours": 117.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2545,7 +2612,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-11-22T16:42:01.366128+00:00",
-          "hours_since_update": 115.0,
+          "hours_since_update": 117.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2563,7 +2630,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 331.0
+          "age_hours": 333.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2606,7 +2673,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-13T16:42:15.782531+00:00",
-          "hours_since_update": 331.0,
+          "hours_since_update": 333.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2624,7 +2691,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 307.0
+          "age_hours": 309.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2668,7 +2735,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-14T16:42:05.868159+00:00",
-          "hours_since_update": 307.0,
+          "hours_since_update": 309.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2686,7 +2753,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 329.72
+          "age_hours": 331.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2729,7 +2796,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 329.72,
+          "hours_since_update": 331.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2747,7 +2814,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 80.99
+          "age_hours": 82.99
         },
         "level": "high",
         "importance_reasons": [
@@ -2786,7 +2853,59 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-24T02:42:35.119839+00:00",
-          "hours_since_update": 80.99,
+          "hours_since_update": 82.99,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_029478",
+        "title": "West Boca Raton neighbors clean up after EF-1 tornado damages homes, cars",
+        "score": 60,
+        "editorial_priority": 45,
+        "editorial_score": 45,
+        "score_breakdown": {
+          "score": 45,
+          "importance": 60,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 73.99
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "weather_emergency",
+            "label": "Weather emergency",
+            "points": 35
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
+          "last_updated": "2026-11-24T11:42:58.636048+00:00",
+          "hours_since_update": 73.99,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2804,7 +2923,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 329.72
+          "age_hours": 331.72
         },
         "level": "high",
         "importance_reasons": [
@@ -2842,7 +2961,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-11-13T17:58:52.126316+00:00",
-          "hours_since_update": 329.72,
+          "hours_since_update": 331.72,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2860,7 +2979,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 204.0
+          "age_hours": 206.0
         },
         "level": "high",
         "importance_reasons": [
@@ -2906,7 +3025,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-11-18T23:42:23.425820+00:00",
-          "hours_since_update": 204.0,
+          "hours_since_update": 206.0,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -2924,7 +3043,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.01
+          "age_hours": 50.01
         },
         "level": "normal",
         "importance_reasons": [
@@ -2958,9 +3077,65 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-11-25T11:41:49.846940+00:00",
-          "hours_since_update": 48.01,
+          "hours_since_update": 50.01,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_028286",
+        "title": "'WE NEED HELP': Martin County flood victims fear more devastation as county braces for another foot of rain",
+        "score": 35,
+        "editorial_priority": 40,
+        "editorial_score": 40,
+        "score_breakdown": {
+          "score": 40,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 2.04
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Jensen Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 5,
+        "timeline_entries": 5,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 5,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-11-27T11:42:00.270311+00:00",
+          "hours_since_update": 2.04,
+          "event_count": 5,
+          "timeline_entries": 5
         }
       },
       {
@@ -2976,7 +3151,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 19.05
+          "age_hours": 21.01
         },
         "level": "high",
         "importance_reasons": [
@@ -3010,7 +3185,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-11-26T16:41:46.958556+00:00",
-          "hours_since_update": 19.05,
+          "hours_since_update": 21.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3028,7 +3203,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 19.06
+          "age_hours": 21.06
         },
         "level": "normal",
         "importance_reasons": [
@@ -3066,65 +3241,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-11-26T16:41:46.958556+00:00",
-          "hours_since_update": 19.06,
+          "hours_since_update": 21.06,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_028549",
-        "title": "Recent rainfall worsens Hurricane Milton damage at Port St. Lucie home - WPTV",
-        "score": 45,
-        "editorial_priority": 36,
-        "editorial_score": 36,
-        "score_breakdown": {
-          "score": 36,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 153.0
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "weather_emergency",
-            "label": "Weather emergency",
-            "points": 35
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-11-21T02:42:22.808106+00:00",
-          "hours_since_update": 153.0,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       }
     ]
@@ -3132,7 +3251,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-11-27T11:45:55Z",
+    "generated_at": "2026-11-27T13:46:06Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3147,28 +3266,28 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
+        "category_eligibility_archive_recovery": 4,
         "generated_live": 1,
         "generation_failed_archive_recovery": 2,
-        "no_publishable_sources": 1
+        "no_publishable_sources": 2
       },
       "failures": {
         "article_framing_integrity": 2,
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 4
       },
       "model_attempt_count": 5,
-      "model_elapsed_seconds": 68.931,
+      "model_elapsed_seconds": 68.208,
       "archive_recovery_requested_count": 8,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 4,
       "category_eligibility_rejection_count": 0,
-      "published_story_duplicate_suppression_count": 16,
+      "published_story_duplicate_suppression_count": 20,
       "story_aware_update_context_count": 0,
-      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 1
     },
     "categories": [
       {
@@ -3186,23 +3305,23 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.328,
+            "elapsed_seconds": 14.591,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead,generated_copy_drifted_from_source_focus — Vero Beach to calculate dispatch spending, seek countywide service estimate"
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Vero Beach to compare dispatch costs as officials prepare for property tax cuts"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.907,
+            "elapsed_seconds": 14.334,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Vero Beach seeks cost estimates for countywide 911 dispatch as tax cuts loom"
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Vero Beach seeks cost estimates for joining countywide 911 dispatch"
           }
         ],
-        "model_elapsed_seconds": 37.235,
+        "model_elapsed_seconds": 28.925,
         "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Vero Beach seeks cost estimates for countywide 911 dispatch as tax cuts loom",
+        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Vero Beach seeks cost estimates for joining countywide 911 dispatch",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3289,7 +3408,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 52.733
+        "elapsed_seconds": 46.562
       },
       {
         "category_key": "crime",
@@ -3327,7 +3446,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.12
+        "elapsed_seconds": 18.232
       },
       {
         "category_key": "business",
@@ -3567,23 +3686,23 @@
           }
         ],
         "new_publication_stale_rejected_count": 4,
-        "elapsed_seconds": 19.055
+        "elapsed_seconds": 20.916
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "no_publishable_sources",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
+        "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "",
-        "failure_summary": "",
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Sports category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3613,7 +3732,8 @@
           "available_this_run": 2
         },
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.001
+        "sports_editorial_source_rejections": [],
+        "elapsed_seconds": 12.193
       },
       {
         "category_key": "things_to_do",
@@ -3651,23 +3771,23 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.746
+        "elapsed_seconds": 11.904
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "category_eligibility_archive_recovery",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
+        "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
         "attempts": [],
         "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Florida category eligibility contract",
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3676,7 +3796,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -3689,28 +3809,21 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.722
+        "elapsed_seconds": 14.375
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "status": "no_publishable_sources",
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 12.597,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 12.597,
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3721,11 +3834,51 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595",
+            "editorial_story_id": "story_028286",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves $200,000 study to address Jensen Beach flooding - Yahoo",
+            "source_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOY1RmNWVqNHBrMHp2VkswYV96MU16bWNRc0xlTnJHN2JSang3TS1ValVXLUNMSl93OGRwbDN2VWJjSktMNnA3c0trSnEzUEZLeVl2aDF4RV9xRGpZYkhXZFJfOEV0cV9YWm9tV1dGZ0ZFOEtqUTJBNjg2MUhOVzJXVWhWOXRfUQ",
+            "editorial_story_id": "story_028286",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+            "editorial_story_id": "story_028286",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Businesses report fake City of Stuart invoice emails seeking thousands in project fees - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQZVB6alZjMzJJWW00OFNXbFpiWS1CeTlGMDZlall4MjItQk04WkZBaGpyMmVha1d4NUozTFE3YWVBNEFXQkNMSFdMdXVWNWROMF9BVUdYTUE5blVnTW1wWklSa0hGQ29kd1ZoQWRTaHY2RWpDN19mZEhpNnc1akd3QlY3YmNuSGNGekhiUEY4dkV1b19uYTZvREprUUY1bmp1UW5LWnVLc1BEMUNFQUhuc05iZmhCZ1ZnU3R1R2ZFUWkzYUg4YXFsQXNnNEdidE1jWVhlV0djNXlWSDRRalYyM2R1WnpSYXZVZU9qMXZUZ3ZSSFZ0WVhYanV6Z3FqSmszWmc",
+            "editorial_story_id": "story_029873",
+            "canonical_slug": "2026-11-25-stuart-warns-businesses-of-fake-city-invoices-seeking-thousands-in-project-fees",
+            "canonical_headline": "Stuart warns businesses of fake city invoices seeking thousands in project fees",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Businesses report fake City of Stuart invoice emails seeking thousands in project fees - WPEC",
@@ -3759,11 +3912,96 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves $200,000 study to address Jensen Beach flooding - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-flooding-damage-study-rain-county-fema/74542595",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Martin County commissioners approved $200,000 for a study investigating recent Jensen Beach flooding.",
+              "The investigation concerns whether development and drainage patterns contributed to the flooding."
+            ],
+            "novel_facts": [
+              "The incoming article specifies that the hydraulic model will examine water movement through the Savannas Preserve and questions about Blackwell Reservoir discharges.",
+              "It describes the model's objectives and provides background on a separate county analysis identifying 53 repetitive-loss areas."
+            ],
+            "reason": "Both articles cover the same $200,000 county approval for the Jensen Beach flood investigation. The incoming report adds study scope, explanatory quotations and mitigation background, but reports no new vote, study findings or other consequential development. These details do not establish a material update or an independently newsworthy follow-up.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County approves $200,000 study to address Jensen Beach flooding - Yahoo",
+            "source_url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOY1RmNWVqNHBrMHp2VkswYV96MU16bWNRc0xlTnJHN2JSang3TS1ValVXLUNMSl93OGRwbDN2VWJjSktMNnA3c0trSnEzUEZLeVl2aDF4RV9xRGpZYkhXZFJfOEV0cV9YWm9tV1dGZ0ZFOEtqUTJBNjg2MUhOVzJXVWhWOXRfUQ",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Martin County flood victims fear more devastation as county braces for another foot of rain - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/we-need-help-martin-county-flood-victims-fear-more-devastation-as-county-braces-for-another-foot-of-rain",
+            "canonical_slug": "2026-11-18-martin-county-approves-200000-flood-investigation-as-more-rain-threatens-jensen",
+            "canonical_headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.99,
+            "shared_anchors": [
+              "Identical WPTV source URL and matching source headline",
+              "Martin County commissioners approved shifting $200,000 from the stormwater budget to investigate flooding",
+              "Investigation concerns development and drainage changes affecting Jensen Beach",
+              "Cheri Drive flooding and the threat of another foot of rain"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article repeats the same sourced report and commission action already represented by the canonical. Its fuller text supplies details of that report, but there is no evidence of a subsequent decision or other material development. The different publication date alone does not establish a new event or update.",
+            "validation_errors": []
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Businesses report fake City of Stuart invoice emails seeking thousands in project fees - cw34.com",
+            "source_url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxQZVB6alZjMzJJWW00OFNXbFpiWS1CeTlGMDZlall4MjItQk04WkZBaGpyMmVha1d4NUozTFE3YWVBNEFXQkNMSFdMdXVWNWROMF9BVUdYTUE5blVnTW1wWklSa0hGQ29kd1ZoQWRTaHY2RWpDN19mZEhpNnc1akd3QlY3YmNuSGNGekhiUEY4dkV1b19uYTZvREprUUY1bmp1UW5LWnVLc1BEMUNFQUhuc05iZmhCZ1ZnU3R1R2ZFUWkzYUg4YXFsQXNnNEdidE1jWVhlV0djNXlWSDRRalYyM2R1WnpSYXZVZU9qMXZUZ3ZSSFZ0WVhYanV6Z3FqSmszWmc",
+            "canonical_slug": "2026-11-25-stuart-warns-businesses-of-fake-city-invoices-seeking-thousands-in-project-fees",
+            "canonical_headline": "Stuart warns businesses of fake city invoices seeking thousands in project fees",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Businesses report fake City of Stuart invoice emails seeking thousands in project fees - WPEC",
@@ -3811,27 +4049,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Martin County approves $200,000 study of Jensen Beach flooding and future risks",
-        "generated_card_count": 0,
-        "elapsed_seconds": 28.128
+        "elapsed_seconds": 22.912
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 25,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed St. Lucie County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 16.645,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 16.645,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3840,7 +4081,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
@@ -3905,7 +4146,11 @@
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 9.258
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Fort Pierce boxing gym earns three state champions, second-place team finish",
+        "generated_card_count": 0,
+        "elapsed_seconds": 33.412
       },
       {
         "category_key": "indian_river",
@@ -3913,7 +4158,7 @@
         "status": "generation_failed_archive_recovery",
         "fetched_candidate_count": 26,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 8,
+        "publishable_source_count": 5,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3922,7 +4167,7 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.074,
+            "elapsed_seconds": 10.629,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
             "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County officials form Task Force 3 to help residents claim property tax relief"
@@ -3930,15 +4175,15 @@
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.025,
+            "elapsed_seconds": 12.009,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County forms Task Force 3 to help residents claim property tax relief"
+            "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County officials form Task Force 3 to help residents claim property tax relief"
           }
         ],
-        "model_elapsed_seconds": 19.099,
+        "model_elapsed_seconds": 22.638,
         "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County forms Task Force 3 to help residents claim property tax relief",
+        "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Indian River County officials form Task Force 3 to help residents claim property tax relief",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3947,7 +4192,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
@@ -3989,7 +4234,7 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "failed",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 38.861
+        "elapsed_seconds": 36.264
       }
     ]
   }
