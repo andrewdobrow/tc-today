@@ -32478,9 +32478,20 @@ def _cross_source_same_event_evidence(
             shared_named_people=len(shared_people),
             shared_precise_locations=len(shared_precise),
             shared_agencies=len(shared_agencies),
+            # A shared topic is candidate retrieval evidence, not a policy subject.
+            # Preserve very close, contemporaneous headline paraphrases (e.g.
+            # reordered attendance-zone decisions) without inventing subject
+            # continuity for different actions arising from one disaster.
             shared_subject_phrases=(
                 len(shared_subjects)
-                or (1 if len(shared_topic_core) >= 2 else 0)
+                or int(
+                    day_gap is not None
+                    and day_gap <= 2
+                    and len(shared_topic_core) >= 2
+                    and shared_topic_core
+                    == (set(left_features.get("headline_topic_tokens") or ()) - topic_generic)
+                    == (set(right_features.get("headline_topic_tokens") or ()) - topic_generic)
+                )
             ),
             shared_headline_topic_core=len(shared_topic_core),
             shared_distinctive_facts=len(shared_distinctive),
@@ -40090,6 +40101,16 @@ def _published_skip_canonical(item, archive):
             and _source_identity_titles_compatible(item, entry)
         ):
             corroborated.append((entry, "exact_source_and_persistent_story_skip"))
+            continue
+        # A persistent registry ID and a legacy fuzzy match cannot suppress
+        # a different-source public-policy development without independent proof.
+        # In particular, shared disaster context cannot establish the same action.
+        pair_evidence = _cross_source_same_event_evidence(item, entry, allow_custom=True)
+        policy_pair = (
+            "public-policy" in set(_cross_source_feature_bundle(item).get("event_families") or ())
+            and "public-policy" in set(_cross_source_feature_bundle(entry).get("event_families") or ())
+        )
+        if policy_pair and not pair_evidence.get("write_authorized"):
             continue
         if _same_event_items(item, entry):
             corroborated.append((entry, "same_event_and_persistent_story_skip"))
