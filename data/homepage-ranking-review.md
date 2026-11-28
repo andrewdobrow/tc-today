@@ -4,15 +4,16 @@
 
 ## Hero
 
-- Current: **Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries**
-- Recommended: **Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries**
+- Current: **Applications open for free temporary RV housing for Martin County flood survivors**
+- Recommended: **Applications open for free temporary RV housing for Martin County flood survivors**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 42.36; urgency 2/10; validated material update |
+| 1 | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | 45 | importance 0; freshness 90.2; urgency 2/10 |
+| 2 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 41.8; urgency 2/10; validated material update |
 
 ## Recommended moves
 
