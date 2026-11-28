@@ -323,3 +323,98 @@ def test_precise_location_composite_remains_authorized_with_two_shared_headline_
 
     assert decision.write_authorized is True
     assert decision.proof_type == "precise_location_plus_distinctive_facts"
+
+
+def _flood_policy_pair():
+    from datetime import date
+
+    common = {
+        "identity_origin": "source_derived",
+        "locality": {"martin-county", "jensen-beach"},
+        "event_families": {"public-policy"},
+        "agencies": {"martin-county-commission"},
+        "distinctive_tokens": {f"background-{i}" for i in range(55)},
+        "people": set(),
+        "precise_locations": set(),
+    }
+    incoming = {
+        "headline": "Martin County flood victims can now apply for free temporary housing through nonprofit",
+        "source_url": "https://example.com/temporary-housing",
+        "article_text": "EmergencyRV applications are open for displaced residents of Martin County.",
+        "date": "2026-11-27",
+    }
+    canonical = {
+        "headline": "Martin County approves $200,000 flood investigation as more rain threatens Jensen Beach",
+        "slug": "2026-11-18-martin-county-flood-investigation",
+        "source_url": "https://example.com/flood-investigation",
+        "date": "2026-11-18",
+        "editorial_story_id": "story_028286",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    incoming_features = dict(
+        common, date=date(2026, 11, 27),
+        subject_phrases={"free-temporary-housing"},
+        headline_topic_tokens={"flood", "victim", "apply", "free", "temporary", "housing", "nonprofit"},
+    )
+    canonical_features = dict(
+        common, date=date(2026, 11, 18),
+        subject_phrases={"flood-investigation-funding"},
+        headline_topic_tokens={"flood", "victim", "investigation", "rain", "funding"},
+    )
+    return incoming, canonical, incoming_features, canonical_features
+
+
+def test_shared_disaster_context_cannot_bind_separate_public_policy_action():
+    g = _load_generate()
+    incoming, canonical, left, right = _flood_policy_pair()
+    evidence = g._cross_source_same_event_evidence(
+        incoming, canonical, left_features=left, right_features=right
+    )
+    assert evidence["shared_subject_phrases"] == []
+    assert evidence["write_authorized"] is False
+    assert evidence["matched"] is False
+    assert evidence["identity_outcome"] == "possible_relationship"
+
+
+def test_shared_disaster_context_cannot_suppress_via_stale_registry_skip(monkeypatch):
+    g = _load_generate()
+    incoming, canonical, left, right = _flood_policy_pair()
+    incoming.update(
+        editorial_story_id="story_028286",
+        _editorial_route="skip",
+        _editorial_relationship="same_event",
+        _editorial_relationship_confidence=0.98,
+    )
+    monkeypatch.setattr(
+        g, "_cross_source_feature_bundle",
+        lambda row: left if row.get("source_url") == incoming["source_url"] else right,
+    )
+    monkeypatch.setattr(g, "_same_event_items", lambda *_a, **_kw: True)
+    monkeypatch.setattr(g, "_archive_entry_live_identity_safe", lambda *_a: True)
+    target, _ = g._published_skip_canonical(incoming, [canonical])
+    assert target is None
+    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical])
+    assert kept == [incoming]
+    assert suppressed == []
+
+
+def test_close_reordered_policy_headlines_still_bind():
+    from datetime import date
+
+    g = _load_generate()
+    incoming, canonical, left, right = _flood_policy_pair()
+    left.update(
+        date=date(2026, 11, 19),
+        headline_topic_tokens={"attendance", "zone", "approv", "school", "2026"},
+        subject_phrases={"attendance-zone-approv"},
+    )
+    right.update(
+        headline_topic_tokens={"zone", "attendance", "approv", "board", "2026"},
+        subject_phrases={"approv-attendance-zone"},
+    )
+    evidence = g._cross_source_same_event_evidence(
+        incoming, canonical, left_features=left, right_features=right
+    )
+    assert evidence["write_authorized"] is True
+    assert evidence["proof_type"] == "governing_body_plus_policy_subject"
