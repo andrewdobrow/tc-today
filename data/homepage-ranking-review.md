@@ -12,8 +12,7 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 42 | importance 0; freshness 48.28; urgency 2/10; validated material update |
-| 2 | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | Port St. Lucie expects temporary Lakehurst Drive repair next week after flood damage | 30 | importance 0; freshness 24.97; urgency 2/10 |
+| 1 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 43.22; urgency 2/10; validated material update |
 
 ## Recommended moves
 
