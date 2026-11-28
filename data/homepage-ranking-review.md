@@ -12,7 +12,7 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 43.22; urgency 2/10; validated material update |
+| 1 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 42.36; urgency 2/10; validated material update |
 
 ## Recommended moves
 
