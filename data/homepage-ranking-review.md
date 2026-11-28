@@ -12,8 +12,8 @@
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | 45 | importance 0; freshness 90.2; urgency 2/10 |
-| 2 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 40 | importance 0; freshness 41.8; urgency 2/10; validated material update |
+| 1 | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | Deputies seek help identifying suspects in Lakewood Park overnight vehicle burglaries | 42 | importance 0; freshness 76.65; urgency 2/10 |
+| 2 | Heritage Plantation residents seek help as more rain threatens flooded homes | Heritage Plantation residents seek help as more rain threatens flooded homes | 37 | importance 0; freshness 28.24; urgency 2/10; validated material update |
 
 ## Recommended moves
 
